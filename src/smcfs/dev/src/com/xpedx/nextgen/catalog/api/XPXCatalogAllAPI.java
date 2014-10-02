@@ -23,6 +23,7 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.custom.dbi.XPX_Item_Associations;
+import com.yantra.custom.dbi.XPX_Item_Contract_Extn;
 import com.yantra.custom.dbi.XPX_Item_Extn;
 import com.yantra.custom.dbi.XPX_Itemcust_Xref;
 import com.yantra.interop.japi.YIFApi;
@@ -30,6 +31,7 @@ import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.shared.dbclasses.XPX_Item_AssociationsDBHome;
+import com.yantra.shared.dbclasses.XPX_Item_Contract_ExtnDBHome;
 import com.yantra.shared.dbclasses.XPX_Item_ExtnDBHome;
 import com.yantra.shared.dbclasses.XPX_Itemcust_XrefDBHome;
 import com.yantra.shared.dbclasses.YFS_ItemDBHome;
@@ -45,7 +47,6 @@ import com.yantra.yfc.dblayer.PLTQueryBuilder;
 import com.yantra.yfc.dblayer.PLTQueryBuilderHelper;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
-import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
@@ -100,6 +101,9 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		if (uomList != null) {
 			getXpedxUOMList(env, SCXmlUtil.createFromString(SCXmlUtil.getString(uomList)), outputDoc);
 		}
+
+		getContractItem(env, inputXML, outputDoc);
+
 		return outputDoc;
 	}
 
@@ -503,9 +507,9 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			pltqbItem.append("organization_code ='" + storeFrontId + "'");
 			if (complexQuery) {
 				YFCNodeList<YFCElement> itemIDList = complexQueryElement.getElementsByTagName("Exp");
-				pltqbItem.append("AND ITEM_ID IN('" + ((YFCElement) itemIDList.item(0)).getAttribute("Value") + "'");
+				pltqbItem.append("AND ITEM_ID IN('" + itemIDList.item(0).getAttribute("Value") + "'");
 				for (int i = 1; i < itemIDList.getLength(); i++) {
-					YFCElement itemIdElem = (YFCElement) itemIDList.item(i);
+					YFCElement itemIdElem = itemIDList.item(i);
 					pltqbItem.append(" ,'" + itemIdElem.getAttribute("Value") + "'");
 				}
 				pltqbItem.append(")");
@@ -754,7 +758,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		Iterator<String> iterator = set.iterator();
 		while (iterator.hasNext()) {
 			YFCElement uOMElement = documentElement.createChild("UOM");
-			String UnitOfMeasure = (String) iterator.next();
+			String UnitOfMeasure = iterator.next();
 			String Conversion = wUOMsToConversionFactors.get(UnitOfMeasure);
 			if (!UnitOfMeasure.equals(lowestConvUOM)) {
 				uOMElement.setAttribute("UnitOfMeasure", UnitOfMeasure);
@@ -789,7 +793,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		Iterator<String> iterator = set.iterator();
 		while (iterator.hasNext()) {
 			YFCElement uOMElement = UOMListElement.createChild("UOM");
-			String UnitOfMeasure = (String) iterator.next();
+			String UnitOfMeasure = iterator.next();
 			String Conversion = wUOMsToConversionFactors.get(UnitOfMeasure);
 			if (!UnitOfMeasure.equals(lowestConvUOM)) {
 				uOMElement.setAttribute("UnitOfMeasure", UnitOfMeasure);
@@ -801,7 +805,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			}
 		}
 		itemElement.setAttribute("ItemID", itemID);
-		documentElement.appendChild((YFCNode) itemElement);
+		documentElement.appendChild(itemElement);
 	}
 
 	private int getConversion(String convFactor, String orderMultiple) {
@@ -815,6 +819,57 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		}
 		return -1;
 	}
+
+	public boolean getContractItem(YFSEnvironment env, Document inputXML, Document outputDoc){
+		boolean isContractItem = false;
+
+		PLTQueryBuilder pltqbContractItem = PLTQueryBuilderHelper.createPLTQueryBuilder();
+		pltqbContractItem.setCurrentTable("XPX_ITEM_CONTRACT_EXTN");
+
+		Element contractItemElement = SCXmlUtil.createChild(outputDoc.getDocumentElement(), "ContractItemList");
+		Element outputListElement = (Element) outputDoc.getElementsByTagName("ItemList").item(0);
+		NodeList itemListNodes = outputListElement.getChildNodes();
+		Element contractEle = (Element) inputXML.getElementsByTagName("ContractItem").item(0);
+		if (contractEle!=null){
+		String customerID = contractEle.getAttribute("CustomerID");
+		pltqbContractItem.append("CUSTOMER_ID" + "=" + "'" + customerID + "'");
+
+
+
+			int length = itemListNodes.getLength();
+			ArrayList<String> itemIds = new ArrayList<String>();
+			pltqbContractItem.append(" AND ITEM_ID IN ( ");
+			for (int i = 0; i < length; i++) {
+				Node itemNode = itemListNodes.item(i);
+				String tmpItemId = itemNode.getAttributes().getNamedItem("ItemID").getTextContent();
+				itemIds.add(tmpItemId);
+				pltqbContractItem.append("'" + tmpItemId + "'");
+					if(i != length-1) {
+						pltqbContractItem.append(", ");
+					}
+				}
+			pltqbContractItem.append(" ) ");
+		List<XPX_Item_Contract_Extn> contractItemList = XPX_Item_Contract_ExtnDBHome.getInstance().listWithWhere((YFSContext) env, pltqbContractItem, 5000);
+
+		if (contractItemList != null && contractItemList.size() > 0 ){
+			isContractItem = true;
+			Iterator<XPX_Item_Contract_Extn> contractItemIter = contractItemList.iterator();
+		while (contractItemIter.hasNext()) {
+			XPX_Item_Contract_Extn contractItemLine = contractItemIter.next();
+			Element contractItemEle = SCXmlUtil.createChild(contractItemElement, "ContractItem");
+			contractItemEle.setAttribute("CustomerID", contractItemLine.getCustomer_Id());
+			contractItemEle.setAttribute("ItemID", contractItemLine.getItem_Id());
+			contractItemEle.setAttribute("ContractItem", "Y");
+		}
+			setItemXrefDoc(outputDoc);
+			setItemExtnDoc(outputDoc);
+		return isContractItem;
+		}
+		}
+
+	return isContractItem;
+	}
+
 
 	public static ArrayList<String> customerUOMList = new ArrayList<String>();
 
