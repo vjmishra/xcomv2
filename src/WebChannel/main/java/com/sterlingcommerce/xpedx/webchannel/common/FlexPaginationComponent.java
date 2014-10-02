@@ -134,7 +134,7 @@ public class FlexPaginationComponent extends Component {
 		if (id != null) {
 			out.append(" id='").append(id).append("'");
 		}
-		out.append(" class='").append("pagination-wrap addmargintop10 addmarginbottom5").append(cssClass == null ? "" : cssClass).append("'");
+		out.append(" class='").append("pagination-wrap addmargintop10 addmarginbottom5").append(cssClass == null ? "" : " " + cssClass).append("'");
 		out.append(">");
 		out.append("	<ul class='pagination pagination-sm floatright'>");
 	}
