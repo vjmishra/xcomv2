@@ -25,7 +25,7 @@
 <script type="text/javascript">	
 function setFilterItemFlags()
 {
-	if(document.getElementById('stockedItemChk').value == 'true')
+	if(document.getElementById('stockedItemChk').checked)
 	{
 		document.getElementById('stockedItem').value = true;
 	}
