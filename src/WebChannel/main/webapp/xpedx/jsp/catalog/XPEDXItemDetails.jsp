@@ -259,6 +259,9 @@
 						<s:if test= '%{#_action.getExtnCustomerItemFlag()== "Y"}'>
 							<div class="cust-numbers"><s:property value="#customerItemLabel" />: <s:property value='custPartNumber' /></div>
 						</s:if>
+						<s:if test = '%{#_action.getIsContractItemFlag() == true}'>
+							<div class="contract-pricing">CONTRACT PRICING</div>
+						</s:if>
 						<div class="relative">
 							<s:if test="%{#wcUtil.isCoreItem(#itemElem)}">
 								<div class="core-item"></div>

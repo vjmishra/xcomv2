@@ -55,7 +55,6 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
-import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSException;
 
@@ -80,6 +79,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		}*/
 
 		//Jira 2421
+
 		 if(request.getParameter("selectedView")!=null){
 	        	localSession.setAttribute("selView", request.getParameter("selectedView"));
 	        }
@@ -98,7 +98,6 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			returnVal = super.execute();
 			setMSDSUrls();
 			if (getWCContext().getCustomerId() != null && !wcContext.isGuestUser()) {
-
 				getItemDetails();
 				getCustomerDetails(); // Template Trim Required
 				//getExtnItemDetails();//Extn Template should be trimmed
@@ -117,13 +116,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 				if (requestedUOM == null && itemUOMsMap != null
 						&& !itemUOMsMap.isEmpty()) {
-					requestedUOM = (String) itemUOMsMap.keySet().iterator()
+					requestedUOM = itemUOMsMap.keySet().iterator()
 							.next();
 				} else {
 					setUpdateAvailability(true);
 				}
 				if(requestedDefaultUOM == null && defaultShowUOMMap!=null && !defaultShowUOMMap.isEmpty()){
-					requestedDefaultUOM = (String)defaultShowUOMMap.keySet().iterator().next();
+					requestedDefaultUOM = defaultShowUOMMap.keySet().iterator().next();
 				}
 				if (requestedQty != null && requestedQty.trim().length() > 0){
 					orderedQty = requestedQty;
@@ -153,6 +152,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 		try {
 			listPrices = createListPrices();
+			itemContract();
 		} catch (Exception e) {
 			log.error("Failed to get list price information", e);
 		}
@@ -165,7 +165,44 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 		return returnVal;
 	}
+	boolean itemContract(){
 
+		try{
+			if (allAPIOutputDoc != null)
+			{
+				Element cIElement = (Element) allAPIOutputDoc.getElementsByTagName("ContractItemList").item(0);
+				NodeList cINodeList = cIElement.getChildNodes();
+				if (cINodeList != null)
+				{
+					int length = cINodeList.getLength();
+					for (int i = 0; i < length; i++)
+					{
+						Node cINode = cINodeList.item(i);
+						if (cINode != null)
+						{
+							NamedNodeMap nodeAttributes = cINode.getAttributes();
+							if (nodeAttributes!=null)
+							{
+								Node contractItem = nodeAttributes.getNamedItem("ContractItem");
+								String contractItemId = contractItem.getNodeValue();
+								if (contractItemId != null)
+								{
+									if (contractItemId == "Y")
+									{
+										isContractItemFlag = true;
+										return isContractItemFlag;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			}catch (Exception ex) {
+				log.error(ex.getMessage());
+			}
+		return isContractItemFlag;
+	}
 	private List<ItemSpecificationGroup> createSpecGroups() throws Exception {
 		List<ItemSpecificationGroup> groups = new ArrayList<ItemSpecificationGroup>(4);
 		groups.add(ItemSpecificationGroup.create("Item Specs"));
@@ -313,6 +350,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			valueMap.put("/XPXItemExtn/@XPXDivision", shipToCustomer.getExtnShipFromBranch());
 			valueMap.put("/XPXItemExtn/@EnvironmentID", envCode);
 
+			String custBillTo = XPEDXWCUtils.getParentCustomer(customerId, wcContext);
+
+			Map<String, String> valueMaps1 = new HashMap<String, String>();
+			valueMaps1.put("/ContractItem//@CustomerID", custBillTo);
+			Element contractItemInput = WCMashupHelper.getMashupInput("xpedxYpmContractItem", valueMaps1, getWCContext().getSCUIContext());
+			Document contractItemInputDoc = contractItemInput.getOwnerDocument();
+			NodeList contractItemInputNodeList = contractItemInput.getElementsByTagName("Or");
+			Element contractInputElemt = (Element) contractItemInputNodeList.item(0);
+
 			Element xpxItemExtninputElem = WCMashupHelper.getMashupInput("xpedxXPXItemExtnList", valueMap, wcContext.getSCUIContext());
 
 			Document inputDoc = xpxItemExtninputElem.getOwnerDocument();
@@ -338,17 +384,27 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			exp2Element.setAttribute("Value", getItemID());
 			pricLlistAssignmentInputElemt.appendChild(pricLlistAssignmentInputDoc.importNode(exp2Element, true));
 
+			// Complex query for Contract item input xml
+			Document expDoc1 = YFCDocument.createDocument("Exp").getDocument();
+			Element exp2Element1 = expDoc1.getDocumentElement();
+			exp2Element1.setAttribute("Name", "ItemID");
+			exp2Element1.setAttribute("Value", getItemID());
+			contractInputElemt.appendChild(contractItemInputDoc.importNode(exp2Element1, true));
+			//contractItemMap.put(itemid, "N");
+
 			// UOMList input XML
 			YFCElement exp3Element = documentElement.createChild("Exp");
 			exp3Element.setAttribute("Name", "ItemID");
 			exp3Element.setAttribute("Value", getItemID());
-			complexQueryOrElement.appendChild((YFCNode) exp3Element);
+			complexQueryOrElement.appendChild(exp3Element);
 
 			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(xrefInput, true));
 			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(pricLlistAssignmentInput, true));
+			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(contractItemInput, true));
 			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(xpxItemExtninputElem, true));
 			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
 
+			allAPIOutputDoc = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", xpxCatalogAllAPIServiceInputElem, wcContext.getSCUIContext());
 			Element xpxCatalogAllAPIServiceOutputElem = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", xpxCatalogAllAPIServiceInputElem, wcContext.getSCUIContext());
 
 			Element pricelistLineListElem = SCXmlUtil.getChildElement(xpxCatalogAllAPIServiceOutputElem, "PricelistLineList");
@@ -596,7 +652,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							msdsLink = msdsLocation+"/"+msdsContentId;
 						}*/
 						msdsLink="http://xpedx.infotrac.net/";
-						
+
 						isMSDSLink=true;
 					}
 					if("URL".equalsIgnoreCase(assetType)){
@@ -2260,7 +2316,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	public void setOrganizationCode(String organizationCode) {
 		this.organizationCode = organizationCode;
 	}
-	
+
 	public String getCustomerId() {
 		return customerId;
 	}
@@ -2573,11 +2629,21 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private String pnaRequestedQty;
 	private String isOrderData ="false";
 	private String qtyTextBox;
+	private Element allAPIOutputDoc;
+	private boolean isContractItemFlag = false;
+
 
 	//EB-225 - CustomerUOM if exist for a item in Item detail page, to set as hidden field in Item detail page
 	private String customerUOM ="";
 	//EB-225 - if requestedUOM is same as customer UOM for pna of a item in Item detail page, this field will have the value, else it will be empty
 	private String pnaRequestedCustomerUOM = "";
+
+	public boolean getIsContractItemFlag() {
+		return isContractItemFlag;
+	}
+	public void setContractItemFlag(boolean isContractItemFlag) {
+		this.isContractItemFlag = isContractItemFlag;
+	}
 
 	public String getPnaRequestedCustomerUOM() {
 		return pnaRequestedCustomerUOM;

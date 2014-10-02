@@ -1,9 +1,8 @@
 /**
- * 
+ *
  */
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,7 +23,7 @@ import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 /**
  * @author vgovindan
  * This class takes care of building JS objects with the items data for the templates in Catalog search results pages.
- * 
+ *
  */
 public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 
@@ -37,19 +36,21 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 		this.ctx = wcContext.getSCUIContext();
 		orderMultipleString = (String)request.getAttribute("Tag_orderMultipleString");
 		qtyString = (String)request.getAttribute("Tag_qtyString");
-		
+
 		itemToItemBranchBeanMap = (HashMap<String, XPEDXItemBranchInfoBean>) wcContext.getWCAttribute("itemToItemBranchBeanMap", WCAttributeScope.SESSION);
 		itemToItemBranchBeanMap = itemToItemBranchBeanMap == null ? new HashMap<String, XPEDXItemBranchInfoBean>() : itemToItemBranchBeanMap;
 		itemMap =  (HashMap<String, HashMap<String, String>>) wcContext.getWCAttribute("itemMap", WCAttributeScope.REQUEST);
-		itemMap = itemMap == null ? new HashMap<String, HashMap<String, String>>() : itemMap;		
+		itemMap = itemMap == null ? new HashMap<String, HashMap<String, String>>() : itemMap;
 		orderMultipleMap =  (HashMap<String, String>) wcContext.getWCAttribute("orderMultipleMap", WCAttributeScope.REQUEST);
 		orderMultipleMap = orderMultipleMap == null ? new HashMap<String, String>() : orderMultipleMap;
+		contractItemMap =  (HashMap<String, String>) wcContext.getWCAttribute("contractItemMap", WCAttributeScope.REQUEST);
+		contractItemMap = contractItemMap == null ? new HashMap<String, String>() : contractItemMap;
 		defaultShowUOMMap =  (HashMap<String, String>) wcContext.getWCAttribute("defaultShowUOMMap", WCAttributeScope.REQUEST);
 		defaultShowUOMMap = defaultShowUOMMap == null ? new HashMap<String, String>() : defaultShowUOMMap;
 		//Added for EB-225 - Itemids with customer UOM as value if exist
 		itemCustomerUomMap =  (LinkedHashMap<String, String>) wcContext.getWCAttribute("itemCustomerUomMap", WCAttributeScope.REQUEST);
 		itemCustomerUomMap = itemCustomerUomMap == null ? new LinkedHashMap<String, String>() : itemCustomerUomMap;
-		
+
 		itemUomHashMap = (HashMap<String, HashMap<String, String>>) wcContext.getWCAttribute("itemUomHashMap", WCAttributeScope.REQUEST);
 		itemUomHashMap = itemUomHashMap == null ? new HashMap<String, HashMap<String, String>>() : itemUomHashMap;
 		PLLineMap = (HashMap<String, List<Element>>) wcContext.getWCAttribute("PLLineMap", WCAttributeScope.REQUEST);
@@ -58,7 +59,7 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 		this.component = new XPEDXItemsDataTemplateComponent(vstack, request, response, this);
 		return component;
 	}
-	
+
 	public Map<String, String> getDefaultShowUOMMap() {
 		return defaultShowUOMMap;
 	}
@@ -73,6 +74,14 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 
 	public void setOrderMultipleMap(HashMap<String, String> orderMultipleMap) {
 		this.orderMultipleMap = orderMultipleMap;
+	}
+
+	public HashMap<String, String> getContractItemMap() {
+		return contractItemMap;
+	}
+
+	public void setContractItemMap(HashMap<String, String> contractItemMap) {
+		this.contractItemMap = contractItemMap;
 	}
 
 	public IWCContext getWcContext() {
@@ -164,7 +173,7 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 			LinkedHashMap<String, String> itemCustomerUomMap) {
 		this.itemCustomerUomMap = itemCustomerUomMap;
 	}
-	
+
 	public Map<String, List<Element>> getReplacmentItemsMap() {
 		return replacmentItemsMap;
 	}
@@ -172,7 +181,7 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 	public void setReplacmentItemsMap(Map<String, List<Element>> replacmentItemsMap) {
 		this.replacmentItemsMap = replacmentItemsMap;
 	}
-	
+
 	private LinkedHashMap<String, String> itemCustomerUomMap = new LinkedHashMap<String, String>();
 	//End of EB-225
 	private String itemElement;
@@ -181,6 +190,7 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 	private HashMap<String, HashMap<String, String>> itemMap;
 	private HashMap<String, XPEDXItemBranchInfoBean> itemToItemBranchBeanMap;
 	private HashMap<String, String> orderMultipleMap;
+	private HashMap<String, String> contractItemMap;
 	private Map <String, String>defaultShowUOMMap;
 	private SCUIContext ctx;
 	private String currency;

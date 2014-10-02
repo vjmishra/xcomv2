@@ -58,7 +58,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String defaultUomCode = ""; //Added for EB 41,42,43
 		//EB-225 - For retrieving the customer UOM of ItemID, from ItemIdcustomerUOM Map
 		String custUOM = validate(tag.getItemCustomerUomMap().get(itemID));
-
+		String isContractItem = tag.getContractItemMap().get(itemID);
 		String shortDesc = validate(info.getAttribute("ShortDescription"));
 		String desc = validate(info.getAttribute("Description"));
 		String itemKey = validate(item.getAttribute("ItemKey"));
@@ -118,7 +118,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String displayInventoryIndicator = validate(itemBranchBean.getInventoryIndicator());
 		String b2cSourcingStatus = validate(b2cItemExtn.getAttribute("ExtnSourcingStatus"));
 
-		String storeFrontId=(String) tag.getWcContext().getStorefrontId();
+		String storeFrontId=tag.getWcContext().getStorefrontId();
 		//String isSuperseded = validate(item.getAttribute("IsItemSuperseded"));
 		//String isValid = validate(info.getAttribute("IsValid"));
 		//String isModelItem = validate(info.getAttribute("IsModelItem"));
@@ -292,7 +292,11 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.CUSTOMER_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("CPN"))));
 		}
-
+		sb.append("\",");
+		sb.append("contractitemdiv: \"");
+		if (isContractItem == "Y"){
+			sb.append("<div class=\\\"contract-pricing\\\">CONTRACT PRICING</div>");
+		}
 		//End of EB 47
 		sb.append("\",");
 
@@ -307,7 +311,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		.append(" id='itemUomList_")
 		.append(itemID).append("'>");
 		for (Iterator<Map.Entry <String, String>> iterator = itemUOMList.entrySet().iterator(); iterator.hasNext();) {
-			Map.Entry  pair = (Map.Entry ) iterator.next();
+			Map.Entry  pair = iterator.next();
 			sb.append("<option value='").append(pair.getKey()).append("'");
 			if(pair.getValue().toString().equals(defaultUOM)){
 				sb.append(" selected='selected' ");
@@ -329,7 +333,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append(orderMultiple).append("'/>\",");
 		sb.append("itemtypedesc: \"");
 		if("W".equals(displayInventoryIndicator) && isGuestUser == false) {
-			
+
 		}
 		if("I".equals(displayInventoryIndicator) && isGuestUser == false) {
 			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\"/></div>Not a Stocked Item<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>");
@@ -340,7 +344,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("\",");
 		sb.append("itemtypedesccondensed: \"");
 		if("W".equals(displayInventoryIndicator) && isGuestUser == false) {
-			
+
 		}
 		if("I".equals(displayInventoryIndicator) && isGuestUser == false) {
 			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked Item</div>");
@@ -351,7 +355,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("\",");
 		sb.append("itemtypedescmini: \"");
 		if("W".equals(displayInventoryIndicator) && isGuestUser == false) {
-		
+
 		}
 		if("I".equals(displayInventoryIndicator) && isGuestUser == false) {
 			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked Item</div>");
@@ -368,7 +372,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 			for(int i=0;i<replacmentList.size();i++ )
 			{
-				Element replacementItemElement = (Element)replacmentList.get(i);
+				Element replacementItemElement = replacmentList.get(i);
 				String replacementItem = validate(replacementItemElement.getAttribute("ItemID"));
 				String replacementItemUOM = validate(replacementItemElement.getAttribute("UnitOfMeasure"));
 				if (i>0) sb.append(",");
@@ -413,7 +417,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		//sb = parseData(sb);
 
 		try {
-			writer.append((CharSequence) sb);
+			writer.append(sb);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

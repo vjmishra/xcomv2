@@ -74,6 +74,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private static final Logger log = Logger.getLogger(XPEDXCatalogAction.class);
 
 	private String customerNumber = null;
+	private boolean isContractItemFlag = false;
 	private boolean isStockedItem = false;
 	private boolean isContractItem = false;
 	private boolean CategoryC3 = false;
@@ -100,6 +101,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 	protected String customerPOLabel="";
 	protected String custLineAccNoLabel="";
 
+	public boolean getisContractItemFlag() {
+		return isContractItemFlag;
+	}
+
+	public void setContractItemFlag(boolean isContractItemFlag) {
+		this.isContractItemFlag = isContractItemFlag;
+	}
 	public String getIsCustomerPO() {
 		return isCustomerPO;
 	}
@@ -271,6 +279,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 
 	private Map<String, String> orderMultipleMap;
+	private Map<String, String> contractItemMap;
 	private String itemDtlBackPageURL = "";
 	private String productCompareBackPageURL;
 
@@ -296,6 +305,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public void setOrderMultipleMap(Map<String, String> orderMultipleMap) {
 		this.orderMultipleMap = orderMultipleMap;
+	}
+
+	public Map<String, String> getContratItemMap() {
+		return contractItemMap;
+	}
+
+	public void setContratItemMap(Map<String, String> contratItemMap) {
+		this.contractItemMap = contratItemMap;
 	}
 
 	public Map<String, String> getDefaultShowUOMMap() {
@@ -479,6 +496,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setItemDtlBackPageURL(wcContext.getSCUIContext().getSession().getAttribute("itemDtlBackPageURL").toString());
 			setProductCompareBackPageURL(wcContext.getSCUIContext().getSession().getAttribute("itemDtlBackPageURL").toString());
 			getCustomerLineDetails();
+			//itemContract();
 		} catch (Exception exception) {
 			log.error("Error in Init Method", exception);
 		}
@@ -604,6 +622,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		} else {
 			try {
 				getAllAPIOutput();
+				itemContract();
 			} catch (Exception e) {
 				log.error("", e);
 			}
@@ -1122,6 +1141,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			long startTimeCustomerService = System.currentTimeMillis();
 
 			getAllAPIOutput();
+			itemContract();
 			long endTimeCustomerService = System.currentTimeMillis();
 			timespent = (endTimeCustomerService - startTimeCustomerService);
 			sb.append("\nCustom Service Execution time on catlaog newSearch() = " + timespent);
@@ -1267,11 +1287,22 @@ public class XPEDXCatalogAction extends CatalogAction {
 				Iterator<String> itemIdIter = itemIds.iterator();
 
 				String customerId = wcContext.getCustomerId();
+				String custBillTo = XPEDXWCUtils.getParentCustomer(customerId, wcContext);
+
+				Map<String, String> valueMaps1 = new HashMap<String, String>();
+				valueMaps1.put("/ContractItem//@CustomerID", custBillTo);
+				Element contractItemInput = WCMashupHelper.getMashupInput("xpedxYpmContractItem", valueMaps1, getWCContext().getSCUIContext());
+				Document contractItemInputDoc = contractItemInput.getOwnerDocument();
+				NodeList contractItemInputNodeList = contractItemInput.getElementsByTagName("Or");
+				Element contractInputElemt = (Element) contractItemInputNodeList.item(0);
+
+
 				Map<String, String> valueMaps = new HashMap<String, String>();
 				valueMaps.put("/PricelistAssignment//@CustomerID", customerId);
 				valueMaps.put("/PricelistAssignment//@ExtnPriceWareHouse", shipToCustomer.getExtnPriceWareHouse());
 				valueMaps.put("/PricelistAssignment/PricelistLine/Item/@OrganizationCode", wcContext.getStorefrontId());
 				Element pricLlistAssignmentInput = WCMashupHelper.getMashupInput("xpedxYpmPriceLinelistAssignmentList", valueMaps, getWCContext().getSCUIContext());
+
 				Document pricLlistAssignmentInputDoc = pricLlistAssignmentInput.getOwnerDocument();
 				NodeList pricLlistAssignmentInputNodeList = pricLlistAssignmentInput.getElementsByTagName("Or");
 				Element pricLlistAssignmentInputElemt = (Element) pricLlistAssignmentInputNodeList.item(0);
@@ -1308,6 +1339,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				Element inputNodeListElemt = (Element) inputNodeList.item(0);
 				itemIdIter = itemIds.iterator();
 				orderMultipleMap = new HashMap<String, String>();
+				contractItemMap = new HashMap<String, String>();
 				while (itemIdIter.hasNext()) {
 					// Complex query for XPXItemExtn input xml
 					Element expElement = SCXmlUtil.createChild(inputNodeListElemt, "Exp");
@@ -1329,6 +1361,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 					exp2Element.setAttribute("Value", itemid);
 					pricLlistAssignmentInputElemt.appendChild(pricLlistAssignmentInputDoc.importNode(exp2Element, true));
 
+					// Complex query for Contract item input xml
+					Document expDoc1 = YFCDocument.createDocument("Exp").getDocument();
+					Element exp2Element1 = expDoc1.getDocumentElement();
+					exp2Element1.setAttribute("Name", "ItemID");
+					exp2Element1.setAttribute("Value", itemid);
+					contractInputElemt.appendChild(contractItemInputDoc.importNode(exp2Element1, true));
+					contractItemMap.put(itemid, "N");
+
 					// UOMList input XML
 					YFCElement exp3Element = documentElement.createChild("Exp");
 					exp3Element.setAttribute("Name", "ItemID");
@@ -1338,6 +1378,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 
 				input.appendChild(input.getOwnerDocument().importNode(xrefInput, true));
+				input.appendChild(input.getOwnerDocument().importNode(contractItemInput, true));
 				input.appendChild(input.getOwnerDocument().importNode(pricLlistAssignmentInput, true));
 				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
 				input.appendChild(input.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
@@ -1345,6 +1386,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				allAPIOutputDoc = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", input, wcContext.getSCUIContext());
 
 				getOrderMultipleMapForItems();
+				getContractItemMapForItems();
 				String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
 				getReplacmentItemsMapForItems(envCode, shipFromBranch);
 				wcContext.setWCAttribute("replacmentItemsMap", replacmentItemsMap, WCAttributeScope.REQUEST);
@@ -1517,6 +1559,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 				changeBasis();
 				getAllAPIOutput();
+				itemContract();
 				setItemsUomsMap();
 				prepareItemBranchInfoBean();
 				setColumnListForUI();
@@ -1599,6 +1642,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 
 			wcContext.setWCAttribute("orderMultipleMap", orderMultipleMap, WCAttributeScope.REQUEST);
+			wcContext.setWCAttribute("contractItemMap", contractItemMap, WCAttributeScope.REQUEST);
 			itemUomHashMap = getXpedxUOMList();
 
 			wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
@@ -1737,6 +1781,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 			for (Element xpxItemExtn : xpxItemExtnList) {
 				if (xpxItemExtn != null) {
 					orderMultipleMap.put(xpxItemExtn.getAttribute("ItemID"), xpxItemExtn.getAttribute("OrderMultiple"));
+				}
+			}
+		}
+	}
+	private void getContractItemMapForItems() {
+		ArrayList<Element> xpxContractItemList = SCXmlUtil.getElements(allAPIOutputDoc, "ContractItemList/ContractItem");
+		if (xpxContractItemList != null) {
+			for (Element xpxContractItemExtn : xpxContractItemList) {
+				if (xpxContractItemExtn != null) {
+					contractItemMap.put(xpxContractItemExtn.getAttribute("ItemID"), xpxContractItemExtn.getAttribute("ContractItem"));
 				}
 			}
 		}
@@ -1919,6 +1973,44 @@ public class XPEDXCatalogAction extends CatalogAction {
 		return itemUomHashMap;
 
 	}
+	boolean itemContract(){
+
+		try{
+			if (allAPIOutputDoc != null)
+			{
+				Element cIElement = (Element) allAPIOutputDoc.getElementsByTagName("ContractItemList").item(0);
+				NodeList cINodeList = cIElement.getChildNodes();
+				if (cINodeList != null)
+				{
+					int length = cINodeList.getLength();
+					for (int i = 0; i < length; i++)
+					{
+						Node cINode = cINodeList.item(i);
+						if (cINode != null)
+						{
+							NamedNodeMap nodeAttributes = cINode.getAttributes();
+							if (nodeAttributes!=null)
+							{
+								Node contractItem = nodeAttributes.getNamedItem("ContractItem");
+								String contractItemId = contractItem.getNodeValue();
+								if (contractItemId != null)
+								{
+									if (contractItemId == "Y")
+									{
+										isContractItemFlag = true;
+										return isContractItemFlag;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			}catch (Exception ex) {
+				log.error(ex.getMessage());
+			}
+		return isContractItemFlag;
+	}
 
 	protected void prepareMyItemListList() {
 		itemListMap = new HashMap();
@@ -2070,6 +2162,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		try {
 			long startTimeCustomerService = System.currentTimeMillis();
 			getAllAPIOutput();
+			itemContract();
 			endTime = System.currentTimeMillis();
 			timespent = (endTime - startTimeCustomerService);
 			if (log.isInfoEnabled()) {
@@ -2149,6 +2242,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			try {
 				long startTimeCustomerService = System.currentTimeMillis();
 				getAllAPIOutput();
+				itemContract();
 				endTime = System.currentTimeMillis();
 				timespent = (endTime - startTimeCustomerService);
 				if (log.isInfoEnabled()) {
@@ -2211,6 +2305,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			try {
 				long startTimeCustomerService = System.currentTimeMillis();
 				getAllAPIOutput();
+				itemContract();
 				endTime = System.currentTimeMillis();
 				timespent = (endTime - startTimeCustomerService);
 				if (log.isInfoEnabled()) {
@@ -2272,6 +2367,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			try {
 				long startTimeCustomerService = System.currentTimeMillis();
 				getAllAPIOutput();
+				itemContract();
 				endTime = System.currentTimeMillis();
 				timespent = (endTime - startTimeCustomerService);
 				if (log.isInfoEnabled()) {

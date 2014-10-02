@@ -841,5 +841,23 @@
             </API>
       </mashup>
       
+      <mashup id ='xpedxYpmContractItem' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="XPXGetItemContractExtn" >
+			<Input>
+				<ContractItem CustomerId="">
+				<ComplexQuery>
+				 <Or>
+       			</Or>
+       			</ComplexQuery>
+				</ContractItem>
+			</Input>
+			<Template>
+				<ContractItem>
+				</ContractItem>
+			</Template>
+		</API>
+	</mashup>
+      
 	 		
 </mashups>

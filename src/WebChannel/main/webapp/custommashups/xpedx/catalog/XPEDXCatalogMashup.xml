@@ -1018,6 +1018,22 @@
 		</API>
 	</mashup>
 	
+	<mashup id ='xpedxYpmContractItem' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getContractItem" >
+			<Input>
+				<ContractItem CustomerID="">
+				 <Or>
+       			</Or>
+				</ContractItem>
+			</Input>
+			<Template>
+				<ContractItem>
+				</ContractItem>
+			</Template>
+		</API>
+	</mashup>
+	
 	<!-- Added for performance : overriding outOfBox catalogNavBar -->
 	<mashup id ='xpedxCatalogNavBar' transactional='true' mashuptype='XAPI' endpoint='CATALOG'
 		description="Filter out the categories from the Catalog Index Search">

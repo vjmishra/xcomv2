@@ -679,6 +679,7 @@ function addItemsToList(idx, itemId, name, desc, qty, uom){
 <s:set name='customerItemFlag' value='%{#_action.getExtnCustomerItemFlag()}'/>
 <s:set name='isCustomerPO' value='%{#_action.getIsCustomerPO()}'/>
 <s:set name='isCustomerLinAcc' value='%{#_action.getIsCustomerLinAcc()}'/>
+<s:set name='isContractItem' value='%{#_action.getisContractItemFlag()}'/>
 
 <%--END of  EB 47 --%>
 	<div id="quickViewLaunchTitle" class="hidden">Quick View</div>
@@ -723,7 +724,7 @@ function getNormalView() {
 								'<div class="buttons">',
 									'<a class="item-lnk" href="{itemDetailURL}normal-view">{buttons}</a>',
 								'</div>',
-							'</div>',
+							'</div>', // end descriptions
 							
 							'<div class="item_number-wrap">',
 								'<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}',
@@ -738,7 +739,10 @@ function getNormalView() {
 									'{customerItemno}',
 								'</div>',
 							</s:if>
-						'</div>',
+							<s:if test='#isContractItem = true'>
+									'{contractitemdiv}',
+							</s:if>
+						'</div>', //end contents
 						'<div class="clearfix"></div>',
 						'<div class="order-input-wrap">',
 							'<div class="order-row">',
@@ -871,7 +875,9 @@ function getCondensedView() {
 											'{customerItemno}',
 										'</div>',
 									</s:if>
-									
+									<s:if test='#isContractItem = true'>
+										'{contractitemdiv}',
+									</s:if>
 									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
 									 
 
@@ -957,7 +963,9 @@ function getMiniView() {
 									<s:if test='#customerItemFlag != null && #customerItemFlag == "Y"'>
 										'{customerItemno}',
 									</s:if>
-										
+									<s:if test='#isContractItem = true'>
+										'{contractitemdiv}',
+									</s:if>	
 									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
 									
 								'</div>', // end item_number

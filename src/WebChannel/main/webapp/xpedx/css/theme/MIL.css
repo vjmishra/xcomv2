@@ -5513,7 +5513,8 @@ div#replacementItemBody .mil-wrap-condensed {
 	width: 0px;
 	float: none;
 	display: none;
-	clear: none;	
+	clear: none;
+	box-shadow : none;	
 }
 .mil-replace-condensed a {
     color: #FF0000 !important;

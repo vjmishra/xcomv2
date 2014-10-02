@@ -1376,23 +1376,32 @@ li.icon-grid-view-select{
 		width:21px; 
 		height:21px;
 		margin:0px 6px 0px 6px;
-		}
+}
 .view2-selected{
 		background:url(../images/catalog/icon-condensed-view-select-sf.png) no-repeat;  
 		width:21px; 
 		height:21px;
 		margin:0px 6px 0px 6px;
-		}
+}
 .view3-selected{
 		background:url(../images/catalog/icon-mini-view-select-sf.png) no-repeat;  
 		width:21px; 
 		height:21px;
 		margin:0px 6px 0px 6px;
-		}
+}
 .view4-selected{
 		background:url(../images/catalog/icon-grid-view-select-sf.png) no-repeat;  
 		width:21px; 
 		height:21px;
 		margin:0px 6px 0px 6px;
-		}
+}
+.contract-pricing {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 9px;
+	color: #b98b01;
+	width: 142px;
+	line-height: 13px;
+	background:url(../images/catalog/pricing-icon-sf.png) top right no-repeat;
+	margin-top: 2px;
+}
 	
