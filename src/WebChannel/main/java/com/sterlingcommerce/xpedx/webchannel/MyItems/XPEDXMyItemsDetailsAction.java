@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -22,18 +23,21 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.comergent.appservices.configuredItem.XMLUtils;
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
+import com.sterlingcommerce.ui.web.framework.utils.SCUIUtils;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
@@ -51,6 +55,8 @@ import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
+import com.yantra.yfs.japi.IYFSApplicationSecurityContextAware;
+import com.yantra.yfs.japi.YFSEnvironment;
 
 @SuppressWarnings("serial")
 public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
@@ -66,6 +72,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected String ajaxLineStatusCodeMsg = "";
 	protected String ajaxDisplayStatusCodeMsg = "";
 	protected Document allItemsDoc = null;
+
+	private boolean isContractItemFlag = false;
 
 	public static final String Get_SAVED_SHARED_LIST_MASHUP_ID = "XPEDXMyItemsDetailsGetSavedShareList";
 	private static int itemMax = 200;
@@ -173,6 +181,14 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
     private String qtyTextBox;
     private String[] names;//EB-760 Moved the export functionality after calling the validate UOM
     public boolean updatebuttonClicked;
+
+    public boolean getIsContractItemFlag() {
+		return isContractItemFlag;
+	}
+
+	public void setContractItemFlag(boolean isContractItemFlag) {
+		this.isContractItemFlag = isContractItemFlag;
+	}
 
 	public String[] getNames() {
 		return names;
@@ -543,10 +559,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(items.size() > 0){
 				itemListEntitled=XPEDXMyItemsUtils.getEntitledItem(getWCContext(),items);
 			}
-			
 
-			
-			
+
+
+
 			for (Element item : items) {
 				String id 		 = item.getAttribute("MyItemsKey");
 				if (request.getParameter("avail_" + id) != null) {
@@ -577,7 +593,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			for (Element item : items) {
 				String id 		 = item.getAttribute("MyItemsKey");
 				String tmpItemId = item.getAttribute("ItemId");
-				String customerPartNumber = ""; 
+				String customerPartNumber = "";
 				String lineNumber = item.getAttribute("ItemOrder");
 				//Added	this XB-56
 				String immediate =null;
@@ -678,9 +694,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				try {
 					if (request.getParameter("avail_" + id) != null) {
 						avail = request.getParameter("avail_" + id);
-						
+
 						//EB-1065 - Export MIL
-						
+
 						//XB-56 Endif (totalForImmediate > 0) {
 						if(exportMap !=null){
 							if(lineNumber==null  && "".equalsIgnoreCase(lineNumber)){
@@ -688,15 +704,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							}else{
 								jdondata = (JSONObject) exportMap.get(tmpItemId+"_"+lineNumber);
 							}
-							
+
 							if(jdondata !=null){
 								if(jdondata.get("Immediate") !=null && !"".equalsIgnoreCase(jdondata.get("Immediate").toString())){
-									immediate = jdondata.get("Immediate").toString();					
+									immediate = jdondata.get("Immediate").toString();
 								}else{
 									immediate="0";
 								}
 								if(jdondata.get("NextDay") !=null && !"".equalsIgnoreCase(jdondata.get("NextDay").toString())){
-									nextDay= jdondata.get("NextDay").toString();				
+									nextDay= jdondata.get("NextDay").toString();
 								}else{
 									nextDay="0";
 								}
@@ -706,17 +722,17 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 									plus2Days = "0";
 								}
 								if(jdondata.get("UOM") !=null && !"".equalsIgnoreCase(jdondata.get("UOM").toString())){
-									UOM = jdondata.get("UOM").toString();							
+									UOM = jdondata.get("UOM").toString();
 									if(UOM.contains("M_")){
 										String a[] = UOM.split("_");
-										UOM = a[1];								
+										UOM = a[1];
 									}
-									
+
 								}
 							}
-						
+
 						}
-						
+
 						//ends
 					}
 					if (avail.trim().equals("null")) {
@@ -788,7 +804,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					}
 					if("CustLineAccNo".equalsIgnoreCase(customKey)){
 						custLineAccFlag = "Y";
-					}					
+					}
 				}
 				}
 				if(!custPoFlag.equalsIgnoreCase("Y") && !custLineAccFlag.equalsIgnoreCase("Y")){
@@ -828,7 +844,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
                 }else{
                 	sbCSV.append(",");
                 }
-				
+
 				sbCSV.append("\n");
 				i++;
 			}
@@ -876,6 +892,94 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 		return itemCompleteDescrip.toString();
 	}
+
+	private void itemContract(){
+		Document outputDoc;
+		// input doc for the mashup
+		try{
+			Element input = SCXmlUtil.createDocument("ContractItemList").getDocumentElement();
+			String customerId = wcContext.getCustomerId();
+			String custBillTo = XPEDXWCUtils.getParentCustomer(customerId, wcContext);
+
+			Map<String, String> valueMaps1 = new HashMap<String, String>();
+			valueMaps1.put("/ContractItem//@CustomerId", custBillTo);
+
+			Element contractItemInput = WCMashupHelper.getMashupInput("xpedxYpmContractItem", valueMaps1, getWCContext().getSCUIContext());
+			Document contractItemInputDoc = contractItemInput.getOwnerDocument();
+			NodeList contractItemInputNodeList1 = contractItemInput.getElementsByTagName("ComplexQuery");
+			NodeList contractItemInputNodeList = contractItemInput.getElementsByTagName("Or");
+
+			Element contractInputElemt1 = (Element) contractItemInputNodeList1.item(0);
+			Element contractInputElemt = (Element) contractItemInputNodeList.item(0);
+			Element allItemDocList = (Element) allItemsDoc.getElementsByTagName("ItemList").item(0);
+			NodeList allItemDocNode = allItemDocList.getChildNodes();
+			int itemDocLength = allItemDocNode.getLength();
+			ArrayList<String> itemIdsFromItemDoc = new ArrayList<String>();
+
+			for (int i = 0; i < itemDocLength; i++) {
+				Node itemDocNode = allItemDocNode.item(i);
+				String tempIDforItem = itemDocNode.getAttributes().getNamedItem("ItemID").getTextContent();
+				itemIdsFromItemDoc.add(tempIDforItem);
+			}
+
+			Iterator<String> itemIdIter = itemIdsFromItemDoc.iterator();
+			while (itemIdIter.hasNext()) {
+				String itemid = itemIdIter.next();
+				// Complex query for Contract item input xml
+				Document expDoc1 = YFCDocument.createDocument("Exp").getDocument();
+				Element exp2Element1 = expDoc1.getDocumentElement();
+				exp2Element1.setAttribute("Name", "ItemId");
+				exp2Element1.setAttribute("Value", itemid);
+				contractInputElemt.appendChild(contractItemInputDoc.importNode(exp2Element1, true));
+			}
+
+
+			//Element contractItemEle = SCXmlUtil.createChild(input, "ContractItem");
+			input.appendChild(input.getOwnerDocument().importNode(contractItemInput, true));
+
+			String inputXml = SCXmlUtil.getString(input);
+			if(LOG.isDebugEnabled())LOG.debug(" getEmployeeId Input XML:-- " + inputXml);
+
+			// invoke Mashup
+			Object obj = WCMashupHelper.invokeMashup("xpedxYpmContractItem", input.getElementsByTagName("ContractItem").item(0), wcContext.getSCUIContext());
+			outputDoc = ((Element) obj).getOwnerDocument();
+			Element outputListElement = (Element) outputDoc.getElementsByTagName("XPXItemContractExtnList").item(0);
+			NodeList itemListNodes = outputListElement.getChildNodes();
+			ArrayList<String> itemIds = new ArrayList<String>();
+			if (itemListNodes!=null){
+				int length = itemListNodes.getLength();
+
+				for (int j = 0; j < length; j++) {
+					Node itemNode = itemListNodes.item(j);
+					String tmpItemId = itemNode.getAttributes().getNamedItem("ItemId").getTextContent();
+					itemIds.add(tmpItemId);
+
+
+				}
+			}
+			Element outDocList = (Element) outDoc.getElementsByTagName("XPEDXMyItemsItemsList").item(0);
+			NodeList outDocNode = outDocList.getChildNodes();
+			int outDocLength = allItemDocNode.getLength();
+			for (int i = 0; i < outDocLength; i++) {
+				Node itemDocNode = outDocNode.item(i);
+				String tempIDforItem = itemDocNode.getAttributes().getNamedItem("ItemId").getTextContent(); // all Item itmDoc
+				if(itemIds.contains(tempIDforItem)){
+					Element contractItem = (Element) outDoc.getElementsByTagName("XPEDXMyItemsItems").item(i);
+					contractItem.setAttribute("ContractItemFlag", "Y");
+				}
+
+
+			}
+
+
+
+		}catch (Exception ex) {
+			LOG.error(ex.getMessage());
+		}
+
+	}
+
+	// TODO Auto-generated method stub
 
 	//XB-56 - End
 	private void checkforEntitlement(){
@@ -1265,6 +1369,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			validateItemUOM();
 
 			setLastModifiedListInfo();
+//			SCUIContext uiContext = wcContext.getSCUIContext();
+//			ISCUITransactionContext scuiTransactionContext = null;
+//			scuiTransactionContext = uiContext
+//					.getTransactionContext(true);
+//			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+//					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			itemContract();
 
 			XPEDXWCUtils.setObectInCache("listOfItemsMap", getListOfItems());
 			XPEDXWCUtils.setObectInCache("orderMultipleFromSession", getItemOrderMultipleMap());
@@ -1381,7 +1492,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						String firstUOM="";
 						for(String uomId :uomiDs)
 						{
-							
+
 							if(index == 0)
 								firstUOM=uomId;
 							if(uomId != null && item.getAttribute("UomId") != null && item.getAttribute("UomId") != null && uomId.trim().equals(item.getAttribute("UomId").trim()))
@@ -1402,6 +1513,23 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 		}
 
+	}
+	public static Object getEnvironmentFromUIContext(SCUIContext uiContext) {
+		Object env = uiContext.getTransactionContext().getTransactionObject(
+		"YFCTransactionObject");
+		if (env instanceof IYFSApplicationSecurityContextAware) {
+			IYFSApplicationSecurityContextAware appSecurityEnv = (IYFSApplicationSecurityContextAware) env;
+			appSecurityEnv.setApplicationSecurityContext(uiContext
+					.getApplicationSecurityContext());
+		}
+		String userTokenId = (String) uiContext.getSession().getAttribute(
+		"UserToken");
+		if ((env instanceof YFSEnvironment) && !SCUIUtils.isVoid(userTokenId)) {
+			YFSEnvironment yfsEnv = (YFSEnvironment) env;
+			yfsEnv.setTokenID(userTokenId);
+		}
+		uiContext.replaceAttribute("SCUI_XAPICALL_ATTR", "SCUI_XAPICALL");
+		return env;
 	}
 
 	public String pricecheck(){
@@ -1705,11 +1833,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					//Added for Jira EB-3649 - If selected UOM is same as Base UOM, then send the order multiple qty as default for PNA, else as 1 as default
 					String itemBaseUom = itemBaseUOM.get(i);
 					if(itemUom.equalsIgnoreCase(itemBaseUom)){
-						itemQty = orderMultiple;	
+						itemQty = orderMultiple;
 					}
 					else
 					{
-						itemQty = "1";	
+						itemQty = "1";
 					}
 					itemUom =  enteredUOMs.get(i);//itemBaseUOM.get(i); added for EB 2034
 				}
@@ -3743,8 +3871,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.inventoryCheckForItemsMap = inventoryCheckForItemsMap;
 	}
 
-	
-	
+
+
 	public HashMap<String, String> getDisplayInventoryCheckForItemsMap() {
 		return displayInventoryCheckForItemsMap;
 	}

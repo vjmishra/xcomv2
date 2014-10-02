@@ -2110,7 +2110,7 @@ function showSharedListForm(){
 				<form id="form1" name="form1" method="post" action="">
 					<textarea name="dlgCopyAndPasteText" id="dlgCopyAndPasteText"
 						cols="48" rows="5"></textarea>
-					<ul id="tool-bar" class="tool-bar-bottom" style="float: right";>
+					<ul id="tool-bar" class="tool-bar-bottom" style="float: right;">
 						<li>
 							<a class="grey-ui-btn" href="javascript:$.fancybox.close();"
 									onclick="Ext.get('dlgCopyAndPasteText').dom.value = '';Ext.get('errorMsgCopyBottom').dom.innerHTML='';Ext.get('errorMsgCopyBottom').dom.style.display='none'">
@@ -2582,7 +2582,6 @@ function showSharedListForm(){
 								<s:set name='customerUOM' value='#itemIdCustomerUomMap.get(#itemId)' />
 								<s:set name="itemUOMsMap" value='itemIdConVUOMMap.get(#itemId)' />
 								<s:set name="itemBaseUom" value='#baseUOMs.get(#itemId)' />
-		
 								<s:if test='%{#customerUOM==#itemBaseUom}'>
 									<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />
 									<s:set name="baseUOMDesc" value="#customerUomWithoutM" />
@@ -2713,6 +2712,9 @@ function showSharedListForm(){
 															<s:property value="#customerItemLabel" />:
 															<s:property value='#partItemVal' />
 														</p>
+													</s:if>
+													<s:if test = '#item.getAttribute("ContractItemFlag")=="Y"'>
+														<div class="contract-pricing">CONTRACT PRICING</div>
 													</s:if>
 												</s:if>
 												<s:if test='editMode == true'>	
