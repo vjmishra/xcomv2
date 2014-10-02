@@ -69,6 +69,8 @@ public class XPEDXOrderListAction extends OrderListAction {
 	private String filteredStatusSearchFieldValue;
 
 	private static final List<String> openStatusList;
+	private static final List<String> openCustomerStatusList;
+	private static final List<String> openFOStatusList;
 	private static final List<String> releasedFFStatusList;
 	private static final List<String> invoicedStatusList;
 	private static final List<String> futureShipmentStatusList;
@@ -77,16 +79,20 @@ public class XPEDXOrderListAction extends OrderListAction {
 
 	static {
 
-		openStatusList = new ArrayList<String>();
-		openStatusList.add("1100.0100"); //Submitted
-		openStatusList.add("1100.0100_Approval"); // Submitted Pending Approval
-		openStatusList.add("1100.0100_Rejected"); // Submitted and Rejected
-		openStatusList.add("1100.5250"); // open
-		openStatusList.add("1100.5350"); //Customer Hold
-		openStatusList.add("1100.5400"); //System Hold
-		openStatusList.add("1100.5450"); //WebHold
-		openStatusList.add("1310"); //Awaiting Ship Order Creation
+		openCustomerStatusList =  new ArrayList<String>();
+		openCustomerStatusList.add("1100.0100"); //Submitted
+		openCustomerStatusList.add("1100.0100_Approval"); // Submitted Pending Approval
+		openCustomerStatusList.add("1100.0100_Rejected"); // Submitted and Rejected
 
+		openFOStatusList =  new ArrayList<String>();
+		openFOStatusList.add("1100.5350"); //Customer Hold
+		openFOStatusList.add("1100.5400"); //System Hold
+		openFOStatusList.add("1100.5450"); //WebHold
+		openFOStatusList.add("1310"); //Awaiting Ship Order Creation
+
+		openStatusList = new ArrayList<String>();
+		openStatusList.addAll(openCustomerStatusList);
+		openStatusList.addAll(openFOStatusList);
 		releasedFFStatusList = new ArrayList<String>();
 		releasedFFStatusList.add("1100.5500"); // Released For Fulfillment
 		releasedFFStatusList.add("1100.5550"); //Shipped
@@ -96,6 +102,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 		invoicedStatusList.add("1100.5950");// Invoice only
 
 		futureShipmentStatusList = new ArrayList<String>();
+		futureShipmentStatusList.add("1100.5250"); // open
 		futureShipmentStatusList.add("1100.5100"); //Back Orders
 		futureShipmentStatusList.add("1100.5300"); //Direct from Manufacturer
 		futureShipmentStatusList.add("1100.6000"); //Blanket
@@ -331,6 +338,7 @@ public class XPEDXOrderListAction extends OrderListAction {
         		}
 
         	}
+
 			populateOrderList();
             //outputDoc = (Element)prepareAndInvokeMashups().get("XPEDXOrderList");
             //BEGIN: Orderlist : RUgrani
@@ -536,7 +544,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 		filteredStatusSearchList.put("OPEN", "Open Orders");
 		filteredStatusSearchList.put("RELEASEDFF", "Released Orders");
 		filteredStatusSearchList.put("INVOICED", "Invoiced Orders");
-		filteredStatusSearchList.put("FUTURESHIPMENTS", "Future Shipments");
+		filteredStatusSearchList.put("FUTURESHIPMENTS", "Back Orders");
 		filteredStatusSearchList.put("OTHER", "Other");
 		return filteredStatusSearchList;
 	}
@@ -761,16 +769,32 @@ public class XPEDXOrderListAction extends OrderListAction {
 				}else{
 					ArrayList<Element> orderList = new ArrayList<Element>();
 					//orderList.add(order);
-					if(this.legacyProductNumValue != null || !YFCCommon.isVoid(getStatusSearchFieldName())){
-						if(!YFCCommon.isVoid(getStatusSearchFieldName()))
+					String filteredStatusSearchFieldName = getFilteredStatusSearchFieldName();
+					boolean isFilteredStatusCheckRequired = false;
+					if(!YFCCommon.isVoid(filteredStatusSearchFieldName) && !"ALL_ORDERS".equalsIgnoreCase(filteredStatusSearchFieldName)
+							&& !XPEDXConstants.DEFAULT_SELECT_ORDER_CRITERIA_LABEL.equalsIgnoreCase(filteredStatusSearchFieldName)){
+						isFilteredStatusCheckRequired = true;
+							}
+					if(this.legacyProductNumValue != null || (!YFCCommon.isVoid(getStatusSearchFieldName()) || isFilteredStatusCheckRequired)){
+						if(!YFCCommon.isVoid(getStatusSearchFieldName()) || isFilteredStatusCheckRequired)
 						{
 							//If any order status is chosen, get the fulfillment order which matches the status
 							//and add it against its customer order key
-							String codeDesc = (String)statusSearchList.get(getStatusSearchFieldName());
-							if(orderStatus.equalsIgnoreCase(codeDesc.trim())){
-								orderList.add(order);
-								xpedxChainedOrderListMap.put(chainedFromOHK, orderList);
+
+							if(!YFCCommon.isVoid(getStatusSearchFieldName())){
+								String codeDesc = (String)statusSearchList.get(getStatusSearchFieldName());
+								if(orderStatus.equalsIgnoreCase(codeDesc.trim())){
+									orderList.add(order);
+									xpedxChainedOrderListMap.put(chainedFromOHK, orderList);
+								}
 							}
+							if(isFilteredStatusCheckRequired){
+								if(filteredOrderStausMap.get(getFilteredStatusSearchFieldName()).indexOf(order.getAttribute("ExtnOrderStatus"))!= -1){
+									orderList.add(order);
+									xpedxChainedOrderListMap.put(chainedFromOHK, orderList);
+								}
+							}
+
 						}
 						else
 							//xpedxChainedOrderListMap.put(orderHeaderKey, orderList);
@@ -1152,31 +1176,77 @@ public class XPEDXOrderListAction extends OrderListAction {
         }
         /* EB-6285 added more filtered statuses for search */
         if(YFCCommon.isVoid(getStatusSearchFieldName()) && !YFCCommon.isVoid(getFilteredStatusSearchFieldName())){
-    		if( !"ALL_ORDERS".equalsIgnoreCase(filteredStatusSearchFieldName) && filteredOrderStausMap.containsKey(filteredStatusSearchFieldName)){
-    			List<String> searchStatusList = filteredOrderStausMap.get(filteredStatusSearchFieldName);
-    			if(complexQueryElement == null)
-    			{
-    				complexQueryElement = orderElem.createChild("ComplexQuery");
-    				complexQueryElement.setAttribute("Operator", "AND");
-    			 	YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
-    			 	for (String searchStatus : searchStatusList) {
-	    			 	YFCElement expElementExtnOrderStatus = complexQueryOrElement.createChild("Exp");
-	    			 	expElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
-	    			 	expElementExtnOrderStatus.setAttribute("Value",searchStatus);
-	    			    complexQueryOrElement.appendChild(expElementExtnOrderStatus);
-    			 	}
-    			}
-            	else{
-            		YFCElement complexQueryInsideAndElement = complexQueryAndElement.createChild("And");
-            		YFCElement complexQueryInsideOrElement = complexQueryInsideAndElement.createChild("Or");
-            		for (String searchStatus : searchStatusList) {
-	    			 	YFCElement expElementExtnOrderStatus = complexQueryInsideOrElement.createChild("Exp");
-	    			 	expElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
-	    			 	expElementExtnOrderStatus.setAttribute("Value",searchStatus);
-	    			    complexQueryInsideOrElement.appendChild(expElementExtnOrderStatus);
-            		}
-            	}
-    		}
+        	if( !"ALL_ORDERS".equalsIgnoreCase(filteredStatusSearchFieldName) && filteredOrderStausMap.containsKey(filteredStatusSearchFieldName)){
+        		List<String> searchStatusList = filteredOrderStausMap.get(filteredStatusSearchFieldName);
+        		if("OPEN".equalsIgnoreCase(filteredStatusSearchFieldName)){
+        			setOrderType("");
+        			setOrderTypeQryType("EQ");
+        			orderElem.removeAttribute("OrderType");
+        			orderElem.setAttribute("OrderTypeQryType", "EQ");
+        			YFCElement complexQueryOrElement = null;
+        			if(complexQueryElement == null)	{
+        				complexQueryElement = orderElem.createChild("ComplexQuery");
+        				complexQueryElement.setAttribute("Operator", "AND");
+        				complexQueryOrElement = complexQueryElement.createChild("Or");
+        			}else{
+        				complexQueryOrElement = complexQueryAndElement.createChild("Or");
+        			}
+        			YFCElement complexQueryFOAndElement = complexQueryOrElement.createChild("And");
+        			YFCElement complexQueryFOAndOrElement = complexQueryFOAndElement.createChild("Or");
+        			for (String searchStatus : openFOStatusList) {
+        				YFCElement foExpElementExtnOrderStatus = complexQueryFOAndOrElement.createChild("Exp");
+        				foExpElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
+        				foExpElementExtnOrderStatus.setAttribute("Value",searchStatus);
+        				complexQueryFOAndOrElement.appendChild(foExpElementExtnOrderStatus);
+        			}
+        			YFCElement expElementFOType = complexQueryFOAndElement.createChild("Exp");
+        			expElementFOType.setAttribute("Name", "OrderType");
+        			expElementFOType.setAttribute("Value","STOCK_ORDER");
+        			complexQueryFOAndElement.appendChild(expElementFOType);
+
+        			YFCElement complexQueryCOAndElement = complexQueryOrElement.createChild("And");
+
+        			YFCElement complexQueryCOAndOrElement = complexQueryCOAndElement.createChild("Or");
+        			for (String searchStatus : openCustomerStatusList) {
+        				YFCElement coExpElementExtnOrderStatus = complexQueryCOAndOrElement.createChild("Exp");
+        				coExpElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
+        				coExpElementExtnOrderStatus.setAttribute("Value",searchStatus);
+        				complexQueryCOAndOrElement.appendChild(coExpElementExtnOrderStatus);
+        			}
+        			YFCElement expElementCOType = complexQueryCOAndElement.createChild("Exp");
+        			expElementCOType.setAttribute("Name", "OrderType");
+        			expElementCOType.setAttribute("Value","Customer");
+        			complexQueryCOAndElement.appendChild(expElementCOType);
+        		}
+        		else{
+        			if(complexQueryElement == null)
+        			{
+        				complexQueryElement = orderElem.createChild("ComplexQuery");
+        				complexQueryElement.setAttribute("Operator", "AND");
+        				YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+        				for (String searchStatus : searchStatusList) {
+        					YFCElement expElementExtnOrderStatus = complexQueryOrElement.createChild("Exp");
+        					expElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
+        					expElementExtnOrderStatus.setAttribute("Value",searchStatus);
+        					complexQueryOrElement.appendChild(expElementExtnOrderStatus);
+        				}
+        			}
+        			else{
+        				YFCElement complexQueryInsideAndElement = complexQueryAndElement.createChild("And");
+        				YFCElement complexQueryInsideOrElement = complexQueryInsideAndElement.createChild("Or");
+        				for (String searchStatus : searchStatusList) {
+        					YFCElement expElementExtnOrderStatus = complexQueryInsideOrElement.createChild("Exp");
+        					expElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
+        					expElementExtnOrderStatus.setAttribute("Value",searchStatus);
+        					complexQueryInsideOrElement.appendChild(expElementExtnOrderStatus);
+        				}
+        			}
+        			setOrderType(XPEDXOrderConstants.XPEDX_ORDER_TYPE_CUSTOMER);
+        			setOrderTypeQryType(queryTypeNe);
+        			orderElem.setAttribute("OrderType", XPEDXOrderConstants.XPEDX_ORDER_TYPE_CUSTOMER);
+        			orderElem.setAttribute("OrderTypeQryType", queryTypeNe);
+        		}
+        	}
     	}
         if(!YFCCommon.isVoid(getSubmittedTSFrom()))
             orderElem.setAttribute("FromOrderDate", WCDataDeFormatHelper.getDeformattedDate(getWCContext().getSCUIContext(), getSubmittedTSFrom()));
