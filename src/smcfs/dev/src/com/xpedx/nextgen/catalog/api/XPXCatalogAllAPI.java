@@ -820,8 +820,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		return -1;
 	}
 
-	public boolean getContractItem(YFSEnvironment env, Document inputXML, Document outputDoc){
-		boolean isContractItem = false;
+	public void getContractItem(YFSEnvironment env, Document inputXML, Document outputDoc){
 
 		PLTQueryBuilder pltqbContractItem = PLTQueryBuilderHelper.createPLTQueryBuilder();
 		pltqbContractItem.setCurrentTable("XPX_ITEM_CONTRACT_EXTN");
@@ -852,7 +851,6 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		List<XPX_Item_Contract_Extn> contractItemList = XPX_Item_Contract_ExtnDBHome.getInstance().listWithWhere((YFSContext) env, pltqbContractItem, 5000);
 
 		if (contractItemList != null && contractItemList.size() > 0 ){
-			isContractItem = true;
 			Iterator<XPX_Item_Contract_Extn> contractItemIter = contractItemList.iterator();
 		while (contractItemIter.hasNext()) {
 			XPX_Item_Contract_Extn contractItemLine = contractItemIter.next();
@@ -861,13 +859,9 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			contractItemEle.setAttribute("ItemID", contractItemLine.getItem_Id());
 			contractItemEle.setAttribute("ContractItem", "Y");
 		}
-			setItemXrefDoc(outputDoc);
-			setItemExtnDoc(outputDoc);
-		return isContractItem;
-		}
-		}
 
-	return isContractItem;
+		}
+		}
 	}
 
 

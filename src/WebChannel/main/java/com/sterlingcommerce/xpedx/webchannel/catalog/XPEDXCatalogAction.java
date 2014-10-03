@@ -496,7 +496,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setItemDtlBackPageURL(wcContext.getSCUIContext().getSession().getAttribute("itemDtlBackPageURL").toString());
 			setProductCompareBackPageURL(wcContext.getSCUIContext().getSession().getAttribute("itemDtlBackPageURL").toString());
 			getCustomerLineDetails();
-			//itemContract();
+
 		} catch (Exception exception) {
 			log.error("Error in Init Method", exception);
 		}
@@ -622,7 +622,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		} else {
 			try {
 				getAllAPIOutput();
-				itemContract();
+
 			} catch (Exception e) {
 				log.error("", e);
 			}
@@ -1141,7 +1141,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			long startTimeCustomerService = System.currentTimeMillis();
 
 			getAllAPIOutput();
-			itemContract();
+
 			long endTimeCustomerService = System.currentTimeMillis();
 			timespent = (endTimeCustomerService - startTimeCustomerService);
 			sb.append("\nCustom Service Execution time on catlaog newSearch() = " + timespent);
@@ -1559,7 +1559,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 				changeBasis();
 				getAllAPIOutput();
-				itemContract();
+
 				setItemsUomsMap();
 				prepareItemBranchInfoBean();
 				setColumnListForUI();
@@ -1973,44 +1973,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		return itemUomHashMap;
 
 	}
-	boolean itemContract(){
 
-		try{
-			if (allAPIOutputDoc != null)
-			{
-				Element cIElement = (Element) allAPIOutputDoc.getElementsByTagName("ContractItemList").item(0);
-				NodeList cINodeList = cIElement.getChildNodes();
-				if (cINodeList != null)
-				{
-					int length = cINodeList.getLength();
-					for (int i = 0; i < length; i++)
-					{
-						Node cINode = cINodeList.item(i);
-						if (cINode != null)
-						{
-							NamedNodeMap nodeAttributes = cINode.getAttributes();
-							if (nodeAttributes!=null)
-							{
-								Node contractItem = nodeAttributes.getNamedItem("ContractItem");
-								String contractItemId = contractItem.getNodeValue();
-								if (contractItemId != null)
-								{
-									if (contractItemId == "Y")
-									{
-										isContractItemFlag = true;
-										return isContractItemFlag;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			}catch (Exception ex) {
-				log.error(ex.getMessage());
-			}
-		return isContractItemFlag;
-	}
 
 	protected void prepareMyItemListList() {
 		itemListMap = new HashMap();
@@ -2162,7 +2125,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		try {
 			long startTimeCustomerService = System.currentTimeMillis();
 			getAllAPIOutput();
-			itemContract();
+
 			endTime = System.currentTimeMillis();
 			timespent = (endTime - startTimeCustomerService);
 			if (log.isInfoEnabled()) {
@@ -2242,7 +2205,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			try {
 				long startTimeCustomerService = System.currentTimeMillis();
 				getAllAPIOutput();
-				itemContract();
+
 				endTime = System.currentTimeMillis();
 				timespent = (endTime - startTimeCustomerService);
 				if (log.isInfoEnabled()) {
@@ -2305,7 +2268,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			try {
 				long startTimeCustomerService = System.currentTimeMillis();
 				getAllAPIOutput();
-				itemContract();
+
 				endTime = System.currentTimeMillis();
 				timespent = (endTime - startTimeCustomerService);
 				if (log.isInfoEnabled()) {
@@ -2367,7 +2330,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			try {
 				long startTimeCustomerService = System.currentTimeMillis();
 				getAllAPIOutput();
-				itemContract();
+
 				endTime = System.currentTimeMillis();
 				timespent = (endTime - startTimeCustomerService);
 				if (log.isInfoEnabled()) {

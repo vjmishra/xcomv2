@@ -897,7 +897,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		Document outputDoc;
 		// input doc for the mashup
 		try{
-			Element input = SCXmlUtil.createDocument("ContractItemList").getDocumentElement();
+
 			String customerId = wcContext.getCustomerId();
 			String custBillTo = XPEDXWCUtils.getParentCustomer(customerId, wcContext);
 
@@ -911,37 +911,23 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 			Element contractInputElemt1 = (Element) contractItemInputNodeList1.item(0);
 			Element contractInputElemt = (Element) contractItemInputNodeList.item(0);
-			Element allItemDocList = (Element) allItemsDoc.getElementsByTagName("ItemList").item(0);
-			NodeList allItemDocNode = allItemDocList.getChildNodes();
-			int itemDocLength = allItemDocNode.getLength();
-			ArrayList<String> itemIdsFromItemDoc = new ArrayList<String>();
-
-			for (int i = 0; i < itemDocLength; i++) {
-				Node itemDocNode = allItemDocNode.item(i);
-				String tempIDforItem = itemDocNode.getAttributes().getNamedItem("ItemID").getTextContent();
-				itemIdsFromItemDoc.add(tempIDforItem);
-			}
-
-			Iterator<String> itemIdIter = itemIdsFromItemDoc.iterator();
-			while (itemIdIter.hasNext()) {
-				String itemid = itemIdIter.next();
+			NodeList itemNodeList = outDoc.getElementsByTagName("XPEDXMyItemsItems");
+			for(int i=0;i<itemNodeList.getLength();i++)
+			{
+				Element itemElem=(Element)itemNodeList.item(i);
 				// Complex query for Contract item input xml
 				Document expDoc1 = YFCDocument.createDocument("Exp").getDocument();
 				Element exp2Element1 = expDoc1.getDocumentElement();
 				exp2Element1.setAttribute("Name", "ItemId");
-				exp2Element1.setAttribute("Value", itemid);
+				exp2Element1.setAttribute("Value", itemElem.getAttribute("ItemId"));
 				contractInputElemt.appendChild(contractItemInputDoc.importNode(exp2Element1, true));
 			}
 
-
-			//Element contractItemEle = SCXmlUtil.createChild(input, "ContractItem");
-			input.appendChild(input.getOwnerDocument().importNode(contractItemInput, true));
-
-			String inputXml = SCXmlUtil.getString(input);
-			if(LOG.isDebugEnabled())LOG.debug(" getEmployeeId Input XML:-- " + inputXml);
+			String inputXml = SCXmlUtil.getString(contractItemInput);
+			if(LOG.isDebugEnabled())LOG.debug(" get contract Items Input XML:-- " + inputXml);
 
 			// invoke Mashup
-			Object obj = WCMashupHelper.invokeMashup("xpedxYpmContractItem", input.getElementsByTagName("ContractItem").item(0), wcContext.getSCUIContext());
+			Object obj = WCMashupHelper.invokeMashup("xpedxYpmContractItem", contractItemInput, wcContext.getSCUIContext());
 			outputDoc = ((Element) obj).getOwnerDocument();
 			Element outputListElement = (Element) outputDoc.getElementsByTagName("XPXItemContractExtnList").item(0);
 			NodeList itemListNodes = outputListElement.getChildNodes();
@@ -953,25 +939,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Node itemNode = itemListNodes.item(j);
 					String tmpItemId = itemNode.getAttributes().getNamedItem("ItemId").getTextContent();
 					itemIds.add(tmpItemId);
-
-
 				}
 			}
-			Element outDocList = (Element) outDoc.getElementsByTagName("XPEDXMyItemsItemsList").item(0);
-			NodeList outDocNode = outDocList.getChildNodes();
-			int outDocLength = allItemDocNode.getLength();
-			for (int i = 0; i < outDocLength; i++) {
-				Node itemDocNode = outDocNode.item(i);
-				String tempIDforItem = itemDocNode.getAttributes().getNamedItem("ItemId").getTextContent(); // all Item itmDoc
-				if(itemIds.contains(tempIDforItem)){
-					Element contractItem = (Element) outDoc.getElementsByTagName("XPEDXMyItemsItems").item(i);
-					contractItem.setAttribute("ContractItemFlag", "Y");
+			for(int i=0;i<itemNodeList.getLength();i++)
+			{
+				Element itemElem=(Element)itemNodeList.item(i);
+				if(itemIds.contains(itemElem.getAttribute("ItemId"))){
+					itemElem.setAttribute("ContractItemFlag", "Y");
 				}
-
-
 			}
-
-
 
 		}catch (Exception ex) {
 			LOG.error(ex.getMessage());

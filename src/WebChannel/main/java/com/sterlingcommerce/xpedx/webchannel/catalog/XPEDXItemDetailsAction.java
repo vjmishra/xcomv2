@@ -152,7 +152,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 		try {
 			listPrices = createListPrices();
-			itemContract();
+
 		} catch (Exception e) {
 			log.error("Failed to get list price information", e);
 		}
@@ -165,12 +165,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 		return returnVal;
 	}
-	boolean itemContract(){
+	boolean itemContract(Element xpxCatalogAllAPIServiceOutputElem){
 
 		try{
-			if (allAPIOutputDoc != null)
+			if (xpxCatalogAllAPIServiceOutputElem != null)
 			{
-				Element cIElement = (Element) allAPIOutputDoc.getElementsByTagName("ContractItemList").item(0);
+				Element cIElement = (Element) xpxCatalogAllAPIServiceOutputElem.getElementsByTagName("ContractItemList").item(0);
 				NodeList cINodeList = cIElement.getChildNodes();
 				if (cINodeList != null)
 				{
@@ -404,9 +404,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(xpxItemExtninputElem, true));
 			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
 
-			allAPIOutputDoc = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", xpxCatalogAllAPIServiceInputElem, wcContext.getSCUIContext());
 			Element xpxCatalogAllAPIServiceOutputElem = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", xpxCatalogAllAPIServiceInputElem, wcContext.getSCUIContext());
-
+			itemContract(xpxCatalogAllAPIServiceOutputElem);
 			Element pricelistLineListElem = SCXmlUtil.getChildElement(xpxCatalogAllAPIServiceOutputElem, "PricelistLineList");
 			if (pricelistLineListElem != null) {
 				List<Element> pricelistLineElems = SCXmlUtil.getChildren(pricelistLineListElem, "PricelistLine");
@@ -2629,7 +2628,6 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private String pnaRequestedQty;
 	private String isOrderData ="false";
 	private String qtyTextBox;
-	private Element allAPIOutputDoc;
 	private boolean isContractItemFlag = false;
 
 
