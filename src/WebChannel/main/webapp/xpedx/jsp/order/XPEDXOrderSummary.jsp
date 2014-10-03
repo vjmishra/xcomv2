@@ -1592,6 +1592,7 @@ from session . We have customer Contact Object in session .
 															</div>
 														</s:if>
 														<s:if test='%{#inventoryChk=="M"}'>
+														<s:hidden name="inventoryInds" id="inventoryInd_%{#orderLineKey}" value='%{#orderLineKey}' />
 															<div class="non-stock-item-shorter floatleft width-214">
 																<div class="stock-icon addmarginright50" style="margin-top:0px">
 																	<img
