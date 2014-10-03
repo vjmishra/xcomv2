@@ -1266,19 +1266,14 @@ ul.megamenu {
 	border: 1px solid #ddd;
 	padding: 6px 4px;
 }
-.pagination .active {
+.pagination .active  {
 	background-color: #1a8664;
-	border: 1px solid #086447;
+	border: 1px solid #1a8664;
 	color: #fff;
 	cursor: default;
 	font-weight: bold;
 	padding: 6px;
-	z-index: 2;
-}
-@-moz-document url-prefix("") {
-.pagination .active {
-	padding: 4px 6px 6px;
-}
+	line-height: 12px;
 }
 .pagination .active span {
 	color: #ffffff;

@@ -1920,9 +1920,8 @@ div.specs-tab {
 	padding: 5px 0px;
 	width: 260px;
 }
-.specs-wrap li.chart-spec-last{
+.specs-wrap li:last-child {
 	border-bottom: none;
-	padding: 5px 0px 0px 0px;
 }
 .chart-spec {
 	width: 100px;

@@ -1001,14 +1001,9 @@ ul.megamenu {
 	border: 1px solid #428bca;
 	background-color: #3577d1;
 	font-weight: bold;
+	line-height: 12px;
 }
 
-@
--moz-document url-prefix () { .pagination .active { padding:4px6px6px;
-	
-}
-
-}
 .pagination .active span {
 	color: #ffffff;
 }
