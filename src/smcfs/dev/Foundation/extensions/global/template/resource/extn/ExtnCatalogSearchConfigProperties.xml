@@ -20,10 +20,9 @@
 							GetExternalValue="Y" Index="ANALYZED" Store="Y"
 							IndexFieldName="contractBillTos" Searchable="Y"
 							UseSynonyms="N" Sortable="N"/>
-						<Attribute DefaultWeight="1.0"
-							GetExternalValue="Y" Index="ANALYZED" Store="Y"
-							IndexFieldName="Item.ExtnSourcingStatus" Searchable="Y"
-							UseSynonyms="N" Sortable="N"/>                    <!-- TODO should this be NOT ANALYZED -->
+						<Attribute IndexFieldName="Item.ExtnSourcingStatus"
+							XMLName="ExtnSourcingStatus" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="Y" UseSynonyms="N" Searchable="Y" Sortable="Y" />
 						<Attribute IndexFieldName="Item.ExtnMpc"
 							XMLName="ExtnMpc" DefaultWeight="1.0" Index="NOT_ANALYZED"
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
