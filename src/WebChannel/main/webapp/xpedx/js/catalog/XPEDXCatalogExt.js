@@ -111,10 +111,9 @@ function clearCreateNewList()
 
 function clearCatalogFilters()
 {			
-	document.getElementById('stockedItem').value = false;
-	document.getElementById('contractItem').value = false;
 	document.getElementById("stockedItemChk").checked=false;
 	document.getElementById("contractItemChk").checked=false;
+	document.getElementById("bestSellerItemChk").checked=false;
 	setCatalogFilters();
 }
 

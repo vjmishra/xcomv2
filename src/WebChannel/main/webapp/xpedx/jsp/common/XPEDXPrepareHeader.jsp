@@ -1066,15 +1066,16 @@ var selectedShipCustomer = null;
 <script type="text/javascript">
 	// All filters
 	function setCatalogFilters() {
-		var isStocked  = document.getElementById('stockedItem').value;	
-		var isContract = document.getElementById('contractItem').value;
-		//TODO add Best
+		var isStocked    = document.getElementById('stockedItemChk').checked;	
+		var isContract   = document.getElementById('contractItemChk').checked;
+		var isBestSeller = document.getElementById('bestSellerItemChk').checked;
 		var searchTermString = document.getElementById("searchTermString").value;
 		Ext.Ajax.request({
       		url: '<s:property value="#setCatalogFiltersURL"/>',
       		params: {
-      			stockedCheckeboxSelected: isStocked,
-      			contractCheckboxSelected: isContract
+      			stockedCheckeboxSelected:   isStocked,
+      			contractCheckboxSelected:   isContract,
+      			bestSellerCheckboxSelected: isBestSeller
           		},
       		method: 'POST',
       		success: function (response, request){

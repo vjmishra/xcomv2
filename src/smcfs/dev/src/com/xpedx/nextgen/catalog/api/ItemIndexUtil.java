@@ -94,16 +94,16 @@ public class ItemIndexUtil {
 
 		YFCDocument contractsInputDoc = getContractsApiInput(itemIds);
 
-		// Setting a template would only filter out createTs
-
+		final String serviceName = "XPXGetItemContractExtn";
 		if (log.isDebugEnabled()) {
-			log.warn("Invoking XPXGetItemContractExtn");
+			log.warn("Invoking " + serviceName);
 			log.warn("itemInputDoc = " + SCXmlUtil.getString(contractsInputDoc.getDocument()));
 		}
 
+		env.setApiTemplate(serviceName, SCXmlUtil.createFromString(getContractApiTemplate(env)));
 		YIFApi api = YIFClientFactory.getInstance().getApi();
 
-		Document contractsOutputDoc = api.executeFlow(env, "XPXGetItemContractExtn", contractsInputDoc.getDocument());
+		Document contractsOutputDoc = api.executeFlow(env, serviceName, contractsInputDoc.getDocument());
 
 		return contractsOutputDoc.getDocumentElement();
 	}
@@ -122,6 +122,13 @@ public class ItemIndexUtil {
 			expElem.setAttribute("Value", itemId);
 		}
 		return contractsInputDoc;
+	}
+	private String getContractApiTemplate(YFSEnvironment env) {
+		String templateXml = ""
+				+ "<XPXItemContractExtnList>"
+				+ "  <XPXItemContractExtn CustomerId='' ItemId=''/>"
+				+ "</XPXItemContractExtnList>";
+		return templateXml;
 	}
 	private void addBillToForItem(Map<String, Set<String>> contractBillTosForItems, Element itemElem) {
 		Set<String> contractBillTos;

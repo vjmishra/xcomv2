@@ -69,19 +69,23 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	private static final String STOCKED_CHECKBOX = "StockedCheckbox";
 	private static final String CONTRACT_CHECKBOX = "ContractCheckbox";
+	private static final String BESTSELLER_CHECKBOX = "BestSellerCheckbox";
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger(XPEDXCatalogAction.class);
 
-	private String customerNumber = null;
-	private boolean isContractItemFlag = false;
+	// variables for filters
 	private boolean isStockedItem = false;
 	private boolean isContractItem = false;
-	private boolean CategoryC3 = false;
-	private String priceCurrencyCode;
-	private static final String CUSTOMER_PART_NUMBER_FLAG = "1";
+	private boolean isBestSellerItem = false;
 	private boolean stockedCheckeboxSelected;
 	private boolean contractCheckboxSelected;
+	private boolean bestSellerCheckboxSelected;
+
+	private String customerNumber = null;
+	private boolean isContractItemFlag = false;
+	private boolean CategoryC3 = false;
+	private String priceCurrencyCode;
 	private Map<String, Map<String, String>> itemUomHashMap = new HashMap<String, Map<String, String>>();
 	private Map<String, String> uomConvFactorMap = new HashMap<String, String>();
 	ArrayList<String> itemIDList = new ArrayList<String>();
@@ -369,14 +373,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 		CategoryC3 = categoryC3;
 	}
 
-	// Stocked Items checkbox support
+	// Stocked Items filter checkbox support
 	public boolean isStockedCheckeboxSelected() {
 		return stockedCheckeboxSelected;
 	}
 	public void setStockedCheckeboxSelected(boolean stockedCheckeboxSelected) {
 		this.stockedCheckeboxSelected = stockedCheckeboxSelected;
 	}
-
 	private void setStockedItemFromSession() {
 		if (getWCContext().getWCAttribute(STOCKED_CHECKBOX, WCAttributeScope.SESSION) == null) {
 			// init session value from bill-to setting
@@ -394,14 +397,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 	}
 
-	// Contract Items checkbox support
+	// Contract Items filter checkbox support
 	public boolean isContractCheckboxSelected() {
 		return contractCheckboxSelected;
 	}
 	public void setContractCheckboxSelected(boolean contractCheckboxSelected) {
 		this.contractCheckboxSelected = contractCheckboxSelected;
 	}
-
 	private void setContractItemFromSession() {
 		if (getWCContext().getWCAttribute(CONTRACT_CHECKBOX, WCAttributeScope.SESSION) == null) {
 			getWCContext().setWCAttribute(CONTRACT_CHECKBOX, false, WCAttributeScope.SESSION);
@@ -409,6 +411,23 @@ public class XPEDXCatalogAction extends CatalogAction {
 		Object contractCheckboxSelected = getWCContext().getWCAttribute(CONTRACT_CHECKBOX, WCAttributeScope.SESSION);
 		if (contractCheckboxSelected != null) {
 			isContractItem = contractCheckboxSelected.toString().equalsIgnoreCase("true");
+		}
+	}
+
+	// Best Seller Items filter checkbox support
+	public boolean isBestSellerCheckboxSelected() {
+		return bestSellerCheckboxSelected;
+	}
+	public void setBestSellerCheckboxSelected(boolean bestSellerCheckboxSelected) {
+		this.bestSellerCheckboxSelected = bestSellerCheckboxSelected;
+	}
+	private void setBestSellerItemFromSession() {
+		if (getWCContext().getWCAttribute(BESTSELLER_CHECKBOX, WCAttributeScope.SESSION) == null) {
+			getWCContext().setWCAttribute(BESTSELLER_CHECKBOX, false, WCAttributeScope.SESSION);
+		}
+		Object bestSellerCheckboxSelected = getWCContext().getWCAttribute(BESTSELLER_CHECKBOX, WCAttributeScope.SESSION);
+		if (bestSellerCheckboxSelected != null) {
+			isBestSellerItem = bestSellerCheckboxSelected.toString().equalsIgnoreCase("true");
 		}
 	}
 
@@ -884,7 +903,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
 						// eb-3685: marketing group search 'search within results' cannot use SHOULD
-						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem && !isContractItem) {
+						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem && !isContractItem && !isBestSellerItem) {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "SHOULD");
 
 						} else {
@@ -989,6 +1008,15 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 		}
 
+		setBestSellerItemFromSession();
+		if (isBestSellerItem) {
+			elements = SCXmlUtil.getElements(mashupInput, "Terms");
+			Element term = createTerm(elements, mashupInput, TERMS_NODE);
+			term.setAttribute("Condition", "MUST");
+			term.setAttribute("IndexFieldName", "Item.ExtnSourcingStatus");
+			term.setAttribute("Value", "CR");
+		}
+
 		// EB-1731 Adding api inputXML in request so that it should not do all calculation on View all link
 		//         the size of this xml will be around 100 bytes so there will not be any latency.
 		searchIndexInputXML = SCXmlUtil.getString(mashupInput).replace("\n", "");
@@ -1001,7 +1029,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 		} else {
 			terms = SCXmlUtil.createChild(mashupInput, "Terms");
 		}
-
 		Element term = SCXmlUtil.createChild(terms, "Term");
 		return term;
 	}
@@ -2149,10 +2176,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 
 		setStockedItemFromSession();
-		if (isStockedItem) {
+		if (isStockedItem || isContractItem || isBestSellerItem) {
 			setsearchMetaTag(true);
 		}
-		//TODO need something like this for Contract?
 
 		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(), path);
 
@@ -2932,11 +2958,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 		return _pricelistLineMap;
 	}
 
-	//TODO add Best
 	public String setCatalogFilters() {
 		init();
 		getWCContext().setWCAttribute(STOCKED_CHECKBOX,  isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
 		getWCContext().setWCAttribute(CONTRACT_CHECKBOX, isContractCheckboxSelected(), WCAttributeScope.SESSION);
+		getWCContext().setWCAttribute(BESTSELLER_CHECKBOX, isBestSellerCheckboxSelected(), WCAttributeScope.SESSION);
 		return SUCCESS;
 	}
 

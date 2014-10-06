@@ -389,11 +389,13 @@
 	<s:if test="#isGuestUser == false">	
 		<div class="filter-by">
 			<div class="title">Filter By:</div>
-			<div><input id="bestSellerItemChk" type="checkbox" <s:if test="%{false}">checked</s:if> />Best Seller</div> <!-- TODO -->
+			<s:set name="isBestSellerChecked" value="%{getWCContext().getWCAttribute('BestSellerCheckbox')}"/>
+			<div><input id="bestSellerItemChk" type="checkbox" <s:if test="%{isBestSellerChecked}">checked</s:if>
+				onclick="setCatalogFilters();"/>Best Seller</div>
 
 			<s:set name="isContractChecked" value="%{getWCContext().getWCAttribute('ContractCheckbox')}"/>
 			<div><input id="contractItemChk"   type="checkbox" <s:if test="%{isContractChecked}">checked</s:if>
-				onchange="setFilterItemFlags();setCatalogFilters();"/>Contract Pricing</div>
+				onclick="setCatalogFilters();"/>Contract Pricing</div>
 
 			<s:if test="#currentShipTo.billTo.extnDefaultStockedItemView == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED">
 				<s:hidden name="stockedItemChk" value="true" />
@@ -401,7 +403,7 @@
 			<s:else>
 				<s:set name="isStockChecked" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
 				<div><input id="stockedItemChk" type="checkbox"  <s:if test="%{#isStockChecked}">checked</s:if>
-					onchange="setFilterItemFlags();setCatalogFilters();"/>Normally Stocked</div>
+					onclick="setCatalogFilters();"/>Normally Stocked</div>
 			</s:else>
 			<div><a href="javascript:clearCatalogFilters()" class="underline">Clear Filters</a></div>
 		</div>

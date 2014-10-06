@@ -22,20 +22,6 @@
 	id='util' />
 <s:set name='isGuestUser' value="wCContext.guestUser" />
 
-<script type="text/javascript">	
-function setFilterItemFlags()
-{
-	if(document.getElementById('stockedItemChk').checked)
-	{
-		document.getElementById('stockedItem').value = true;
-	}
-	if(document.getElementById('contractItemChk').checked)
-	{
-		document.getElementById('contractItem').value = true;
-	}
-}
-</script>
-
 
 <!-- begin left column -->
 <s:set name='FacetsList' value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")' />
@@ -52,10 +38,7 @@ function setFilterItemFlags()
 	<s:form name='narrowSearch' action="search">
 		<div class="searchbox-form1">
 			<div class="catalog-search-container">
-
 				<input id="search_searchTerm" class="x-input input-watermark input-watermark-color" data-watermark="Search Within Results..." name="searchTerm" tabindex="1002" type="text" >
-				<input name="stockedItem" value="false" id="stockedItem" type="hidden">
-				<input name="contractItem" value="false" id="contractItem" type="hidden">
 			</div>
 		</div>
 	</s:form>
