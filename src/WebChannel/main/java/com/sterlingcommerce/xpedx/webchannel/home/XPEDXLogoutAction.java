@@ -37,6 +37,8 @@ public class XPEDXLogoutAction extends Logout {
 		
 		final DefaultHttpClient httpClient = new DefaultHttpClient();
 		
+		if(getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP")!=null){
+			isSalesRep=(String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
 		}
 		if( isSalesRep!= null && isSalesRep.equalsIgnoreCase("true")){
 			returnType="SalesRepUser";
