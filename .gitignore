@@ -3,5 +3,3 @@
 src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.lock
 *.zip
 src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/*
-.project
-.classpath
