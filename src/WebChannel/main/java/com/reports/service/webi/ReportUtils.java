@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -17,18 +18,33 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+//import com.linar.jintegra.Log;
 import com.reports.service.Report;
+import com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetAllReportsAction;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfs.core.YFSSystem;
 
+//ML: BI4 changes.
+import javax.servlet.http.HttpSession;
+
+/*
+ * This utility class is used to connect to the BI4 server, query the CMS server and retrieve report documents.
+ * 
+ * 
+ */
 public class ReportUtils {
 
 	String msgStr = "";
+	private static final Logger log = Logger.getLogger(XPEDXGetAllReportsAction.class);
 
+	/*
+	 * getCMSLogonDetails returns the logon settings for the BI server specified in xpedx_reporting.properties
+	 */
 	public static Map<String, String> getCMSLogonDetails() {
 		Map<String, String> logonMap = new HashMap<String, String>();
 
@@ -49,6 +65,10 @@ public class ReportUtils {
 
 	}
 
+	/*
+	 * loadInputStream reads an input stream and returns it as a string. 
+	 * 
+	 */
 	public String loadInputStream(InputStream inputStream) throws Exception {
 		byte[] buffer = new byte[1024];
 		String sFinal = "";
@@ -65,6 +85,9 @@ public class ReportUtils {
 		return sFinal;
 	}
 
+	/*
+	 * getOpenDocURL returns the URI of the open document specified by the JSONObject obj.
+	 */
 	public String getOpenDocURL(JSONObject obj) {
 		String sReturn = "";
 		JSONObject subobj = (JSONObject) obj.get("openDocument");
@@ -73,6 +96,10 @@ public class ReportUtils {
 		return sReturn;
 	}
 
+	/*
+	 * getAllReports returns an arraylist of report objects from/after parsing the JSONObject obj.
+	 * 
+	 */
 	public List<Report> getAllReports(JSONObject obj) throws Exception {
 		List<Report> reportList = new ArrayList<Report>();
 		JSONArray document = (JSONArray) obj.get("entries");
@@ -92,6 +119,10 @@ public class ReportUtils {
 		return reportList;
 	}
 
+	/*
+	 * getParams returns a list of parameters as a string from the report specified in the JSONObject.
+	 * 
+	 */
 	public String getParams(JSONObject obj, Map<String, String> paramVals)
 			throws Exception {
 		String sResult = "";
@@ -155,6 +186,10 @@ public class ReportUtils {
 		return sResult;
 	}
 
+	/*
+	 * makes an http post to a server.
+	 * 
+	 */
 	public HttpHost getHttpHost(String sServer) {
 
 		String[] cms = sServer.split("\\:");
@@ -167,6 +202,11 @@ public class ReportUtils {
 		return target;
 	}
 
+	/*
+	 * logonCMS logs onto the CMS server using the authentication model specified and returns a logonToken. 
+	 * NOTE/WARNING: Encoding the token might cause the new sessions to require new logons again. 
+	 * TO DO: FIND OUT IF TOKEN IS GETTING PASSED CORRECTLY ON SUBSEQUENT CALLS.
+	 */
 	public ArrayList<String> logonCMS(String sUserName, String sPassword,
 			String sAuth, HttpHost target) throws Exception {
 		final DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -233,7 +273,11 @@ public class ReportUtils {
 											// call;
 				return result;
 			}
-		} finally {
+		}
+		catch (Exception e) {
+			log.debug("in logonCMS() function. Could not connect to target BI server due to:->" + e.getMessage());
+			}
+		finally {
 			// When HttpClient instance is no longer needed,
 			// shut down the connection manager to ensure
 			// immediate deallocation of all system resources
@@ -242,6 +286,9 @@ public class ReportUtils {
 		return result;
 	}
 
+	/*
+	 * getOpenDoc makes a call to the BI server and opens the document specified by docID using HttpPost and the specified token.
+	 */
 	public String getOpenDoc(String docId, HttpHost target, String token)
 			throws Exception {
 		final DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -270,6 +317,9 @@ public class ReportUtils {
 		return sReturn;
 	}
 
+	/*
+	 *  getParamString returns a list of parameters for the specified report/document (docID) as a string. 
+	 */
 	public String getParamString(String docID, HttpHost target, String token,
 			Map<String, String> paramVals) throws Exception {
 		final DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -299,12 +349,16 @@ public class ReportUtils {
 		return sReturn;
 	}
 
+	/*
+	 * getPromptsAsString connects to BI using the specified token, and returns the report(docID) parameters as a plain string. 
+	 * relies on getPrompts() to do the parsing of the JSONObject. 
+	 */
 	public List<String> getPromptsAsString(String docID, HttpHost target,
 			String token) throws Exception {
 		final DefaultHttpClient httpClient = new DefaultHttpClient();
 		List<String> promptList = null;
 		try {
-			HttpGet httpGetRequest = new HttpGet(
+ 			HttpGet httpGetRequest = new HttpGet(
 					"/biprws/raylight/v1/documents/" + docID + "/parameters");
 			httpGetRequest.addHeader("Accept", "application/JSON");
 			httpGetRequest.addHeader("X-SAP-LogonToken", token);
@@ -323,11 +377,17 @@ public class ReportUtils {
 				}
 			}
 		} finally {
+						
+			//finally shutdown client.
 			httpClient.getConnectionManager().shutdown();
 		}
 		return promptList;
 	}
 
+	/*
+	 * getPrompts is a utility function that parses a JSONOjbect for "parameters" and retrieves their name property, 
+	 * stores and returns them in an ArrayList of strings.
+	 */
 	public List<String> getPrompts(JSONObject obj) {
 		List<String> promptList = new ArrayList<String>();
 
@@ -343,6 +403,10 @@ public class ReportUtils {
 		return promptList;
 	}
 
+	/*
+	 * getAllDocuments logs onto the BI server using the previously retrieved token and retries all the reports in the specified folder (folderId) 
+	 * and returns them as a List object. 
+	 */
 	public List<Report> getAllDocuments(HttpHost target, String token,
 			String folderId) throws Exception {
 		final DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -371,6 +435,57 @@ public class ReportUtils {
 			httpClient.getConnectionManager().shutdown();
 		}
 		return reportList;
+	}
+	
+	/*
+	 *  EB-7221 - Logs off BI4 and returns the http status code of the logoff call. 
+	 */
+	public String logOffBI(String logonToken)
+	{
+		//BI4 reporting / logoff
+		HttpHost target; 
+		String username;
+		String password;
+		String authentication;
+		String CMS;
+		String tmp = "Error during logoff from BI.";
+		//Logoff from BI session - Mahmoud		
+		try{
+			final DefaultHttpClient httpClient = new DefaultHttpClient();
+			//log off from the BI session. Note: Only if we have a LogonToken can we do a logoff			
+			if (logonToken != null) {			
+				
+				Map<String,String> CMSLogonDetails = ReportUtils.getCMSLogonDetails();
+				username = CMSLogonDetails.get("username").toString();
+				password = CMSLogonDetails.get("password").toString();
+				authentication = CMSLogonDetails.get("authentication").toString();
+				CMS = CMSLogonDetails.get("CMS").toString();
+				//postpone setting _target until CMS is read to avoid calling getCMSLogonDetails() more than once. 
+				
+				target = getHttpHost(CMS);
+				
+				HttpPost httpPostRequest = new HttpPost("/biprws/logoff");
+				httpPostRequest.addHeader("Accept", "application/JSON");
+				httpPostRequest.addHeader("Content-Type", "application/JSON");
+				httpPostRequest.addHeader("X-SAP-LogonToken", logonToken);				 
+				//
+				// Send the Post.
+				//
+				HttpResponse httpResponse = httpClient.execute(target,
+						httpPostRequest);
+				System.out.println("Executed call to logoff from BI.");
+				tmp = httpResponse.getStatusLine().toString();
+				System.out.println("Http Status code from BI Logoff = " + tmp);
+			}		
+			
+		}
+		catch(Exception ex1)
+		{
+			tmp = "Could not logoff from BI/CMS. due to " + ex1.getMessage();
+			//System.out.println(tmp);
+		}
+		return tmp;
+
 	}
 
 }

@@ -42,29 +42,51 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 	}
 	
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see com.sterlingcommerce.webchannel.core.WCMashupAction#execute()
+	 * This action class logs onto BI and retrieves a list of all the standard, then custom reports. 
+	 * It adds the standard reports to the standardReportList
+	 * public variable to use on the JSP. Then compares the the user's entitled custom 
+	 * reports to the list retrieved from BI. If any match, they are added to the ValidCustomReportList public variable to display to the user. 
+	 */
 	public String execute() {
-		String wcPropertiesFile = "xpedx_reporting.properties";
-		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);
-		
-		/*XPEDXReportService reportService = new XPEDXReportService();
-		ReportService intReportService = reportService.getReportService();
-		ReportList reportList = intReportService.getReports();
-		customReportList = reportList.getCustReportList();
-		standardReportList = reportList.getStdReportList();*/ 
-		
-		
+		String username;
+		String password;
+		String authentication;
+		String CMS;
+		String standard_folder_id = "";
+		String custom_folder_id = "";
+		HttpHost _target = null;
+		String wcPropertiesFile = "xpedx_reporting.properties";		
+		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);		
 		ReportUtils ru = new ReportUtils();
-
-		HttpHost _target = ru.getHttpHost(ReportUtils.getCMSLogonDetails().get("CMS"));
-
 		ArrayList<String> logonTokens = null;
+		
 		try {
-			logonTokens = ru.logonCMS(
-					ReportUtils.getCMSLogonDetails().get("username"),
-					ReportUtils.getCMSLogonDetails().get("password"),
-					ReportUtils.getCMSLogonDetails().get("authentication"), _target);
+			//ML - changed logic to read CMS Info from property file only once. 
+			Map<String,String> CMSLogonDetails = ReportUtils.getCMSLogonDetails();
+			username = CMSLogonDetails.get("username").toString();
+			password = CMSLogonDetails.get("password").toString();
+			authentication = CMSLogonDetails.get("authentication").toString();
+			standard_folder_id = CMSLogonDetails.get("standard_folder_id").toString();
+			custom_folder_id = CMSLogonDetails.get("custom_folder_id").toString();
+			CMS = CMSLogonDetails.get("CMS").toString();
+			_target = ru.getHttpHost(CMS);
+			
+			//ML:Find out if logonTokens is in session. If not, then go get a new one and store it in the session. 
+			//this logic should be reused across this "Report List" page, the "Report Details" page, and the ReportDisplay page to avoid
+			//creating too many sessions and violate the SAP license agreement. 
+			logonTokens = (ArrayList) request.getSession().getAttribute("logonTokens"); 
+			if ((logonTokens == null) || (logonTokens.size() != 2)) {				
+				logonTokens = ru.logonCMS(username, password, authentication, _target);
+				//store the logonTokens in session for future use
+				request.getSession().setAttribute("logonTokens", logonTokens);
+			}							
+			
+		
 		} catch (Exception e) {
+			System.out.println("Could not logon to BI/CMS using the supplied credentials.");
 			e.printStackTrace();
 		}
 		Boolean isOK = true;
@@ -74,12 +96,12 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 		}
 		if (isOK) {			
 			try {
-				standardReportList = ru.getAllDocuments(_target, logonTokens.get(0), ReportUtils.getCMSLogonDetails().get("standard_folder_id"));
+				standardReportList = ru.getAllDocuments(_target, logonTokens.get(0), standard_folder_id);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			try {
-				customReportList = ru.getAllDocuments(_target, logonTokens.get(0), ReportUtils.getCMSLogonDetails().get("custom_folder_id"));
+				customReportList = ru.getAllDocuments(_target, logonTokens.get(0), custom_folder_id);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
