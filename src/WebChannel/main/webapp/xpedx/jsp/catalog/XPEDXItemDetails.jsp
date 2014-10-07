@@ -13,7 +13,7 @@
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils' id='utilMIL' />
 <s:set name='scuicontext' value="uiContext" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
-
+<s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <swc:html isXhtml="true">
@@ -134,6 +134,7 @@
 			<s:set name='pImg' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 		</s:if>
 		<s:set name="isStocked" value="isStocked" />
+		<s:set name="displayInventoryIndicator" value="displayInventoryIndicator" />
 		<s:set name="orderMultiple" value="orderMultiple" />
 		<s:set name='showCurrencySymbol' value='true' />
 		<s:set name='currency' value='#xutil.getAttribute(#itemListElem,"Currency")' />
@@ -188,7 +189,7 @@
 				<p class="addmarginbottom15"><a href="javascript:goBack();">&lsaquo; Back</a></p>
 				
 				<div id="errorMessageDiv"></div>
-				<h1 style="font-weight:bold; "><s:property	value='#xutil.getAttribute(#primaryInfoElem,"ShortDescription")' /></h1>
+				<h1><s:property	value='#xutil.getAttribute(#primaryInfoElem,"ShortDescription")' /></h1>
 				<div id="printButton" class="print-ico-xpedx underlink">
 					<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
 				</div>
@@ -243,26 +244,6 @@
 						<ul id="prodlist">
 							<s:property value='#xutil.getAttribute(#primaryInfoElem,"Description")' escape="false"/>
 						</ul>
-						<div class="relative">
-							<s:if test="%{#wcUtil.isCoreItem(#itemElem)}">
-								<div class="core-item"></div>
-							</s:if>
-							<s:if test="#itemMainImages != null && #itemMainImages.size() > 0">
-								<s:set name='imageMainLocation'	value="#xutil.getAttribute(#itemMainImages[0], 'ContentLocation')" />
-								<s:set name='imageMainId' value="#xutil.getAttribute(#itemMainImages[0], 'ContentID')" />
-								<s:hidden name="hdn_imageMainId" value="%{#imageMainId}" />
-								<s:set name='imageMainLabel' value="#xutil.getAttribute(#itemMainImages[0], 'Label')" />
-								<s:set name='imageMainURL'	value="#imageMainLocation + #imageMainId " />
-								<s:if test='%{#imageMainURL=="/"}'>
-									<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
-								</s:if>
-								<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>" class="prodImg" id="productImg1" alt="<s:text name='%{#imageMainLabel}'/>" />
-							</s:if>
-							<s:else>
-								<img src="<s:url value='%{#pImg}'/>"  class="prodImg" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
-							</s:else>
-						</div>
-						
 						<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL"/>
 						<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
 						<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
@@ -278,9 +259,25 @@
 						<s:if test= '%{#_action.getExtnCustomerItemFlag()== "Y"}'>
 							<div class="cust-numbers"><s:property value="#customerItemLabel" />: <s:property value='custPartNumber' /></div>
 						</s:if>
-						<s:if test='%{#isStocked !="Y"}'>
-							<div class="mill-mfg-message">Mill / Mfg. Item - Additional charges may apply</div>
-						</s:if>
+						<div class="relative">
+							<s:if test="%{#wcUtil.isCoreItem(#itemElem)}">
+								<div class="core-item"></div>
+							</s:if>
+							<s:if test="#itemMainImages != null && #itemMainImages.size() > 0">
+								<s:set name='imageMainLocation'	value="#xutil.getAttribute(#itemMainImages[0], 'ContentLocation')" />
+								<s:set name='imageMainId' value="#xutil.getAttribute(#itemMainImages[0], 'ContentID')" />
+								<s:hidden name="hdn_imageMainId" value="%{#imageMainId}" />
+								<s:set name='imageMainLabel' value="#xutil.getAttribute(#itemMainImages[0], 'Label')" />
+								<s:set name='imageMainURL'	value="#imageMainLocation + #imageMainId " />
+								<s:if test='%{#imageMainURL=="/"}'>
+									<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+								</s:if>
+								<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>" class="prodImg addmargintop10" id="productImg1" alt="<s:text name='%{#imageMainLabel}'/>" />
+							</s:if>
+							<s:else>
+								<img src="<s:url value='%{#pImg}'/>"  class="prodImg addmargintop10" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
+							</s:else>
+						</div>
 						<s:if test="msdsLinkMap != null && msdsLinkMap.size() > 0">
 							<div class="detail-msds-button">
 								<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
@@ -292,8 +289,12 @@
 						</s:if>
 					</div> <%-- / detail-image-wrap --%>
 					
+					<s:set name='paragraph' value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' />
+					<s:hidden id='paragraphvalue'  value='%{#paragraph}'></s:hidden> 
 					<div class="order-wrap">
-						<p><s:property value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' escape="false"/></p>
+						<s:if test='#paragraph!=""'>
+						<p class="addmarginbottom10"><s:property value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' escape="false"/></p>
+						</s:if>
 						<s:if test='%{#_action.getWCContext().isGuestUser()}'>
 							<div class="addpadtop20 addpadright20">
 								<h4>Price and availability are offered to registered customers. Please contact us at
@@ -317,7 +318,7 @@
 										<s:hidden id="Qty_Check_Flag" name="Qty_Check_Flag" value="false"/>
 										<div class="order-label">Qty:</div>
 										<div class="order-input">
-											<s:textfield name='qtyBox' id="%{'Qty_' + #itemID}" size="7" maxlength="7"	
+											<s:textfield name='qtyBox' id="%{'Qty_' + #itemID}" size="6" maxlength="7"	
 													value="%{#_action.getRequestedQty()}"
 													theme="simple" onkeyup="isValidQuantityRemoveAlpha(this,event);"
 													onchange="isValidQuantity(this); qtyInputCheck(this);"
@@ -375,8 +376,22 @@
 								</div>
 							</div> <%-- / item-button-wrap --%>
 							
-							<s:div id="%{'errorMsgForQty_' + #itemID}" cssClass="addmarginbottom20" cssStyle="display:inline-block;"></s:div>
+							<s:div id="%{'errorMsgForQty_' + #itemID}" cssClass="addmarginbottom10" cssStyle="display:inline-block;"></s:div>
 						</s:else> <%-- / if-else guest user --%>
+						
+						<s:if test='%{#displayInventoryIndicator=="I"}'>
+							<div class="non-stock-item"><div class="stock-icon">
+								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25"/>
+								</div>Not a Stocked Item<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
+						</s:if>
+						<s:if test='%{#displayInventoryIndicator=="M"}'>
+							<div class="non-stock-item"><div class="stock-icon">
+								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png" width="25" height="25"/>
+								</div>Item Ships Directly from Mfr<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
+						</s:if>
+						<s:if test='%{#displayInventoryIndicator=="W"}'>
+							
+						</s:if>
 						
 						<s:if test="(replacementAssociatedItems!=null && replacementAssociatedItems.size() > 0)">
 							<div class="replacement-item">
@@ -406,8 +421,11 @@
 						</s:if>
 						<div class="pa-wrap">
 							<%-- This will be filled by ajax as the PnA call happens on page load as Ajax --%>
-							<div style="display: none;" id="availabilty_<s:property value='%{#itemID}' />" class="price-and-availability"></div>
+							<div style="display: none;"
+								id="availabilty_<s:property value='%{#itemID}' />"
+								class="price-and-availability"></div>
 						</div>
+
 					</div> <%-- / order-wrap --%>
 				</div> <%-- / image-order-container --%>
 				

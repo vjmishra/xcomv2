@@ -20,44 +20,26 @@
 
 	<div class="xpedx-light-box" id="dlgImportForm">
 		
-		<h2> <s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /> </h2>
+		<h1><s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /></h1>
 		<div  id="importItems">
 			<s:form name="formImport" id="formImport" action="MyItemsDetailsImportPrepare" method="post" enctype="multipart/form-data">
 			  
 				<div id="errorMsgForRequiredField" class="error" style="display: none;"></div> 
 				
 				<div>
-		            <p>
-		            	Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file.
-		            </p>
-		            
-		            <p>
-		            	A sample file is provided. Delete the item contents and enter your own data.
-		            </p>
-		            
-					<input class="btn-neutral floatleft addmargintop10" type="submit" value="Download Sample" onclick="window.location.href='../sample/SampleImport.csv'; return false;" />
-		            
-		            <p>
-		            	Please note that an individual My Items List cannot exceed 200 items.
-		            </p>
-		            
-		            <p>
-		            	To import the file, locate the file on your hard drive by using the 'Browse' button or by typing the file path in the box below.
-		            	After the file is located, click 'Open' and then click the 'Import' button.
-		            </p>
-		            <br />
+		            <p class="addmargintop0 addmarginbottom10">Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file.</p>
+		            <p class="addmarginbottom10">A sample file is provided. Delete the item contents and enter your own data.</p>
+		            <p class="addmarginbottom10"><a href="#"  onclick="window.location.href='../sample/SampleImport.csv'; return false;">Download Sample File</a></p>
+		            <p class="addmarginbottom10 small"><span class="bold">Please Note:</span> Individual My Items Lists cannot exceed 200 items. </p>
+					<hr class="shade"/>
+					<h4 class="addmargintop10 addmarginbottom10">Importing</h4>
+					<p class="addmarginbottom10">To import the file, locate the file on your hard drive by using the 'Browse' button. After the file is located, click 'Open' and then click the 'Import' button. </p>
 		            
 					<s:file name="upload" size="50" id="File"/>
-					
-					<center>
 						<div id="errorMsgForBrowsePath" class="error error-msg-btm" style="display: none;" >
 							<s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.FILEPATH" />
 						</div>
-					</center>
-					
-					<p>
-						Items are imported in the same order they are listed in the file, and added to the bottom of the My Items List.
-					</p>
+					<p class="addmargintop10">Items are imported in the same order they are listed in the file, and added to the bottom of the My Items List.</p>
 		        	
 					<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 					<s:hidden name="editMode" value="%{true}"></s:hidden>

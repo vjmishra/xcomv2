@@ -554,9 +554,10 @@ width:100%;
 	float: right;
 	clear: none;
 	width: 365px;
-	top: 30px;
+	top: 10px;
 	left: 424px;
-	position: absolute;
+	margin-top:-155px;
+	width: 400px;
 }
 .normal-view #item-ct dd .order-row {
 	height: 25px;
@@ -566,7 +567,7 @@ width:100%;
 	float: left;
 	width: 160px;
 	text-align: right;
-	padding: 3px 6px 6px 0px;
+	padding: 3px 6px 6px 35px;
 }
 .normal-view #item-ct dd .order-input-wrap .order-input {
 	float: right;
@@ -803,10 +804,10 @@ ul
 	text-align: center;
 }
 
-#items-control{
+/* #items-control{
 	float:left;
 	width:99%;
-}
+} */
 #items-combox {
 	
 }
@@ -1380,7 +1381,7 @@ img#youtube { margin-right: 9px; }
 	float: right;
 	clear: both;
 	text-align: right;
-	margin: 25px 0px 16px 0px;
+	margin: 25px 0px 5px 0px;
 }
 
 .condensed-view  #item-ct dd .mill-mfg {
@@ -1445,3 +1446,42 @@ img#youtube { margin-right: 9px; }
 .condensed-view  #item-ct dd .notice {
 	margin-bottom: 10px;
 	}
+
+	/*----------NON STOCK ITEMS------------*/
+.mini-view .non-stock-item {
+	font-weight: bold;
+	font-style: italic;
+	color: #000000;
+	text-align: right;
+	clear: both;
+	font-size: 12px;
+	padding: 15px 10px 0 0;
+	}
+.mini-view .non-stock-item .stock-icon {
+	float: right;
+	clear: none;
+	margin-left: 5px;
+	margin-top: -6px;
+	}
+.condensed-view .non-stock-item {
+	font-weight: bold;
+	font-style: italic;
+	color: #000000;
+	text-align: right;
+	clear: both;
+	font-size: 12px;
+	padding: 5px 10px 15px 0;
+	}
+.condensed-view .non-stock-item .stock-icon {
+	float: right;
+	clear: none;
+	margin-left: 5px;
+	margin-top: -6px;
+	}
+.replacement-text {
+	text-align: right;
+	width: 435px;
+	margin: 5px; 
+	padding: 2px;
+	}
+	

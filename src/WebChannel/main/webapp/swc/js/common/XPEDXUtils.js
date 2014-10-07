@@ -62,9 +62,9 @@ function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
 	$.fancybox(
 		Ext.get("replacementItems").dom.innerHTML,
 		{
-        	'autoDimensions'	: true,
-			'width'         	: 350,
-			'height'        	: 'auto'
+        	'autoDimensions'	: false,
+			'width'         	: 600,
+			'height'        	: 360
 		}
 	);	  	
 }

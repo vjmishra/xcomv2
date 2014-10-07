@@ -27,12 +27,12 @@
 					</xsl:if>
 					<xsl:if test = '//@BrandName="xpedx"'>
 					<xsl:element name="a">	
-						<xsl:attribute name="href">mailto:ebusiness@<xsl:value-of select="//@BrandName"/>.com</xsl:attribute>ebusiness@<xsl:value-of select="//@BrandName"/>.com
+						<xsl:attribute name="href">mailto:ebusiness@veritivcorp.com</xsl:attribute>ebusiness@veritivcorp.com
 					</xsl:element><xsl:text>&#160;or&#160;877 269-1784.</xsl:text>
 					</xsl:if>
 					<xsl:if test = '//@BrandName="Saalfeld"'>
 					<xsl:element name="a">	
-						<xsl:attribute name="href">mailto:ebusiness@<xsl:value-of select="//@BrandName"/>redistribution.com</xsl:attribute>ebusiness@<xsl:value-of select="//@BrandName"/>redistribution.com
+						<xsl:attribute name="href">mailto:ebusiness2@veritivcorp.com</xsl:attribute>ebusiness2@veritivcorp.com
 					</xsl:element><xsl:text>&#160;or&#160;877 269-1784.</xsl:text>
 				</xsl:if>
 			</td>

@@ -3,6 +3,7 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+<s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
 <%-- Quick Scroll Up and Down --%>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-scroll-nav<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/scroll-startstop.events.jquery<s:property value='#wcUtil.xpedxBuildKey' />.js"></script> 
@@ -12,9 +13,9 @@
 		<div style="display:none;" class="nav_up" id="nav_up"></div>
 		<div style="display:none;" class="nav_down" id="nav_down"></div>
 </div>
-
+<s:if test="%{!#isPunchoutUser}"> 
 <div class="t1-footer commonFooter" id="t1-footer">
-		<table>
+<table>
 			<tr>
 				<td class="footer-left" style="border-style: none">&nbsp;</td>
 				<td class="footer-center" style="border-style: none">
@@ -26,7 +27,6 @@
 						    
     						    <td class="first"> 	<s:a href="%{homeLink}">Home</s:a></td>
     						    
-				    
 						    <s:if test="%{#theStoreFront=='xpedx'}">
 								  <td ><a href="http://www.xpedx.com/" target="_blank">About Us</a></td>
 						    </s:if>
@@ -38,7 +38,7 @@
 						    </s:elseif>
 						    <s:elseif test="%{#theStoreFront=='BulkleyDunton'}">
 							      <td><a href="https://www.bulkleydunton.com/" target="_blank">About Us</a></td>
-							</s:elseif>					
+							</s:elseif>
 							<td>
 								<s:url id='contactUsLink' namespace="/common" action='MyContact'>
 								<!-- 	<s:param name="selectedHeaderTab">ToolsTab</s:param>  -->
@@ -63,7 +63,6 @@
 					<div id="footer-copyright">&copy; 2014. All Rights Reserved.</div>
 				</td>
 					<!-- EB-1848 As a web channel user I would like to see updated and new social media icons on the footer page of xpedx.com so that the site reflects the new branding standards -->
-					
 					<td id="social-networking-footer" class="footer-right" style="border-style: none">
 						 <s:if test="%{#theStoreFront=='xpedx'}">						 	
 						 	<a target="_blank" href="https://www.linkedin.com/company/veritiv"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/linkedin_36x36.png" alt="" /></a>
@@ -80,6 +79,48 @@
 			</tr>
 		</table>
 </div>
+</s:if>
+<s:else>
+<div class="t1-footer commonFooter po-footer" id="t1-footer">
+<table>
+			<tr>
+				<td class="footer-left" style="border-style: none">&nbsp;</td>
+				<td class="footer-center" style="border-style: none">
+					<table>
+						<tr>						    
+						    <!--  Server location -->
+						    <s:set name='theStoreFront' value="wCContext.storefrontId" />
+    						    <s:url id ='homeLink' action='home' namespace='/home' /> 
+						    
+    						    <td class="first"> 	<s:a href="%{homeLink}">Home</s:a></td>
+    						    
+						    
+							<td>
+								<s:url id='contactUsLink' namespace="/common" action='MyContact'>
+								<!-- 	<s:param name="selectedHeaderTab">ToolsTab</s:param>  -->
+								</s:url>
+								<s:a href="%{contactUsLink}">Contact Us</s:a>
+							</td>
+							
+							<td>
+								<s:url id='termsOfAccessLink' namespace="/home" action='MyTermsOfAccess'>
+								</s:url>
+								<s:a href="%{termsOfAccessLink}">Terms of Access</s:a>
+							</td>
+							<td class="last">
+								<s:url id='privacyPolicyLink'  action='MyPrivacyPolicy'>
+								</s:url>
+								<s:a href="%{privacyPolicyLink}">Privacy Policy</s:a>
+							</td>
+						</tr>
+					</table>
+					<div id="footer-copyright">&copy; 2014. All Rights Reserved.</div>
+				</td>
+			</tr>
+		</table>
+</div>
+</s:else>
+		
 <script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/watermark.js"></script>
 <%-- 
 <s:include value="../../htmls/webtrends/webtrends.html"/><!--EB-519-->

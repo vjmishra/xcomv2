@@ -219,6 +219,17 @@ Ext.onReady(function(){
 	   <%-- dynamically populate data here with ShipToComponent javascript  --%>
 	</div>
 </div>
+<div class='x-hidden dialog-body' id="procurementValidationDiv">
+	<div id="procurementValidation">
+	 <!-- dynamically populate contactModal for punchout user from login page  -->
+	</div>
+</div> 
+
+<div class='x-hidden dialog-body' id="stockCheckValidationDiv">
+	<div id="stockCheckvalidation">
+	 <!-- dynamically populate contactModal for stockcheck user from login page  -->
+	</div>
+</div> 
 		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 		<div class="container">
 		<div id="homepage-image-rotation">

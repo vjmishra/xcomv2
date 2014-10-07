@@ -24,10 +24,10 @@ It is not a good practice but creating on every jsp page is also not convenient 
 			<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 		<![endif]-->
 		
-		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/change-ship-to<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+		
  		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 		<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/cluetip/jquery.cluetip<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/mini-cart<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
+		
 		<!-- END Styles -->
 		
 		<!-- BEGIN JS -->
@@ -425,7 +425,9 @@ var selectedShipCustomer = null;
 			case 'delete':		
 				$.fancybox(
 					Ext.get("delete_my_item_list").dom.innerHTML,{
-					'autoDimensions'	: true
+						'autoDimensions'	: false,
+						'width' 			: 320,
+						'height' 			: 120  
 				});
 				var form = Ext.get("doAction_delete_item_list");
 				form.dom.listKey.value=listKey;
@@ -960,6 +962,10 @@ var selectedShipCustomer = null;
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
 <s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
+<s:set name="extnPunchOutUser" value='%{#xpedxCustomerContactInfoBean.isExtnPunchOutUser()}' />
+<s:hidden id='extnPunchOutUserValue' value='%{#extnPunchOutUser}' /> 
+<s:set name="extnStockCheck" value='%{#xpedxCustomerContactInfoBean.getExtnStockCheckWS()}' />
+<s:hidden id='extnstockCheckValue' value='%{#extnStockCheck}' />
 <s:set name="logUser" value ="%{#_action.getWCContext().getSCUIContext().getSecurityContext().getLoginId()}"/>
 <s:set name="assgnCustomers" value="#_action.getAssignedShipTos()" />
 <s:set name="fromWhichPage" value="#_action.getIsFromWhichPage()"/>
@@ -1038,6 +1044,8 @@ var selectedShipCustomer = null;
 </s:url>
 <s:url id='passwordUpdate' namespace='/common' action='xpedxPasswordUpdate' >
 </s:url>
+<a href="#procurementValidation" id="extnPunchOutModal" style="display: none;"></a>
+<a href="#stockCheckvalidation" id="extnStockCheckModal" style="display: none;"></a>
 
 <div class='x-hidden dialog-body ' id="securityQueContent">
 	<div id="ajax-securityQueContent" class="xpedx-light-box"
@@ -1229,7 +1237,34 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
     	
     	showShiptos("Select Preferred Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	null,	applyShipToChanges,	null, applyNoShioTo);
     }
-    
+     function showContactModal()
+    {
+    		var $procurementValidationDiv = $('#procurementValidation');
+			var html = [];
+			html.push('			<div class="contact-modal">');
+			html.push('			<p>	We','\'','re sorry, this User ID can only access the website via your system using "Punchout".</p>');
+			html.push('			<h3>Please contact the eBusiness Customer Support Desk at 1-877-269-1784 or ebusiness@vertivcorp.com. </h3>');
+			html.push('			</div>');
+			html.push('			<div>');
+			html.push('					<input class="btn-gradient float-left addmarginleft20" type="submit" value="Sign Out" id ="signOutButton"  onclick="javascript:signOutFunction()"/>');
+			html.push('			</div>');
+			$procurementValidationDiv.get(0).innerHTML = html.join('');	
+    }
+     
+    function showStockCheckModal()
+    {
+    	var $stockCheckvalidationDiv = $('#stockCheckvalidation');
+		var html = [];
+		html.push('			<div class="stockcheck-modal">');
+		html.push('			<p>	We','\'','re sorry, this User ID can only access the website via your system using "Stock Check Web Service".</p>');
+		html.push('			<h3>Please contact the eBusiness Customer Support Desk at 1-877-269-1784 or ebusiness@vertivcorp.com. </h3>');
+		html.push('			</div>');
+		html.push('			<div>');
+		html.push('					<input class="btn-gradient float-left addmarginleft20" type="submit" value="Sign Out" id ="signOutButton"  onclick="javascript:signOutFunction()"/>');
+		html.push('			</div>');
+		$stockCheckvalidationDiv.get(0).innerHTML = html.join('');	
+    }
+     
     function signOutFunction(){
     	window.location.href =$('#shipTologoutURL').val();
     }
@@ -1860,11 +1895,47 @@ function passwordUpdateModal()
 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
 		var isSalesRep = "<s:property value='%{wCContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP")}'/>";
 		var isPunchoutUser = '<s:property value="#isPunchoutUser"/>';
+		var extnPunchOutUser='<s:property value="#extnPunchOutUser"/>'
+		var extnStockCheck='<s:property value="#extnStockCheck"/>';
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";
-			if((!isSalesRep) && (isPunchoutUser!="true") && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
+			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";		
+			
+			if((isPunchoutUser=="false") && (extnPunchOutUser=="true")){				
+				$("#extnPunchOutModal").fancybox({					
+					'onStart' 	: function(){
+						if(isguestuser!="true"){
+							showContactModal();
+						}            		
+				},
+					
+				'hideOnOverlayClick': false,
+				'showCloseButton'	: false,
+				'enableEscapeButton': false,
+				'autoDimensions'	: false,
+			 	'width' 			: 400,
+			 	'height' 			: 150
+				}).trigger('click');
+			} 
+			
+			else if (extnStockCheck!=null && (extnStockCheck=="Y")){				
+				$("#extnStockCheckModal").fancybox({					
+					'onStart' 	: function(){
+						if(isguestuser!="true"){
+							showStockCheckModal();
+						}            		
+				},
+					
+				'hideOnOverlayClick': false,
+				'showCloseButton'	: false,
+				'enableEscapeButton': false,
+				'autoDimensions'	: false,
+			 	'width' 			: 400,
+			 	'height' 			: 150
+				}).trigger('click');
+			} 
+			else if((!isSalesRep) && (isPunchoutUser!="true") && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
 				
 				passwordUpdateModal();
 				Ext.Msg.hide();
@@ -1890,8 +1961,8 @@ function passwordUpdateModal()
 				 	'showCloseButton'	: false,
 				 	'enableEscapeButton': false,
 				 	'autoDimensions'	: false,
-			 		'width' 		: 900,
-			 		'height' 		: 530  
+			 		'width' 		: 751,
+			 		'height' 		: 365  
 				}).trigger('click');
 			} /* EB-76 Code Changes End */
 			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){	
@@ -1914,8 +1985,8 @@ function passwordUpdateModal()
 					 	'showCloseButton'	: false,
 					 	'enableEscapeButton': false,
 					 	'autoDimensions'	: false,
-				 		'width' 		: 900,
-				 		'height' 		: 530  
+				 		'width' 		: 751,
+				 		'height' 		: 365 
 					}).trigger('click');
 			} 
 			else if((!isSalesRep && (isPunchoutUser!="true")) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
@@ -2610,7 +2681,7 @@ function callAjaxForSorting(url,divId)
 					<!--  Drop down fields  -->
 					<div id="welcome-address-popup" style="display: none;">
 						 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-	         				Shopping for : 
+	         				<strong>Shopping for : </strong>
 	       				</s:if>
 	       				<s:else>
 	         				Orders for :
@@ -2625,11 +2696,12 @@ function callAjaxForSorting(url,divId)
 							<s:a id="changeShipToURL" href="%{#changeShipToURLid}">[Change]</s:a>
 							</s:else>
 						</s:if>						
-						<br/> 
-					  	<s:property value='loggerInUserCustomerName'/> (<s:property value='#shipToCustomerDisplayStr'/>)<br/>  																	
-						 <s:if test="{#defualtShipTAddress.getLocationID()!=null && #defualtShipTAddress.getLocationID().trim().length() > 0}">
+						<hr/> 
+					  	<s:property value='loggerInUserCustomerName'/> (<s:property value='#shipToCustomerDisplayStr'/>)<br/> 
+					  																	
+						 <s:if test="%{#defualtShipTAddress.getLocationID().trim() != ''}">
 							Local ID: <s:property value='#defualtShipTAddress.getLocationID()'/><br/>
-						</s:if>						
+						</s:if >						
 						<s:iterator value="#defualtShipTAddress.getAddressList()" id='addressline' >
 							<s:if test='#addressline.length() > 30'>
 							<s:set name='addressline' value='%{#addressline.substring(0,30)}'/>

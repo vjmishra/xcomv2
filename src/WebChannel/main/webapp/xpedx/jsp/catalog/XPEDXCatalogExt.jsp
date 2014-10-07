@@ -395,34 +395,32 @@
 								</select> 
 							</s:else>
 						</s:if>
+						<ul class="cat-grid-icons" id="viewSelect">
+                    <li class="icon-normal-view normal-view" title="Full View" id="fview"></li>
+                    <li class="icon-condensed-view condensed-view" title="Condensed View" id="cview"></li>
+                    <li class="icon-mini-view mini-view" title="Mini View" id="mview"></li>
+                    <li class="icon-grid-view papergrid-view" title="Grid View" id="gview"></li>
+                    <s:if test='%{#session.selView != null}'>	
+			<input name="selectedView" value="<s:property value='%{#session.selView}' />" id="selectedView" type="hidden" />	
+		     <s:set name="selView" value="<s:property value=null />" scope="session"/> 
+	   </s:if>
+	   <s:else>
+	   		<input name="selectedView" value="icon-normal-view normal-view" id="selectedView" type="hidden" />
+	   </s:else>
+                         </ul>
                  </div>   
-   <input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
-	<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
-	<s:set name='sortName' value='%{theSpanNameValue}' />
-	<s:set name='sortDir' value='%{sortDirection}' />           
-                 <p class="pageresults"><s:property value='#numResult' /> Results&nbsp;|<span>&nbsp;Page&nbsp
-                 <!-- Webtrend Meta Tag start -->
-                 <%--added for jira 3317 --%>
-                 <s:if test="%{#totalNumberOfPages == 0 || #totalNumberOfPages == 1}">
-				 <s:property value="%{#pageNumber}"/>
-		 </s:if></span>
-                 <s:if test="%{searchMetaTag == true}">
-                 	<s:if test="%{#checkedval1 == true}" ><META Name="DCSext.w_x_ss" content="1"></s:if>
-					
-					<META Name="WT.ossr" content="<s:property value='%{#numResult}' />">
-					<META Name="WT.oss" content="<s:property value='%{#_action.getSearchTerm()}' />">
-				</s:if>
- 				<!-- Webtrend Meta Tag endt -->
- 
-                 	<s:url id="goToPageURL" action="goToPage">
-                 		<s:param name="sortDirection" value="#sortDir"/>
-						<s:param name="theSpanNameValue" value="#sortName"/>
-						<s:param name="pageNumber" value="'{0}'" />
-						<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
-					</s:url> <swc:pagectl currentPage='%{#pageNumber}'
-						lastPage='%{#totalNumberOfPages}' showFirstAndLast='False'
-						urlSpec='%{#goToPageURL}' cssClass='pageresults' startTabIndex='51' />
-				  </p>
+			   <input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
+				<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
+				<s:set name='sortName' value='%{theSpanNameValue}' />
+				<s:set name='sortDir' value='%{sortDirection}' />
+				<s:url id="goToPageURL" action="goToPage">
+					<s:param name="sortDirection" value="#sortDir"/>
+					<s:param name="theSpanNameValue" value="#sortName"/>
+					<s:param name="pageNumber" value="'{0}'" />
+					<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+				</s:url>
+				<xpedx:flexpagectl currentPage='%{#pageNumber}' lastPage='%{#totalNumberOfPages}' totalResults='%{#numResult}'
+							urlSpec='%{#goToPageURL}' cssClass='pageresults' isAjax="false" />
           </div>
 	
 <!-- START of new MIL - PN -->
@@ -742,19 +740,7 @@ function getNormalView() {
 								'</div>',
 							</s:if>
 						'</div>',
-						
-						<s:if test='!#guestUser'>
-							<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-							'{itemtypedesc}',
-						</s:if>
-						
 						'<div class="clearfix"></div>',
-						<s:if test='!#guestUser'>
-							'<div class="replacement-item">',
-								'{repItem}',
-							'</div>',
-						</s:if>
-						
 						'<div class="order-input-wrap">',
 							'<div class="order-row">',
 								<s:if test='!#guestUser'>
@@ -795,7 +781,7 @@ function getNormalView() {
 							
 							'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',
 							<s:if test='!#guestUser'>
-								'<div class="cart-pa-button-wrap">',
+								'<div class="cart-pa-button-wrap addmarginbottom10">',
 									'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
 									'<input class="btn-neutral" type="button" onclick="javascript:addItemToWishList(\'{itemid}\'); return false;" value="Add to List">',
 									'<div class="availablelink">',
@@ -805,19 +791,29 @@ function getNormalView() {
 										'</div>',
 									'</div>',
 								'</div>',
-								'<div class="clearfix height5"></div>',
+								'<div class="clearfix"></div>',
 								'<div class="uomLink" id="errorMsgForQty_{itemid}">',
 									'{uomLink}',
 								'</div>',
-								'<div class="clearfix height5"></div>',
 							</s:if>
+							<s:if test='!#guestUser'>
+								<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
+									'{itemtypedesc}',
+								</s:if>
+								'<div class="clearfix"></div>',	
+								<s:if test='!#guestUser'>
+									'<div class="replacement-item replacement-text">',
+										'{repItem}',
+									'</div>',
+								</s:if>	
 						'</div>', <%-- / order-input-wrap" --%>
+						'<div class="clearfix"></div>',
 						
 						<s:if test='!#guestUser'>
 							'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
 						</s:if>
 							
-						'<div class="clearfix height5"></div>',
+						'<div class="clearfix"></div>',
 						
 						'<div class="show-hide-wrap">',
 							'<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">',
@@ -878,7 +874,7 @@ function getCondensedView() {
 									</s:if>
 									
 									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-									'{itemtypedesc}', 
+									 
 
 								'</div>', // end item-numbers
 								
@@ -908,6 +904,7 @@ function getCondensedView() {
 							</s:if>
 							
 							'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',
+							'{itemtypedesccondensed}',
 							'<div class="clearfix"></div>',
 						'</dd>',
 						'<tpl if="itemindex % 2 == 1">',
@@ -963,7 +960,7 @@ function getMiniView() {
 									</s:if>
 										
 									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-									'{itemtypedesc}',
+									
 								'</div>', // end item_number
 								
 								'<div class="quantity_box">',
@@ -998,6 +995,7 @@ function getMiniView() {
 									<s:if test='!#guestUser'>
 										'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
 									</s:if>
+										'{itemtypedescmini}',
 								'</div>',
 								<s:if test='!#guestUser'>
 									'<div>',
@@ -1028,28 +1026,28 @@ var globaltheSpanNameValue='<%=request.getParameter("theSpanNameValue")%>';
 function getGridView() {
 return new Ext.XTemplate(
   '<div id="item-ct">',
-  '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
-  '<tr>','<td class="table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
-   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:20px;" title="Mill / Mfg. Item">M</td>',</s:if>
-  '<td class="Item-hname" style="width:58px;"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></td>',
-  <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname"><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname"><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname"><a href="#" onclick="toggleBasisSort();">Basis<span id="directionBasisArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Thickness-hname"><a href="#" onclick="toggleThicknessSort();">Thickness<span id="directionThicknessArrow"></span></a></td>',</s:if>				                    
-  <s:if test='#allowedColumns.contains("Package")'>'<td class="Pack-hname"><a href="#" onclick="togglePackSort();">Pack<span id="directionPackArrow"></span></a></td>',</s:if>			                    
-  <s:if test='#allowedColumns.contains("Capacity")'>'<td class="Capacity-hname"><a href="#" onclick="toggleCapacitySort();">Capacity<span id="directionCapacityArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Model")'>'<td class="Model-hname"><a href="#" onclick="toggleModelSort();">Model<span id="directionModelArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname"><a href="#" onclick="toggleMaterialSort();">Material<span id="directionMaterialArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Ply")'>'<td class="Ply-hname"><a href="#" onclick="togglePlySort();">Ply<span id="directionPlyArrow"></span></a></td>',</s:if>				                
-  <s:if test='#allowedColumns.contains("Form")'>'<td class="Form-hname"><a href="#" onclick="toggleFormSort();">Form<span id="directionFormArrow"></span></a></td>',</s:if>			                    				  
-  <s:if test='#allowedColumns.contains("Gauge")'>'<td class="Gauge-hname"><a href="#" onclick="toggleGaugeSort();">Gauge<span id="directionGaugeArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname"><a href="#" onclick="toggleVendorSort();">Mfg. Item #<span id="directionVendorArrow"></span></a></td>',</s:if>
-  <s:if test='!#isReadOnly && !#guestUser'><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if></s:if>
-  <s:else><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname table-header-bar-right"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if> </s:else>
-  <s:if test='!#isReadOnly && !#guestUser'>'<td class="no border table-header-bar-right lprice-hname" style="width:120px;">List Price</td>',</s:if>
+  '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">',
+  '<tr>','<th><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
+   <s:if test='!#isReadOnly && !#guestUser'>'<th style="width:20px;" title="Mill / Mfg. Item">M</th>',</s:if>
+  '<th style="width:58px;"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></th>',
+  <s:if test='#allowedColumns.contains("Size")'>'<th><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Color")'>'<th><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Basis")'>'<th><a href="#" onclick="toggleBasisSort();">Basis<span id="directionBasisArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Mwt")'>'<th><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Thickness")'>'<th><a href="#" onclick="toggleThicknessSort();">Thickness<span id="directionThicknessArrow"></span></a></th>',</s:if>				                    
+  <s:if test='#allowedColumns.contains("Package")'>'<th><a href="#" onclick="togglePackSort();">Pack<span id="directionPackArrow"></span></a></th>',</s:if>			                    
+  <s:if test='#allowedColumns.contains("Capacity")'>'<th><a href="#" onclick="toggleCapacitySort();">Capacity<span id="directionCapacityArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Model")'>'<th><a href="#" onclick="toggleModelSort();">Model<span id="directionModelArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Material")'>'<th><a href="#" onclick="toggleMaterialSort();">Material<span id="directionMaterialArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Ply")'>'<th><a href="#" onclick="togglePlySort();">Ply<span id="directionPlyArrow"></span></a></th>',</s:if>				                
+  <s:if test='#allowedColumns.contains("Form")'>'<th><a href="#" onclick="toggleFormSort();">Form<span id="directionFormArrow"></span></a></th>',</s:if>			                    				  
+  <s:if test='#allowedColumns.contains("Gauge")'>'<th><a href="#" onclick="toggleGaugeSort();">Gauge<span id="directionGaugeArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Vendor")'>'<th><a href="#" onclick="toggleVendorSort();">Mfg. Item #<span id="directionVendorArrow"></span></a></th>',</s:if>
+  <s:if test='!#isReadOnly && !#guestUser'><s:if test='#allowedColumns.contains("Environment")'>'<th class="Environment-hname"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </th>',</s:if></s:if>
+  <s:else><s:if test='#allowedColumns.contains("Environment")'>'<td ><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if> </s:else>
+  <s:if test='!#isReadOnly && !#guestUser'>'<th  style="width:120px;">List Price</th>',</s:if>
   <s:if test='!#isReadOnly && !#guestUser'>//	'<td class="no border table-header-bar-right sorttable_nosort" align="center">Action</td>',</s:if>
-  '</tr>','</thead>',
+  '</tr>',
   '<tpl for=".">','<tbody>',
   '<tpl for="items">',
    '<tr id="{itemkey}" class="itemrow">','<td id="desctab">'+'<a class="item-lnk" id="item-detail-lnk" href="{itemDetailURL}papergrid-view" tabindex="{tabidx}">',
@@ -1083,8 +1081,7 @@ var ct = Ext.get('item-box-inner');
 
 	<div class="normal-view" id="items">
 	<div id="items-control">
-	<table width="100%" >
-	<tr ><td class="drag-to-compare"  id="items-combox" width="50%" >
+	<div class="drag-to-compare"  id="items-combox">
 	<h4><a href="javascript:validationforDragToCompare();" tabindex="41">
 	<s:if test="%{#totalNumberOfPages} == 0"> 
 	 	<div class="success"> Your search did not yield any results. Please try again. </div>
@@ -1094,30 +1091,8 @@ var ct = Ext.get('item-box-inner');
 			:<span id="comnum"> <s:text name='No_Items' /></span>
 	 </s:else>
 	 </a></h4>
-	</td>
-	<%--Start XB - 339 Label added to identify Catalog View icons --%>
-	<td class="drag-to-compare"  width="40%" align="right" ><h4><s:text name="MSG.SWC.COMP.CHGCATALOGVIEW.GENERIC.PGTITLE" /> :&nbsp;</h4></td>
-	<%--End XB - 339 --%>
-	<td id="items-cb" width="10%"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif"
-		class="normal-view" title="Full View"><img
-		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif" class="condensed-view"
-		title="Condensed View"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif"
-		class="mini-view" title="Mini View"><!-- IW 7/16/2010: new icon/button for papergrid-view --><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif" class="papergrid-view"
-		title="Grid View">
+	</div>
 		
-		
-	
-		
-		<s:if test='%{#session.selView != null}'>	
-			<input name="selectedView" value="<s:property value='%{#session.selView}' />" id="selectedView" type="hidden" />	
-		     <s:set name="selView" value="<s:property value=null />" scope="session"/> 
-	   </s:if>
-	   <s:else>
-	   		<input name="selectedView" value="normal-view" id="selectedView" type="hidden" />
-	   </s:else>
-		</td>
-		</tr>
-	</table>
 	</div>
 	
 	<s:if test='%{!errorCode.trim().equals("")}'>		
@@ -1197,21 +1172,14 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<%--Added hidden parameter searchTermString for JIRA #4195 --%>
 	<s:hidden id='searchTermString' name='searchTermString' value="%{searchString}" />
-	<p class="pageresults"><s:property value='#numResult' /> Results&nbsp;|<span>&nbsp;Page&nbsp
-	<s:if test="%{#totalNumberOfPages == 0 || #totalNumberOfPages == 1}">
-		<s:property value="%{#pageNumber}"/>
-	</s:if></span>
-	
 	<s:url id="goToPageURL" action="goToPage">		
 		<s:param name="sortDirection" value="#sortDir"/>
 		<s:param name="theSpanNameValue" value="#sortName"/>
 		<s:param name="pageNumber" value="'{0}'" />
 		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 	</s:url> 
-	<swc:pagectl currentPage='%{#pageNumber}'
-		lastPage='%{#totalNumberOfPages}' showFirstAndLast='False'
-		urlSpec='%{#goToPageURL}' cssClass='pageresults' startTabIndex='51' />
-	</p>
+	<xpedx:flexpagectl currentPage='%{#pageNumber}' lastPage='%{#totalNumberOfPages}' totalResults='%{#numResult}'
+				urlSpec='%{#goToPageURL}' cssClass='pageresults' isAjax="false" />
 	</div>
 	</div>
 	<!-- old narrow by include -->
@@ -1376,7 +1344,7 @@ function LoadPage()
 		
 		}
 	if(document.getElementById('selectedView').value==""){	
-		document.getElementById('selectedView').value='normal-view';
+		document.getElementById('selectedView').value='icon-normal-view normal-view';
 	}	
 }
 String.prototype.trim = function () {

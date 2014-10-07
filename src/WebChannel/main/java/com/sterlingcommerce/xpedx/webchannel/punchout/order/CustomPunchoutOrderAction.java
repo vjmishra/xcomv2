@@ -35,6 +35,7 @@ import org.xml.sax.SAXException;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.common.eprocurement.AribaContextImpl;
 import com.sterlingcommerce.webchannel.common.eprocurement.IAribaContext;
@@ -126,22 +127,46 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		String xsltFileName;
+		Document orderOutputDoc;
+		ISCUITransactionContext scuiTransactionContext = null;
+		YFSEnvironment env = null;
+		try {
+			 scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			 env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 
-		Document custDetails = getCustDetails(context, env);
-		String xsltFileName = SCXmlUtil.getXpathAttribute(custDetails.getDocumentElement(), "/Customer/Extn/@ExtnXSLTFileName");
-		// v1 replaceChars functionality not yet supported. [Is xslt version needed?]
-		//String replaceChars = SCXmlUtil.getXpathAttribute( CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnReplaceCharacter");
-		//String xsltVersion = SCXmlUtil.getXpathAttribute(CustDetails.getDocumentElement(),"/Customer/Extn/@ExtnXSLTVer");
+			Document custDetails = getCustDetails(context, env);
+			xsltFileName = SCXmlUtil.getXpathAttribute(custDetails.getDocumentElement(), "/Customer/Extn/@ExtnXSLTFileName");
 
-		Document orderOutputDoc = getOrderDetails(orderHeaderKey, env);
+			//TODO should verify file exists otherwise get exceptions during xslt processing
 
-		updateOrderUoms(env, orderOutputDoc);
-		updateLineNos(orderOutputDoc);
-		addRoundedUnitPrices(orderOutputDoc);
-		updateCustomUnspsc(context, env, orderOutputDoc);
+			orderOutputDoc = getOrderDetails(orderHeaderKey, env);
+
+			updateOrderUoms(env, orderOutputDoc);
+			updateLineNos(orderOutputDoc);
+			addRoundedUnitPrices(orderOutputDoc);
+			updateCustomUnspsc(context, env, orderOutputDoc);
+			scuiTransactionContext.commit();
+		} catch (Exception e) {
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
+		} finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
+		}
 
 		return transformUsingXslt(orderOutputDoc, xsltFileName);
 	}
@@ -170,7 +195,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 					if(LOG.isDebugEnabled()){
 						LOG.debug("Punchout: for item: " + itemId + " replacing with custom UNSPCS: " + customUnspsc);
 					}
-					
+
 					extnElem.setAttribute("ExtnUNSPSC", customUnspsc);
 				}
 			}
@@ -260,17 +285,38 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 	private void deleteCart(String deleteOrderHeaderKey) throws Exception {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-		YIFApi api = YIFClientFactory.getInstance().getApi();
+		ISCUITransactionContext scuiTransactionContext = null;
+		YFSEnvironment env = null;
+		try {
+			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			YIFApi api = YIFClientFactory.getInstance().getApi();
 
-		Document deleteOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
-		deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, deleteOrderHeaderKey);
-		deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ACTION,"DELETE");
-		api.invoke(env, "deleteOrder", deleteOrderInputDoc);
-
-		//prepareAndInvokeMashup(DRAFT_ORDER_DELETE_MASHUP);
+			Document deleteOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
+			deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, deleteOrderHeaderKey);
+			deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ACTION,"DELETE");
+			api.invoke(env, "deleteOrder", deleteOrderInputDoc);
+			scuiTransactionContext.commit();
+		} catch (Exception e) {
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
+		}finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
+		}
 	}
 
 	private Document getOrderDetails(String orderHeaderKey, YFSEnvironment env)
@@ -282,6 +328,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 		Element orderElement = (Element)WCMashupHelper.invokeMashup(
 				GET_PUNCHOUT_ORDER_DETAILS_MASHUP,inputOrderElement, wcContext.getSCUIContext());
+
 
 		return orderElement.getOwnerDocument();
 	}

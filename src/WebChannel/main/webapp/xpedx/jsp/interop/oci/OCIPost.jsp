@@ -1,34 +1,31 @@
-<!--
+<%@ page import="java.util.Enumeration"%>
+
+<%--
 	This page simply posts the passed params to new XPEDXOciServlet.java
-  -->
+	This is necessary due to an implementation of the authentication layer, otherwise we could have customer use '/swc/interop/xoci' directly.
+--%>
 
 <html>
 <head>
-<%@ page import="java.util.*"%>
 <script type="text/javascript">
-
-function callSterling(){
-
-	document.SterlingOCI.submit();
-}
+	function submitForm(){
+		document.SterlingOCI.submit();
+	}
 </script>
 </head>
-<body onload="callSterling()">
-<form name="SterlingOCI"  method="POST" action="/swc/interop/xoci">
-
+<body onload="submitForm()">
+	<form name="SterlingOCI"  method="POST" action="/swc/interop/xoci">
 <%
-	Enumeration parameterNames = request.getParameterNames();
-    while (parameterNames.hasMoreElements()){
-    	 String parameterName = (String) parameterNames.nextElement();
-         String parameterValue = request.getParameter(parameterName);
-    	%>
-    	<input type="hidden" name="<%=parameterName%>" 
-    	id="<%=parameterName%>" value="<%=parameterValue %>">
-    	<% 
-    }
-
+		Enumeration<String> parameterNames = request.getParameterNames();
+	    while (parameterNames.hasMoreElements()){
+	    	 String parameterName = parameterNames.nextElement();
+	         String parameterValue = request.getParameter(parameterName);
 %>
-
-</form>
+	    	<input type="hidden" id="<%=parameterName%>" name="<%=parameterName%>" value="<%=parameterValue %>">
+<% 
+	    }
+	
+%>
+	</form>
 </body>
 </html>

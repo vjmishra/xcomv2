@@ -41,10 +41,10 @@
 	<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
 	<s:set name="myPriceValue" value="%{'false'}" />
 	
-    <table class="mil-top-border" border="0px solid red" class="float-right">
-	   <tr  class="table-header-bar">
-		<td class="text-right white table-header-bar-left" > Price (<s:property value='#currencyCode'/>) </td>
-		<td class="text-right white pricing-border mill-container-extended-pricing table-header-bar-right" > Extended Price (<s:property value='#currencyCode'/>) &nbsp;</td>
+    <table class="mil-top-border standard-table" border="0px solid red" class="float-right">
+	   <tr>
+		<th class="text-right addpadright10"> Price (<s:property value='#currencyCode'/>) </th>
+		<th width="145"> Extended Price (<s:property value='#currencyCode'/>) &nbsp;</th>
 	   </tr>
 	</table>
 	
@@ -610,10 +610,6 @@
 				     	 <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config" style="font-size:12px">
 						    	<tbody>
-						    		<s:if test='%{#jsonAvailabilityBalance != null}'>
-										<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
-										<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:2px"><strong><s:property value="#xpedxUtilBean.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</strong></p>
-									</s:if>
 									<tr>
 										<td align="left" style="color:${jsonAvailabilityMessageColor};font-size:13px;"><strong>${jsonAvailabilityMessage}</strong></td>
 									</tr>					    		
@@ -633,6 +629,21 @@
 										<td class="text-left">&nbsp;${jsonUOMDesc}</td>
 						    		</tr>
 						    		<%-- <s:if test="(#divName != null)"> --%>
+						    		
+						    		<s:if test='%{#jsonAvailabilityBalance != null}'>
+						    		<tr>
+						    		<td colspan="3">
+						    			<div class="clearfix"></div>
+										<div class="warning-icon">
+											<img width="12" height="12" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/warning.png"/>
+										</div>
+										<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
+										<div class="qty-unavailable"><s:property value="#xpedxUtilBean.formatQuantityForCommas(#jsonAvailabilityBalance)"/> 
+											<s:property value='%{#jsonUOMDesc}'/> currently unavailable
+										</div>
+										</td>
+										</tr>
+									</s:if>
 						    		<tr>
 										<%-- <td colspan="3"><p class="italic">${jsonImmediate} available today at ${DivisionName}</p></td> --%>
 										<td colspan="3"><p class="italic">${jsonCommaFmtImmediate} &nbsp;${jsonUOMDesc}&nbsp;available today at ${DivisionName}</p></td> 
@@ -659,16 +670,32 @@
 					</s:if>
 					--%>
 				<%-- </s:if> --%>
-				<br/> 
+				
 				<div class="clearall">&nbsp; </div>
 			    	<div class="red float-left">
 			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-				    	<s:iterator value="inventoryMap" id="inventoryMap" status="status" >
+				    	<s:iterator value="displayInventoryMap" id="displayInventoryMap" status="status" >
 							<s:set name="inventoryChk" value="value" />
 							<s:set name="itemId" value="key" />
 							<s:if test='#item.getAttribute("ItemID") == #itemId'>
-								<s:if test='%{#inventoryChk !="Y"}'>								
-									<p class="red">Mill / Mfg. Item - Additional charges may apply</p>
+								<s:if test='%{#inventoryChk=="I"}'>
+									<div class="non-stock-item-shorter addmarginleft145 addmargintop10">
+										<div class="stock-icon">
+											<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25" title="Contact Customer Service to confirm pricing and any additional charges" />
+										</div>
+											Not a Stocked Item
+									</div>
+								</s:if>
+								<s:if test='%{#inventoryChk=="M"}'>
+									<div class="non-stock-item-shorter addmarginleft130">
+										<div class="stock-icon">
+											<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png" width="25" height="25" title="Contact Customer Service to confirm pricing and any additional charges" />
+										</div>
+											Ships Directly from Mfr
+									</div>
+								</s:if>
+								<s:if test='%{#inventoryChk=="W"}'>
+														
 								</s:if>
 							</s:if>	
 						</s:iterator>
@@ -827,7 +854,7 @@
     				<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>
     				<s:if test='%{#lineStatusCodeMsg != null || #lineStatusCodeMsg != ""}'>
 						<div id="mid-col-mil">
-							<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}" /></font></b></h5>
+							<h5 class="suspended-item"><s:property value="%{#lineStatusCodeMsg}" /></font></b></h5>
 						</div>
 					</s:if>
     				<%-- end of it 2885 --%>

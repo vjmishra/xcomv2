@@ -106,12 +106,12 @@
 	<!-- EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding  -->
 	<xsl:if test = '$Brand="xpedx"'>
 	<xsl:element name="a">	
-		<xsl:attribute name="href">mailto:ebusiness@<xsl:value-of select="$Brand"/>.com</xsl:attribute>ebusiness@<xsl:value-of select="$Brand"/>.com
+		<xsl:attribute name="href">mailto:ebusiness@veritivcorp.com</xsl:attribute>ebusiness@veritivcorp.com
 	</xsl:element>
 	</xsl:if>
 	<xsl:if test = '$Brand="Saalfeld"'>
 	<xsl:element name="a">	
-		<xsl:attribute name="href">mailto:ebusiness@<xsl:value-of select="$Brand"/>redistribution.com</xsl:attribute>ebusiness@<xsl:value-of select="$Brand"/>redistribution.com
+		<xsl:attribute name="href">mailto:ebusiness2@veritivcorp.com</xsl:attribute>ebusiness2@veritivcorp.com
 	</xsl:element>
 	</xsl:if>
 	or by calling <xsl:value-of select="$BrandPhoneNumber"/>. 

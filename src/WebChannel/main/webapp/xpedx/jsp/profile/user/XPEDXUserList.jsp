@@ -148,72 +148,45 @@
     	<s:param name="searchCriteria" value="%{searchCriteria}"/>
     	<s:param name="searchValue" value="%{searchValue}"/>
     </s:url>
- <div id="inline1" class="xpedx-light-box" style="overflow: auto;">
- 
- 	
-
-	<s:set name="iter" value="#util.getElements(#sdoc, '//Page/Output/CustomerContactList/CustomerContact')"/>
-	<!-- 
-	<div class="table-top-bar">
-        <div class="table-top-bar-L"></div>
-		<div class="table-top-bar-R"></div>
-    </div>
-    
-    -->
-    
-	
-	
-	
-	
-	
-	
-	
-        <div >
-        
-                           
-
+ 	<div id="inline1" class="xpedx-light-box" style="overflow: auto;">
+		<s:set name="iter" value="#util.getElements(#sdoc, '//Page/Output/CustomerContactList/CustomerContact')"/>
+        <div>
             <div id="inline1" class="xpedx-light-box">
-           <!-- <div style=" float:right; text-align:right; margin-top:-5px;" >User Search: <input name="textfield" type="text" class="x-input" style="width:120px; margin-bottom:15px;" id="textfield" />  <button type="submit" id="newSearch_0" value="Submit" class="searchButton"></button>     </div>  -->
-<h2><span style="margin:0px;">My Users</span></h2> 
-<s:set name='storefrontId' value="wCContext.storefrontId" />
+				<h1><span style="margin:0px;">My Users</span></h1> 
+				<s:set name='storefrontId' value="wCContext.storefrontId" />
 				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-<p class="less-margin">  <img class="inline-image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_admin.png" /> Denotes an Admin User
-</s:if>
+					<s:set name="adminIcon" value="%{#wcUtil.staticFileLocation + '/xpedx/images/theme/theme-1/20x20_admin.png'}" />
+				</s:if>
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
-				<p class="less-margin">  <img class="inline-image" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/20x20_green_admin.png" /> Denotes an Admin User
+					<s:set name="adminIcon" value="%{#wcUtil.staticFileLocation + '/' + wCContext.storefrontId + '/images/20x20_green_admin.png'}" />
 				</s:elseif>
-   <!-- <div class="paginationContainer">-- pagination control -->
-       <span style="float:right; margin-right:3px; margin-top: 5px;"> <span class="bold">Page&nbsp;
-       <%--added for jira 3317 --%>
-                 <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">
-		 	<s:property value="%{pageNumber}"/>
-       		 </s:if>
-       <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true" divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="true"/></span>
-   </p>
-       <!--</div> -->
+				<p class="less-margin floatleft">
+					<img class="inline-image" src="<s:property value='#adminIcon' />" />
+					Denotes an Admin User
+   				</p>
+				<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true" divId="viewUsersDlg" />
 
-<div class="clearview">&nbsp;<br /></div>  
+				<div class="clearfix"></div>  
 
- <div style="width:757px;"> 
+					<div style="width:757px;"> 
  
-		                 <xpedx:sortctl sortField="%{orderByAttribute}"
-						  sortDirection="%{orderDesc}" down="Y" up="N"
-		                  urlSpec="%{#userListSortURL}" isAjax="true" divId="viewUsersDlg" >
+						<xpedx:sortctl sortField="%{orderByAttribute}" sortDirection="%{orderDesc}" down="Y" up="N"
+								urlSpec="%{#userListSortURL}" isAjax="true" divId="viewUsersDlg">
 						  
-     <table cellspacing="0" cellpadding="0" class="sortable" id="user-header" style="background: none repeat scroll 0% 0% transparent; margin-left: 1px;">  
-                         <thead>
-                              <tr class="table-header-bar" id="none">
+						<table cellspacing="0" cellpadding="0" class="standard-table sortable addmargintop10" id="user-header" style="background: none repeat scroll 0% 0% transparent; margin-left: 1px;">  
+                         
+                              <tr id="none">
                              <!-- <th width="1%" class="no-border table-header-bar-left sorttable_nosort"></th>  --> 
-                                                              <th width="25%"  class="no-border  padding8 table-header-bar-left sortable"><xpedx:sortable fieldname="%{'CustomerContactID'}"><span class="white">Username</span></xpedx:sortable></th>
-                                <th width="21%" align="center" class="no-border padding8 sortable"><xpedx:sortable fieldname="%{'FirstName'}"><span class="white">First Name</span></xpedx:sortable></th>
-                                 <th width="21%" align="center" class="no-border padding8 sortable"><xpedx:sortable fieldname="%{'LastName'}"><span class="white">Last Name</span></xpedx:sortable></th>
-                                <th width="33%" class="no-border-right table-header-bar-right sortable padding8"><xpedx:sortable fieldname="%{'EmailID'}"><span class="white"><span class="padding8">Email Address</span></span></xpedx:sortable></th>
+                                <th width="25%"  class="sortable"><xpedx:sortable fieldname="%{'CustomerContactID'}">Username</xpedx:sortable></th>
+                                <th width="21%" align="center" class="sortable"><xpedx:sortable fieldname="%{'FirstName'}">First Name</xpedx:sortable></th>
+                                <th width="21%" align="center" class="sortable"><xpedx:sortable fieldname="%{'LastName'}">Last Name</xpedx:sortable></th>
+                                <th width="33%" class="sortable"><xpedx:sortable fieldname="%{'EmailID'}"><span class="padding8">Email Address</span></xpedx:sortable></th>
 
                                
                                 
                                 
                               </tr>
-                         </thead>      	
+                              	
 	    	       <input type="hidden" name="seletedUrl" id="seletedUrl" value="" />
 	    	<s:form name="selectUserForm" id="selectUserForm">
 	    	</s:form>
@@ -293,10 +266,7 @@
                            <!-- </div> 
     						 </div> -->
                             
-                             <div id="table-bottom-bar" style="width:100%; clear:both;"> 
-                            <div id="table-bottom-bar-L"></div>
-                            <div id="table-bottom-bar-R"></div>
-              </div>  
+                             
              
             </div>
 </div>	
@@ -306,17 +276,10 @@
     	<div id="table-bottom-bar-R"></div>
     </div>-->
     
-        <div class="paginationContainer " style="margin-right: 13px; margin-bottom: 10px; margin-top: 0px;"><!-- pagination control -->
-        <span class="bold">Page&nbsp;
-         <%--added for jira 3317 --%>
-                 <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">
-		 	<s:property value="%{pageNumber}"/>
-		 </s:if>
-        <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true"  divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="true" /> 
-        </span> </div><br/>
+        <br/>
 		<ul id="tool-bar" class="tool-bar-bottom"  style="float:right; margin-right:13px;"  >
-	        <li><a class="grey-ui-btn" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
-            <li ><a class="green-ui-btn" href="#" onclick="javascript: selectedUser('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />'); return false;"><span>Select</span></a></li>
+	        <li><a class="btn-neutral" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
+            <li ><a class="btn-gradient" href="#" onclick="javascript: selectedUser('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />'); return false;"><span>Select</span></a></li>
 	    </ul>
 	    <s:form name="userList" id="userList">
 		    <s:hidden name="customerID" value="%{#_action.getCustomerID()}"/>

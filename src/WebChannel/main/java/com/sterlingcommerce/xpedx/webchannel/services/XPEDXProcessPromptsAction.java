@@ -216,38 +216,21 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 	}
 
 	public String execute() {
-		LOG.debug("++++++++++++++++++++++++++++++++++++++++++++++"
-				+ " In XPEDXProcessWebiPromptAction"
-				+ "++++++++++++++++++++++++++++++");
+		String username;
+		String password;
+		String authentication;
+		String CMS;
+		Map<String, String> promptData = new HashMap<String, String>();		
+		ReportUtils ru = new ReportUtils();
+		List<String> promptsString = null;
+		HttpHost _target = null; 
+		ArrayList<String> logonTokens = null;
+		
+		LOG.debug("++++ In XPEDXProcessPromptsAction.java ++++");
 		Map<String, String[]> map = request.getParameterMap();
 
-		/*
-		 * ReportEngines reportEngines =
-		 * (ReportEngines)request.getSession().getAttribute("ReportEngines");
-		 * ReportEngine reportEngine = null; reportEngine =
-		 * reportEngines.getService
-		 * (ReportEngines.ReportEngineType.WI_REPORT_ENGINE); DocumentInstance
-		 * document = reportEngine.openDocument(Integer.parseInt(getId()));
-		 * document.refresh(); Prompts prompts = document.getPrompts();
-		 */
-
-		/*XPEDXReportService reportService = new XPEDXReportService();
-		ReportService intReportService = reportService.getReportService();
-		ReportList reportList = intReportService.getReports();
-		allReportList = reportList.getCustReportList();
-		allReportList.addAll(reportList.getStdReportList());
-
-		List<ReportPrompt> allPrompts = null;
-
-		for (Report report : allReportList) {
-			if (report.getId() == Integer.parseInt(getId())) {
-				allPrompts = report.getMandatoryPrompts();
-				allPrompts.addAll(report.getOptionalPrompts());
-				break;
-			}
-		}*/
-
-		// Ony when All is selected
+		
+		// Ony when "All Locations" is selected
 		String userId = wcContext.getLoggedInUserId();
 		String[] strLocType = map.get("selectedLocationType");
 		if (strLocType[0].equalsIgnoreCase("All")) {
@@ -300,22 +283,29 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 
 		}
 		
-		Map<String, String> promptData = new HashMap<String, String>();
-		
-		ReportUtils ru = new ReportUtils();
-		List<String> promptsString = null;
-
-		HttpHost _target = ru.getHttpHost(ReportUtils.getCMSLogonDetails().get(
-				"CMS"));
-
-		ArrayList<String> logonTokens = null;
+		//Logon to the CMS and retrieve a Token
 		try {
-			logonTokens = ru.logonCMS(
-					ReportUtils.getCMSLogonDetails().get("username"),
-					ReportUtils.getCMSLogonDetails().get("password"),
-					ReportUtils.getCMSLogonDetails().get("authentication"),
-					_target);
+			//ML - changed logic to read CMS Info from property file only once. 
+			Map<String,String> CMSLogonDetails = ReportUtils.getCMSLogonDetails();
+			username = CMSLogonDetails.get("username").toString();
+			password = CMSLogonDetails.get("password").toString();
+			authentication = CMSLogonDetails.get("authentication").toString();
+			CMS = CMSLogonDetails.get("CMS").toString();
+			//postpone setting _target until CMS is read to avoid calling getCMSLogonDetails() more than once. 
+			_target = ru.getHttpHost(CMS);
+
+			//ML:Find out if logonTokens is in session. If not, then go get a new one and store it in the session. 
+			//this logic should be reused across this "Report List" page, the "Report Details" page, and the ReportDisplay page to avoid
+			//creating too many sessions and violate the SAP license agreement. 
+			logonTokens = (ArrayList) request.getSession().getAttribute("logonTokens"); 
+			if ((logonTokens == null) || (logonTokens.size() != 2)) {				
+				logonTokens = ru.logonCMS(username, password, authentication, _target);
+				//store the logonTokens in session for future use
+				request.getSession().setAttribute("logonTokens", logonTokens);
+			}		
+			
 		} catch (Exception e) {
+			System.out.println("Could not logon to BI/CMS using the supplied credentials.");
 			e.printStackTrace();
 		}
 		Boolean isOK = true;
@@ -345,19 +335,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 			if (promptNameArray.length >= 2)
 				suffix = promptNameArray[1];
 			prefix = promptNameArray[0];
-
-			// Removed as per requirements
-			// || prefix.equalsIgnoreCase("caln")
-			/*
-			 * if (!prompt.isOptional() ) { LOG.debug(
-			 * "=====================It is mandatory prompt====================="
-			 * + promptName); if(paramStringArray == null) {
-			 * errorList.add(suffix + " is mandatory."); } else { boolean
-			 * paramString = true; for (int j=0; j<paramStringArray.length; j++)
-			 * { if (!paramStringArray[j].trim().equals("")) paramString =
-			 * false; } if (paramString) errorList.add(suffix +
-			 * " is mandatory."); } }
-			 */
+			
 
 			if (prefix.equalsIgnoreCase("ddls") && suffix != null
 					&& suffix.equalsIgnoreCase("account:")) {
@@ -485,7 +463,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 					}
 				}
 			}
-		}
+		} //end of FOR LOOP
 
 		if (errorList.size() > 0) {
 			if (log.isDebugEnabled()) {
@@ -522,56 +500,6 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 				finalURL= openDocURL + params + "&token=" + encodedToken + "&sRefresh=Y";		
 			}
 			
-			// Set the prompts and rerun the report
-
-			//LOG.debug("Setting report prompts ************************************");
-			// document.setPrompts();
-
-			// Set the token in case you rerun with new prompts
-			/*ReportCriteria reportCriteria = new ReportCriteria();
-
-			reportCriteria.setReportId(Integer.parseInt(getId()));
-			reportCriteria.setReportPromptNameValue(reportPromptNameValueList);
-
-			// reportCriteria.setPromptMap(promptValue);
-
-			if (getViewReportAs().equals("pdf")) {
-				reportCriteria.setReportType(ReportTypeEnum.PDF);
-			}
-			if (getViewReportAs().equals("xl")) {				
-				reportCriteria.setReportType(ReportTypeEnum.EXCEL);
-			}
-			if (getViewReportAs().equals("html")) {
-				reportCriteria.setReportType(ReportTypeEnum.HTML);
-			}
-
-			//reportData = intReportService.executeReport(reportCriteria);
-
-			request.getSession().setAttribute("ReportData", reportData);*/			
-
-			/*ServletOutputStream outs = null;
-
-			if (reportData == null) {
-				System.out.println("========== report data is null =========");
-			} else {
-				if (getViewReportAs().equals("xl")) {
-					response.setHeader("Content-Disposition",
-							"Attachment;Filename=\"MyReport.xls\"");
-					response.setContentType("application/vnd.ms-excel");
-					try {
-						response.setContentLength(reportData.getBinaryReport().length);
-						outs = response.getOutputStream();
-						outs.write(reportData.getBinaryReport());
-						outs.flush();
-						outs.close();
-						setRndrReport("false");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					return SUCCESS;
-				} 
-			}*/
 						
 		}
 

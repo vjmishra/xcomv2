@@ -893,7 +893,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			if (shipFromDivision.equalsIgnoreCase(div)) {
 				String orderMul = itemExtnElement.getAttribute("OrderMultiple");
 				setIsStocked(itemExtnElement.getAttribute("InventoryIndicator"));
-
+				setDisplayInventoryIndicator(itemExtnElement.getAttribute("InventoryIndicator"));
 				/*start of webtrends */
 				String inventoryIndicator = itemExtnElement.getAttribute("InventoryIndicator");
 				if (inventoryIndicator.equalsIgnoreCase("W")){
@@ -2245,6 +2245,14 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			this.isStocked="N";
 	}
 
+	public String getDisplayInventoryIndicator() {
+		return displayInventoryIndicator;
+	}
+
+	public void setDisplayInventoryIndicator(String displayInventoryIndicator) {
+		this.displayInventoryIndicator = displayInventoryIndicator;
+	}
+
 	public String getOrganizationCode() {
 		return organizationCode;
 	}
@@ -2252,9 +2260,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	public void setOrganizationCode(String organizationCode) {
 		this.organizationCode = organizationCode;
 	}
-
-
-
+	
 	public String getCustomerId() {
 		return customerId;
 	}
@@ -2409,6 +2415,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	String priceCurrencyCode = null;
 	String orderMultiple = null;
 	String isStocked = "N";
+	String displayInventoryIndicator=null;
 	// Added by anil start
 	private Map <String,String>defaultShowUOMMap;
 

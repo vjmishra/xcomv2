@@ -1,6 +1,7 @@
 /**
  * NOTE: This file was developed by Sterling(IBM) consultants in 2010 - it was never actually used.
- * See XPEDXPunchoutServlet.java for the 2014 code that was implemented by xpedx instead.
+ * See XPEDXPunchoutCxmlServlet.java for the 2014 code that was implemented by xpedx instead.
+ * @see XPEDXPunchoutCxmlServlet
  */
 package com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement;
 
@@ -18,7 +19,6 @@ import com.sterlingcommerce.ui.web.framework.security.SCUISecurityResponse;
 import com.sterlingcommerce.ui.web.framework.utils.SCUIContextHelper;
 import com.sterlingcommerce.ui.web.platform.utils.SCUIPlatformUtils;
 import com.sterlingcommerce.webchannel.common.eprocurement.AribaContextImpl;
-import com.sterlingcommerce.webchannel.common.eprocurement.CXMLMessageFields;
 import com.sterlingcommerce.webchannel.common.eprocurement.IAribaContext;
 import com.sterlingcommerce.webchannel.common.eprocurement.IProcurementContext;
 import com.sterlingcommerce.webchannel.common.integration.IAribaConstants;
@@ -46,6 +46,7 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
 	WCIntegrationResponse wcResponse = null;
 
 
+	@Override
 	protected SCUISecurityResponse authenticateRequest(HttpServletRequest req,
     		HttpServletResponse res)
     throws ServletException, IOException{
@@ -91,6 +92,7 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
 
 
 
+	@Override
 	protected WCIntegrationResponse processRequest (HttpServletRequest req,
     		HttpServletResponse res)
     throws ServletException, IOException{
@@ -229,6 +231,7 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
 				}
 	    }
 
+		@Override
 		public String getResponseDoc(Error errObj,boolean resStatus, IWCContext ctx)    {
 			if(resStatus)
 				wcResponse = new WCIntegrationResponse(WCIntegrationResponse.SUCCESS,errObj);

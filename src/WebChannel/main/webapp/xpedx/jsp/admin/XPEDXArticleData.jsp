@@ -169,8 +169,8 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 							$(document).ready(function(){
 		                		$("#confirmDeleteArticle").fancybox({
 		                			'autoDimensions'	: false,
-		                			'width' 			: 300,
-		                			'height' 			: 180  
+		                			'width' 			: 260,
+		                			'height' 			: 110  
 		                		}).trigger('click');
 		                	    
 		                	});							
@@ -207,8 +207,8 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 						$(document).ready(function(){
 				    		$("#confirmDeleteArticle").fancybox({
 				    			'autoDimensions'	: false,
-				    			'width' 			: 300,
-				    			'height' 			: 180  
+				    			'width' 			: 260,
+				    			'height' 			: 110  
 				    		}).trigger('click');
 				    	    
 				    	});
@@ -300,13 +300,13 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
     				    </div>
 				<!--  <s:hidden id="customerId" value='%{wCContext.customerId}' name='customerId'/>  commented for jira 2484 -->
 				  	<a id="confirmDeleteArticle" href="#deleteArticleDiv"></a>
-				   	<table style="width: 100%;" id="articletable" class="sortable">
-	                    <tr class="table-header-bar">
-	                      		<td width="6%" class="no-border table-header-bar-left padding8 c1 sorttable_nosort "><!--<span class="white txt-small"><a href="javascript:selectAll('articletable');" class="white">&nbsp;</a></span>--></td>
-	                            <td width="13%" align="left" class="no-border sortable c2 text-center "><span class="white txt-small">Effective</span></td>
-	                            <td width="13%" align="left" class="no-border sortable c2 text-center "><span class="white txt-small">Expiration</span></td>
-	                        	<td width="48%" align="left" class="no-border sortable c2 "><span class="white txt-small">Article Title</span></td>
-	        					<td width="20%" align="left" class="table-header-bar-right no-border sortable c2 text-center "><span class="white txt-small">Last Modified By</span></td>
+				   	<table style="width: 100%;" id="articletable" class="sortable standard-table">
+	                    <tr>
+	                      		<th></th>
+	                            <th class="sortable pointer">Effective</th>
+	                            <th class="sortable pointer">Expiration</th>
+	                        	<th class="sortable pointer">Article Title</th>
+	        					<th class="sortable pointer">Last Modified By</th>
 	         			</tr>
 	                    <s:set name="modifiedUserFormattedNames" value='#wcUtil.createModifyUserNameMap(articleLines)'/>
 						<s:iterator value='articleLines' id='articleLine' status="articleLineCount">
@@ -344,10 +344,7 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 						</tbody>
 					</table> 
 					
-					<div id="table-bottom-bar" style="width:100%; clear:both;">
-			          <div id="table-bottom-bar-L"></div>
-			          <div id="table-bottom-bar-R"></div>
-			        </div>
+					
 					
 					
 					
@@ -377,22 +374,17 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 		
 		<!-- added for jira 2484 confirmation box -->  
 		<div style="display: none;">
-	<div id="deleteArticleDiv">
-		<!-- <h2>Delete Article</h2> -->
-		<h2> <s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.PGTITLE' /> </h2>
-		
-		<br /><hr /><br></br>
-		
-		<!-- <p>Are you sure you would like to delete this article?</p><br></br> <br></br> -->
-		<p> <s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.DELETECONFIRM' /> </p><br></br> <br></br>
-			<ul id="tool-bar" class="tool-bar-bottom">
+	<div id="deleteArticleDiv" class="xpedx-light-box">
+		<h1> <s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.PGTITLE' /> </h1>
+		<p class="addmargintop0"><s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.DELETECONFIRM' /></p>
+			<ul id="tool-bar" class="tool-bar-bottom float-right">
 			<li>
-				<a class="grey-ui-btn" href="javascript:$.fancybox.close();">
+				<a class="btn-neutral" href="javascript:$.fancybox.close();">
 					<span>No</span>
 				</a>
 			</li>
 			<li class="float-right">
-				<a class="green-ui-btn" href="javascript:fancyBoxCloseAndDelArticle();">
+				<a class="btn-gradient" href="javascript:fancyBoxCloseAndDelArticle();">
 					<span>Yes</span>
 				</a>
 			</li>

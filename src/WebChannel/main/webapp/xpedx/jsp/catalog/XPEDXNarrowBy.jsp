@@ -52,7 +52,8 @@ function setStockItemFlag()
 	<s:form name='narrowSearch' action="search">
 		<div class="searchbox-form1">
 			<div class="catalog-search-container">
-				<input id="search_searchTerm" class="x-input input-watermark" data-watermark="Search Within Results..." name="searchTerm" tabindex="1002" type="text" >
+
+				<input id="search_searchTerm" class="x-input input-watermark input-watermark-color" data-watermark="Search Within Results..." name="searchTerm" tabindex="1002" type="text" >
 				<input name="stockedItem" value="false" id="stockedItem" type="hidden">
 			</div>
 		</div>

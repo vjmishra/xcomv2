@@ -87,6 +87,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 
 	
     protected HashMap<String, String> inventoryIndicatorMap = new HashMap<String, String>();
+    protected HashMap<String, String> displayInventoryIndicatorMap = new HashMap<String, String>();
     protected String orderBillToID = "";
 	protected String orderShipToID = "";
 	protected String custmerPONumber = "";
@@ -242,6 +243,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			//String shipFromBranch = (String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
 			String shipFromBranch=shipToCustomer.getExtnShipFromBranch();
 			setInventoryIndicatorMap(xpedxwcUtils.getInventoryCheckMap(getOutputDocument(), shipFromBranch, getWCContext()));
+			setDisplayInventoryIndicatorMap(xpedxwcUtils.getDisplayInventoryCheckMap(getOutputDocument(), shipFromBranch, getWCContext()));
 			getEmailAddrs();
 			getAllItemSKUs();
 			//Start of EB-64 - getting the item id and customer UOM of that item, if it exist
@@ -1479,6 +1481,15 @@ END of JIRA 3382*/
 	public void setInventoryIndicatorMap(
 			HashMap<String, String> inventoryIndicatorMap) {
 		this.inventoryIndicatorMap = inventoryIndicatorMap;
+	}
+	
+	public HashMap<String, String> getDisplayInventoryIndicatorMap() {
+		return displayInventoryIndicatorMap;
+	}
+
+	public void setDisplayInventoryIndicatorMap(
+			HashMap<String, String> displayInventoryIndicatorMap) {
+		this.displayInventoryIndicatorMap = displayInventoryIndicatorMap;
 	}
 
 	/**

@@ -1,0 +1,50 @@
+/*******NEW FOR CART HEADER*********/
+.cart-info-wrap {
+	clear: none;
+	float: left;
+	width: 49%;
+}
+
+.cart-info-wrap label {
+	clear: both;
+	display: block;
+	margin-bottom: 2px;
+	width: auto;
+}
+
+.cart-info-wrap textarea,.cart-info-wrap input {
+	margin-bottom: 8px;
+}
+
+.cart-info-wrap textarea {
+	height: 50px;
+	width: 500px;
+}
+
+.cart-btn-wrap {
+	clear: none;
+	float: right;
+	margin-top: 66px;
+	width: 49%;
+}
+
+/*************CART LIST PAGE******************/
+table#carts-list td {
+    border-bottom: 1px solid #cccccc;
+    padding: 8px;
+}
+
+table#carts-list tbody img {
+    float: left;
+    margin-right: 5px;
+    margin-top: -2px;
+}
+table#carts-list .left-cell {
+	padding-top: 10px;
+	}
+
+.cart-list-desc{
+	font-size:11px;
+	color:#808080;
+	}
+/******/

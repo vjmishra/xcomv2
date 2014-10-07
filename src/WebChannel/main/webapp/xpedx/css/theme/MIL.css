@@ -5507,6 +5507,7 @@ div#replacementItemBody .mil-wrap-condensed {
 	float: left;
 	display: block;
 	clear: none;	
+	box-shadow: 1px 1px 4px #999999;
 }
 .hide-item-thumbnails .mil-wrap-condensed-container .item-thumbnail {
 	width: 0px;
@@ -5889,7 +5890,7 @@ tr:hover {
 
 
 
-.table-header-bar {
+/* .table-header-bar {
 	background-color: #003399;	
 }
 
@@ -5902,7 +5903,7 @@ tr:hover {
 	background-image: url(../../images/theme/theme-1/mil/items-list-bg-RIGHT.gif);
 	background-repeat: no-repeat;
 	background-position: right top;
-}
+}*/
 
 /*
 #mil-list p {
@@ -5928,7 +5929,7 @@ tr:hover {
  
  
 /* Dan */ 
-#mil-list tr {
+/* #mil-list tr {
 	border-top:1px solid #d7d7d7;
 }
 
@@ -5938,7 +5939,7 @@ tr:hover {
 
 #mil-list tr a {
 	color: #003399;	
-}
+} */
 
 .mil-edit {
 	padding-left:0;
@@ -6116,8 +6117,7 @@ div#main.userProfile { min-height: 850px; }
 	display: inline;
 }
 
-.xpedx-light-box p {
-}
+
 .x-input {
 	padding-left: 0px;
 	padding-right: 0px;	
@@ -6177,11 +6177,11 @@ BEGIN 2014 styles
 	clear: both;
 	height: 5px;
 }
-.standard-table {
+/* .standard-table {
 	width: 950px;
 	margin: 0px 0px 0px 20px;
 }
-
+ */
 .graybar {
 	height: 25px;
 	background-color: #e9e9e9;
@@ -6373,7 +6373,7 @@ BEGIN 2014 styles
 .fixwidth200 {
 	width: 200px;
 }
-#mil-list.standard-table td.left-rounded-corner {
+/* #mil-list.standard-table td.left-rounded-corner {
 	color: #ffffff;
 	font-size:11px;
 	border-left: none;
@@ -6384,12 +6384,10 @@ BEGIN 2014 styles
 	font-size:11px;
 	border-right: none;
 	text-align: center;
-}
+} */
 .imagewrap {
 	float: left;
 	clear: none;
-	height: 150px;
-	width: 150px;
 	margin: -15px 0px 0px 20px;
 }
 .mil-checkbox-wrap {
@@ -6409,10 +6407,6 @@ BEGIN 2014 styles
 	width: 500px;
 	margin-left: 0px;
 	height: auto;
-}
-
-.mil-action-list-wrap .notice {
-	border: none;
 }
 
 .mil-edit-forms {
@@ -6453,4 +6447,30 @@ BEGIN 2014 styles
 
 #mil-list .right-cell select {
 	width: 125px;
+}
+
+.mil-nonstock-adjust {
+	margin-left: -148px;
+	width: 400px;
+	padding: 0px;
+}
+
+.mil-replacement-adjust {
+	display:inline;
+	margin: 5px 0;
+}
+
+.mil-edit-replacement-adjust {
+	margin-right: -20px;
+}
+
+#fancybox-content{
+	height: 325px;
+}
+
+.graybar a {
+	font-weight: bold;
+}
+.graybar a:hover {
+	text-decoration: underline;
 }

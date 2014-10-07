@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<%@ taglib prefix="xpedx" uri="xpedx"%>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -412,14 +413,11 @@ function printPOs(customerPos) {
 			</s:form>
 			
 	    <!-- Begin mid-section -->
-	    <div class="midsection addmarginleft0"> <!-- Begin mid-section container -->
+	    <div class="addmarginleft0 float-right"> <!-- Begin mid-section container -->
 		
              <div id="open-orders-Msg-top"  style="display: none;position:relative;left:375px;color:red;" class="error">&nbsp;</div> 
-            <div class="search-pagination-bottom">
-            	  <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
-                 	urlSpec="%{#orderListPaginationURL}"/>
-			</div>
+           <xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
+           <div class="clearfix"></div>
 <!--	    	<div class="search-pagination-top">Page&nbsp;&nbsp;<a class="underlink" href="#"><</a> <a class="underlink" href="#">1</a> <a class="underlink" href="#">2</a> <a class="underlink" href="#">3</a> <a class="underlink" href="#">4</a> <a class="underlink" href="#">5</a> <a class="underlink" href="#"> ></a></div> -->
 			<s:form id="dol" namespace="/order" method="post" onsubmit="return swc_validateForm('dol');" >
 				<s:hidden id="action_namespace" name="#action.namespace" value="/order"/>
@@ -427,49 +425,49 @@ function printPOs(customerPos) {
 					<swc:sortctl sortField="%{orderByAttribute}"
 						  sortDirection="%{orderDesc}" down="Y" up="N"
 						  urlSpec="%{#orderListSortURL}">
-	    	<table class="search-table standard-table">
-	    			<tbody>
-							<tr class="table-header-bar">
-								<td class="table-header-bar-left " style="min-width: 10em;">
+	    	<table class=" standard-table-width standard-table">
+	    			
+							<tr>
+								<th style="min-width: 10em;">
 						<swc:sortable fieldname="%{'ExtnWebConfNum'}">
 										<span style="color: white" class="underlink">Web&nbsp;Confirmation
 										</span>
-									</swc:sortable></td>
-								<td style="min-width: 5.5em;">
+									</swc:sortable></th>
+								<th style="min-width: 5.5em;">
 									<span style="color: white">Order&nbsp;#</span>
-								</td>
-								<td style="min-width: 9.5em;"><swc:sortable
+								</th>
+								<th style="min-width: 9.5em;"><swc:sortable
 										fieldname="%{'CustomerPONo'}">
 										<span style="color: white;" class="underlink"> PO # </span>
-									</swc:sortable></td>
-								<td style="min-width: 6em;"><swc:sortable
+									</swc:sortable></th>
+								<th style="min-width: 6em;"><swc:sortable
 										fieldname="%{'OrderDate'}">
 										<span class="underlink" style="color: white;">Ordered</span>
-									</swc:sortable></td>
-								<td style="min-width: 7em;"><swc:sortable
+									</swc:sortable></th>
+								<th style="min-width: 7em;"><swc:sortable
 										fieldname="%{'ExtnOrderedByName'}">
 										<span class="underlink" style="color: white;">Ordered&nbsp;By
 										</span>
-									</swc:sortable></td>
-								<td style="min-width: 9.3em;"><swc:sortable
+									</swc:sortable></th>
+								<th style="min-width: 9.3em;"><swc:sortable
 										fieldname="%{'ExtnShipToName'}">
 										<span class="underlink" style="color: white;">Ship-To</span>
-									</swc:sortable></td>
-								<td style="min-width: 8em;"><swc:sortable
+									</swc:sortable></th>
+								<th style="min-width: 8em;"><swc:sortable
 										fieldname="%{'ExtnTotalOrderValue'}">
 										<span class="underlink" style="color: white;">Amount
 										</span>
-									</swc:sortable></td>
-								<td style="min-width: 10.7em;" class="table-header-bar-right"><span
+									</swc:sortable></th>
+								<th style="min-width: 10.7em;"><span
 									style="color: white">Status</span>
-								</td>
+								</th>
 	    			</tr>
 	    		<%-- 
 	            <s:set name="parentOrderList" value="#util.getElements(#sdoc, '//Page/Output/OrderList/Order')"/>
 	            --%>
 	            <%-- Parent customer order info is being read from xpedxParentOrderListMap --%>
 	            <s:set name="parentOrderList" value="xpedxParentOrderListMap"/>
-	            
+	            <tbody>
 	            <s:iterator  status='rowStatus' value='xpedxParentOrderListMap' >
 	            	<s:set name='parentOrder' value='value' />
 	            	<s:set name="priceInfo" value='#parentOrder'/>
@@ -842,11 +840,7 @@ function printPOs(customerPos) {
     </s:form>
     		<!-- <div id="table-bottom-bar" class="search-bottom-table-bar"><div id="table-bottom-bar-L"></div><div id="table-bottom-bar-R"></div></div> -->
     		
-            <div class="search-pagination-bottom">
-				 <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-                 <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
-                 	urlSpec="%{#orderListPaginationURL}"/>
-			</div>
+            <xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
 		 <div id="open-orders-Msg-bottom" style="display: none;position:relative;left:375px;color:red;" align="center" class="error">&nbsp;</div> 
 		 
 	    </div> <!-- end mid-section container -->
@@ -863,21 +857,21 @@ function printPOs(customerPos) {
 		<div >
              <div class="loading-icon" style="display:none;"></div>
          </div>		
-		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
+		<div  class="xpedx-light-box approval-reject-web-adjustment" id="">
 			<!-- <h2>Approval / Rejection Comments</h2>		 -->	
-			<h2><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h2>			
+			<h1><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h1>			
 				<s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">					
-					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea>
+					<s:textarea id="ReasonText1" name="ReasonText1" cssClass="textarea-web-adjustment" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea>
 					<s:hidden name="ReasonText" id="ReasonText" value="" />
 					<s:hidden name="OrderHeaderKey" value="" />
 					<s:hidden name="ApprovalAction" value=""/>
 					<s:hidden name="ApprovalActionRequestUrl" value="orderList"/>
 					<s:hidden name="#action.namespace" value="/order"/>
 					<s:hidden id="actionName" name="#action.name" value="approval"/>
-					<ul id="tool-bar" class="tool-bar-bottom">
-						<li><a style="float:right; class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
-						<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
-						<li><a style="float:right;" class="green-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>						 
+					<ul id="tool-bar" class="tool-bar-bottom float-right">
+						<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
+						<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
+						<li><a style="float:right;" class="btn-gradient" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>						 
 					</ul>
 				</s:form>
 				</div>

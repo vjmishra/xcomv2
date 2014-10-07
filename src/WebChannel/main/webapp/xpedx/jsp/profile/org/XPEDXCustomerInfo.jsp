@@ -125,7 +125,7 @@
 			},
 			'autoDimensions'	: false,
 			'width' 			: 880,
-			'height' 			: 420,
+			'height' 			: 480,
 			'scrolling'			:'no',
 			//XNGTP - JIRA- 489 
 			'onClosed' : function(){				
@@ -335,9 +335,9 @@ ul.checkboxTree li
       </div>
       <table id="customerFieldsTable" style="width:100%" class="standard-table">
         <tbody>
-          <tr class="table-header-bar no-border">
-          	<td class="table-header-bar-left"width="209"><span class="white txt-small white">Field Name</span></td>
-          	<td width="357" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small white">Site Label</span></td>
+          <tr>
+          	<th>Field Name</th>
+          	<th width="357" align="left">Site Label</th>
           </tr>
           <s:if test="(#_action.IsCustLinePONoFlag())">
             <tr class="odd" >
@@ -435,7 +435,7 @@ ul.checkboxTree li
 <div title="Add New Quick Link" id="newQL"
 	style="width: 400px; height: 220px; overflow: auto;"
 	class="xpedx-light-box">
-<h2>Add New Quick Link</h2>
+<h1>Add New Quick Link</h1>
 <p><strong></strong></p>
 
 <table class="form" width="100%" style="clear: both">
@@ -454,11 +454,11 @@ ul.checkboxTree li
 </table>
 <div></div>
 <ul id="tool-bar" class="tool-bar-bottom float-right"  style="padding-top: 30px;">
-	<li><s:a cssClass="grey-ui-btn "
+	<li><s:a cssClass="btn-neutral"
 		href="#" onclick="javascript:$.fancybox.close();">
 		<span>Cancel</span>
 	</s:a></li>
-	<li><s:a href="javascript:addRow()" cssClass="green-ui-btn">
+	<li><s:a href="javascript:addRow()" cssClass="btn-gradient">
 		<span>Add</span>
 	</s:a></li>
 </ul>

@@ -18,6 +18,12 @@ import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
+import java.util.Map;
+
+/*
+ *This class retrieves the report parameters that the user selects on the ReportList page. 
+ * 
+ */
 
 @SuppressWarnings("serial")
 public class XPEDXGetWebiPromptsAction extends WCMashupAction {
@@ -136,6 +142,10 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 
 	public String execute() {
 
+		String username;
+		String password;
+		String authentication;
+		String CMS;
 		List<String> errors = getErrorNames();
 		Iterator<String> iter = errors.iterator();
 		if (errors != null) {
@@ -146,30 +156,35 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 			LOG.debug("-------------------- errorString = " + errorString);
 		}
 
-		/*
-		 * ReportEngines reportEngines =
-		 * (ReportEngines)request.getSession().getAttribute("ReportEngines");
-		 * ReportEngine reportEngine = null; reportEngine =
-		 * reportEngines.getService
-		 * (ReportEngines.ReportEngineType.WI_REPORT_ENGINE); DocumentInstance
-		 * document = reportEngine.openDocument(Integer.parseInt(getId()));
-		 * Prompts prompts = document.getPrompts();
-		 */
 
 		ReportUtils ru = new ReportUtils();
 		List<String> promptsString = null;
 
-		HttpHost _target = ru.getHttpHost(ReportUtils.getCMSLogonDetails().get(
-				"CMS"));
+		HttpHost _target = null; 
 
 		ArrayList<String> logonTokens = null;
 		try {
-			logonTokens = ru.logonCMS(
-					ReportUtils.getCMSLogonDetails().get("username"),
-					ReportUtils.getCMSLogonDetails().get("password"),
-					ReportUtils.getCMSLogonDetails().get("authentication"),
-					_target);
+			//ML - changed logic to read CMS Info from property file only once. 
+			Map<String,String> CMSLogonDetails = ReportUtils.getCMSLogonDetails();
+			username = CMSLogonDetails.get("username").toString();
+			password = CMSLogonDetails.get("password").toString();
+			authentication = CMSLogonDetails.get("authentication").toString();
+			CMS = CMSLogonDetails.get("CMS").toString();
+			//postpone setting _target until CMS is read to avoid calling getCMSLogonDetails() more than once. 
+			_target = ru.getHttpHost(CMS);
+
+			//ML:Find out if logonTokens is in session. If not, then go get a new one and store it in the session. 
+			//this logic should be reused across this "Report List" page, the "Report Details" page, and the ReportDisplay page to avoid
+			//creating too many sessions and violate the SAP license agreement. 
+			logonTokens = (ArrayList) request.getSession().getAttribute("logonTokens"); 
+			if ((logonTokens == null) || (logonTokens.size() != 2)) {				
+				logonTokens = ru.logonCMS(username, password, authentication, _target);
+				//store the logonTokens in session for future use
+				request.getSession().setAttribute("logonTokens", logonTokens);
+			}		
+			
 		} catch (Exception e) {
+			System.out.println("Could not logon to BI/CMS using the supplied credentials.");
 			e.printStackTrace();
 		}
 		Boolean isOK = true;
@@ -182,40 +197,18 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 				promptsString = ru.getPromptsAsString(getId(), _target,
 						logonTokens.get(0));
 			} catch (Exception e) {
+				System.out.println("Could not logon retrieve report parameters for docID: " + getId().toString());
 				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 		}
 
-		/*
-		 * XPEDXReportService reportService = new XPEDXReportService();
-		 * ReportService intReportService = reportService.getReportService();
-		 * ReportList reportList = intReportService.getReports(); allReportList
-		 * = reportList.getCustReportList();
-		 * allReportList.addAll(reportList.getStdReportList());
-		 * 
-		 * List<ReportPrompt> allPrompts = null;
-		 * 
-		 * for (Report report : allReportList) { if (report.getId() ==
-		 * Integer.parseInt(getId())) { allPrompts =
-		 * report.getMandatoryPrompts();
-		 * allPrompts.addAll(report.getOptionalPrompts()); break; } }
-		 */
-
-
-		List<String> defaultPromptValue = new ArrayList<String>();
-
-		// DocumentInstance document =
-		// reportEngines.getDocumentFromStorageToken(getCuid());
-		// Prompts prompts = document.getPrompts();
-		XPEDXWebiPromptsBean bean[] = new XPEDXWebiPromptsBean[promptsString
-				.size()];
-		LOG.debug("++++++++++++++++++++++++++++++++++++++++++prompts count = "
-				+ promptsString.size());
-		for (int i = 0; i < promptsString.size(); i++) {
-			// Prompt prompt = prompts.getItem(i);
-			// ReportPrompt reportPrompt = allPrompts.get(i);
-			// String promptName = reportPrompt.getPromptName();
+		List<String> defaultPromptValue = new ArrayList<String>();		
+		XPEDXWebiPromptsBean bean[] = new XPEDXWebiPromptsBean[promptsString.size()];
+		LOG.debug("++++++++++++++++++++++++++++++++++++++++++prompts count = " + promptsString.size());
+		//Loop through the parameters/prompts list
+		for (int i = 0; i < promptsString.size(); i++) {			
 			String promptName = promptsString.get(i);
 
 			bean[i] = new XPEDXWebiPromptsBean();
@@ -243,158 +236,15 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 			}
 			if (prefix.equalsIgnoreCase("mslb")
 					|| prefix.equalsIgnoreCase("ddlb")) {
-				// bean[i].setPromptValues(reportPrompt.getDefaultPromptValues());
 				bean[i].setPromptValues(defaultPromptValue);
-			}
-			/*
-			 * if(prefix.equalsIgnoreCase("msls") ||
-			 * prefix.equalsIgnoreCase("ddls")) {
-			 * bean[i].setSuffixList(getSterlingPromptList(prompt, suffix,
-			 * bean[i])); }
-			 */
-
+			}			
 		}
-
-		setWebiPromptsBean(bean);
+		//Store the prompts bean.
+		setWebiPromptsBean(bean); 	
 
 		return SUCCESS;
 	}
-
-	/*
-	 * private List<XPEDXShipAndBillSuffix> getSterlingPromptList(Prompt prompt,
-	 * String suffix, XPEDXWebiPromptsBean promptsBean) {
-	 * 
-	 * 
-	 * if (suffix.equalsIgnoreCase("Bill To:")) { String
-	 * loggedInCustomerFromSession = XPEDXWCUtils
-	 * .getLoggedInCustomerFromSession(wcContext); HashMap<String,
-	 * ArrayList<String>> allMap = null; if (loggedInCustomerFromSession != null
-	 * && loggedInCustomerFromSession.trim().length() > 0) { try { allMap =
-	 * XPEDXWCUtils.getAssignedCustomersMap(loggedInCustomerFromSession,
-	 * wcContext.getLoggedInUserId()); } catch (CannotBuildInputException e) {
-	 * LOG.error("Error getting all bill to as Map : " + e.getMessage()); } }
-	 * else { try { allMap =
-	 * XPEDXWCUtils.getAssignedCustomersMap(wcContext.getCustomerId(),
-	 * wcContext.getLoggedInUserId()); } catch (CannotBuildInputException e) {
-	 * LOG.error("Error getting all bill to as Map : " + e.getMessage()); } }
-	 * LOG.debug("All shipTos Map***********=" + allMap); List<String>
-	 * allBillTos = allMap.get(XPEDX_ASSIGNED_CUSTOMER_BILL_TO); //List<String>
-	 * allBillToCustDetail = new ArrayList<String>();
-	 * List<XPEDXShipAndBillSuffix> billToSuffixList = new
-	 * ArrayList<XPEDXShipAndBillSuffix>();
-	 * 
-	 * XPEDXShipAndBillSuffix suffixBean = null;
-	 * 
-	 * if (allBillTos != null) { for(int i=0; i<allBillTos.size(); i++) { String
-	 * custId = allBillTos.get(i); LOG.debug("BillTo++++++++++"+ custId); try {
-	 * 
-	 * Document docCustDetail = XPEDXWCUtils.getCustomerDetails(custId,
-	 * wcContext.getStorefrontId()); String billToCustDetail =
-	 * getBillToCustDetails(docCustDetail);
-	 * 
-	 * LOG.debug("billToCustDetail+++++++++++++" + billToCustDetail);
-	 * //allBillToCustDetail.add(billToCustDetail); suffixBean = new
-	 * XPEDXShipAndBillSuffix(); suffixBean.setStrToDisplay(billToCustDetail);
-	 * suffixBean.setSuffixValue(getShipToSuffix(custId));
-	 * 
-	 * 
-	 * //billToMap.put(billToCustDetail, getShipToSuffix(custId));
-	 * billToSuffixList.add(suffixBean); } catch (CannotBuildInputException e) {
-	 * LOG.error("Error getting customer details for bill to customer : " +
-	 * e.getMessage()); } } //promptsBean.setSuffixList(billToSuffixList);
-	 * //return allBillToCustDetail; return billToSuffixList;
-	 * 
-	 * } //promptsBean.setSuffixList(new ArrayList<String>()); //Map<String,
-	 * String> billMap[] = new HashMap[0]; return new
-	 * ArrayList<XPEDXShipAndBillSuffix>();
-	 * 
-	 * }
-	 * 
-	 * if (suffix.equalsIgnoreCase("Ship To:")) { List<String> assignedShipTos =
-	 * null; HashSet hashSet = null; //String a1=
-	 * XPEDXWCUtils.getDefaultShipTo(); //dupsShipTos=
-	 * XPEDXWCUtils.getAllShipTosAsList(getWCContext()); //hashSet = new
-	 * HashSet(dupsShipTos); //assignedShipTos= new ArrayList(hashSet);
-	 * //LOG.debug("Ship Tos dupsShipTos ====" + dupsShipTos ); assignedShipTos
-	 * = XPEDXWCUtils.getAllAssignedShiptoCustomerIdsForAUser(getWCContext().
-	 * getLoggedInUserId(),getWCContext());
-	 * LOG.debug("Ship Tos assignedShipTos====" + assignedShipTos); if
-	 * (assignedShipTos == null) { assignedShipTos = new ArrayList<String>(); }
-	 * 
-	 * //List<String> assignedShipToList = new ArrayList<String>();
-	 * List<XPEDXShipAndBillSuffix> shipToSuffixList = new
-	 * ArrayList<XPEDXShipAndBillSuffix>(); int listSize =
-	 * assignedShipTos.size(); XPEDXShipAndBillSuffix shipSuffixBean = null;
-	 * 
-	 * if (assignedShipTos != null) { if (listSize > 0) { for (int index = 0;
-	 * index < listSize; index++) { XPEDXShipToCustomer xPEDXShipToCustomer =
-	 * null; try { xPEDXShipToCustomer = XPEDXWCUtils
-	 * .getShipToAdress(assignedShipTos.get(index),
-	 * getWCContext().getStorefrontId()); } catch (CannotBuildInputException e)
-	 * { LOG.error("Error getting ship to address : " + e.getMessage()); }
-	 * String customerId = xPEDXShipToCustomer.getCustomerID(); String
-	 * shipToSuffix = getShipToSuffix(customerId); String comcode =
-	 * getCompanyCode(customerId); String custNo= getCustomerNo(customerId);
-	 * //String crId=getWCContext().getCustomerId(); String stringToDisplay =
-	 * "";
-	 * 
-	 * if (xPEDXShipToCustomer.getAddressList().size() > 0) stringToDisplay =
-	 * xPEDXShipToCustomer.getAddressList().get(0) + ", ";
-	 * 
-	 * stringToDisplay = comcode + "- " + custNo + "- " + shipToSuffix + "- " +
-	 * stringToDisplay + xPEDXShipToCustomer.getCity() + ", " +
-	 * xPEDXShipToCustomer.getState() + ", " + xPEDXShipToCustomer.getZipCode();
-	 * 
-	 * //assignedShipToList.add(stringToDisplay); shipSuffixBean = new
-	 * XPEDXShipAndBillSuffix();
-	 * shipSuffixBean.setStrToDisplay(stringToDisplay);
-	 * shipSuffixBean.setSuffixValue(shipToSuffix);
-	 * //shipToMap.put(stringToDisplay, shipToSuffix);
-	 * shipToSuffixList.add(shipSuffixBean); } } }
-	 * //promptsBean.setSuffixList(shipToSuffixList); return shipToSuffixList; }
-	 * 
-	 * 
-	 * if (suffix.equalsIgnoreCase("Account:")) { Element docElement = null;
-	 * List<XPEDXShipAndBillSuffix> list = new
-	 * ArrayList<XPEDXShipAndBillSuffix>(); //XPEDXShipAndBillSuffix
-	 * shipSuffixBean = null; XPEDXShipAndBillSuffix suffixBean = null;
-	 * List<XPEDXShipAndBillSuffix> billToSuffixList = new
-	 * ArrayList<XPEDXShipAndBillSuffix>(); XPEDXShipToCustomer
-	 * xPEDXShipToCustomer = null; String
-	 * customerId=getWCContext().getCustomerId();
-	 * LOG.debug("In Account, customerId++++++++++++"+ customerId); try {
-	 * docElement = prepareAndInvokeMashup("getCustomerExtnParameters");
-	 * 
-	 * if (null != docElement) { LOG.debug("Output XML In Account: " +
-	 * SCXmlUtil.getString(docElement)); LOG.debug("Output XML: " +
-	 * SCXmlUtil.getString(docElement)); } } catch (XMLExceptionWrapper e) {
-	 * LOG.error("Error getting Customer Extn parameters : " + e.getMessage());
-	 * 
-	 * } catch (CannotBuildInputException e) {
-	 * LOG.error("Error getting Customer Extn parameters : " + e.getMessage());
-	 * 
-	 * }
-	 * 
-	 * Element eleExtn = SCXmlUtil.getChildElement(docElement, "Extn"); String
-	 * testing =SCXmlUtil.getString(eleExtn);
-	 * LOG.debug("TEST Acount SAP=====>>>"+ testing);
-	 * LOG.debug("TEST Acount SAP=====>>>"+ testing);
-	 * 
-	 * String sapnumber= eleExtn.getAttribute("ExtnSAPNumber"); String sapname=
-	 * eleExtn.getAttribute("ExtnSAPName"); String legacycustnumber=
-	 * eleExtn.getAttribute("ExtnLegacyCustNumber");
-	 * 
-	 * String accountInfo = sapnumber + " - " + sapname ;
-	 * 
-	 * suffixBean = new XPEDXShipAndBillSuffix();
-	 * suffixBean.setStrToDisplay(accountInfo);
-	 * suffixBean.setSuffixValue(sapnumber);
-	 * 
-	 * billToSuffixList.add(suffixBean); return billToSuffixList; }
-	 * //promptsBean.setSuffixList(new ArrayList<String>()); //return new
-	 * ArrayList<String>(); return new ArrayList<XPEDXShipAndBillSuffix>(); }
-	 */
-
+	
 	private String getBillToCustDetails(Document docCustDetail) {
 		String custId = SCXmlUtil.getAttribute(
 				docCustDetail.getDocumentElement(), "CustomerID");

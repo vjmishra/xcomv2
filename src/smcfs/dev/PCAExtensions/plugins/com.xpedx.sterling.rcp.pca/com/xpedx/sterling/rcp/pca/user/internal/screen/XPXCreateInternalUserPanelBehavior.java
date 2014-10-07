@@ -322,6 +322,10 @@ public class XPXCreateInternalUserPanelBehavior extends YRCBehavior {
 						if(YRCPlatformUI.isVoid(strEmployeeID)){
 							strEmployeeID = "";
 						}
+						//EB-7869 remove the "U" prefix for the employee id during show and creation of new internal users in Call Center
+						if(!YRCPlatformUI.isVoid(strEmployeeID) && (strEmployeeID.startsWith("U") || strEmployeeID.startsWith("u"))){
+							strEmployeeID = strEmployeeID.substring(1, strEmployeeID.length());
+						}
 						setFieldValue("txtEmployeeId", strEmployeeID);
 						
 						String strEmailAddress = YRCXmlUtils.getXPathElement(eleOutput, "/User").getAttribute("EmailAddress");

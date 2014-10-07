@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAction;
@@ -326,28 +327,51 @@ public class XPEDXShowLocations extends WCAction {
 				// Error in invoking mashup
 			}
 		} else {
-			YFCDocument outputCustomerListTemplateDoc = YFCDocument
-					.createDocument("XPXCustHierarchyViewList");
-			YFCElement outputCustomerListTemplateElement = outputCustomerListTemplateDoc
-					.getDocumentElement();
-			outputCustomerListTemplateElement.setAttribute(
-					"TotalNumberOfRecords", "");
-			YFCElement outputCustomerTemplateElement = outputCustomerListTemplateDoc
-					.createElement("XPXCustHierarchyView");
-			outputCustomerListTemplateElement
-					.appendChild(outputCustomerTemplateElement);
-			ISCUITransactionContext scuiTransactionContext = getWCContext()
-					.getSCUIContext().getTransactionContext(true);
-			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-			env.setApiTemplate("XPXCustomerHierarchyViewService",
-					outputCustomerListTemplateDoc.getDocument());
-			YIFApi api = YIFClientFactory.getInstance().getApi();
-			Document outputCustomerDocument = api.executeFlow(env,
-					"XPXCustomerHierarchyViewService",
-					inputCustomerDocument.getDocument());
-			env.clearApiTemplate("XPXCustomerHierarchyViewService");
-			outputCustomerElement = outputCustomerDocument.getDocumentElement();
+			ISCUITransactionContext scuiTransactionContext = null;
+			YFSEnvironment env = null;
+			try {
+				YFCDocument outputCustomerListTemplateDoc = YFCDocument
+						.createDocument("XPXCustHierarchyViewList");
+				YFCElement outputCustomerListTemplateElement = outputCustomerListTemplateDoc
+						.getDocumentElement();
+				outputCustomerListTemplateElement.setAttribute(
+						"TotalNumberOfRecords", "");
+				YFCElement outputCustomerTemplateElement = outputCustomerListTemplateDoc
+						.createElement("XPXCustHierarchyView");
+				outputCustomerListTemplateElement
+						.appendChild(outputCustomerTemplateElement);
+				 scuiTransactionContext = getWCContext()
+						.getSCUIContext().getTransactionContext(true);
+				env = (YFSEnvironment) scuiTransactionContext
+						.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+				env.setApiTemplate("XPXCustomerHierarchyViewService",
+						outputCustomerListTemplateDoc.getDocument());
+				YIFApi api = YIFClientFactory.getInstance().getApi();
+				Document outputCustomerDocument = api.executeFlow(env,
+						"XPXCustomerHierarchyViewService",
+						inputCustomerDocument.getDocument());
+				env.clearApiTemplate("XPXCustomerHierarchyViewService");
+				outputCustomerElement = outputCustomerDocument.getDocumentElement();
+				scuiTransactionContext.commit();
+			} catch (Exception e) {			// rollback the tran
+				if (scuiTransactionContext != null) {
+					try {
+						scuiTransactionContext.rollback();
+					} catch (Exception ignore) {
+					}
+				}
+				throw new IllegalStateException(e);
+			} finally {
+				if (scuiTransactionContext != null && getWCContext().getSCUIContext() != null) {
+					try {
+						// release the transaction to close the connection.
+						SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, getWCContext().getSCUIContext());
+						scuiTransactionContext = null;
+						env = null;
+					} catch (Exception ignore) {
+					}
+				}
+			}
 		}
 		createOrganization(outputCustomerElement, orgListElement,
 				orgListDoucment, organizationCode, suffixType);

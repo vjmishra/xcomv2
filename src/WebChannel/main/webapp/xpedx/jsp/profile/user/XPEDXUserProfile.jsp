@@ -36,7 +36,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/ui.dynatree<s:property value='#wcUtil.xpedxBuildKey' />.css"	rel="stylesheet" type="text/css" id="skinSheet">
+<link media="all" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/ui.dynatree<s:property value='#wcUtil.xpedxBuildKey' />.css"	rel="stylesheet" type="text/css" id="skinSheet"/>
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -1298,6 +1298,39 @@ function funDivOpenClose(val1)
 		}
 		//End of EB 1977
 	</script>
+	<script>
+	function imgChange(){
+		if(document.getElementById("b2bCatalogView0").checked)
+		{
+		document.getElementById("view1").className = "view1-selected";
+		document.getElementById("view2").className = "view2";
+		document.getElementById("view3").className = "view3";
+		document.getElementById("view4").className = "view4";
+		}
+		else if(document.getElementById("b2bCatalogView2").checked )
+		{
+		document.getElementById("view3").className = "view3-selected";
+		document.getElementById("view1").className = "view1";
+		document.getElementById("view2").className = "view2";
+		document.getElementById("view4").className = "view4";
+		}
+		else if(document.getElementById("b2bCatalogView1").checked )
+		{
+		document.getElementById("view2").className = "view2-selected";
+		document.getElementById("view1").className = "view1";
+		document.getElementById("view3").className = "view3";
+		document.getElementById("view4").className = "view4";
+		}
+		else if(document.getElementById("b2bCatalogView3").checked )
+		{
+		document.getElementById("view4").className = "view4-selected";
+		document.getElementById("view1").className = "view1";
+		document.getElementById("view2").className = "view2";
+		document.getElementById("view3").className = "view3";
+		}
+	}
+	window.onload = imgChange;
+	</script>
 
 <style type="text/css">
 .checkboxTree input[type=checkbox] {
@@ -1357,7 +1390,6 @@ div table#myTable td input {
 }
 
 div table#user-header th {
-	padding: 5px;
 	width: 179px;
 }
 
@@ -1672,46 +1704,36 @@ a.underlink:hover {
 													<div class="divs">
 														<div>
 															<s:radio list="#{'0': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
-														<div class="view1"></div>
-														<div>Full View - 1 item per row</div>
+														<div class="view1" id="view1"></div>
+														<div class="addpadtop2">Full View - 1 item per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'2': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
 														<!-- 			<div class="view3"></div> -->
-														<div>
-															<img
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/mini-view.png"
-																style="margin: 0 6px;" class="mini-view"
-																title="Mini View" alt="mini-view" />
-														</div>
-														<div>Mini View - 4 items per row</div>
+														<div class="view3" id="view3"></div>
+														<div class="addpadtop2">Mini View - 4 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'1': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
-														<div class="view2"></div>
-														<div>Condensed View - 2 items per row</div>
+														<div class="view2" id="view2"></div>
+														<div class="addpadtop2">Condensed View - 2 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'3': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
 														<!-- 			<div class="view4"></div> -->
-														<div>
-															<img
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/grid-view.png"
-																style="margin: 0 6px;" class="grid-view"
-																title="Grid View" alt="grid-view" />
-														</div>
-														<div>Grid View - No images</div>
+														<div class="view4" id="view4"></div>
+														<div class="addpadtop2">Grid View - No images</div>
 													</div>
 												</td>
 											</tr>
@@ -1968,19 +1990,14 @@ a.underlink:hover {
 													<div class="txt-small clearview"></div>
 													<table width="100%" border="0" cellspacing="0"
 														cellpadding="0" id="tb1" class="standard-table">
-														<tbody>
-															<tr class="table-header-bar">
-																<td width="35%"
-																	class="no-border-left table-header-bar-left"><span
-																	class="white"> Name</span></td>
-																<td width="48%" align="left" class="  "><span
-																	class="white">URL</span></td>
-																<td width="8%" align="left"><span class="white">Show</span></td>
-																<td width="9%" align="left"
-																	class="no-border-right table-header-bar-right"><span
-																	class="white">Sequence</span></td>
+														
+															<tr>
+																<th width="35%">Name</th>
+																<th width="48%" align="left">URL</th>
+																<th width="8%" align="left">Show</th>
+																<th width="9%" align="left">Sequence</th>
 															</tr>
-														</tbody>
+														
 													</table>
 												</td>
 											</tr>
@@ -2661,46 +2678,36 @@ a.underlink:hover {
 													<div class="divs">
 														<div>
 															<s:radio list="#{'0': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
-														<div class="view1"></div>
-														<div>Full View - 1 item per row</div>
+														<div class="view1" id="view1"></div>
+														<div class="addpadtop2">Full View - 1 item per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'2': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
 														<!-- 			<div class="view3"></div> -->
-														<div>
-															<img
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/mini-view.png"
-																style="margin: 0 6px;" class="mini-view"
-																title="Mini View" alt="mini-view" />
-														</div>
-														<div>Mini View - 4 items per row</div>
+														<div class="view3" id="view3"></div>
+														<div class="addpadtop2">Mini View - 4 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'1': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
-														<div class="view2"></div>
-														<div>Condensed View - 2 items per row</div>
+														<div class="view2" id="view2"></div>
+														<div class="addpadtop2">Condensed View - 2 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'3': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
 														<!-- 			<div class="view4"></div> -->
-														<div>
-															<img
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/grid-view.png"
-																style="margin: 0 6px;" class="grid-view"
-																title="Grid View" alt="grid-view" />
-														</div>
-														<div>Grid View - No images</div>
+														<div class="view4" id="view4"></div>
+														<div class="addpadtop2">Grid View - No images</div>
 													</div>
 												</td>
 											</tr>
@@ -2957,19 +2964,14 @@ a.underlink:hover {
 														<div class="txt-small clearview"></div>
 														<table width="100%" border="0" cellspacing="0"
 															cellpadding="0" id="tb1" class="standard-table">
-															<tbody>
-																<tr class="table-header-bar">
-																	<td width="35%"
-																		class="no-border-left table-header-bar-left"><span
-																		class="white"> Name</span></td>
-																	<td width="48%" align="left" class="  "><span
-																		class="white">URL</span></td>
-																	<td width="8%" align="left"><span class="white">Show</span></td>
-																	<td width="9%" align="left"
-																		class="no-border-right table-header-bar-right"><span
-																		class="white">Sequence</span></td>
+															
+																<tr >
+																	<th width="35%">Name</th>
+																	<th width="48%" align="left" >URL</th>
+																	<th width="8%" align="left">Show</th>
+																	<th width="9%" align="left">Sequence</th>
 																</tr>
-															</tbody>
+															
 														</table>
 													</td>
 												</tr>

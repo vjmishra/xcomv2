@@ -1741,8 +1741,8 @@ BEGIN 2014 styles
 }
 
 .detail-view .print-ico-xpedx {
-	margin-top: -10px;
 	margin-right: 8px;
+   	margin-top: -56px;
 }
 .prodImg {
     box-shadow: 1px 1px 4px #999999;
@@ -1764,7 +1764,7 @@ BEGIN 2014 styles
 .detail-view .order-input-wrap {
 	float:right;
 	display: block;
-	margin-top: 20px;
+	margin-top: 0px;
 }
 .detail-view .order-row {
 	height: 25px;
@@ -1784,13 +1784,14 @@ BEGIN 2014 styles
 	text-align: left;
 }
 .detail-view ul#prodlist, .detail-view li.prodlist{
-	margin: 0px 0px 20px 10px;
 	font-size: 13px;
 	overflow: visible;
 	max-height: none;
 }
 
-
+.detail-view h1 {
+	width: 760px;
+}
 .detail-view .price-wrap .pa-row .col-1 {
     clear: none;
     float: left;
@@ -1869,6 +1870,7 @@ table#prod-details-tbl  {
 	width: 300px;
 	height: auto;
 	overflow: hidden;
+	margin-top: -23px;
 }
 .specs-wrap div.specs-trigger:nth-last-of-type(2) {
 	border-bottom: #cccccc 1px solid;

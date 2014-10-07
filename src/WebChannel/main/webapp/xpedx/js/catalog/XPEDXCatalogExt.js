@@ -326,9 +326,9 @@ function createNewFormElement(inputForm, elementName, elementValue){
 			}
 	});
 					
-	Ext.get('items-cb').on('click', function (e) {
+	Ext.get('viewSelect').on('click', function (e) {
 		// Change view
-		var img = e.getTarget('img', 2);
+		var img = e.getTarget('li', 2);
 		if (img) {
 				Ext.getDom('items').className = img.className;
 		}
@@ -392,21 +392,38 @@ function updateView() {
 
   
 	var tpl = null;
-	if(selectedClass == "normal-view") {
+	if(selectedClass == "icon-normal-view normal-view") {
 		tpl = getNormalView();tpl.compile();
+		$("#fview").addClass("icon-normal-view-select");
+		$("#cview").removeClass("icon-condensed-view-select");
+		$("#mview").removeClass("icon-mini-view-select");
+		$("#gview").removeClass("icon-grid-view-select");
 	}
-	if(selectedClass == "condensed-view") {
+	if(selectedClass == "icon-condensed-view condensed-view") {
 		tpl = getCondensedView();tpl.compile();
+		$("#cview").addClass("icon-condensed-view-select");
+		$("#fview").removeClass("icon-normal-view-select");
+		$("#mview").removeClass("icon-mini-view-select");
+		$("#gview").removeClass("icon-grid-view-select");
 	}
-	if(selectedClass == "mini-view") {
+	if(selectedClass == "icon-mini-view mini-view") {
 		tpl = getMiniView();tpl.compile();
+		$("#mview").addClass("icon-mini-view-select");
+		$("#fview").removeClass("icon-normal-view-select");
+		$("#cview").removeClass("icon-condensed-view-select");
+		$("#gview").removeClass("icon-grid-view-select");
 	}
-	if(selectedClass == "papergrid-view") {
+	if(selectedClass == "icon-grid-view papergrid-view") {
 		tpl = getGridView();tpl.compile();
+		$("#gview").addClass("icon-grid-view-select");
+		$("#fview").removeClass("icon-normal-view-select");
+		$("#cview").removeClass("icon-condensed-view-select");
+		$("#mview").removeClass("icon-mini-view-select");
 	}
    
-   selectedExtTemplate = selectedClass;
-  
+	
+	selectedExtTemplate = selectedClass;
+	
 	tpl.overwrite(ct, catalog);
    
 	itemwin = new Ext.Window({
@@ -430,7 +447,7 @@ function updateView() {
 	$("#x-tbl-cmmn tbody tr:odd").css("background-color", "#fafafa");
 	$("#x-tbl-cmmn tbody tr:even").css("background-color", "#fff");
 	
-	if("papergrid-view" == Ext.getDom('items').className){
+	if("icon-grid-view papergrid-view" == Ext.getDom('items').className){
 		forEach(document.getElementsByTagName('table'), function(table) {
 		  if (table.className.search(/\bsortable\b/) != -1) {
 			sorttable.makeSortable(table);
@@ -448,7 +465,7 @@ function shortenItemDescriptions()
 {
 	var selectedClass = document.getElementById("selectedView").value;
 
-	if(selectedClass == "normal-view") {
+	if(selectedClass == "icon-normal-view normal-view") {
 
 		/* To ensure that the long/short desc. gets shortened each time the view changes.
 		 * Added per Jira 3318. 
@@ -466,7 +483,7 @@ function shortenItemDescriptions()
 		/* End Jira 3318 changes */
 		
 	}
-	else if(selectedClass == "condensed-view") {
+	else if(selectedClass == "icon-condensed-view condensed-view") {
 		
 		/* To ensure that the long/short desc. gets shortened each time the view changes.
 		 * Added per Jira 3318. (Looks like substring is ignoring the spaces.)
@@ -498,7 +515,7 @@ function shortenItemDescriptions()
 			/* end short desc. shortener */
 		/* End Jira 3318 changes */
 	}
-	else if(selectedClass == "mini-view") {
+	else if(selectedClass == "icon-mini-view mini-view") {
 		
 		/* To ensure that the long/short desc. gets shortened each time the view changes.
 		 * Added per Jira 3318. 
@@ -530,7 +547,7 @@ function shortenItemDescriptions()
 			/* end short desc. shortener */
 		/* End Jira 3318 changes */
 	}
-	else if(selectedClass == "papergrid-view") {
+	else if(selectedClass == "icon-grid-view papergrid-view") {
 
 		/* To ensure that the long/short desc. gets shortened each time the view changes.
 		 * Added per Jira 3318. 
@@ -1318,7 +1335,7 @@ $(document).ready(function() {
 		},
 		'autoDimensions'	: false,
 		'width' 			: 380,
-		'height' 			: 262  
+		'height' 			: 290  
 	});
 });
 function addItemToWishList(itemid) {

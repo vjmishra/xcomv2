@@ -109,6 +109,7 @@ height:22px;
 
 .catalog .success { 
 	float: right;
+	margin-bottom: 5px;
 }
 /* END Catalog UI review Changes */
 
@@ -193,5 +194,5 @@ body.x-body-masked .x-window-plain .x-window-mc {
 	margin: 0px 0px 10px 0px;
 	white-space: nowrap;
 	padding:6px;
-	-ms-overflow-y : scroll;
+	-ms-overflow-y : auto;
 }

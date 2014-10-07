@@ -20,6 +20,7 @@ function getPriceAndAvailabilityForItems(options) {
 		$('#availabilty_' + items[i]).hide().get(0).innerHTML = '';
 	}
 	
+	
 	var origQty = [];
 	if (!qtys) {
 		qtys = [];
@@ -72,7 +73,7 @@ function getPriceAndAvailabilityForItems(options) {
 		success: function(data) {
 			var pna = data.priceAndAvailability;
 			var pricingInfo = data.pricingInfo;
-			
+			var html = [];
 			if (!pna || pna.transactionStatus != 'P') {
 				alert('Real time Price & Availability is not available at this time. Please contact Customer Service.');
 				return;
@@ -81,7 +82,6 @@ function getPriceAndAvailabilityForItems(options) {
 			var pnaSuccess = true;
 			for (var i = 0, len = pna.items.length; i < len; i++) {
 				var pnaItem = pna.items[i];
-				
 				var $divItemAvailability = $('#availabilty_' + pnaItem.legacyProductCode);
 				if ($divItemAvailability.length == 0) {
 					if (console) { console.log('Element not found: #availabilty_' + pnaItem.legacyProductCode); }
@@ -90,21 +90,23 @@ function getPriceAndAvailabilityForItems(options) {
 				}
 				
 				var lineErrorMessage = data.lineErrorMessages[pnaItem.legacyProductCode];
-				if (lineErrorMessage && lineErrorMessage.trim().length > 0) {
-					var html = [];
-					html.push('		<div class="pa-wrap">');
-					html.push('			<h5 align="center"><b><font color="red">', htmlEncode(lineErrorMessage), '</font></b></h5>');
+				
+				/*if (lineErrorMessage && lineErrorMessage.trim().length > 0) {
+					
+					html.push('		<div class="price-and-availability">');
+					html.push('			<h5 align="center"><b><font color="red" >', htmlEncode(lineErrorMessage), '</font></b></h5>');
 					html.push('		</div>');
-					$divItemAvailability.show().get(0).innerHTML = html.join('');
+					$divItemAvailability.show().get(0).innerHTML= html.join('');
 					pnaSuccess = false;
-					continue;
-				}
+					//continue;
+				}*/
+			
 				
 				// order multiple messaging
 				$divErrorMsgForQty = $('#errorMsgForQty_' + pnaItem.legacyProductCode);
 				var isOrderMultipleError = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty;
 				var cssClass = isOrderMultipleError ? 'error' : 'notice';
-				cssClass += ' pnaOrderMultipleMessage';
+				cssClass += ' pnaOrderMultipleMessage addmarginbottom10';
 				$divErrorMsgForQty.attr('class', cssClass);
 				
 				var html = [];
@@ -144,6 +146,7 @@ function getPriceAndAvailabilityForItems(options) {
 				html.push('				<div class="avail-wrap">');
 				
 				var requestedQty = parseFloat(pnaItem.requestedQty);
+				var notAvailQty=parseFloat((requestedQty-pnaAvail['total']).toFixed(5));
 				
 				if (origQty[i].trim().length > 0) {
 					// only display 'ready to ship' message if user requested a qty (omit message if user left qty field blank)
@@ -173,6 +176,16 @@ function getPriceAndAvailabilityForItems(options) {
 				html.push('						<div class="col-2">', numberWithCommas(pnaAvail['total']), '</div>');
 				html.push('						<div class="col-3">', data.uomDescriptions[pnaItem.requestedQtyUOM], '</div>');
 				html.push('					</div>');
+				html.push('					<div class="clearfix"></div>');
+				if (origQty[i].trim().length > 0) {
+					 if (pnaAvail['total'] > 0 && requestedQty > pnaAvail['total']) {
+					
+						html.push('					<div class="warning-icon">');
+						html.push('						<img width="12" height="12" alt="" src="'+XPEDXWCUtils_STATIC_FILE_LOCATION+'/xpedx/images/common/warning.png"/>')
+						html.push('					</div>');
+						html.push('          		<div class="qty-unavailable">',notAvailQty,' ', data.uomDescriptions[pnaItem.requestedQtyUOM],' currently unavailable</div>');
+					}
+				}
 				html.push('					<div class="pa-row pa-location">', numberWithCommas(pnaAvail['0']), ' ', data.uomDescriptions[pnaItem.requestedQtyUOM], ' available today at ', data.divisionName, '</div>');
 				html.push('				</div>'); // close avail-wrap
 				html.push('			</div>'); // close pa-avail
@@ -240,10 +253,18 @@ function getPriceAndAvailabilityForItems(options) {
 					html.push('			</div>'); // close pa-price
 					html.push('		</div>'); // close pa-wrap
 				}
-				
+					
 				$divItemAvailability.show().get(0).innerHTML = html.join('');
 			}
-			
+			if (lineErrorMessage && lineErrorMessage.trim().length > 0) {
+				html.push('		</div>');
+				html.push('		<div class="pa-wrap">');
+				html.push('			<h5 class="suspended-item">', htmlEncode(lineErrorMessage), '</h5>');
+				html.push('		</div>');
+				$divItemAvailability.show().get(0).innerHTML= html.join('');
+				pnaSuccess = false;
+				
+			}
 			if (pnaSuccess && typeof(options.success) === 'function') {
 				options.success(data);
 			}

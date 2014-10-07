@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<%@ taglib prefix="xpedx" uri="xpedx" %>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -433,25 +434,19 @@
 	    </div> <!-- end top section -->
 	    <br/>
 	    <!-- Begin mid-section -->
-	    <div class="midsection addmarginleft0"> <!-- Begin mid-section container -->
+	    
+	    <xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#approvalListPaginationURL}" isAjax="false" />
+	    <div class="clearfix"></div>
+	    <div class="addmarginleft0"> <!-- Begin mid-section container -->
 	    	
-	       <div class="search-pagination-top">
-	       		  <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-                  <s:if test="%{totalNumberOfPages>1}">
-                  	Page
-                  </s:if>
-                  
-                  	&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
-                 	urlSpec="%{#approvalListPaginationURL}"/>
-			</div>
 	    	
             <swc:sortctl sortField="%{orderByAttribute}"
 		                  sortDirection="%{orderDesc}" down="Y" up="N"
 		                  urlSpec="%{#approvalListSortURL}">			
-	    	<table class="search-table standard-table">
-	    		<thead>
+	    	<table class="standard-table-width standard-table">
+	    		
 	    			<tr id="top-bar">
-	    				<th class="table-header-bar-left " style="min-width: 10em;">
+	    				<th style="min-width: 10em;">
 						<swc:sortable  fieldname="%{'Extn_'+'ExtnWebConfNum'}">
 						<span style="color:white" class="underlink">Web&nbsp;Confirmation </span></swc:sortable>
 						</th>
@@ -460,9 +455,9 @@
 	    				<th style="min-width: 7em;"><swc:sortable fieldname="%{'Extn_'+'ExtnOrderedByName'}"><span class="underlink" style="color:white">Ordered&nbsp;By </span></swc:sortable></th>
 	    				<th style="min-width: 10em;"><swc:sortable fieldname="%{'Extn_'+'ExtnShipToName'}"><span class="underlink" style="color:white">Ship-To</span></swc:sortable> </th>
 	    				<th style="min-width: 8em;"><swc:sortable fieldname="%{'Extn_'+'ExtnTotalOrderValue'}"><span class="underlink" style="color:white">Amount </span></swc:sortable></th>
-	    				<th style="min-width: 10em;" class="table-header-bar-right"><span class="underlink" style="color:white">Status </span></th>
+	    				<th style="min-width: 10em;" ><span class="underlink" style="color:white">Status </span></th>
 	    			</tr>
-	    		</thead>
+	    		
                     <s:set name="parentOrderList" value="#util.getElements(#approvalListdoc, '//Page/Output/OrderList/Order')" />
 	    		<tbody>
 <!-- start -->
@@ -597,11 +592,7 @@
 	    	</table>
 			</swc:sortctl>
 	    	
-			<div class="search-pagination-bottom">
-			        <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-			        <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
-			       	urlSpec="%{#approvalListPaginationURL}"/>
-			</div>
+			<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#approvalListPaginationURL}" isAjax="false" />
 	    	
 	    </div> <!-- end mid-section container -->
 	    <!-- End mid section -->
@@ -623,19 +614,19 @@
 		<div>
 			<div class="loading-icon" style="display:none;"></div>
  		</div>	
-		<div  class="xpedx-light-box" id="" style="width:400px; height:150px;">	    			
-			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
+		<div  class="xpedx-light-box approval-reject-adjustment" id="">	    			
+			<h1> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h1>				    			
 				<%--Start 3999 Changes Start --%><s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
-					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="4" theme="simple" cssStyle="overflow:hidden;" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
+					<s:textarea id="ReasonText1" name="ReasonText1" cssClass="textarea-adjustment" cols="69" rows="4" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
 					<s:hidden name="ReasonText" id="ReasonText" value="" />
 					<s:hidden name="OrderHeaderKey" value="" />
 					<s:hidden name="ApprovalAction" value=""/>
 					<s:hidden name="#action.namespace" value="/order"/>
 					<s:hidden id="actionName" name="#action.name" value="approval"/>
 					<ul id="tool-bar" class="tool-bar-bottom" style="float:right">
-						<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel'); return false;"><span>Cancel</span></a></li>
-						<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
-						<li><a style="float:right;" class="green-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>
+						<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel'); return false;"><span>Cancel</span></a></li>
+						<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
+						<li><a style="float:right;" class="btn-gradient" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>
 						
 					</ul>
 				</s:form>

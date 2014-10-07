@@ -52,7 +52,11 @@ public class XPXReportParentSAPChanges implements YIFCustomApi {
 		reportParentSAPChangeDoc.getDocumentElement().setAttribute("Subject", subjectLine.toString());
 		
 		StringBuffer reportParentSAPChangeEmailID = new StringBuffer();
-		reportParentSAPChangeEmailID.append(YFSSystem.getProperty("fromAddress.username")).append("@").append(emailBrand);
+		if(reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE).equalsIgnoreCase("xpedx")){
+		reportParentSAPChangeEmailID.append(YFSSystem.getProperty("EMailFromAddresses"));
+		}else if(reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE).equalsIgnoreCase("Saalfeld")){
+			reportParentSAPChangeEmailID.append(YFSSystem.getProperty("saalFeldEMailFromAddresses"));
+		}
 		reportParentSAPChangeDoc.getDocumentElement().setAttribute("FromEmailID", reportParentSAPChangeEmailID.toString());
 		reportParentSAPChangeDoc.getDocumentElement().setAttribute("ToEmailID", YFSSystem.getProperty("reportParentSAPChangeToEmailID")) ;
 		/*End - Changes made by Mitesh Parikh for JIRA 3283*/

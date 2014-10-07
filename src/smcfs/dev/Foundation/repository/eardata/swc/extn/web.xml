@@ -17,14 +17,13 @@
         <param-name>scui-param-value-validation-adapter::/configurator/addToCart.action</param-name>
         <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
     </context-param>
-    <!-- Commented for JIRA 2486 and added a new mapping for Sales Rep login-->
-     <!--  <context-param>
-        <param-name>xpedx_sales_rep_login_url</param-name>
-        <param-value>/xpedx/jsp/salesrep/salesRepLogin.jsp</param-value>
-    </context-param> -->
-     <context-param>
+    <context-param>
         <param-name>xpedx_sales_rep_login_url</param-name>
         <param-value>/home/salesReploginFullPage.action</param-value>
+    </context-param>
+    <context-param>
+        <param-name>xpedx_punchout_timeout_url</param-name>
+        <param-value>/punchout/punchoutTimeout.action</param-value>
     </context-param>
     <!-- End of JIRA 2486  -->
     <context-param>
@@ -510,7 +509,7 @@
 	    <filter-class>com.sterlingcommerce.xpedx.webchannel.common.XPEDXSessionManageFilter</filter-class>
 		<init-param>
 	<param-name>excludeActions</param-name>
-	<param-value>brands.action,ajaxAutocomplete.action,login.action,home.action,gategorySubMenu.action,resetPassword.action,salesRepLogin.action,salesReploginFullPage.action,getSalesProCustomersList.action,salesRepCustomerLogin.action,pLogin.action,validateResetPassword,validatePassword,changePwdForgotPwd,answerSubmit,forgotPwd,searchCustomer,logout,MyRegisterUser,MyContact,printOrderDetail,MyPrivacyPolicy.action,debugmgi.action,debugMegaMenu.action</param-value>
+	<param-value>brands.action,ajaxAutocomplete.action,login.action,home.action,gategorySubMenu.action,resetPassword.action,salesRepLogin.action,salesReploginFullPage.action,getSalesProCustomersList.action,salesRepCustomerLogin.action,pLogin.action,validateResetPassword,validatePassword,changePwdForgotPwd,answerSubmit,forgotPwd,searchCustomer,logout,MyRegisterUser,MyContact,printOrderDetail,MyPrivacyPolicy.action,debugmgi.action,debugMegaMenu.action,cxmlLogin.action,ociLogin.action,punchoutTimeout.action</param-value>
     </init-param>
 	</filter>
 	<filter-mapping>
@@ -772,6 +771,11 @@
     <listener id="listener_2">
         <listener-class>com.yantra.ycp.ui.backend.YCPSessionListener</listener-class>
     </listener>
+    <!-- Logoff BI4 - EB-7221 - ML: implemented new listener to intercept session destruction in order to logoff BI4/reclaim resources if needed. -->
+    <listener id="listener_3">
+        <listener-class>com.sterlingcommerce.xpedx.webchannel.common.XPEDXSessionListener</listener-class>
+    </listener>
+    
     <servlet id="Servlet_1">
         <servlet-name>InitializationServlet</servlet-name>
         <servlet-class>com.comergent.reference.apps.configurator.InitializationServlet</servlet-class>
@@ -1072,10 +1076,10 @@
         <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXAribaIntegrationServlet</servlet-class>
     </servlet> 
     <servlet id="Servlet_47">
-        <description>XPEDXPunchoutServlet</description>
-        <display-name>XPEDXPunchoutServlet</display-name>
-        <servlet-name>XPEDXPunchoutServlet</servlet-name>
-        <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutServlet</servlet-class>
+        <description>XPEDXPunchoutCxmlServlet</description>
+        <display-name>XPEDXPunchoutCxmlServlet</display-name>
+        <servlet-name>XPEDXPunchoutCxmlServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutCxmlServlet</servlet-class>
     </servlet> 
     <servlet id="Servlet_48">
 		<servlet-name>SalesRepLogin</servlet-name>
@@ -1252,7 +1256,7 @@
         <url-pattern>/interop/cxml</url-pattern>
     </servlet-mapping>
     <servlet-mapping id="ServletMapping_42">
-        <servlet-name>XPEDXPunchoutServlet</servlet-name>
+        <servlet-name>XPEDXPunchoutCxmlServlet</servlet-name>
         <url-pattern>/interop/xcxml</url-pattern>
     </servlet-mapping>
     <servlet-mapping id="ServletMapping_43">

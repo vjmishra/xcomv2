@@ -22,14 +22,14 @@
 			</s:if>
 		</div> 
       	<table width="100%" cellspacing="0" cellpadding="0" border="0" id="tbl" class="standard-table">
-  			<tbody>
-  				<tr class="table-header-bar">
-    				<td width="35%" class="no-border table-header-bar-left"><span class="white txt-small"> Name</span></td>
-    				<td width="48%" align="left" class="no-border  "><span class="white txt-small">URL</span></td>
-    				<td width="8%" align="left" class="no-border"><span class="white txt-small">Show</span></td>
-    				<td width="9%" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small">Sequence</span></td>
+  			
+  				<tr >
+    				<th width="35%"> Name</th>
+    				<th width="48%" align="left">URL</th>
+    				<th width="8%" align="left">Show</th>
+    				<th width="9%" align="left">Sequence</th>
 				</tr>				
-			</tbody>
+			
 		</table> 
       <%-- 	<div id="table-bottom-bar" style="width:100%;">
         	<div id="table-bottom-bar-L"></div>

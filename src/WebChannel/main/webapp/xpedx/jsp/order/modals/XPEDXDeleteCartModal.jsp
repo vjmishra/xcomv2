@@ -5,25 +5,19 @@
 
 <a href="#xpedxDeleteCartDialog" id="xpedxDeleteCartDialog1" style="display:none"></a>
 <div style="display: none;">
-<div class="xpedx-light-box" id="xpedxDeleteCartDialog">
-<!-- <h2>Delete Cart</h2> -->
-<h2> <s:text name="MSG.SWC.CART.DELCART.GENERIC.DLGTITLE" /> </h2>
-<!-- <p>Are you sure you would like to delete this cart?</p> -->
-<s:text name="MSG.SWC.CART.DELCART.GENERIC.CONFIRM" />
-<br />
-
+<div class="xpedx-light-box dialogue-box-adjustment" id="xpedxDeleteCartDialog">
+<h1> <s:text name="MSG.SWC.CART.DELCART.GENERIC.DLGTITLE" /> </h1>
+<p class="addmargintop0"><s:text name="MSG.SWC.CART.DELCART.GENERIC.CONFIRM" /></p>
 <s:form name="delOrder" id="delOrder" method="post" validate="true">
 	<s:hidden name="OrderHeaderKey" id="OrderHeaderKey" value="" />
 	<s:hidden name="draft" id="draft" value="Y" />
 	<div class="clearBoth"></div>
-	 
-	<ul>
-		<li><a class="grey-ui-btn"
+	<ul id="tool-bar" class="tool-bar-bottom float-right">
+		<li><a class="btn-neutral"
 			onclick="$('#fancybox-close').click();return false;" href="javascript:void();"><span>No</span></a></li>
 		<li class="float-right"
 			onclick="javascript:deleteCart(document.getElementById('delOrder')); ">
-		<a class="green-ui-btn float-right" href="javascript:void();"><span>Yes</span></a></li>
+		<a class="btn-gradient" href="javascript:void();"><span>Yes</span></a></li>
 	</ul>
-	
 </s:form></div>
 </div>

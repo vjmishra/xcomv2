@@ -23,13 +23,13 @@ import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPEDXNewUserRegistration extends WCMashupAction {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	@SuppressWarnings("unused")
 	private static final Logger log = Logger
 			.getLogger(XPEDXNewUserRegistration.class);
-
+	private String newUserAccountNumber = null;
 	private String newUserEmail = null;
 	private String newUserPhone = null;
 	private String newUserCompanyName = null;
@@ -44,6 +44,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	private String templatePath = null;
 	private String mailFromAddress = null;
 	private String mailCCAddress = null;
+
+
 	private String newUserFirstName = null;
 	private String newUserLastName = null;
 	private String messageType = "NewUser";
@@ -62,7 +64,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 	@Override
 	public String execute() {
-
+		String returnValue = SUCCESS;
 		StringBuffer sb = new StringBuffer();
 		String _subjectLine=null;
 		// StringBuffer sbm = new StringBuffer();
@@ -70,14 +72,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 		String storeFrontId = wcContext.getStorefrontId();
 		if (storeFrontId != null && storeFrontId.length() > 0) {
-			String userName = YFSSystem.getProperty("fromAddress.username");
-			String suffix = YFSSystem.getProperty("fromAddress.suffix");
 			if("Saalfeld".equalsIgnoreCase(storeFrontId)){
-					sb.append(userName).append("@").append(storeFrontId).append("redistribution").append(suffix);
+					sb.append(YFSSystem.getProperty("saalFeldEMailFromAddresses"));
 			}else{
-				sb.append(userName).append("@").append(storeFrontId).append(suffix);
+				sb.append(YFSSystem.getProperty("EMailFromAddresses"));
 			}
-			
+
 			// String marketingCC = "marketing";
 			// suffix = YFSSystem.getProperty("fromAddress.suffix");
 			// sbm.append(marketingCC).append("@").append(storeFrontId).append(suffix);
@@ -87,8 +87,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 		/**
 		 * Start ------- JIRA 3261 for logo changes
-		 * 
-		 * 
+		 *
+		 *
 		 * */
 
 		// String imageUrl = "";
@@ -104,8 +104,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 		}
 		/**
 		 * End ------- JIRA 3261 for logo changes
-		 * 
-		 * 
+		 *
+		 *
 		 * */
 
 		// setMailCCAddress(sbm.toString());
@@ -159,37 +159,48 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			String brand=newUserElement.getAttribute("Brand");
 			// EB- 2048-As a Saalfeld product owner, I want to view the Saalfeld Registration Email with correct Saalfeld branding
 			if("Saalfeld".equalsIgnoreCase(brand)){
-				emailFrom = "ebusiness@Saalfeldredistribution.com";
+				emailFrom = YFSSystem.getProperty("saalFeldEMailFromAddresses");
 				_subjectLine=brand.concat("redistribution.com").concat(" ").concat(getMailSubject());
 			}else{
 				_subjectLine=brand.concat(".com").concat(" ").concat(getMailSubject());
 			}
-				
+
 			//StringBuffer emailSubject = new StringBuffer(brand.concat(" ").concat(getMailSubject().toString()));
-			
+
 			String businessIdentifier=newUserElement.getAttribute("ToEmailId");
 			    XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType,
 			    		_subjectLine, emailFrom, storeFrontId,businessIdentifier);
 			/* XBT-73 : End - Sending email through Java Mail API now */
-
+			    scuiTransactionContext.commit();
 		} catch (Exception e) {
 			log.error("Couldn't send the Mail to CSR" + e.getMessage());
-			return ERROR;
-			// TODO: handle exception
+			returnValue = ERROR;
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
 		}
 		finally {
-			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
-	}
-		return SUCCESS;
+		return returnValue;
 	}
 
 	/**
 	 * Start JIRA 3261
-	 * 
-	 * 
+	 *
+	 *
 	 * */
 	private String getLogoName(String sellerOrgCode) {
 		String _imageName = "";
@@ -227,8 +238,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 	/**
 	 * End JIRA 3261
-	 * 
-	 * 
+	 *
+	 *
 	 * */
 
 	public String getNewUserAddress1() {
@@ -261,6 +272,14 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 	public void setNewUserEmail(String newUserEmail) {
 		this.newUserEmail = newUserEmail;
+	}
+
+	public String getNewUserAccountNumber() {
+		return newUserAccountNumber;
+	}
+
+	public void setNewUserAccountNumber(String newUserAccountNumber) {
+		this.newUserAccountNumber = newUserAccountNumber;
 	}
 
 	public String getBrandEmail() {

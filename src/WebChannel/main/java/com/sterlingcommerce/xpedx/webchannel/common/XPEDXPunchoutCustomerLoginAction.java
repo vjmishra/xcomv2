@@ -2,6 +2,11 @@ package com.sterlingcommerce.xpedx.webchannel.common;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
 
+/**
+ * @deprecated Since R16. Use PunchoutCxmlLoginAction or OCIPost.jsp instead. This action will be removed in R17.
+ * We're keeping it in R16 strictly for backwards compatibility for OCI customers. See eb-4834 and for details.
+ */
+@Deprecated
 public class XPEDXPunchoutCustomerLoginAction extends WCAction {
 
 	/**

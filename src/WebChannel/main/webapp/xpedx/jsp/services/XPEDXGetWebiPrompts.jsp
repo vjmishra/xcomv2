@@ -18,7 +18,6 @@
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" /> 
 <!-- styles -->
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/banner<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -38,15 +37,11 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.ui.core<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.ui.widget<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.ui.datepicker<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<!-- carousel scripts css  -->
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/skins/xpedx/theme<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/skins/xpedx/skin<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <!-- carousel scripts js   -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/modals/checkboxtree/demo<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/modals/checkboxtree/jquery.checkboxtree<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/modals/checkboxtree/jquery.checkboxtree<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -55,8 +50,6 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pseudofocus<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global-xpedx-functions<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/shopping-cart<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/om2<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--  Change Location Light box -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/profile/org/xpedxCustomerLocations<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <title><s:property value="wCContext.storefrontId" /> - Webi Input Prompt</title>
@@ -185,12 +178,12 @@
                        var currentTagTokens = token.split( ";" );
                        var textedit = currentTagTokens[0];
                        //Editing billtoname start
-                       var editbillto = textedit.split(",");
+                       var editbillto = textedit.split(", ");
                        var editbilltoone = editbillto[0];
                        var editbilltotwo = editbilltoone.split(" ");
                        var display_BillToname = "";
                        for (var i = 1; i< editbilltotwo.length;i++){
-                           display_BillToname = display_BillToname + " " + editbilltotwo[i];
+                           display_BillToname = display_BillToname + editbilltotwo[i] + " " ;
                            }
                        //Editing billtoname end
                        //Editing Address Start
@@ -202,18 +195,24 @@
                            }
                        //Editing City, zipcode, country
                        var editaddress1="";
-                       for (var i = editbillto.length-3; i< editbillto.length;i++){
+                       for (var i = editbillto.length-3; i< editbillto.length-2;i++){
                             if(editaddress1 =="")
                                 editaddress1= editbillto[i];
                             else
-                           editaddress1= editaddress1 +"," +editbillto[i] ;
+                           editaddress1= editaddress1 +"\n" +editbillto[i] ;
                            
-                               }
+                      	}
+                       var cityandstate=  editbillto[editbillto.length-2]+", "+editbillto[editbillto.length-1];
                        //Editing Address End
                        var stringone =  textedit.split(" ");
                        var displayid = stringone[0];
                        var displaycustid_with_BillToname = displayid + "\n" +  display_BillToname;
-                       textElement.value = displaycustid_with_BillToname + "\n" +     editaddress  + editaddress1  ;                    
+                       if(editaddress==""){
+                    	   textElement.value = displaycustid_with_BillToname + "\n" + editaddress1+ "\n"+ cityandstate;
+                       }
+                       else{
+                       		textElement.value = displaycustid_with_BillToname + "\n" +  editaddress + "\n" + editaddress1+ "\n"+ cityandstate; 
+                       }
                        var hdnLocType = document.getElementById('selectedLocationType');
                        hdnLocType.value="Bill To";
                        var hdnCustId = document.getElementById('selectedCustId');
@@ -462,8 +461,9 @@ $(function() {
                }
                },
                'autoDimensions'    : false,
-               'width'             : 800,
-               'height'             : 340,
+               'width'             : 880,
+               'height'            : 480,
+               'scrolling'		   :'no',
                //XNGTP - JIRA- 489 
                'onClosed' : function(){                
                    document.getElementById("showLocationsDiv").innerHTML = '';
@@ -499,8 +499,10 @@ $(function() {
                }
                },
                'autoDimensions'    : false,
-               'width'             : 800,
-               'height'             : 400,
+               'width'             : 880,
+               'height'            : 480,
+               'scrolling'		   :'no',
+               
                //XNGTP - JIRA- 489 
                'onClosed' : function(){                
                    document.getElementById("showBillToDiv").innerHTML = '';
@@ -522,7 +524,6 @@ $(function() {
     <div class="container content-container">
       <!-- breadcrumb -->
       <h1><s:property value="%{name}"/></h1>
-      <div id="mid-col-mil"> 
     		 <s:if test="getErrorNames() != null && getErrorNames().size() > 0">
                  <s:iterator value="getErrorNames()" status="errorListStatus" id="listId">
                   <font color = "red"><s:property/></font>
@@ -673,11 +674,7 @@ $(function() {
             </div>
           
          </s:form>
-<div class=" bot-margin">&nbsp;</div>  
-      
-</div>
       <!-- End Pricing -->
-      <br />
     </div>
   </div>
 </div>

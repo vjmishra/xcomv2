@@ -209,7 +209,7 @@
     Createuserid="admin"
     Description="Expire password after certain number of days"
     Lockid="0" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2011-10-07T13:54:30-04:00" Modifyuserid="ngmc"
+    Modifyts="2014-01-14T14:17:43-05:00" Modifyuserid="ngmc"
     Name="PWD_EXPIRATION_CHECK" OrganizationCode="xpedx"
     ParamDefn="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param DataType=&quot;Number&quot;&#xa;        Description=&quot;Number of days a password is valid for&quot;&#xa;        ModifyFlag=&quot;Y&quot; Name=&quot;NumDaysValid&quot;/>&#xa;&lt;/ParamList>&#xa;"
     PasswordRuleDefnKey="20110420182845130851" Type="Login"/>

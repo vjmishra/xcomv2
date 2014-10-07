@@ -1237,13 +1237,14 @@ public class XPXUtils implements YIFCustomApi {
 						throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
 					}
 				} else {
-					throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
+					log.error("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table: " + incomingUOM);
+					//throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
 				}
 			} else {
 				throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
 			}
 
-			if (replacedUOM.contains("_")) {
+			if (replacedUOM != null && replacedUOM.contains("_")) {
 				// Means the envt id is appended to this uom....in this case, strip
 				// the envt id and then send it to customer
 				String[] splitArrayOnUom = replacedUOM.split("_");
@@ -1940,10 +1941,10 @@ public class XPXUtils implements YIFCustomApi {
 				String suffix = YFSSystem.getProperty("fromAddress.suffix");
 				//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding
 				if("Saalfeld".equalsIgnoreCase(storeFrontId)){
-					sb.append(userName).append("@").append(storeFrontId).append("redistribution").append(suffix);
+					sb.append(YFSSystem.getProperty("saalFeldEMailFromAddresses"));
 				}
 				else
-				sb.append(userName).append("@").append(storeFrontId).append(suffix);
+				sb.append(YFSSystem.getProperty("EMailFromAddresses"));
 				// EB-2447 As a Saalfeld Product owner, I want to view the Saalfeld Password Reset Request Notification email ...
 				String resetSubString =null;
 				if("Saalfeld".equalsIgnoreCase(storeFrontId)){

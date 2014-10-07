@@ -679,7 +679,7 @@ function showSplitDiv(divId)
                         <table class="width-44 float-right" id="OD-top-section-right" >
                         		<tr>
                         			<td colspan="2"><span class="boldText">Order Status: </span> 
-                        			<s:if test='%{#xutil.getAttribute(#orderDetail,"MaxOrderStatus") == "1310" || (#orderType == "Customer" && #isCSRReview)}'>
+                        			<s:if test='%{#orderType == "Customer" && #isCSRReview}'>
                         				Submitted (CSR Reviewing) 
                         			</s:if>
                         			<s:else>
@@ -723,7 +723,9 @@ function showSplitDiv(divId)
                         			</td>
                         		</tr>
 			   				<tr>
-								<td>&nbsp;</td>
+								<td class="red"><s:if test="#_action.isBackOrderQty() == true">
+								Partial quantity available for shipment
+								</s:if></td>
 							</tr>
 								<s:if test='#_action.isDeliveryHold() == true || #_action.isShipComplete() == true  || #xpedxExtnRushOrderFlag == "Y" || #_action.isWillCall() == true '>
                         		<tr>
@@ -805,16 +807,21 @@ function showSplitDiv(divId)
 	    
 	    <!-- begin table header -->
 	    <div class="wc-table-header" style="margin-left:-9px">
-	    <table class="full-width no-border">
+	    <table class="full-width no-border standard-table">
 	    		<tr>
-	    			<td class="text-right table-header-bar-left white">Price (<s:property value='%{currencyCode}'/>)</td>
+	    		<s:if test="#orderType != 'Customer'">
+	    			<th class="text-right addpadright10">Price (<s:property value='%{currencyCode}'/>)</th>
+	    		</s:if>
+	    		<s:else>
+	    			<th class="text-right addpadright10">Price (<s:property value='%{currencyCode}'/>)</th>
+	    		</s:else>
 	    			<s:if test="#orderType != 'Customer'">
-						<td class="text-right white" width="125">Shippable Price (<s:property value='%{currencyCode}'/>)</td>
+						<th width="135">Shippable Price (<s:property value='%{currencyCode}'/>)</th>
 					</s:if>
 					<s:else>
-						<td class="text-right white" width="125">&nbsp;</td>
+						<th width="125">&nbsp;</th>
 					</s:else>
-	    			<td class="text-right white table-header-bar-right" width="120">Extended Price (<s:property value='%{currencyCode}'/>)</td>
+	    			<th  width="135">Extended Price (<s:property value='%{currencyCode}'/>)</th>
 	    		</tr>
 	    </table>
 	    </div>
@@ -961,7 +968,7 @@ function showSplitDiv(divId)
 					    	<table class="full-width"> <!-- my-price-table -->
 					    		<tr>
 					    		 
-					    			<td class="text-right" width="81">
+					    			<td class="text-right" width="90">
 						    			<s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 						    			  Ordered&nbsp;Qty:
 						    			</s:if>
@@ -976,7 +983,7 @@ function showSplitDiv(divId)
 									<s:else>
 										<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
 									</s:else>
-					    			<td class="text-left"  width="175">	
+					    			<td class="text-left"  width="166">	
 						    			 <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>				    			
 						    			  <s:property value='#xpedxUtilBean.formatQuantityForCommas(#orderqty)'/>&nbsp;<s:property value='#uomDesc'/> 
 						    			 </s:if>
@@ -1069,8 +1076,8 @@ function showSplitDiv(divId)
 						    			</td>
 					    			</s:if>
 					    			<s:else>
-						    			<td class="text-right" width="81">&nbsp;</td>
-						    			<td class="text-left"  width="175">&nbsp;</td>
+						    			<td class="text-right" width="90">&nbsp;</td>
+						    			<td class="text-left"  width="166">&nbsp;</td>
 					    			</s:else>
 					    			<td class="text-right">					    			
 						    		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
@@ -1093,14 +1100,14 @@ function showSplitDiv(divId)
 					    		</tr>
 					    		<tr>
 					    			<s:if test="#orderType != 'Customer'">
-						    			<td class="text-right">
+					    				<s:set name='backqty' value='#orderLineExtnElem.getAttribute("ExtnReqBackOrdQty")' />
+									    <s:set name='backqty' value='%{#strUtil.replace(#backqty, ".00", "")}' />										
+						    			<td class="text-right <s:property value='%{#backqty > 0 ? "bold" : ""}'/>">
 						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 						    			    Backorder Qty:
 						    			  </s:if>
 						    			</td>
-						    			<s:set name='backqty' value='#orderLineExtnElem.getAttribute("ExtnReqBackOrdQty")' />
-										<s:set name='backqty' value='%{#strUtil.replace(#backqty, ".00", "")}' />
-										<s:set name='backqty' value="#xpedxUtilBean.formatQuantityForCommas(#backqty)"/>
+						    			<s:set name='backqty' value="#xpedxUtilBean.formatQuantityForCommas(#backqty)"/>
 										<s:if test="%{#customerUom == #uom}">											
 											<s:set name='customerUomWithoutM' value='%{#uom.substring(2, #uom.length())}' />
 											<s:set name='uomDesc' value="#customerUomWithoutM"/>
@@ -1115,8 +1122,8 @@ function showSplitDiv(divId)
 						    		    </td>
 					    			</s:if>
 					    			<s:else>
-					    				<td class="text-right" width="81">&nbsp;</td>
-						    			<td class="text-left"  width="175">&nbsp;</td>
+					    				<td class="text-right" width="90">&nbsp;</td>
+						    			<td class="text-left"  width="166">&nbsp;</td>
 					    			</s:else>
 					    			<td class="text-right">&nbsp;</td>
 					    			<td class="text-right">&nbsp;</td>
@@ -1829,12 +1836,12 @@ function showSplitDiv(divId)
              <div class="loading-icon" style="display:none;"></div>
          </div>	
 			
-		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
-			<h2>Approval / Rejection Comments</h2>
+		<div  class="xpedx-light-box approval-reject-web-adjustment" id="">
+			<h1>Approval / Rejection Comments</h1>
 <!-- 			<p>Enter comments or instructions for the order owner:</p> -->
 			<s:form id="approval" name="approval" action="approvalAction" namespace="/order" validate="true" method="post">
 <%-- 				<span><s:text name="Approval/Rejection.Notes"/></span> --%>
-				<%--Start 3999 Changes Start --%><s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
+				<%--Start 3999 Changes Start --%><s:textarea id="ReasonText1" name="ReasonText1" cssClass="textarea-web-adjustment" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
 				<s:hidden name="ReasonText" id="ReasonText" value="" />				
 				<s:hidden name="OrderHeaderKey" value="" />
 				<s:hidden name="ApprovalAction" value=""/>
@@ -1844,10 +1851,10 @@ function showSplitDiv(divId)
 				<s:hidden id="orderListReturnUrl" name="orderListReturnUrl" value="%{orderListReturnUrl}" />
 				
 				<s:hidden id="returnWebConfUrl" name="returnWebConfUrl" value="true" />
-				<ul id="tool-bar" class="tool-bar-bottom">
-					<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
-					<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject','<s:property value="%{dorderHeaderKey}" />');"><span>Reject</span></a></li>
-					<li><a style="float:right;" class="green-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Accept','<s:property value="%{dorderHeaderKey}" />');"><span>Approve</span></a></li>									
+				<ul id="tool-bar" class="tool-bar-bottom float-right">
+					<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
+					<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:openNotePanelSetAction('Reject','<s:property value="%{dorderHeaderKey}" />');"><span>Reject</span></a></li>
+					<li><a style="float:right;" class="btn-gradient" href="#" onclick="javascript:openNotePanelSetAction('Accept','<s:property value="%{dorderHeaderKey}" />');"><span>Approve</span></a></li>									
 				</ul>
 			</s:form>
 		</div>

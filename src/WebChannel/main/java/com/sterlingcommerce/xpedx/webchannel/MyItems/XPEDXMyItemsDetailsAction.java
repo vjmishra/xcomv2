@@ -84,6 +84,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected ArrayList<String> xpedxYouMightConsiderItemIds;
 	protected ArrayList<String> xpedxPopularAccessoriesItemIds;
 	protected HashMap<String, String> inventoryCheckForItemsMap;
+	protected HashMap<String, String> displayInventoryCheckForItemsMap;
 	protected List displayUOMs = new ArrayList();
 	private ArrayList listOfItems;
 	//XB-56 - Start
@@ -2181,6 +2182,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		if(envCode==null || envCode.trim().length()==0)
 			envCode = XPEDXWCUtils.getEnvironmentCode(wcContext.getCustomerId());
 		HashMap<String,String> inventoryMap = new HashMap<String, String>();
+		HashMap<String,String> displayInventoryMap = new HashMap<String, String>();
 		HashMap<String,String> orderMultipleMap = new HashMap<String, String>();
 		// for webtrends start
 		HashMap<String,String> itemTypeMap = new HashMap<String, String>();
@@ -2201,14 +2203,17 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							if (inventoryIndicator.equalsIgnoreCase("W")){
 								inventoryMap.put(currItemId, "Y");
 								itemTypeMap.put(currItemId,"Stocked");
+								displayInventoryMap.put(currItemId, "W");
 							}else{
 								inventoryMap.put(currItemId, "N");
 							}
 							/*start of webtrends */
 							if (inventoryIndicator.equalsIgnoreCase("I")){
 								itemTypeMap.put(currItemId,"InDirect");
+								displayInventoryMap.put(currItemId, "I");
 							}else if (inventoryIndicator.equalsIgnoreCase("") || inventoryIndicator.equalsIgnoreCase("M")){
 								itemTypeMap.put(currItemId,"Mill");
+								displayInventoryMap.put(currItemId, "M");
 							}
 							/*End of webtrends */
 							if (orderMultiple == null || orderMultiple.trim().length() == 0) {
@@ -2231,6 +2236,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 		setItemOrderMultipleMap(orderMultipleMap);
 		setInventoryCheckForItemsMap(inventoryMap);
+		setDisplayInventoryCheckForItemsMap(displayInventoryMap);
 		//Added for webtrends
 		setItemTypeMap(itemTypeMap);
 	}
@@ -3737,6 +3743,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.inventoryCheckForItemsMap = inventoryCheckForItemsMap;
 	}
 
+	
+	
+	public HashMap<String, String> getDisplayInventoryCheckForItemsMap() {
+		return displayInventoryCheckForItemsMap;
+	}
+
+	public void setDisplayInventoryCheckForItemsMap(
+			HashMap<String, String> displayInventoryCheckForItemsMap) {
+		this.displayInventoryCheckForItemsMap = displayInventoryCheckForItemsMap;
+	}
 
 	public void setMyItemsKey(String myItemsKey) {
 		this.myItemsKey = myItemsKey;

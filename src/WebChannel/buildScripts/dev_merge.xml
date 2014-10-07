@@ -28,6 +28,7 @@
 				<include name="com/**" />
 			</fileset>
 		</copy>
+		<!-- Copy the classes directory to the exploded-dir/WEB-INF/classes -->
 		<copy overwrite="true" todir="${classes_dir}">
 			<fileset dir="${source_classes_dir}">
 				<different targetdir="${classes_dir}" ignoreFileTimes="true" />
@@ -46,7 +47,7 @@
 				<include name="${swc_custom_dir}/**" />
 			</fileset>
 		</copy>
-		
+
 		<copy overwrite="true" todir="${destination_WEBINF_dir}">
 			<fileset dir="${src_WEBINF_dir}">
 				<different targetdir="${destination_WEBINF_dir}" ignoreFileTimes="true" />

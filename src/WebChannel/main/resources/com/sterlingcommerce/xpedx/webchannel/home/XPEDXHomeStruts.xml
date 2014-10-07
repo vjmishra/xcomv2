@@ -8,6 +8,7 @@
 			<param name="resourceId">/swc/home</param>
 			<result name="main" >/xpedx/jsp/home/XPEDXhome.jsp</result>
 			<result name="punchout" >/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
+			<result name="noShipTo" >/xpedx/jsp/punchout/punchoutNoShipTo.jsp</result>
 			<result name="changePreferredShip" type="redirectAction">
 				<param name="actionName">setCurrentCustomerIntoContext-punchout</param>
 				<param name="namespace">/common</param>

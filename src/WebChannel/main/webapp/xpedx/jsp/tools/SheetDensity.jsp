@@ -73,6 +73,7 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sheetdensity<s:property value='#wcUtil.xpedxBuildKey' />.js" language="javascript"> </script>
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/backlink<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="tools.sheetdensity.title" /></title>
 </head>
@@ -81,131 +82,152 @@
         <div id="main">
 
         	 <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-            <div class="container content-container"> 
-            	<h1>Sheet Density</h1>
-                <!-- breadcrumb -->
-                <div id="searchBreadcrumb">
-                	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
-						<s:param name="selectedHeaderTab">ToolsTab</s:param>
-		</s:url>
-           <!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="page-title"><s:text name="tools.sheetdensity.title" /></span> Commented for jira 1538 -->
-                </div>
-                <div id="mid-col-mil"><div style=" width: 600px;">
- 
-                      <p>To determine the density of any given sheet, divide the basis weight by the caliper. 
+			<div class="container content-container">
+			<p class="addmarginbottom15"><a class="back-resources">‹ Back</a></p>
+				<h1>Sheet Density</h1>
+					<div style="width: 600px;">
 
-</p>
-<br />
-<!-- Changes done for jira 1538 -->
-<strong>Note</strong>: <br />
-                              Caliper is expressed in the formula as a whole number. 
- 
-                  <div id="requestform">
-<div class="clearview">&nbsp;</div> 
- 
-            
-            	<form name="eform" method="post" action="sc_papcalcoddnumshee.aspx" id="eform" >
-            
-               <table style="width:600px;" class="form sheet-density">
-                    <tbody>
-                      
-                        <tr>
-                          <td> Basis Weight:</td>
-                          <td width="438"> 
-                          
-                          <input name="bWeight" type="text" style="width:80px;" onkeyup="calcPhone('Value',eform.bWeight);" class="x-input" id="bWeight" /></td>
-                        </tr>
-                        <tr>
-                          <td>Caliper:</td>
-                          <td><input name="caliper" type="text" style="width:80px;" onkeyup="calcPhone('Value',eform.caliper);" class="x-input" id="caliper" /></td>
-                        </tr>
-                        <tr>
-                          <td colspan="2">
-                            <ul id="cart-actions" style="height:auto;">
-                            	<li><input class="btn-neutral" type="button" href="#" onClick="javascript:document.eform.reset()" value="Clear"/></li>
-                            	<li><input href="#" onclick="javascript:validateForm();" class="btn-gradient" type="button" value="Calculate"/></li>
-                            </ul>
-                         </td>
-                        </tr>
-                        <tr >
-                         <td width="150"><strong>Density   											:</strong></td>
-                         <td> <input readonly="readonly"  name="Answer" style="border:none; color:#F00; font-weight:bold;" size="15">lbs. per point </td>
-                        </tr>
-                         
-                    </tbody>
-             </table></form>
-            
-    <div class="clearview">&nbsp;</div>
-                        
-               </div>
-                     <div class="clearview"><h2>Specifications</h2></div><div class="clearview">&nbsp;</div>
-                     <table style="width: 100%;" id="mil-list-new">
-                      <tbody><tr class="table-header-bar">
-                       
-                                <td width="318" class="no-border table-header-bar-left noBorders-blue"><span class="white txt-small">Formula</span></td>
-                                <td colspan="2" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small"> </span></td>
-          </tr>
-                            <tr>
-                                <td align="right" class="noBorders-fff"><table cellspacing="0" cellpadding="0" class="noBorders-fff">
-                                  <tbody><tr>
-                                    <td valign="middle" align="center" style="border-left: medium none;" class="noBorders-fff">Basis Weight </td>
-                                  </tr>
-                                  <tr>
-                                    <td valign="middle" align="center" style="border-left: medium none; border-top: 1px solid #999;" class="noBorders-fff">Caliper</td>
-                                  </tr>
-                              </tbody></table></td>
-                              <td width="18" valign="middle" class="noBorders-fff"> =</td>
-                              <td width="228" valign="middle">Density</td>
-                            </tr>
-               	  </tbody></table><div style="width: 100%;" id="table-bottom-bar">
-                    <div id="table-bottom-bar-L"></div>
-                        <div id="table-bottom-bar-R"></div>
-                    </div>  <div class="clearview">&nbsp; </div>  
-                    <table style="width: 100%;" id="mil-list-new">
-                      <tbody><tr class="table-header-bar">
-                       
-                                <td width="318" class="no-border table-header-bar-left noBorders-blue"><span class="white txt-small">Example</span></td>
-                                <td colspan="2" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small"> </span></td>
-          </tr>
-                            <tr>
-                              <td colspan="3" >Find the density of a sheet of 118lb. Carolina C2S Cover paper with caliper of .008
-</td>
-                            </tr>
-                            
-                           <tr>
-                                <td align="right" class="noBorders-fff"><table cellspacing="0" cellpadding="0" class="noBorders-fff">
-                                  <tbody><tr>
-                                    <td valign="middle" align="center" style="border-left: medium none;" class="noBorders-fff"><span class="noBorders-fff" style="border-left: medium none;">118</span></td>
-                                  </tr>
-                                  <tr>
-                                    <td valign="middle" align="center" style="border-left: medium none; border-top: 1px solid #999;" class="noBorders-fff">8</td>
-                                  </tr>
-                              </tbody></table></td>
-                              <td width="18" valign="middle" class="noBorders-fff"> =</td>
-                              <td width="228" valign="middle">14.75 lbs. per point </td>
-                        </tr>
-                  </tbody></table>
-                   
-                  <div style="width: 100%;" id="table-bottom-bar">
-  <div id="table-bottom-bar-L"></div>
-                    <div id="table-bottom-bar-R"></div>
-                  </div>  <div class="clearview">&nbsp; </div>
-                  <div class="x-corners"> 
-                            
-    <div ><br />
-      <strong>Note:</strong>:<br />
-The results of the Interactive Calculations System are estimates and are not guaranteed by International Paper.
+						<p>To determine the density of any given sheet, divide the
+							basis weight by the caliper.</p>
+						<!-- Changes done for jira 1538 -->
+						<p class="addpadtop10"><strong>Note</strong>: <br /> Caliper is expressed in the formula
+						as a whole number.</p>
 
-<br />
-<br />
-    </div>
-         
-                    </div>
+						<div id="requestform addpadtop20">
 
-                </div> 
+
+							<form name="eform" method="post"
+								action="sc_papcalcoddnumshee.aspx" id="eform">
+
+								<table style="width: 600px;" class="form sheet-density">
+									<tbody>
+
+										<tr>
+											<td>Basis Weight:</td>
+											<td width="438"><input name="bWeight" type="text"
+												style="width: 80px;"
+												onkeyup="calcPhone('Value',eform.bWeight);" class="x-input"
+												id="bWeight" /></td>
+										</tr>
+										<tr>
+											<td>Caliper:</td>
+											<td><input name="caliper" type="text"
+												style="width: 80px;"
+												onkeyup="calcPhone('Value',eform.caliper);" class="x-input"
+												id="caliper" /></td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<ul id="cart-actions" style="height: auto;">
+													<li><input class="btn-neutral" type="button" href="#"
+														onClick="javascript:document.eform.reset()" value="Clear" /></li>
+													<li><input href="#"
+														onclick="javascript:validateForm();" class="btn-gradient"
+														type="button" value="Calculate" /></li>
+												</ul>
+											</td>
+										</tr>
+										<tr>
+											<td width="150"><strong>Density :</strong></td>
+											<td><input readonly="readonly" name="Answer"
+												style="border: none; color: #F00; font-weight: bold;"
+												size="15">lbs. per point</td>
+										</tr>
+
+									</tbody>
+								</table>
+							</form>
+
+							<div class="clearview">&nbsp;</div>
+
+						</div>
+						<div class="clearview">
+							<h2>Specifications</h2>
+						</div>
+						<div class="clearview">&nbsp;</div>
+						<table style="width: 100%;" class="standard-table">
+								<tr>
+
+									<th width="318">Formula</th>
+									<th colspan="2"></th>
+								</tr>
+								<tbody>
+								<tr>
+									<td align="right" class="noBorders-fff" style="border-right: none;"><table
+											cellspacing="0" cellpadding="0" class="noBorders-fff">
+											<tbody>
+												<tr>
+													<td valign="middle" align="center"
+														style="border: none;" class="noBorders-fff">Basis
+														Weight</td>
+												</tr>
+												<tr>
+													<td valign="middle" align="center"
+														style="border-left: medium none; border-top: 1px solid #999; border-right: none; border-bottom: none;"
+														class="noBorders-fff">Caliper</td>
+												</tr>
+											</tbody>
+										</table></td>
+									<td width="18" valign="middle" class="noBorders-fff" style="border-right: none;">=</td>
+									<td width="228" valign="middle">Density</td>
+								</tr>
+							</tbody>
+						</table>
+						<div style="width: 100%;" id="table-bottom-bar">
+							<div id="table-bottom-bar-L"></div>
+							<div id="table-bottom-bar-R"></div>
+						</div>
+						<div class="clearview">&nbsp;</div>
+						<table style="width: 100%;" class="standard-table">
+							<tbody>
+								<tr>
+
+									<th width="318">Example</th>
+									<th colspan="2"> </th>
+								</tr>
+								<tr>
+									<td colspan="3" style="border-bottom: none;">Find the density of a sheet of 118lb.
+										Carolina C2S Cover paper with caliper of .008</td>
+								</tr>
+
+								<tr>
+									<td align="right" class="noBorders-fff" style="border-right: none;"><table
+											cellspacing="0" cellpadding="0" class="noBorders-fff">
+											<tbody>
+												<tr>
+													<td valign="middle" align="center"
+														style="border: none;" class="noBorders-fff"><span
+														class="noBorders-fff" style="border-left: medium none;">118</span></td>
+												</tr>
+												<tr>
+													<td valign="middle" align="center"
+														style="border-left: medium none; border-top: 1px solid #999; border-right: none; border-bottom: none;"
+														class="noBorders-fff">8</td>
+												</tr>
+											</tbody>
+										</table></td>
+									<td width="18" valign="middle" class="noBorders-fff" style="border-right: none;">=</td>
+									<td width="228" valign="middle">14.75 lbs. per point</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<div style="width: 100%;" id="table-bottom-bar">
+							<div id="table-bottom-bar-L"></div>
+							<div id="table-bottom-bar-R"></div>
+						</div>
+						<p class="addpadtop20">
+								<strong>Note:</strong>: The results of the
+								Interactive Calculations System are estimates and are not
+								guaranteed by xpedx, LLC.
+							</p>
+
+
+
+
+					</div>
 			</div>
-        </div>
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+			<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	<!-- end main  -->
 		<!-- end container  -->
     </div> </div>

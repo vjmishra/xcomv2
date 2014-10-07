@@ -5734,6 +5734,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		nonFatalErrorList.add(XPXLiterals.NFE_M0020);
 		nonFatalErrorList.add(XPXLiterals.NFE_M0036);
 		nonFatalErrorList.add(XPXLiterals.NFE_M0041);
+		nonFatalErrorList.add(XPXLiterals.NFE_M0100);
 		
 		YFCElement rootExtnEle = rootEle.getChildElement("Extn");
 		if (rootExtnEle != null) {
@@ -5765,7 +5766,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				// Apply Needs Attention Hold.
 				rootEle.setAttribute("ApplyNeedsAttentionHold", "Y");
 				
-				if (!headerProcessCode.equalsIgnoreCase("D")) {
+				if (!headerProcessCode.equalsIgnoreCase("D") || !nonFatalErrorList.contains(headerStatusCode)) {
 					// Apply LEGACY_FATAL_ERR_CODE_HOLD If Legacy Sent Error Code Along With Header Process Code 'C'.
 					rootEle.setAttribute("ApplyFatalErrorHold", "Y");
 				} else {
@@ -5798,7 +5799,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				// To Check Line Status Codes To Permanently Lock The Order.
 				if (checkLineStatusCode) {
 					lineStatusCode = rootOrdLineExtnEle.getAttribute("ExtnLineStatusCode");
-					if (!YFCObject.isNull(lineStatusCode) && !YFCObject.isVoid(lineStatusCode) && !lineStatusCode.equalsIgnoreCase(XPXLiterals.NFE_M0000)) {
+					if (!YFCObject.isNull(lineStatusCode) && !YFCObject.isVoid(lineStatusCode) && !lineStatusCode.equalsIgnoreCase(XPXLiterals.NFE_M0000) && !lineStatusCode.equalsIgnoreCase(XPXLiterals.NFE_M0100)) {
 						// Apply Needs Attention Hold.
 						rootEle.setAttribute("ApplyNeedsAttentionHold", "Y");
 						// Permanently Lock The Order.

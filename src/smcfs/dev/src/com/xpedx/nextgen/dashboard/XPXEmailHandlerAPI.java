@@ -16,7 +16,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.tools.datavalidator.XmlUtils;
 import com.xpedx.nextgen.common.util.XPXEmailUtil;
 import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
@@ -166,7 +168,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         String strOrderType = null;
         String businessIdentifier="";
         String cOrderOperation = null;
-       
+
         api = YIFClientFactory.getInstance().getApi();
 
         Element inputElement = inXML.getDocumentElement();
@@ -177,17 +179,18 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         for (int counter = 0; counter < orderLength; counter++) {
             Element orderElement = (Element) orderList.item(counter);
             strOrderType = orderElement.getAttribute("OrderType");
+            boolean isBackOrderQty = false;
             if (!YFCObject.isNull(strOrderType) && strOrderType.equalsIgnoreCase("Customer")) {
                 // Customer Order.
-            	Element orderExtnEle=SCXmlUtil.getChildElement(orderElement, "Extn");           	
+            	Element orderExtnEle=SCXmlUtil.getChildElement(orderElement, "Extn");
             	cOrderOperation = orderExtnEle.getAttribute("ExtnLastOrderOperation");
-                
+
             	Element orderLinesEle=SCXmlUtil.getChildElement(orderElement, "OrderLines");
                 ArrayList<Element> orderLineList = SCXmlUtil.getChildren(orderLinesEle, "OrderLine");
                 int orderLineLength = orderLineList.size();
                 for (int lineCount = 0; lineCount < orderLineLength; lineCount++) {
                     String shipLineTotal = null;
-                    Element orderLineEle = (Element) orderLineList.get(lineCount);
+                    Element orderLineEle = orderLineList.get(lineCount);
                     if("Cancelled".equals(orderLineEle.getAttribute("Status")) || "Canceled".equals(orderLineEle.getAttribute("Status")))
 					{
 						if(orderLinesEle!=null)
@@ -207,6 +210,10 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
                         extnElem.setAttribute("ExtnTotalOfShippableTotals", shipLineTotal);
                     }
                 }
+            }
+            isBackOrderQty = isBackorderQtyExists(SCXmlUtil.getElements(orderElement, "OrderLines/OrderLine"));
+            if(isBackOrderQty) {
+            	orderElement.setAttribute("BackOrderQtyMsg", "Partial quantity available for shipment");
             }
         }
 
@@ -255,14 +262,14 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         // if(sendMail.equals("Y"))
         // {
         stampLegacyOrderNoOnCustomerOrderLine(env, customerDoc,orderListOutput);
- 
+
         /*Begin- Code commented for EB-3696 and 3697 */
         /* String isEditOrderFlag=inputElement.getAttribute("IsOrderEdit");
         if("Y".equals(isEditOrderFlag)) {
         	cOrderOperation="OrderEdit";
         }*/
         /*End- Code commented for EB-3696 and 3697 */
-        
+
         orderconfSubjectline=utilObj.stampOrderSubjectLine(env, customerDoc, cOrderOperation);
         yfcLogCatalog.debug("inputDocument with SubjectLine: "
                 + SCXmlUtil.getString(customerDoc));
@@ -514,43 +521,43 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
             if (length != 0) {
                 Element extnElement = (Element) extnElementList.item(0);
                 if(extnCustLinePOLbl!=null &&  !extnCustLinePOLbl.trim().equals("")) {
-                	extnElement.setAttribute("ExtnCustLinePOLbl", extnCustLinePOLbl); 
+                	extnElement.setAttribute("ExtnCustLinePOLbl", extnCustLinePOLbl);
                 }
                 if(extnCustLineAccLbl!=null &&  !extnCustLineAccLbl.trim().equals("")) {
-                	extnElement.setAttribute("ExtnCustLineAccLbl", extnCustLineAccLbl); 
+                	extnElement.setAttribute("ExtnCustLineAccLbl", extnCustLineAccLbl);
                 }
-                
+
                 String emailid_customerContactID_orderEdit=null;
-                if("OrderEdit".equals(cOrderOperation)) {                	
-                	String customerContactID_orderEdit=extnElement.getAttribute("ExtnOrderEditCustContactID");                	
+                if("OrderEdit".equals(cOrderOperation)) {
+                	String customerContactID_orderEdit=extnElement.getAttribute("ExtnOrderEditCustContactID");
                 	if(customerContactID_orderPlace!=null && customerContactID_orderPlace.length()>0 &&
-                	   customerContactID_orderEdit!=null && customerContactID_orderEdit.length()>0 && 
+                	   customerContactID_orderEdit!=null && customerContactID_orderEdit.length()>0 &&
                 	   !customerContactID_orderPlace.equals(customerContactID_orderEdit)) {
-                		
+
                 		Document custContact_OrdEditOutDoc=getCustomerContactList(env, customerContactID_orderEdit);
                 		if(custContact_OrdEditOutDoc!=null) {
                 			String receiveOrderConfirmationFlag=SCXmlUtil.getXpathAttribute(custContact_OrdEditOutDoc.getDocumentElement(),"/CustomerContact/Extn/@ExtnOrderConfEmailFlag");
                 			if("Y".equalsIgnoreCase(receiveOrderConfirmationFlag)) {
                 				emailid_customerContactID_orderEdit=SCXmlUtil.getXpathAttribute(custContact_OrdEditOutDoc.getDocumentElement(), "./CustomerContact/@EmailID");
-                                
+
                             }
-                		}                		
+                		}
                 	}
                 }
-                
+
                 String addlnEmailAddresses = SCXmlUtil.getXpathAttribute(extnElement, "./@ExtnAddnlEmailAddr");
                 if (addlnEmailAddresses.indexOf(";") > -1) {
                     addlnEmailAddresses = addlnEmailAddresses.replace(";", ",");
                     yfcLogCatalog.debug("addln email addresses ::"+ addlnEmailAddresses);
-                }               
-                
+                }
+
                 if(emailid_customerContactID_orderEdit!=null && emailid_customerContactID_orderEdit.trim().length()>0) {
                 	if(addlnEmailAddresses!=null && addlnEmailAddresses.trim().length()>0) {
                 		addlnEmailAddresses.concat(emailid_customerContactID_orderEdit).concat(",");
                 	} else {
                 		addlnEmailAddresses=emailid_customerContactID_orderEdit;
                 	}
-                	
+
                 }
                 extnElement.setAttribute("ExtnAddnlEmailAddr",
                         addlnEmailAddresses);
@@ -636,30 +643,30 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
      * @throws RemoteException
      * @throws YFSException
      */
- 
+
     private Document getCustomerContactList(YFSEnvironment env, String customerContactID) throws ParserConfigurationException, FactoryConfigurationError, YIFClientCreationException, YFSException, RemoteException {
-    	
-    	// Prepare Input XML for API getCustomerContactList 
+
+    	// Prepare Input XML for API getCustomerContactList
         /**
          * <CustomerContact CustomerContactID="BillToB2BUser"> <Customer
          * CustomerID="" OrganizationCode=""/> </CustomerContact>
          */
         Document getCCListDoc = null;
         Document customerContactDoc = SCXmlUtil.getDocumentBuilder().newDocument();
-        Element customerContactElement = customerContactDoc.createElement("CustomerContact"); 
-        customerContactDoc.appendChild(customerContactElement); 
-        
+        Element customerContactElement = customerContactDoc.createElement("CustomerContact");
+        customerContactDoc.appendChild(customerContactElement);
+
         if (customerContactID != null && customerContactID.trim().length()>0) {
-        	customerContactElement.setAttribute("CustomerContactID", customerContactID);    
- 
-            yfcLogCatalog.debug("Input xml to getCustomerContactList api :: "+ SCXmlUtil.getString(customerContactDoc)); 
+        	customerContactElement.setAttribute("CustomerContactID", customerContactID);
+
+            yfcLogCatalog.debug("Input xml to getCustomerContactList api :: "+ SCXmlUtil.getString(customerContactDoc));
             api = YIFClientFactory.getInstance().getApi();
-            env.setApiTemplate("getCustomerContactList",getCustomerContactListTemplate); 
+            env.setApiTemplate("getCustomerContactList",getCustomerContactListTemplate);
             getCCListDoc = api.getCustomerContactList(env, customerContactDoc);
             env.clearApiTemplate("getCustomerContactList");
             yfcLogCatalog.debug("getCustomerContactListDoc ::"+ SCXmlUtil.getString(getCCListDoc));
-             
-        }        
+
+        }
         return getCCListDoc;
     }
 
@@ -1191,7 +1198,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
             	Iterator<String> itr = salesRepUserKeys.iterator();
             	while(itr.hasNext()) {
-            		String itemId = (String)itr.next();
+            		String itemId = itr.next();
             		YFCElement expEle = inputXML.getOwnerDocument().createElement("Exp");
             		expEle.setAttribute("Name", "UserKey");
             		expEle.setAttribute("Value", itemId);
@@ -1224,4 +1231,27 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         yfcLogCatalog.debug("Inside XPXEmailHandlerAPI.getSalesRepEmail(). SalesRep Email IDs are: " + salesRepEmail);
         return salesRepEmail;
     }
+
+	/**
+	 * verifying is there Back order quantity exist in any of the order line. if exist then it returns true otherwise return false
+	 * @param tempMajorLineElements
+	 * @return
+	 */
+	private boolean isBackorderQtyExists(ArrayList<Element> tempMajorLineElements){
+		if(tempMajorLineElements != null && tempMajorLineElements.size() > 0){
+			for (int i = 0; i < tempMajorLineElements.size(); i++) {
+				Element orderLine = tempMajorLineElements.get(i);
+				 if (orderLine != null && orderLine.getAttribute("LineType") != "C" && orderLine.getAttribute("LineType") != "M"){
+					 Element orderLineExtnElem = XmlUtils.getChildElement(orderLine, "Extn");
+					 if(orderLineExtnElem !=null && !SCUtil.isVoid(orderLineExtnElem.getAttribute("ExtnReqBackOrdQty"))){
+						 double backOrderedQty = Double.parseDouble(orderLineExtnElem.getAttribute("ExtnReqBackOrdQty"));
+						 if(backOrderedQty > 0) {
+							 return true;
+						 }
+					 }
+				 }
+			}
+		}
+		return false;
+	}
 }

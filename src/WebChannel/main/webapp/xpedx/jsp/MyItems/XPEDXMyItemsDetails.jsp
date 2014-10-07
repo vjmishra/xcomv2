@@ -1997,7 +1997,30 @@ function showSharedListForm(){
 							}
                                      
                  }
-
+				  
+ function removeItem(itemKey){
+	 
+	 		$("#itemKeyForRemoveFromList").val(itemKey);
+	 		$("#listKeyForRemove").val($("#listKey").val());
+	 		$("#confirmDeleteItem").fancybox({				
+			'onClosed' : function() {    			
+				$("#itemKeyForRemoveFromList").val("");
+				$("#listKeyForRemove").val("");
+			},
+			'autoDimensions'	: false,
+			'width' 			: 300,
+			'height' 			: 120  
+				}).trigger('click');
+	 }
+	function fancyBoxCloseAndDelItem(){
+		var itemIdForRemoveFromListForm = document.getElementById("itemIdForRemoveFromListForm");
+		itemIdForRemoveFromListForm.listNameForRemove.value = Ext.get("listName").dom.value;
+		itemIdForRemoveFromListForm.listDescForRemove.value = Ext.get("listDesc").dom.value;
+		<s:url id='deleteListLink' action='MyItemsDetailsDelete.action' escapeAmp='false'></s:url>
+		itemIdForRemoveFromListForm.action = "<s:property value='%{deleteListLink}'/>";
+		$("#itemIdForRemoveFromListForm").submit();	
+		$.fancybox.close();
+	}		
     </script>
 
 </head>
@@ -2043,7 +2066,8 @@ function showSharedListForm(){
 		<s:url id='addToCartURLId' namespace="/myItems" action='addMyItemToCart' />
 		<s:hidden id='updatePandAURL' value='%{#addToCartURLId}' />
 		<s:hidden id='currentCartInContextOHKVal' value='%{#currentCartInContextOHK}' />
-
+		<div>
+		<a id="confirmDeleteItem" href="#deleteItemDiv"></a>
 		<!-- HTML Dialogs -->
 		<div style="display: none;">
 			<div id="dlgNewForm" class="dlgForm">
@@ -2192,7 +2216,7 @@ function showSharedListForm(){
 					<h1>Edit My Items List:&nbsp;<span><s:property value="listName" /></span></h1>
 				</s:if>
 				<s:else>
-				<h1><s:text name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:&nbsp;<span><s:property value="listName" /></span></h1>
+					<h1><s:text name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:&nbsp;<span><s:property value="listName" /></span></h1>
 				</s:else>
 				
 				<div id="printButton" class="print-ico-xpedx underlink">
@@ -2626,16 +2650,15 @@ function showSharedListForm(){
 											</s:else>
 											
 											<%-- TODO: add escape=false to this s:property (href's query string is messed up without it) --%>
-											<a href='<s:property value="%{itemDetailsLink}" />'>
 												<div class="imagewrap relative">
 													<s:if test="#wcUtil.isCoreItemByExtn(#YFSItmeExtn)">
 														<div class="core-item"></div>
 													</s:if>
+													<a href='<s:property value="%{itemDetailsLink}" />'>
 													<img class="item-thumbnail"
 															data-src="<s:url value='%{#itemImagesMap.get(#itemId)}' includeParams='none' />"
-															width="150" height="150" alt="" />
+															width="150" height="150" alt="" /></a>
 												</div>
-											</a>
 											<s:hidden name="keys" value="%{#id}" />
 										</div>
 										<!-- end image / checkbox   -->
@@ -2692,44 +2715,9 @@ function showSharedListForm(){
 														</p>
 													</s:if>
 												</s:if>
-												<div class="red">
-													<s:if test="%{#itemType != '99.00'}">
-														<s:set name="isStocked"
-															value="inventoryCheckForItemsMap.get(#itemId)"></s:set>
-														<s:if test="#isStocked !=null">
-															<s:if test='%{#isStocked !="Y"}'>
-																<p>Mill / Mfg. Item - Additional charges may apply</p>
-															</s:if>
-														</s:if>
-														<s:else>
-															<p>Mill / Mfg. Item - Additional charges may apply</p>
-														</s:else>
-													</s:if>
-												</div>
-												
-												<s:if test='editMode != true'>
-													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-														<p class="replacementtext">
-															This item will be replaced once inventory is depleted.&nbsp;<img
-																alt="To replace or add item, click the Edit This List button."
-																title="To replace or add item, click the Edit This List button."
-																height="12" border="0" width="12"
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
-																style="margin-top: 2px; float: right;" />
-														</p>
-													</s:if>
-												</s:if>
-												<s:else> <%-- editMode --%>
-													<%-- Show Replacement link only in Edit mode --%>
-													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-														<p class="replacementtext">
-															<a href="#linkToReplacement" class="modal red"
-																	onclick='showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
-																This item will be replaced once inventory is depleted.
-															</a>
-														</p>
-													</s:if>
-												</s:else>
+												<s:if test='editMode == true'>	
+													<input class="btn-neutral addmargintop10" type="button" value="Remove from List" name="button" onclick="removeItem('<s:property value="#id"/>');"/>
+												</s:if>	
 											</div>
 											
 											<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
@@ -2750,6 +2738,7 @@ function showSharedListForm(){
 												</p>
 												<br />
 											</s:if>
+											
 										</div> <%-- / mil-desc-wrap --%>
 		
 		
@@ -2913,10 +2902,10 @@ function showSharedListForm(){
 											<s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}" />
 											<s:set name="baseUOMCode" value="#baseUOMs.get(#itemId)"></s:set>
 											<s:hidden name="baseUOMCode" id="baseUOMCode_%{#id}" value="%{#baseUOMCode}" />
-											
-											
+											<s:set name="displayInventoryIndicator" value="displayInventoryCheckForItemsMap.get(#itemId)"></s:set>
+											<s:hidden name="displayInventoryIndicatorvalue" value="#displayInventoryIndicator"></s:hidden>
 											<s:if test='editMode != true'>
-												<div class="cart-btn-wrap">
+												<div class="cart-btn-wrap addmarginbottom10">
 													<div class="mil-avail-link">
 														<a id="PAAClick_<s:property value="#id"/>" href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')">
 															Show Price &amp; Availability
@@ -2937,10 +2926,11 @@ function showSharedListForm(){
 												<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
 												
 												<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-													<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;">
+												
+													<div  id="errorDiv_qtys_<s:property value='%{#id}' />"><p class="notice addmarginbottom10">
 														<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
 														<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}" />
-														<s:property value="#baseUOMDesc"></s:property>
+														<s:property value="#baseUOMDesc"></s:property></p>
 													</div>
 													<s:hidden name="hiddenUOMOrdMul_%{#id}"
 															id="hiddenUOMOrdMul_%{#id}"
@@ -2951,7 +2941,7 @@ function showSharedListForm(){
 													<s:hidden name="hiddenId" id="hiddenId" value="%{#id}" />
 												</s:if>
 												<s:else>
-													<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;"></div>
+													<div class="notice addmarginbottom10" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: none; float: right;"></div>
 												</s:else>
 												
 												<s:if test='%{#erroMsg !=null && #erroMsg !=""}'>
@@ -2960,22 +2950,56 @@ function showSharedListForm(){
 												<s:else>
 													<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
 												</s:else>
-												<br />
-		
-												<div class="clearall">&nbsp;</div>
+												<div class="clearfix"></div>
 		
 											</s:if>
 											<s:else> <%-- end editMode --%>
 												<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-													<div class="notice"
-															id="errorDiv_qtys_<s:property value='%{#id}' />"
-															style="display: inline; float: right;">
-														<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
+													<div 
+															id="errorDiv_qtys_<s:property value='%{#id}' />"><p class="notice addmarginbottom10">
+															<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
 														<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
-														<s:property value="#baseUOMDesc"></s:property>
+														<s:property value="#baseUOMDesc"></s:property></p>
 													</div>
 												</s:if>
+												<s:else>
+													<div class="notice addmarginbottom10" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: none; float: right;"></div>
+												</s:else>
 											</s:else>
+											<s:if test='%{#displayInventoryIndicator=="I"}'>
+												<div class='non-stock-item mil-nonstock-adjust'><div class='stock-icon'><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25"/>
+												</div>Not a Stocked Item<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>
+											</s:if>
+											<s:if test='%{#displayInventoryIndicator=="M"}'>
+												<div class='non-stock-item mil-nonstock-adjust'><div class='stock-icon'><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png" width="25" height="25"/>
+												</div>Item Ships Directly from Mfr<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>
+											</s:if>
+											<s:if test='%{#displayInventoryIndicator=="W"}'>
+														
+											</s:if>
+											
+											<s:if test='editMode != true'>
+													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+														<div class="replacement-item width-315 mil-replacement-adjust"><p>
+															This item will be replaced once inventory is depleted.&nbsp;<span class="inline float-right"><img
+																alt="To replace or add item, click the Edit This List button."
+																title="To replace or add item, click the Edit This List button."
+																height="12" border="0" width="12"
+																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"/></span></p>
+														</div>
+													</s:if>
+												</s:if>
+												<s:else> <%-- editMode --%>
+													<%-- Show Replacement link only in Edit mode --%>
+													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+														<div class="replacement-item width-315 mil-edit-replacement-adjust">
+															<a href="#linkToReplacement" class="modal red"
+																	onclick='showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
+																This item will be replaced once inventory is depleted.
+															</a>
+														</div>
+													</s:if>
+												</s:else>
 		
 										</div> <%-- / mil-action-list-wrap --%>
 									</div> <%-- / mil-wrap-condensed or mil-wrap-condensed-mid or mil-wrap-condensed-bot --%>
@@ -3276,12 +3300,12 @@ function showSharedListForm(){
 
 					<div id="replacement_<s:property value='key'/>"
 						class="xpedx-light-box">
-						<h2>
+						<h1>
 							Replacement Item(s) for
 							<s:property value="wCContext.storefrontId" />
 							Item #:
 							<s:property value='key' />
-						</h2>
+						</h1>
 						
 						<!-- Light Box -->
 						<s:div cssStyle="height: %{#altItemList.size() > 1 ? '202px' : '250px'}; width: 580px; overflow: auto; border: 1px solid #CCC; border-radius: 6px;">
@@ -3399,6 +3423,31 @@ function showSharedListForm(){
 				</s:iterator>
 			</s:if>
 		</div> <%-- / wrapper for lightbox --%>
+	<div style="display: none;">
+		<div id="deleteItemDiv" class="xpedx-light-box">
+			<h1> <s:text name='Delete Item From My Items List' /></h1>
+			<s:form id="itemIdForRemoveFromListForm" method="post" name="itemIdForRemoveFromListForm" onsubmit="return false;">
+				<input id= "itemKeyForRemoveFromList" name = "itemKeys" type="hidden" value=""/>
+				<input id= "listKeyForRemove" name = "listKey" type="hidden" value=""/>
+				<input id= "editModeForRemove" name = "editMode" type="hidden" value="true"/>
+				<input id= "listNameForRemove" name = "listName" type="hidden" value=""/>
+				<input id= "listDescForRemove" name = "listDesc" type="hidden" value=""/>
+			</s:form>
+				<p class="addmargintop0"><s:text name='Are you sure want to delete this item from your My Items List?' /></p>
+					<ul id="tool-bar" class="tool-bar-bottom float-right">
+						<li>
+							<a class="btn-neutral" href="javascript:$.fancybox.close();">
+								<span>Cancel</span>
+							</a>
+						</li>
+						<li class="float-right">
+							<a class="btn-gradient" href="javascript:fancyBoxCloseAndDelItem();">
+								<span>Yes</span>
+							</a>
+						</li>
+					</ul>
+		</div>
+	</div>
 		
 		<s:form action="addComplementaryItemToCart" namespace="/order" method="POST" name="addReplacementItemToCartForm" id="addReplacementItemToCartForm">
 			<div id="replacementItems" style="height: 380px; display: none;">

@@ -12,8 +12,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathConstants;
@@ -40,21 +40,18 @@ import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.BusinessRuleUtil;
 import com.sterlingcommerce.webchannel.utilities.OrderHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
-import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-
-
 import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
-import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -284,14 +281,15 @@ public class XPEDXOrderUtils {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext
-				.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		ISCUITransactionContext scuiTransactionContext = null;
+		YFSEnvironment env = null;
 		String customerID = context.getCustomerId();
 		String storeFrontId = context.getStorefrontId();
 
 		try {
+			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			env = (YFSEnvironment) scuiTransactionContext
+					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			HashMap<String, String> customerDetails = getCustomerDetails(env,
 					customerID, storeFrontId);
 
@@ -365,13 +363,29 @@ public class XPEDXOrderUtils {
 	//				}
 	//			}
 				}
+			scuiTransactionContext.commit();
 		}//if itemId, shipFromBranch and envCode are not null
+		catch (Exception e) {
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
+
+		}
 		finally {
-			scuiTransactionContext.end();
-			env.clearApiTemplate("getItemList");
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
-			env = null;
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
 		if (orderMultiple == null || orderMultiple.trim().length() == 0) {
 			orderMultiple = "1";
@@ -797,11 +811,11 @@ public class XPEDXOrderUtils {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext
-				.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		ISCUITransactionContext scuiTransactionContext = null;
+		YFSEnvironment env = null;
 		try {
+			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
 			YFCElement documentElement = inputDocument.getDocumentElement();
 
@@ -869,19 +883,28 @@ public class XPEDXOrderUtils {
 				}
 			//XPEDXWCUtils.setObectInCache("UOMsMap",itemUomForSingleItemIsCustomerUomHashMap);
 			ServletActionContext.getRequest().setAttribute("UOMsMap", itemUomForSingleItemIsCustomerUomHashMap);
-		} catch (Exception ex) {
-			log.error(ex.getMessage());
-		} catch (Throwable t) {
-			// Just adding this catch block to control the null pointer logging
-			// happening in staging.
+			scuiTransactionContext.commit();
+		}catch (Throwable t) {
 			log.error(t.getMessage());
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(t);
 		}
 		finally {
-			scuiTransactionContext.end();
-			env.clearApiTemplate("XPXUOMListAPI");
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
-			env = null;
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
 		return wUOMsAndConFactors;
 
@@ -907,11 +930,11 @@ public class XPEDXOrderUtils {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext
-				.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		ISCUITransactionContext scuiTransactionContext = null;
+		YFSEnvironment env = null;
 		try {
+			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
 			YFCElement documentElement = inputDocument.getDocumentElement();
 
@@ -924,7 +947,7 @@ public class XPEDXOrderUtils {
 				YFCElement expElement = documentElement.createChild("Exp");
 				expElement.setAttribute("Name", "ItemID");
 				expElement.setAttribute("Value", ItemID.get(i));
-				complexQueryOrElement.appendChild((YFCNode)expElement);
+				complexQueryOrElement.appendChild(expElement);
 			}
 			complexQueryElement.setAttribute("Operator", "AND");
 			complexQueryElement.appendChild(complexQueryOrElement);
@@ -1005,15 +1028,27 @@ public class XPEDXOrderUtils {
 					}
 				}
 			}
-
+			scuiTransactionContext.commit();
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(ex);
 		} finally {
-			scuiTransactionContext.end();
-			env.clearApiTemplate("XPXUOMListAPI");
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
-			env = null;
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
 	}
 		ServletActionContext.getRequest().setAttribute("itemCustomerUomHashMap", itemUomIsCustomerUomHashMap);
@@ -1044,11 +1079,11 @@ public class XPEDXOrderUtils {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext
-				.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		ISCUITransactionContext scuiTransactionContext = null;
+		YFSEnvironment env = null;
 			try {
+				 scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+				 env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			  Element wElement=(Element)ServletActionContext.getRequest().getAttribute("itemsUOMListElement");
 			  if(wElement == null)
 			  {
@@ -1064,7 +1099,7 @@ public class XPEDXOrderUtils {
 					YFCElement expElement = documentElement.createChild("Exp");
 					expElement.setAttribute("Name", "ItemID");
 					expElement.setAttribute("Value", ItemID.get(i));
-					complexQueryOrElement.appendChild((YFCNode)expElement);
+					complexQueryOrElement.appendChild(expElement);
 				}
 				complexQueryElement.setAttribute("Operator", "AND");
 				complexQueryElement.appendChild(complexQueryOrElement);
@@ -1107,7 +1142,7 @@ public class XPEDXOrderUtils {
 								}//EB-934 ends here
 								//2964 Start
 								if (uomListElement != null) {
-									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListElement);
+									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList(uomListElement);
 								Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
 
 									for (Element uomNode : listOfUOMElements) {
@@ -1363,16 +1398,29 @@ public class XPEDXOrderUtils {
 			}
 			// End of XB-687
 		}//End of else of defaultShowUOM Flag
+		scuiTransactionContext.commit();
 	} catch (Exception ex) {
 			log.error(ex.getMessage());
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(ex);
 	}
 	finally {
-			scuiTransactionContext.end();
-			env.clearApiTemplate("XPXUOMListAPI");
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
-			env = null;
+		if (scuiTransactionContext != null && wSCUIContext != null) {
+			try {
+				// release the transaction to close the connection.
+				SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+				scuiTransactionContext = null;
+				env = null;
+			} catch (Exception ignore) {
+			}
 		}
+	}
 	}
 		ServletActionContext.getRequest().setAttribute("itemCustomerUomHashMap", itemCustomerUomHashMap);
 		ServletActionContext.getRequest().setAttribute("ItemCustomerUomConvFactHashMap", itemCustomerUomConvFactHashMap);
@@ -1389,14 +1437,15 @@ public class XPEDXOrderUtils {
 		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 		LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 		Map<String,String> itemDefaultUOMMap = new HashMap<String,String> ();
-		
+
 		if(items!=null && items.size()>=1) {
 			IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 			SCUIContext wSCUIContext = context.getSCUIContext();
-			ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			ISCUITransactionContext scuiTransactionContext = null;
+			YFSEnvironment env = null;
 			try {
-			
+				scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+				env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 				YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
 				YFCElement documentElement = inputDocument.getDocumentElement();
 
@@ -1409,7 +1458,7 @@ public class XPEDXOrderUtils {
 					YFCElement expElement = documentElement.createChild("Exp");
 					expElement.setAttribute("Name", "ItemID");
 					expElement.setAttribute("Value", items.get(i));
-					complexQueryOrElement.appendChild((YFCNode)expElement);
+					complexQueryOrElement.appendChild(expElement);
 				}
 				complexQueryElement.setAttribute("Operator", "AND");
 				complexQueryElement.appendChild(complexQueryOrElement);
@@ -1420,7 +1469,7 @@ public class XPEDXOrderUtils {
 				Document outputListDocument = api.executeFlow(env, "XPXUOMListAPI",inputDocument.getDocument());
 				Element wElement = outputListDocument.getDocumentElement();
 
-				
+
 				if (wElement!=null && wElement.getChildNodes()!=null) {
 					NodeList wNodeList = wElement.getChildNodes();
 					int length = wNodeList.getLength();
@@ -1446,7 +1495,7 @@ public class XPEDXOrderUtils {
 										uomListElement = (Element)uomListNodeList.item(0);
 									}
 									if (uomListElement != null) {
-										List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListElement);
+										List<Element> listOfUOMElements = SCXmlUtil.getChildrenList(uomListElement);
 										Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
 
 										for (Element uomNode : listOfUOMElements) {
@@ -1468,7 +1517,7 @@ public class XPEDXOrderUtils {
 															wUOMsAndConFactors.put(UnitOfMeasure.getTextContent(), Long.toString(convFactor));
 														}
 														if(!YFCUtils.isVoid(isCustomerUOMFlg)){
-															wUOMsAndCustomerUOMFlag.put(UnitOfMeasure.getTextContent(), isCustomerUOMFlg);															
+															wUOMsAndCustomerUOMFlag.put(UnitOfMeasure.getTextContent(), isCustomerUOMFlg);
 														}
 														else{
 															wUOMsAndCustomerUOMFlag.put(UnitOfMeasure.getTextContent(), "N");
@@ -1501,7 +1550,7 @@ public class XPEDXOrderUtils {
 				double minFractUOM = 0.00;
 				double maxFractUOM = 0.00;
 				String lowestUOM = "";
-				String highestUOM = "";			
+				String highestUOM = "";
 				String orderMultiple = "";
 				String defaultUOMCode = "";
 				String customerUOM = "";
@@ -1524,7 +1573,7 @@ public class XPEDXOrderUtils {
 							try {
 								String uom =  it.next();
 								Object objConversionFactor = displayUomMap.get(uom);
-								String isCustomerUom = (String)uomIsCustomermap.get(uom);
+								String isCustomerUom = uomIsCustomermap.get(uom);
 
 								orderMultiple = orderMultipleMap.get(strItemID);
 								if("Y".equals(msapOrderMultipleFlag) && Integer.valueOf(orderMultiple) > 1 && !"1".equals(objConversionFactor)){
@@ -1546,7 +1595,7 @@ public class XPEDXOrderUtils {
 									}
 								}
 								if(isCustomerUom!=null && isCustomerUom.equalsIgnoreCase("Y")){
-									customerUOM = uom;									
+									customerUOM = uom;
 								}
 							} catch (Exception e) {
 								log.error("Error while getting the UOM Description.....");
@@ -1566,18 +1615,32 @@ public class XPEDXOrderUtils {
 						} else {
 							itemDefaultUOMMap.put(strItemID, defaultUOMCode);
 						}
-						
+
 					}
-				}		
-				return itemDefaultUOMMap;	
+				}
+				scuiTransactionContext.commit();
+				return itemDefaultUOMMap;
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
+				// rollback the tran
+				if (scuiTransactionContext != null) {
+					try {
+						scuiTransactionContext.rollback();
+					} catch (Exception ignore) {
+					}
+				}
+				throw new IllegalStateException(ex);
 			}
 			finally {
-				scuiTransactionContext.end();
-				env.clearApiTemplate("XPXUOMListAPI");
-				SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
-				env = null;
+				if (scuiTransactionContext != null && wSCUIContext != null) {
+					try {
+						// release the transaction to close the connection.
+						SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+						scuiTransactionContext = null;
+						env = null;
+					} catch (Exception ignore) {
+					}
+				}
 			}
 		}
 		return itemDefaultUOMMap;
@@ -1591,12 +1654,12 @@ public class XPEDXOrderUtils {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext
-				.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		ISCUITransactionContext scuiTransactionContext = null;
+		YFSEnvironment env = null;
 		LinkedHashMap<String, String> uomsAndConFactors = new LinkedHashMap<String, String>();
 		try {
+			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			Element wElement=(Element)ServletActionContext.getRequest().getAttribute("itemsUOMListElement");
 			List<Element> listConv = null;
 			if(wElement == null)
@@ -1701,16 +1764,16 @@ public class XPEDXOrderUtils {
 
 			for (Iterator it = wUOMsAndConFactors.keySet().iterator(); it.hasNext();) {
 				String uomCode = (String) it.next();
-				String convFactor = (String)wUOMsAndConFactors.get(uomCode);
+				String convFactor = wUOMsAndConFactors.get(uomCode);
 				long convFac = Math.round(Double.parseDouble(convFactor));
-				String isCustomerUom = (String)wUOMsAndCustomerUOMFlag.get(uomCode);
+				String isCustomerUom = wUOMsAndCustomerUOMFlag.get(uomCode);
 				if("Y".equals(msapOrderMultipleFlag) && Integer.valueOf(orderMultiple) > 1 && !"1".equals(convFactor))
 				{
 
 					if(convFactor.toString() == orderMultiple){
 						minFractUOM = 1;
 						lowestUOM = uomCode;
-						minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)convFactor)) + ")";
+						minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble(convFactor)) + ")";
 
 
 					}
@@ -1721,13 +1784,13 @@ public class XPEDXOrderUtils {
 							if(conversion <= 1 && conversion >= minFractUOM){
 								minFractUOM = conversion;
 								lowestUOM = uomCode;
-								minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)convFactor)) + ")";
+								minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble(convFactor)) + ")";
 
 
 							}else if(conversion>1 && ( conversion < maxFractUOM || maxFractUOM == 0)){
 								maxFractUOM = conversion;
 								highestUOM = uomCode;
-								maxUOMsDesc =  XPEDXWCUtils.getUOMDescription(highestUOM)+ " (" + Math.round(Double.parseDouble((String)convFactor)) + ")";
+								maxUOMsDesc =  XPEDXWCUtils.getUOMDescription(highestUOM)+ " (" + Math.round(Double.parseDouble(convFactor)) + ")";
 
 
 							}
@@ -1779,21 +1842,29 @@ public class XPEDXOrderUtils {
 				defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
 			}
 			ServletActionContext.getRequest().setAttribute("defaultShowUOMMap", defaultShowUOMMap);
-		} catch (Exception ex) {
-			log.error(ex.getMessage());
+			scuiTransactionContext.commit();
 		} catch (Throwable t) {
-			// Just adding this catch block to control the null pointer logging
-			// happening in staging.
 			log.error(t.getMessage());
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(t);
 		}
 		finally {
-			scuiTransactionContext.end();
-			env.clearApiTemplate("XPXUOMListAPI");
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
-			env = null;
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
-
 		return displayItemUomsMap;
 
 	}
@@ -2059,7 +2130,7 @@ public class XPEDXOrderUtils {
 		    {
 		        for(int i = 0; i < ruleElems.size(); i++)
 		        {
-		        	 String ruleId = ((Element)ruleElems.get(i)).getAttribute("RuleId");
+		        	 String ruleId = ruleElems.get(i).getAttribute("RuleId");
 		        	 validateCustomerPOBusinessRule(wcContext,ruleId);
 		        	 break;
 		        }
@@ -2072,7 +2143,7 @@ public class XPEDXOrderUtils {
 	    {
 	        for(int i = 0; i < ruleElems.size(); i++)
 	        {
-	            String ruleId = ((Element)ruleElems.get(i)).getAttribute("RuleId");
+	            String ruleId = ruleElems.get(i).getAttribute("RuleId");
 	            if(log.isDebugEnabled()){
 	            log.debug("RuleID:::"+ruleId);
 	            }
@@ -2101,7 +2172,7 @@ public class XPEDXOrderUtils {
 	    for(Iterator<Element> orderLineIter = orderLineElemList.iterator(); orderLineIter.hasNext();)
 	    {
 	    	ArrayList<String> missingReqFieldsForOLK = null;
-	    	Element orderLineElem = (Element)orderLineIter.next();
+	    	Element orderLineElem = orderLineIter.next();
 	        if(orderLineElem != null)
 	        {
 	            String orderLineKey = SCXmlUtil.getAttribute(orderLineElem, "OrderLineKey");
@@ -2111,7 +2182,7 @@ public class XPEDXOrderUtils {
 	          if(orderLineType!=null && !orderLineType.equalsIgnoreCase("M")&& !orderLineType.equalsIgnoreCase("C")){
 	            for(Iterator<String> requiredFieldsIter = requiredCustFields.iterator(); requiredFieldsIter.hasNext();)
 	            {
-	                String requiredCustField = (String)requiredFieldsIter.next();
+	                String requiredCustField = requiredFieldsIter.next();
 	                if("CustomerPONo".equalsIgnoreCase(requiredCustField))
 	                {
 	                	if(YFCCommon.isVoid(orderLineElem.getAttribute(requiredCustField))) {
@@ -2160,7 +2231,7 @@ public class XPEDXOrderUtils {
 		    {
 		        for(int i = 0; i < ruleElems.size(); i++)
 		        {
-		        	 String ruleId = ((Element)ruleElems.get(i)).getAttribute("RuleId");
+		        	 String ruleId = ruleElems.get(i).getAttribute("RuleId");
 		        	 validateCustomerPOBusinessRule(wcContext,ruleId);
 		        	 break;
 		        }
@@ -2173,7 +2244,7 @@ public class XPEDXOrderUtils {
 	    {
 	        for(int i = 0; i < ruleElems.size(); i++)
 	        {
-	            String ruleId = ((Element)ruleElems.get(i)).getAttribute("RuleId");
+	            String ruleId = ruleElems.get(i).getAttribute("RuleId");
 	            if(log.isDebugEnabled()){
 	            log.debug("RuleID:::"+ruleId);
 	            }
@@ -2230,7 +2301,7 @@ public class XPEDXOrderUtils {
 			Element orderOutput = XPEDXOrderUtils
 					.createNewDraftOrderOnBehalfOf(wcContext, NEW_CART_NAME);
 			if (orderOutput != null) {
-				Element orderEl = XMLUtilities.getElement(((Node) orderOutput
+				Element orderEl = XMLUtilities.getElement((orderOutput
 						.getOwnerDocument()), "//Order");
 				String orderHeaderKey = orderEl.getAttribute("OrderHeaderKey");
 				CommerceContextHelper.overrideCartInContext(wcContext,

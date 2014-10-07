@@ -226,13 +226,6 @@
 			<result type="json"></result>
 		</action>
 		
-		<action name="salesrepLogout"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
-			method="logoutSalesRep">
-			<result name="success" type="redirectAction">
-				<param name="actionName">salesReploginFullPage</param>				
-			</result>	
-		</action>
 		<action name="salesRepCustomerLogin"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepCustomerLoginAction">
 			<param name="mashups">XPEDXGetSalesRepCustomersDetails</param>
@@ -241,16 +234,12 @@
 			<result name="error">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
 		</action>
 		
-		<action name="pLogin"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
+		<!--
+			pLogin is deprecated as of R16. It will be removed in R17. Use PunchoutCxmlLoginAction or OCIPost.jsp instead.
+			We're keeping this action in R16 strictly for backwards compatibility for OCI customers. See eb-4834 for details.
+		-->
+		<action name="pLogin" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
 			<result name="success">/xpedx/jsp/punchout/punchoutlogin.jsp</result>				
-		</action>
-		
-		<action name="searchCustomer"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
-			method="getCustomersForSalesRep">
-			<param name="mashups">XPEDXGetSalesRepCustomersDetails</param>
-			<result name="success">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
 		</action>
 		
 		<action name="xpedxSearchAssignedCustomers"

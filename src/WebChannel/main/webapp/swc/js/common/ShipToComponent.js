@@ -40,7 +40,7 @@ function reset() {
 				var $shipTosContainerDiv = $('#ship-container');
 				var html = [];
 				if (titleOfModal){
-					html.push('		<h2>',	titleOfModal,	'</h2>');
+					html.push('		<h1>',	titleOfModal,	'</h1>');
 				}
 				html.push('			<input type="hidden" name="userIdForSelectOrChangeShipTo" id="userIdForSelectOrChangeShipTo" value="', customerContactId, '"/>');
 
@@ -107,7 +107,6 @@ function reset() {
 					}					
 				}
 				html.push('		    <div class="clearfix"></div>');	
-				html.push('			<hr class="divider-line addmargintop10">');
 				html.push('			<div class="ship-search-wrap">');
 				if (data.defaultShipToCustomer && "30" === data.defaultShipToCustomer.customerStatus) {
 					html.push('				<div><h3>Please select an active ship-to as your default.<h3></div>');

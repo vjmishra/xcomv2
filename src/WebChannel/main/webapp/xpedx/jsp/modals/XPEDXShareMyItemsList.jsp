@@ -19,17 +19,12 @@
 </style>
 
 <div style="display: none">
-	<div id="dlgShareList" class="share-modal xpedx-light-box"  style="width:740px!important; height:385px">
-		<h2>Share My Items List</h2>
-		<p>Name</p>
-		<div class="clear"></div>	
-		<span style="width: 421px; float: left;" class="grey"><s:property value="listName" /></span>
-		<p>Description</p>
-		<div class="clear"></div>
-		
-		<span style="width: 100%; float: left;" class="grey"><s:property value="listDesc" /></span>
-		<div class="clear"></div>
-	
+	<div id="dlgShareList" class="xpedx-light-box">
+		<h1>Share My Items List</h1>
+		<p class="addmargintop0">Name:
+		<span class="grey addpadleft10"><s:property value="listName" /></span></p>
+		<p class="addmargintop5">Description:
+		<span class="grey"><s:property value="listDesc" /></span></p>
 		<s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 		<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 		<s:form id="XPEDXMyItemsDetailsChangeShareList" action="MyItemsDetailsChangeShareList" method="post" enctype="multipart/form-data" >

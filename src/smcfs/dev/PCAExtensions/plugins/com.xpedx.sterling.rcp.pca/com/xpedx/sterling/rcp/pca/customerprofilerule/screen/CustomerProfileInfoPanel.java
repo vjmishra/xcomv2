@@ -2128,8 +2128,8 @@ IYRCComposite {
 		// eCSR to be done
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@UserKey");
-		cbd.setDescriptionBinding("@Loginid");
-		cbd.setListBinding("XPXGetUserList:/UserList/User");
+		cbd.setDescriptionBinding("@userNameAndLoginId");
+		cbd.setListBinding("XPXGetUserSortedList:/UserList/User");
 		cbd
 		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR1Key");
 		cbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR1Key");
@@ -2138,8 +2138,8 @@ IYRCComposite {
 
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@UserKey");
-		cbd.setDescriptionBinding("@Loginid");
-		cbd.setListBinding("XPXGetUserList:/UserList/User");
+		cbd.setDescriptionBinding("@userNameAndLoginId");
+		cbd.setListBinding("XPXGetUserSortedList:/UserList/User");
 		cbd
 		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR2Key");
 		cbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR2Key");

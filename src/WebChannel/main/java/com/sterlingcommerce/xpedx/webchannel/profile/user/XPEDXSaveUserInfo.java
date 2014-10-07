@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +21,7 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
@@ -48,13 +48,13 @@ import com.yantra.yfs.japi.YFSEnvironment;
 
 /**
  * @author vsriram
- * 
+ *
  */
 public class XPEDXSaveUserInfo extends WCMashupAction
 
 {
 	/**
-     * 
+     *
      */
 	private static final long serialVersionUID = -7194085148560207953L;
 	private Element customer;
@@ -126,7 +126,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	List<String> alFinalSelectedCustomers = new ArrayList<String>();
 	private boolean treeSelected;
 	private boolean selfAdminId;
-	
+
 	//EB-2824 start only setter getter method
 
 	private String alternateApprover;
@@ -149,7 +149,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		this.primaryApprover = primaryApprover;
 	}
 
-	
+
 	public String getSpendingLt() {
 		return spendingLt;
 	}
@@ -170,7 +170,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		this.treeSelected = treeSelected;
 	}
 
-	
+
 	public String getUserNotAdmin() {
 		return userNotAdmin;
 	}
@@ -179,15 +179,15 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		this.userNotAdmin = userNotAdmin;
 	}
 
-	
+
 
 	public void setNewAssignedCustomers(String newAssignedCustomers) {
 		this.newAssignedCustomers = newAssignedCustomers;
-		
+
 	}
-	
+
 	public String getNewAssignedCustomers() {
-		
+
 		return newAssignedCustomers;
 	}
 
@@ -354,7 +354,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			paper101Grade = "Y";
 	}
 
-	/* ENDS - Customer-User Profile Changes - adsouza */	
+	/* ENDS - Customer-User Profile Changes - adsouza */
 
 	private String estimator = "N";
 	public boolean isSelfAdminId() {
@@ -409,7 +409,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.opensymphony.xwork2.ActionSupport#execute()
 	 */
 	@Override
@@ -420,7 +420,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Creates a new Buyer User
-	 * 
+	 *
 	 * @return the action result
 	 */
 	public String createUser() {
@@ -451,7 +451,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Saves the Buyer User Information
-	 * 
+	 *
 	 * @return the action result
 	 */
 	public String saveuserInfo() {
@@ -623,7 +623,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 							 * //request.getSession().setAttribute("errorNote",
 							 * "The password cannot contain $, ? or ! characters. Please revise and try again."
 							 * );
-							 * 
+							 *
 							 * setSuccess(false); setSaveAddUser(false);
 							 * //return REDIRECT; }
 							 */
@@ -711,19 +711,19 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					String selectView = null;
 					switch (Integer.parseInt(getB2bCatalogView())) {
 					case 0:
-						selectView = "normal-view";
+						selectView = "icon-normal-view normal-view";
 						break;
 					case 1:
-						selectView = "condensed-view";
+						selectView = "icon-condensed-view condensed-view";
 						break;
 					case 2:
-						selectView = "mini-view";
+						selectView = "icon-mini-view mini-view";
 						break;
 					case 3:
-						selectView = "papergrid-view";
+						selectView = "icon-grid-view papergrid-view";
 						break;
 					default:
-						selectView = "normal-view";
+						selectView = "icon-normal-view normal-view";
 						break;
 
 					}
@@ -757,7 +757,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			String useLoginID = wcContext.getSCUIContext()
             .getRequest().getParameter("userName");
 
-			
+
 			if (oldEmailId != null && newEmailId != null
 					&& ((checkIfEmailChanged(oldEmailId, newEmailId)) || (checkIfAnswerChanged()) || (checkIfPasswordChanged()))) {
 				updateEMailAddress(oldEmailId, newEmailId,useLoginID);
@@ -948,7 +948,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * This method is invoked while changing the password for a user on the UI
-	 * 
+	 *
 	 * @return
 	 */
 	public String validatePassword() {
@@ -1022,16 +1022,16 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	/**
 	 * <CustomerAssignment CustomerID="" OrganizationCode="" UserId=""
 	 * Operation="" />
-	 * 
+	 *
 	 * @return
 	 */
 	private void saveChanges() {
 		/* Begin - Changes made for XB-287 : Save functionality */
-		
+
 		List<String> alOldAssignedCustomers = new ArrayList<String>();
-		
+
 		//Added for EB 633
-		
+
 		if (null!=getNewAssignedCustomers() && getNewAssignedCustomers().indexOf(",") != -1) {
 			alNewSelectedCustomers = Arrays.asList(getNewAssignedCustomers()
 					.split(","));
@@ -1046,7 +1046,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		/* End - Changes made for XB-287 : Save functionality */
 		String tmpCustomerId = "";
 		for (int i = 0; i < alNewSelectedCustomers.size(); i++) {
-			tmpCustomerId = (String) alNewSelectedCustomers.get(i).trim();
+			tmpCustomerId = alNewSelectedCustomers.get(i).trim();
 			if (alOldAssignedCustomers.contains(tmpCustomerId)) {
 				alOldAssignedCustomers.remove(tmpCustomerId);
 			} else {
@@ -1054,7 +1054,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			}
 
 		}
-		
+
 		log.debug("Old Assigned Customers"+alOldAssignedCustomers.toString());
 		log.debug("Final selected Customers"+alFinalSelectedCustomers.toString());
 		manageCustomerAssigmentInputDoc = SCXmlUtil
@@ -1168,7 +1168,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	 * "true");
 	 * XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT
 	 * ,"true" ); }
-	 * 
+	 *
 	 * if(!listOfShipTo.contains(defaultShipTo)) { defaultShipTo = "";
 	 * if(customerContactId.equals(wcContext.getLoggedInUserId())) {
 	 * XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,
@@ -1191,10 +1191,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		Document inputDoc = SCXmlUtil.createDocument("XPXCustHierarchyView");
 		Element complexQuery = inputDoc.createElement("ComplexQuery");
 		Element or = inputDoc.createElement("Or");
-		ISCUITransactionContext scuiTransactionContext = getWCContext()
-				.getSCUIContext().getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		ISCUITransactionContext scuiTransactionContext = null;
+		YFSEnvironment env = null;
 		boolean isAPICall = false;
 		for (int i = 0; i < oldAssignedCustomers.size(); i++) {
 			if (wList.contains(oldAssignedCustomers.get(i).trim()))
@@ -1209,15 +1207,39 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		if (!isAPICall)
 			return shipToStr;
 
-		YIFApi api = YIFClientFactory.getInstance().getApi();
-		Document outputListDocument = api.executeFlow(env,
-				"XPXCustomerHierarchyViewService", inputDoc);
-		Element custView = outputListDocument.getDocumentElement();
-		ArrayList<Element> xpxCustViewElems = SCXmlUtil.getElements(custView,
-				"XPXCustHierarchyView");
-		for (int j = 0; j < xpxCustViewElems.size(); j++) {
-			shipToStr.add(xpxCustViewElems.get(j).getAttribute(
-					"ShipToCustomerID"));
+		try {
+			scuiTransactionContext = getWCContext().getSCUIContext().getTransactionContext(true);
+			env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			YIFApi api = YIFClientFactory.getInstance().getApi();
+			Document outputListDocument = api.executeFlow(env,
+					"XPXCustomerHierarchyViewService", inputDoc);
+			Element custView = outputListDocument.getDocumentElement();
+			ArrayList<Element> xpxCustViewElems = SCXmlUtil.getElements(custView,
+					"XPXCustHierarchyView");
+			for (int j = 0; j < xpxCustViewElems.size(); j++) {
+				shipToStr.add(xpxCustViewElems.get(j).getAttribute(
+						"ShipToCustomerID"));
+			}
+			scuiTransactionContext.commit();
+		} catch (Exception e) {
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
+		} finally {
+			if (scuiTransactionContext != null && getWCContext().getSCUIContext() != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, getWCContext().getSCUIContext());
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
 		return shipToStr;
 	}
@@ -1251,7 +1273,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	/**
 	 * Setting some input XML attributes like User roles, Customer/User status
 	 * based on the request parameters
-	 * 
+	 *
 	 * @return
 	 */
 	private void overrideContactAttributes() {
@@ -1321,7 +1343,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	/**
 	 * Checks whether user has changed password from the UI by comparing to the
 	 * masked constant String to be shown in the UI
-	 * 
+	 *
 	 * @return true if password field changed
 	 */
 
@@ -1338,7 +1360,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	/**
 	 * Checks whether user has changed secret answer from the UI by comparing to
 	 * the masked constant String to be shown in the UI
-	 * 
+	 *
 	 * @return true if secret answer field changed
 	 */
 	private boolean checkIfPasswordChanged() {
@@ -1353,7 +1375,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Returns the Customer member variable
-	 * 
+	 *
 	 * @return customer element
 	 */
 	public Element getCustomer() {
@@ -1362,7 +1384,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Sets the customer element
-	 * 
+	 *
 	 * @param contact
 	 */
 	public void setCustomer(Element contact) {
@@ -1378,7 +1400,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Sets the user element
-	 * 
+	 *
 	 * @param user
 	 */
 	public void setUser(Element user) {
@@ -1394,7 +1416,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Sets the user password to the member variable
-	 * 
+	 *
 	 * @param userPassword
 	 */
 	public void setUserPassword(String userPassword) {
@@ -1410,7 +1432,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Sets the Confirm Password field to the member variable
-	 * 
+	 *
 	 * @param confirmPassword
 	 */
 	public void setConfirmPassword(String confirmPassword) {
@@ -1418,7 +1440,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	}
 
 	/**
-	 * 
+	 *
 	 * @return the locale member variable
 	 */
 	public Element getLoc() {
@@ -1427,7 +1449,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Sets the locale value to the member variable
-	 * 
+	 *
 	 * @param locale
 	 */
 	public void setLoc(Element locale) {
@@ -1443,7 +1465,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Sets the UserID
-	 * 
+	 *
 	 * @param userId
 	 */
 	public void setUserId(String Id) {
@@ -1459,7 +1481,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Sets the Organization code
-	 * 
+	 *
 	 * @param organizationCode
 	 */
 	public void setOrganizationCode(String orgCode) {
@@ -1475,7 +1497,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	/**
 	 * Sets the Customer Admin Parameter
-	 * 
+	 *
 	 * @param customerAdmin
 	 */
 	public void setCustomerAdmin(Element customerAdmin) {
@@ -2091,13 +2113,14 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		/**
 		 * Value of username and suffix is retrieve by
 		 * customer_overrides.properties
-		 * 
+		 *
 		 * */
 		if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
-			String userName = YFSSystem.getProperty("fromAddress.username");
-			String suffix = YFSSystem.getProperty("fromAddress.suffix");
-			sb.append(userName).append("@").append(strEnterpriseCode)
-					.append(suffix);
+			if("Saalfeld".equalsIgnoreCase(strEnterpriseCode)){
+				sb.append(YFSSystem.getProperty("saalFeldEMailFromAddresses"));
+			}else{
+				sb.append(YFSSystem.getProperty("EMailFromAddresses"));
+			}
 			emailFromAddresses = sb.toString();
 
 		}
@@ -2105,7 +2128,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		/**
 		 * Value of imagesRootFolder is retrieve by
 		 * customer_overrides.properties
-		 * 
+		 *
 		 **/
 
 		String imageUrl = "";
@@ -2184,7 +2207,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	/**
 	 * JIRA 1998 Checks whether user has changed email address from the
 	 * UserProfile by comparing to the old email id from session
-	 * 
+	 *
 	 * @return true if email address field changed
 	 */
 

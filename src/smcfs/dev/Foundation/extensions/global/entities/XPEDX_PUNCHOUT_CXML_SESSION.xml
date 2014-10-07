@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Persists session data for CXML token-based authentication. Tokens are short lived, invalid after a few minutes" HasHistory="False" Prefix="XPEDX" TableName="XPEDX_PUNCHOUT_CXML_SESSION">
+			<Attributes>
+				<Attribute ColumnName="PUNCHOUT_CXML_SESSION_ID" DataType="Text-32" Description="UUID to uniquely identify this session token" Nullable="False" XMLName="PunchoutCxmlSessionId" />
+				
+				<Attribute ColumnName="USERID" DataType="Text-255" DefaultValue="" Description="User id" Nullable="false" XMLName="Userid" />
+				<Attribute ColumnName="PASSWD" DataType="Text-255" DefaultValue="" Description="Password (encrypted)" Nullable="false" XMLName="Passwd" />
+				
+				<Attribute ColumnName="PAYLOAD_ID" DataType="Text-255" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="PayloadId" />
+				<Attribute ColumnName="BUYER_COOKIE" DataType="Text-255" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="BuyerCookie" />
+				<Attribute ColumnName="FROM_IDENTITY" DataType="Text-255" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="FromIdentity" />
+				<Attribute ColumnName="TO_IDENTITY" DataType="Text-255" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="ToIdentity" />
+				<Attribute ColumnName="RETURN_URL" DataType="Text-2000" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="ReturnUrl" />
+				
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Created TimeStamp" Nullable="false" XMLName="CreateTs" />
+			</Attributes>
+			
+			<PrimaryKey Name="CXML_SESSION_PK">
+				<Attribute ColumnName="PUNCHOUT_CXML_SESSION_ID" />
+			</PrimaryKey>
+			
+		</Entity>
+	</Entities>
+</DBSchema>

@@ -53,8 +53,8 @@
 					shareSelectAll(false);
 				},
 				'autoDimensions'	: false,
-				'width' 			: 820,
-				'height' 			: 250  
+				'width' 			: 748,
+				'height' 			: 272 
 			});
 			
 			$("#dlgImportItemsLink").fancybox({
@@ -670,36 +670,33 @@
 				<div class="mil-lists-toolbar" style="margin-right:0">
 					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
 					
-					<div class="search-pagination search-pagination-top clearboth addpadtop5">
-						<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}"
-								showFirstAndLast="False" urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
-					</div>
+					<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
 				</div>
-				
-				<table id="mil-list" class="standard-table" style="margin:0px">
+				<div class="clearfix"></div>
+				<table id="mil-list" class="standard-table addmargintop5" >
 					<swc:sortctl sortField='%{orderByAttribute}' sortDirection='%{orderDesc}' down="Y" up="N" urlSpec='%{#milListSortURL}'>
-						<tbody>
-							<tr id="none" class="table-header-bar ">
-								<td class="left-cell left-rounded-corner" >
+						
+							<tr id="none">
+								<th class="width-460">
 									<swc:sortable fieldname="%{'ListName'}">
 										<span class="white"> Name</span>
 									</swc:sortable>
-								</td>
-								<td class="list-of-lists-header fixwidth200">
+								</th>
+								<th class="width-140">
 									<swc:sortable fieldname="%{'ModifyUserName'}">
 										<span class="white">Last Modified By</span>
 									</swc:sortable>
-								</td>
-								<td class="list-of-lists-header">
+								</th>
+								<th class="width-140">
 									<swc:sortable fieldname="%{'Modifyts'}">			
 										<span class="white">Last Modified</span>
 									</swc:sortable>
-								</td>
-								<td class="right-rounded-corner" align="center" colspan="2">
+								</th>
+								<th>
 									&nbsp;
-								</td>
+								</th>
 							</tr>
-							
+							<tbody>
 							<s:set name="listModifiedByMap" value="getListModifiedByMap()" />
 							<s:set name="listSizeMap" value="getListSizeMap()" />		
 							<s:iterator status="status" id="item" value="listOfItems">
@@ -790,10 +787,10 @@
 									<s:if test="#status.last" > last</s:if>">
 									<td class="left-cell">
 										<s:if test='%{#sharePrivateFlag.trim() != ""}'>
-											<img id="whitecart" class="mil-list-row-icon" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_personal_list.png"/>
+											<img id="whitecart" class="mil-list-row-icon float-left" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_personal_list.png"/>
 										</s:if>
 										<s:else>
-											<img id="whitecart" class="mil-list-row-icon" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_shared_list.png"/>
+											<img id="whitecart" class="mil-list-row-icon float-left" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_shared_list.png"/>
 										</s:else>
 										<s:a  href="javascript:doAction('view', '%{#uId}'); ">
 											<s:property value="#name" /> (<s:property value="#numOfItems" />)
@@ -836,12 +833,8 @@
 				</table>
 				
 				<div class="mil-lists-toolbar" style="margin-right:0">
-					<div class="search-pagination search-pagination-bottom clearboth addpadtop5">
-						<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}"
-								showFirstAndLast="False" urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
-					</div>
-					
-					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
+					<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
+					<input name="button" type="button" class="btn-gradient floatright addmargintop10" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
 				</div>
 				
 			</div> <%-- / container mil-list --%>

@@ -92,21 +92,16 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 					<p><a class="underlink" href="<s:url action="forgotPwd" namespace="/home" />"><s:text name="login.forgotPwd"/></a></p>
 					
 					<div class="button-row">
-						<input type="button"  id="loginFormSignInLink" class="btn-gradient addmarginright10" value="Sign In"/> 
-						<%-- <a href="<s:property value='MyRegisterUserURL' />" class="underlink addpadleft20">Register</a> --%>
-						<input id="registerId" class="btn-neutral" type="button" value="Register"/>
+						<input type="button"  id="loginFormSignInLink" class="btn-gradient addmarginright10 float-left" value="Sign In"/>
+						<s:if test='%{#RememberMeRule=="Y"}'>
+						<div class="login-remember"> <input id="remember.me" name="RememberMe" tabindex="3" type="checkbox"/>
+							<div class="txt-sml-gry">Remember Me</div>
+						</div>
+						</s:if>
 					</div>
 					
 					<%-- eb-2749: in order for IE to remember the password, we must submit the form using a real button --%>
 					<input type="submit" id="loginFormSubmitButton" name="submitForm" value="Submit" style="position:absolute;left:-9999px" />
-
-					<s:if test='%{#RememberMeRule=="Y"}'>
-						<p> <input type="checkbox" id="remember.me" name="RememberMe"
-							checked="checked" tabindex="3">
-						<label class="txt-sml-gry">&nbsp;Remember Me</label>
-						<p/>
-					</s:if>
-								
 				 <s:set name="displayError" value="N" />
 					<% if(null != request.getParameter("fromRegisterPage") && !request.getParameter("fromRegisterPage").equals("Y")) { %>
 					<s:if
@@ -133,17 +128,20 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 					<%	}
 					%>
 					
-					<s:hidden name="EnterpriseCode" value="%{#wcCtx.getStorefrontId()}" />						
-				<p/>
-				<div>
-					<s:action name="xpedxDynamicPromotionsAction" executeResult="true" namespace="/common" >
-							<s:param name="callerPage">SignInPageSide</s:param>
-						</s:action>
+					<s:hidden name="EnterpriseCode" value="%{#wcCtx.getStorefrontId()}" />	
+					
+				<div class="clearfix"></div>
+				<div class="login-register addpadtop20">
+					<s:if test="#sfid=='xpedx'">
+					<h3>Not currently an xpedx.com customer?</h3></s:if>
+					<s:else><h3>Not currently a Saalfeld </br>online customer?</h3></s:else>
+					<p class="addmarginbottom10">Create an account to shop online.</p>
+					<input id="registerId" class="btn-gradient" type="button" value="Register"/>
 				</div>
-					</s:form>	
-			</td>
-		</tr>
-		<tr>
+			</s:form>	
+		</td>
+	</tr>
+<tr>
 		
 		<%-- start of Fix : JIRA - 3385 --%>
 			<!--  td class="stores-cell">

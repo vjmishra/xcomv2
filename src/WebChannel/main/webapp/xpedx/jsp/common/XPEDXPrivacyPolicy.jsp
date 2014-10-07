@@ -5,7 +5,7 @@
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 <s:set name='isGuestUser' value="wCContext.guestUser" />
-
+<s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>

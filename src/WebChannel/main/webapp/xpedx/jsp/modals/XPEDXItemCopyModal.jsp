@@ -25,27 +25,22 @@
 
 <div style="display: none;">
 
-	<div id="dlgShareListHL" class="xpedx-light-box" style="width: 750px !important; height:450px">
-		<h2 id="smilTitleHL"><s:text name="MSG.SWC.MIL.COPYMIL.GENERIC.DLGTITLE" /></h2>
+	<div id="dlgShareListHL" class="xpedx-light-box">
+		<h1 id="smilTitleHL"><s:text name="MSG.SWC.MIL.COPYMIL.GENERIC.DLGTITLE" /></h1>
 		
 		<!-- CODE_START MIL - PN --> 
 		<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 		<s:form id="XPEDXMyItemsDetailsChangeShareListHL" name="XPEDXMyItemsDetailsChangeShareListHL" action="MyItemsDetailsChangeShareList" namespace="/myItems" method="post">
 		
-			<p>Name</p>
-			<div class="clear"></div>
-		
+			<p class="addmargintop0">Name</p>
 			<input type="text" id="listNameHL" class="x-input text standard-textbox"
 				 name="listName" value="" maxlength="35"
 				onkeyup="javascript:listNameCheckHL(this);"
 				onmouseover="javascript:listNameCheckHL(this);" />
 			
 			<p>Description</p>
-			<div class="clear"></div>
 			<textarea style="" rows="2" id="listDescHL" name="listDesc" value="" onkeyup="javascript:restrictTextareaMaxLength(this,255);"
 					maxlength="250" title="Description" class="x-input standard-textarea"></textarea>
-			
-			
 			<s:set name='appFlowContext' value='#session.FlowContext' />
 			<s:set name='isFlowInContext' value='#util.isFlowInContext(#appFlowContext)' />
 			<s:set name='orderHeaderKey' value='%{#appFlowContext.key}' />
@@ -152,7 +147,7 @@
 							});
 						}
 					</script>
-					<s:div id="divMainShareListHL" cssClass="grey-msg x-corners" cssStyle="height:110px; width:740px; overflow:auto;">
+					<s:div id="divMainShareListHL" cssClass="grey-msg x-corners addmargintop10" cssStyle="height:110px; width:740px; overflow:auto;">
 						<!-- CONTENT WILL GO HERE -->
 					</s:div>
 				

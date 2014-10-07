@@ -5,8 +5,8 @@
 
 	<div style="display: none;">
 	<a id="dlgAddToListLink" href="#dlgAddToList">Select a WishList</a>		
-		<div id="dlgAddToList" class="xpedx-light-box ui-addTrPad" style="width:360px; height:242px;overflow:hidden;">
-				<div class="ui-addTrPad-head">Select My Items List</div>
+		<div id="dlgAddToList" class="xpedx-light-box">
+				<h1>Select My Items List</h1>
 				<div class="legend">
 				  <div class="personal">Personal</div>
 				  <div class="shared">Shared</div>
@@ -20,9 +20,9 @@
 				</s:form>
 			<ul id="tool-bar" class="line-spacing">
 			<div id="addItemListButton" style="display:none;" >
-				<li style="float: right;"><a class="green-ui-btn" href='javascript:addItemsToList();'><span>Apply</span></a></li>
+				<li style="float: right;"><a class="btn-gradient" href='javascript:addItemsToList();'><span>Apply</span></a></li>
 			</div>
-				<li style="float:right; margin-right:5px;" ><a class="grey-ui-btn" href="javascript:$.fancybox.close()" 
+				<li style="float:right; margin-right:5px;" ><a class="btn-neutral" href="javascript:$.fancybox.close()" 
 					onclick="$('#fancybox-close').click();return false;"><span>Cancel</span></a></li>
 				<li style="margin-left:1px;" ><a class="modal" id="dlgShareListLinkHL1" href="#dlgShareListHL" >Create New List</a></li>					
 			</ul>

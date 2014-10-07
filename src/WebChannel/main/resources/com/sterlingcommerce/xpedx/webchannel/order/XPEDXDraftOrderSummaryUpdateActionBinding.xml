@@ -30,6 +30,7 @@
    -->
     <!-- Added entry for binding Customer PO Number  -->
    	<entry key="customerPoNumber">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@CustomerPONo,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@CustomerPONo,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/@CustomerPONo</entry>
+   	<entry key="requestDeliveryDate">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@ReqDeliveryDate,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@ReqDeliveryDate,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/@ReqDeliveryDate</entry>
     
     <!-- Save cart summary information (same as draftOrderSummaryUpdate) on orderplace: RUgrani -->
     <entry key="extnEnvtId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnEnvtId,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnEnvtId</entry>

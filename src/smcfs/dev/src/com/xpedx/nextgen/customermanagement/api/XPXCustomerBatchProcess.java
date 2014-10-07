@@ -526,7 +526,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									reportParentSAPChangeDoc.getDocumentElement().setAttribute("Subject", subjectLine.toString());
 									
 									StringBuffer reportParentSAPChangeEmailID = new StringBuffer();
-									reportParentSAPChangeEmailID.append(YFSSystem.getProperty("fromAddress.username")).append("@").append(emailBrand);
+									
+									if(reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE).equalsIgnoreCase("xpedx")){
+										reportParentSAPChangeEmailID.append(YFSSystem.getProperty("EMailFromAddresses"));
+									}else if(reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE).equalsIgnoreCase("Saalfeld")){
+											reportParentSAPChangeEmailID.append(YFSSystem.getProperty("saalFeldEMailFromAddresses"));
+									}
 									reportParentSAPChangeDoc.getDocumentElement().setAttribute("FromEmailID", reportParentSAPChangeEmailID.toString());
 									reportParentSAPChangeDoc.getDocumentElement().setAttribute("ToEmailID", YFSSystem.getProperty("reportParentSAPChangeToEmailID")) ;
 									XPXEmailUtil.insertEmailDetailsIntoDB(env,reportParentSAPChangeDoc.getString(), "PARENT_SAP_CHANGE_EMAIL", subjectLine.toString(), reportParentSAPChangeEmailID.toString(), reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE),existingMSAPNumber);

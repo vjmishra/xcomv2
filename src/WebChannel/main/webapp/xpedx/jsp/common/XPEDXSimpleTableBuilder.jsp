@@ -27,14 +27,15 @@ Class Model for this component:
 --%>
 <%--<swc:sortctl sortField="'sortField'" sortDirection="'sortDirection'"
     down="'sortDown'" up="'sortUp'" urlSpec="sortURL'">--%>
-<table class="<s:property value='cssClass'/> standard-table"
+    
+<table class="<s:property value='cssClass'/> standard-table addmargintop5"
        id="<s:property value='id'/>" summary="<s:property value='summary'/>">
 <!--        <tr id="none" class="table-header-bar">-->
 <!-- Arun Changing for carts listing page - have to customize this if there is a conflict with other ones -->
-		 <tr id="top-bar" class="header">
+		 <tr>
 		  <s:iterator value="columnSpecs" id="columnSpec" status="headerStatus">
              	
-                <td  align="<s:if test="#headerStatus.first"></s:if><s:else>center</s:else>" class="<s:property value='#columnSpec.labelCssClass'/>"
+                <th  align="<s:if test="#headerStatus.first"></s:if><s:else>center</s:else>" class="<s:property value='#columnSpec.labelCssClass'/>"
                     id="<s:property value='#columnSpec.columnId'/>" <s:if test="#headerStatus.last">colspan="2"</s:if>>
                     <s:if test="#columnSpec.sortable">
                         <swc:sortable fieldname="#columnSpec.dataField">
@@ -46,7 +47,7 @@ Class Model for this component:
                        <span class="cm-sort underlink"><s:property value="getText(#columnSpec.label)"/></span>
 <%--                        <a class="cm-sort underlink" href="#"><s:property value="getText(#columnSpec.label)"/></a> --%>
                     </s:else>
-                </td>
+                </th>
             </s:iterator>
         </tr>
                             <%-- bb4 --%>
