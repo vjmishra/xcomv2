@@ -6,11 +6,21 @@
 	<property name="swc_build_dir" value="${swc_exploded_dir}" />
 	<property name="classes_dir" value="${swc_build_dir}/WEB-INF/classes" />
 	<property name="mashupxmlsDestinationDir" value="${swc_exploded_dir}/mashupxmls/webchannel/extn/swc" />
-
+	<property name="destination_WEBINF_dir" value="${swc_exploded_dir}/WEB-INF" />
+	
 	<target name="clean">
+		<echo message="Deleting ${classes_dir}/com/*"/>
 		<delete includeemptydirs="true">
 			<fileset dir="${classes_dir}" includes="com/*" />
 		</delete>
+		<echo message="Deleting ${destination_WEBINF_dir}/classes/com"/>
+		<!-- Force-Delete the deployments/exploded classes/com directory.	-->
+		<delete includeemptydirs="true" dir="${destination_WEBINF_dir}/classes/com" />
+		<echo message="Deleting ${destination_WEBINF_dir}/classes/sterlingcommerce"/>
+		<!-- Force-Delete the deployments/exploded classes/sterlingcommerce directory.	-->
+		<delete includeemptydirs="true" dir="${destination_WEBINF_dir}/classes/sterlingcommerce" />
+			
+		
 		<delete includeemptydirs="true">
 			<fileset dir="${swc_build_dir}">
 				<include name="${swc_custom_dir}/**" />

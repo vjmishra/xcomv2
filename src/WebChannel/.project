@@ -3,6 +3,7 @@
 	<name>WebChannel</name>
 	<comment></comment>
 	<projects>
+		<project>smcfs</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

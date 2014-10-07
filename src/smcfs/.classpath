@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/xpedx/nextgen/priceAndAvailabilityService/" kind="src" path="dev/src"/>
+	<classpathentry kind="src" path="dev/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="WEBLOGIC_HOME/server/lib/weblogic.jar"/>
 	<classpathentry kind="var" path="SMCFS_WAR/WEB-INF/lib/activation-1.1.jar"/>
@@ -253,5 +253,7 @@
 	<classpathentry kind="var" path="SMCFS_WAR/WEB-INF/lib/ypmbe.jar"/>
 	<classpathentry kind="var" path="SMCFS_WAR/WEB-INF/lib/yscpbe.jar"/>
 	<classpathentry kind="var" path="SMCFS_WAR/WEB-INF/lib/yscwbe.jar"/>
+	<classpathentry kind="var" path="SMCFS_WAR"/>
+	<classpathentry kind="lib" path="C:/deployments/smcfs/WEB-INF/lib/opencsv-2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
