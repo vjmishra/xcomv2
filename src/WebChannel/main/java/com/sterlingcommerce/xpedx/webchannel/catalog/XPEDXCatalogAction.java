@@ -74,10 +74,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	private static final Logger log = Logger.getLogger(XPEDXCatalogAction.class);
 
-	// variables for filters
-	private boolean isStockedItem = false;
-	private boolean isContractItem = false;
-	private boolean isBestSellerItem = false;
+	// variables based on checkbox filters in UI
+	private boolean isStockedFilter = false;
+	private boolean isContractFilter = false;
+	private boolean isBestSellerFilter = false;
 	private boolean stockedCheckeboxSelected;
 	private boolean contractCheckboxSelected;
 	private boolean bestSellerCheckboxSelected;
@@ -393,7 +393,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 		Object sessionStockedCheckbox = getWCContext().getWCAttribute(STOCKED_CHECKBOX, WCAttributeScope.SESSION);
 		if (sessionStockedCheckbox != null) {
-			isStockedItem = sessionStockedCheckbox.toString().equalsIgnoreCase("true");
+			isStockedFilter = sessionStockedCheckbox.toString().equalsIgnoreCase("true");
 		}
 	}
 
@@ -410,7 +410,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 		Object contractCheckboxSelected = getWCContext().getWCAttribute(CONTRACT_CHECKBOX, WCAttributeScope.SESSION);
 		if (contractCheckboxSelected != null) {
-			isContractItem = contractCheckboxSelected.toString().equalsIgnoreCase("true");
+			isContractFilter = contractCheckboxSelected.toString().equalsIgnoreCase("true");
 		}
 	}
 
@@ -427,7 +427,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 		Object bestSellerCheckboxSelected = getWCContext().getWCAttribute(BESTSELLER_CHECKBOX, WCAttributeScope.SESSION);
 		if (bestSellerCheckboxSelected != null) {
-			isBestSellerItem = bestSellerCheckboxSelected.toString().equalsIgnoreCase("true");
+			isBestSellerFilter = bestSellerCheckboxSelected.toString().equalsIgnoreCase("true");
 		}
 	}
 
@@ -886,6 +886,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			searchTerm="";
 			setStockedItemFromSession();
 			setContractItemFromSession();
+			setBestSellerItemFromSession();
 			List<String> specialWords = Arrays.asList(luceneEscapeWords);
 
 			for (String searchStringToken : searchStringTokenList) {
@@ -903,7 +904,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
 						// eb-3685: marketing group search 'search within results' cannot use SHOULD
-						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem && !isContractItem && !isBestSellerItem) {
+						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedFilter && !isContractFilter && !isBestSellerFilter) {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "SHOULD");
 
 						} else {
@@ -980,7 +981,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 		setStockedItemFromSession();
 		shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-		if (isStockedItem) {
+		if (isStockedFilter) {
 			if (shipToCustomer == null) {
 				XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(), getWCContext().getStorefrontId()).getDocumentElement());
 				setShipToCustomer((XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER));
@@ -996,7 +997,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 
 		setContractItemFromSession();
-		if (isContractItem) {
+		if (isContractFilter) {
 			String billToCustomer = shipToCustomer.getBillTo().getCustomerID();
 			if (billToCustomer != null && billToCustomer.trim().length() > 0) {
 				String[] billToParts = billToCustomer.split("-");
@@ -1009,7 +1010,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 
 		setBestSellerItemFromSession();
-		if (isBestSellerItem) {
+		if (isBestSellerFilter) {
 			elements = SCXmlUtil.getElements(mashupInput, "Terms");
 			Element term = createTerm(elements, mashupInput, TERMS_NODE);
 			term.setAttribute("Condition", "MUST");
@@ -2176,7 +2177,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 
 		setStockedItemFromSession();
-		if (isStockedItem || isContractItem || isBestSellerItem) {
+		if (isStockedFilter || isContractFilter || isBestSellerFilter) {
 			setsearchMetaTag(true);
 		}
 

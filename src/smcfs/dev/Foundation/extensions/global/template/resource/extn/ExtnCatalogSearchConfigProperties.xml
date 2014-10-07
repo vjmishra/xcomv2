@@ -21,8 +21,8 @@
 							IndexFieldName="contractBillTos" Searchable="Y"
 							UseSynonyms="N" Sortable="N"/>
 						<Attribute IndexFieldName="Item.ExtnSourcingStatus"
-							XMLName="ExtnSourcingStatus" DefaultWeight="1.0" Index="NOT_ANALYZED"
-							Store="Y" UseSynonyms="N" Searchable="Y" Sortable="Y" />
+							XMLName="ExtnSourcingStatus" DefaultWeight="1.0" Index="ANALYZED"
+							Store="Y" UseSynonyms="N" Searchable="Y" Sortable="N" />
 						<Attribute IndexFieldName="Item.ExtnMpc"
 							XMLName="ExtnMpc" DefaultWeight="1.0" Index="NOT_ANALYZED"
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
