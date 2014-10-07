@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import com.reports.service.webi.ReportUtils;
 import com.sterlingcommerce.webchannel.core.wcaas.Logout;
-import com.sterlingcommerce.xpedx.webchannel.common.CookieUtil;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 //ML:  - EB-7221 - add imports to perform loggoff BI4 to keep sessions to a minimum.
 import java.util.ArrayList;
@@ -26,27 +25,27 @@ import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
 public class XPEDXLogoutAction extends Logout {
-
-	private static final Logger LOG = Logger.getLogger(XPEDXLogoutAction.class);
-
-	@Override
+	
+	private static final Logger LOG = Logger
+	.getLogger(XPEDXLogoutAction.class);
+	
 	public String execute() {
-		SCUIContext scuiContext = getWCContext().getSCUIContext();
-
-		String returnType = "WebUser";
+		String returnType="WebUser";
 		String isSalesRep = null;
 		String result = "";
 		
 		
 		final DefaultHttpClient httpClient = new DefaultHttpClient();
 		
+		if(getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP")!=null){
+			isSalesRep=(String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
 		}
-		if (isSalesRep != null && isSalesRep.equalsIgnoreCase("true")) {
-			returnType = "SalesRepUser";
+		if( isSalesRep!= null && isSalesRep.equalsIgnoreCase("true")){
+			returnType="SalesRepUser";
 		}
 		boolean isPunchoutUser = XPEDXWCUtils.isPunchoutUser(getWCContext());
-		if (isPunchoutUser) {
-			returnType = "punchoutUser";
+		if(isPunchoutUser){
+			returnType="punchoutUser";
 		}
 		//Logoff BI4 - EB-7221
 		ArrayList<String> logonTokens = null;
@@ -62,18 +61,14 @@ public class XPEDXLogoutAction extends Logout {
 			//remove the token from session
 			getWCContext().getSCUIContext().getSession().removeAttribute("logonTokens");
 			
-		}
-		
+		}		
 				
 		try {
 			super.execute();
 		} catch (Exception e) {
 			LOG.error("Error during logout " + e.getMessage());
-		}
+		}		
 		
-
-		CookieUtil.deleteCookie(scuiContext.getRequest(), scuiContext.getResponse(), CookieUtil.PUNCHOUT);
-
 		return returnType;
 	}
 
