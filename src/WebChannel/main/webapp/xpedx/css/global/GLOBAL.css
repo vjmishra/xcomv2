@@ -6571,6 +6571,10 @@ table#top-section td, table#top-section-right td, table#OD-top-section-right td
  margin-top: 5px;
  margin-bottom: 5px;
 }
+.top-section div.margin-adjust
+{
+margin-top:-3px
+}
 .rounded-border
 {
     float: none;
