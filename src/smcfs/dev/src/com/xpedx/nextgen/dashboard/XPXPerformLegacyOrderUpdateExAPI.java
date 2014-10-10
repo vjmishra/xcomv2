@@ -2544,7 +2544,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (rootEle.hasAttribute("EnterpriseCode")) {
 			String orgCode = rootEle.getAttribute("EnterpriseCode");
 			if (YFCObject.isNull(orgCode) || YFCObject.isNull(orgCode)) {
-				throw new Exception("Attribute EnterpriseCode cannot be NULL or Void!");
+				throw new Exception("Customer doesn’t exist in web. So attribute EnterpriseCode is NULL or Void!");
 			}
 			custInXMLEle.setAttribute("OrganizationCode", orgCode);
 		} else {
