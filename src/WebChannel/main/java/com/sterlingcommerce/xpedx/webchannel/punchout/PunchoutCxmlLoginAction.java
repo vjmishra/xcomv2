@@ -10,7 +10,8 @@ import com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutC
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 /**
- * After the CXML authentication handshake (see identity/secret in XPEDXPunchoutServlet), the user is returned a url that points to this action.
+ * After the CXML authentication handshake (see identity/secret in XPEDXPunchoutCxmlServlet),
+ * the user is returned a url that points to this action.
  * This action uses the seesionId parameter to fetch the CXML settings (user, password, etc).
  * @see XPEDXPunchoutCxmlServlet
  */

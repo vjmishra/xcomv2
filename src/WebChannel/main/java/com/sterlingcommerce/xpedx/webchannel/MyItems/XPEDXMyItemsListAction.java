@@ -8,15 +8,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
@@ -31,7 +28,7 @@ import com.yantra.yfc.dom.YFCDocument;
 
 @SuppressWarnings("serial")
 public class XPEDXMyItemsListAction extends WCMashupAction {
-	
+
 	private static final Logger LOG = Logger.getLogger(XPEDXMyItemsListAction.class);
 	private Document outDoc;
 	private String userHRY			= "";
@@ -56,9 +53,9 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
     private String modifyts;
     private String createUserId;
     private String modifyUserid;
-    
-    
-	
+
+
+
 	public String getModifyts() {
 		return modifyts;
 	}
@@ -126,7 +123,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 		this.pageSize = pageSize;
 	}
 
-	
+
 
 	public Boolean getIsFirstPage() {
 		return isFirstPage;
@@ -167,7 +164,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 		this.totalNumberOfPages = totalNumberOfPages;
 	}
 
-	
+
 	public String getShareList() {
 		return ShareList;
 	}
@@ -228,7 +225,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	private HashMap<String, HashMap<String,String>> assignedCustomersMap;
 	private HashMap<String, String> listSizeMap = new HashMap<String, String>();
 	private HashMap<String, String> listModifiedByMap = new HashMap<String, String>();
-	
+
 	public HashMap<String, String> getListSizeMap() {
 		return listSizeMap;
 	}
@@ -239,8 +236,8 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	}
 
 	private boolean filterByMyListChk 	= false;
-	private String 	uniqueId 			= ""; 
-	
+	private String 	uniqueId 			= "";
+
 	public static final String COMMAND_COPY_LIST 	= "copy_list";
 	public static final String COMMAND_VIEW_LIST 	= "view_list";
 	private String command = COMMAND_VIEW_LIST;
@@ -252,31 +249,31 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	private boolean canSaveItem		= true;
 	private boolean canDeleteItem	= true;
 	private boolean canShare		= false;
-	
+
 	private String orderByLastModified = "asc";
-	
+
 	private String sharePermissionLevel = "";
 	private String rbPermissionShared = "";
 	private String rbPermissionPrivate = "";
-	
+
 	private boolean filterBySelectedListChk = false;
 	private boolean filterByAllChk = false;
 	private boolean filterBySharedLocations = false;
 	private boolean deleteClicked = false;
-	
-	
-	
+
+
+
 	/**
-	 * This method is used to get the Shared List or Names of the default shipTo or 
+	 * This method is used to get the Shared List or Names of the default shipTo or
 	 * while getting the lists of different locations
 	 */
 	private void generateSelectedLists(){
 		try {
-			
+
 			setSharedListOrValues(new ArrayList<String>());
 			setSharedListOrNames(new ArrayList<String>());
 			if(ShareList!=null )
-			{    
+			{
 				if(ShareList.length()>0)
 			     {
 				filterByAllChk=true;
@@ -296,7 +293,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 				}
 				String[] customerList = getCustomerIds();
 				/*
-				 * If this customerPath is also included in the Query, Then it fetches all the shared lists shared with 
+				 * If this customerPath is also included in the Query, Then it fetches all the shared lists shared with
 				 * all the customers below that particular customer. Say if Bill1 is selected, then if customer paths is included in the Query
 				 * it fetches all the shared lists which are shared with all the ship to's under Bill1 also.
 				 * Right Now When Bill1 is selected. It s
@@ -327,7 +324,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					customerList = new String[] {getWCContext().getCustomerId()};
 					if(customerPathOfCurrentShipTo!=null)
 						customerList = customerPathOfCurrentShipTo.split("\\|");
-					
+
 					if(customerList!=null){
 							for (int i=0; i< customerList.length; i++) {
 								String customerId = customerList[i];
@@ -337,17 +334,17 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 						}
 				}
 			}else if(getFilterByAllChk()){// on landing page - home page
-				
+
 				/*getSharedListOrNames().add("CustomerID");
 				getSharedListOrValues().add(getWCContext().getCustomerId());*/
-				
+
 				//Fetches all the assigned customers along with the ship-to
-				//and gets the MILs shared with these customers. 
+				//and gets the MILs shared with these customers.
 				String customerPathOfCurrentShipTo = XPEDXMyItemsUtils.getCustomerPathAsHRY(getWCContext().getSCUIContext(), getWCContext().getCustomerId(), getWCContext().getStorefrontId());
 				String[] customerList = new String[] {getWCContext().getCustomerId()};
 				if(customerPathOfCurrentShipTo!=null)
 					customerList = customerPathOfCurrentShipTo.split("\\|");
-				
+
 				if(customerList!=null){
 					for (int i=0; i< customerList.length; i++) {// admin
 						String customerId = customerList[i];
@@ -356,22 +353,22 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					}
 				}
 			}
-			
+
 			//Add the current user as owner
 			getSharedListOrNames().add("Createuserid");
 			getSharedListOrValues().add(XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()));
-			
+
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 		}
 	}
 	private void generateSelectedLists(boolean flag){
 		try {
-			
+
 			setSharedListOrValues(new ArrayList<String>());
 			setSharedListOrNames(new ArrayList<String>());
 			if(ShareList!=null )
-			{    
+			{
 				if(ShareList.length()>0)
 			     {
 				filterByAllChk=true;
@@ -391,7 +388,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 				}
 				String[] customerList = getCustomerIds();
 				/*
-				 * If this customerPath is also included in the Query, Then it fetches all the shared lists shared with 
+				 * If this customerPath is also included in the Query, Then it fetches all the shared lists shared with
 				 * all the customers below that particular customer. Say if Bill1 is selected, then if customer paths is included in the Query
 				 * it fetches all the shared lists which are shared with all the ship to's under Bill1 also.
 				 * Right Now When Bill1 is selected. It s
@@ -423,7 +420,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					String shipToCustomerID="";
 					String billToCutomerID="";
 					String msapCustomerID=(String)wcContext.getSCUIContext().getSession().getAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_ID);
-					
+
 					// = (String) wcContext.getSCUIContext().getSession().getAttribute("customerPathOfCurrentShipTo");
 					/*if(customerPathOfCurrentShipTo == null || customerPathOfCurrentShipTo.trim().equals("")){
 					customerPathOfCurrentShipTo = XPEDXMyItemsUtils.getCustomerPathAsHRY(getWCContext().getSCUIContext(), getWCContext().getCustomerId(), getWCContext().getStorefrontId());
@@ -444,7 +441,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					//JIRA 4245 End - Performance Issue
 					customerList = new String[] {shipToCustomerID,billToCutomerID,sapCustomerID,msapCustomerID};
 					/*if(customerPathOfCurrentShipTo!=null)
-						customerList = customerPathOfCurrentShipTo.split("\\|");		*/			
+						customerList = customerPathOfCurrentShipTo.split("\\|");		*/
 					if(customerList!=null){
 							for (int i=0; i< customerList.length; i++) {// admin
 								String customerId = customerList[i];
@@ -454,17 +451,17 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 						}
 				}
 			}else if(getFilterByAllChk()){// on landing page - home page
-				
+
 				/*getSharedListOrNames().add("CustomerID");
 				getSharedListOrValues().add(getWCContext().getCustomerId());*/
-				
+
 				//Fetches all the assigned customers along with the ship-to
-				//and gets the MILs shared with these customers. 
+				//and gets the MILs shared with these customers.
 				String customerPathOfCurrentShipTo = XPEDXMyItemsUtils.getCustomerPathAsHRY(getWCContext().getSCUIContext(), getWCContext().getCustomerId(), getWCContext().getStorefrontId());
 				String[] customerList = new String[] {getWCContext().getCustomerId()};
 				if(customerPathOfCurrentShipTo!=null)
 					customerList = customerPathOfCurrentShipTo.split("\\|");
-				
+
 				if(customerList!=null){
 					for (int i=0; i< customerList.length; i++) {// admin
 						String customerId = customerList[i];
@@ -473,11 +470,11 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					}
 				}
 			}
-			
+
 			//Add the current user as owner
 			getSharedListOrNames().add("Createuserid");
 			getSharedListOrValues().add(XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()));
-			
+
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 		}
@@ -491,7 +488,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	private String[] getAssignedCustomers(String[] customerList) {
 		HashMap<String, ArrayList<String>> customerAssignmentsMap;
 		try {
-			
+
 			String[] customersFromCustomerpaths;
 			Set<String> both = new HashSet<String>();
 			for(int i=0; getCustomerPaths()!=null && i< getCustomerPaths().length; i++){
@@ -501,16 +498,16 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 				    Collections.addAll(both, customersFromCustomerpaths);
 				}
 			}
-			
+
 			if(customerList.length>0){
 				Collections.addAll(both, customerList);
 			}
 			return both.toArray(new String[both.size()]);
-			
+
 			/*customerAssignmentsMap = XPEDXWCUtils.getAssignedCustomersMap(
-					XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()) , 
+					XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()) ,
 					getWCContext().getLoggedInUserId());
-		
+
 			Set<String> keys = customerAssignmentsMap.keySet();
 			HashSet<String> customerSet = new HashSet<String>();// using set to make sure no duplicates are present
 			if(keys!=null && !keys.isEmpty())
@@ -527,7 +524,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					}
 				}
 			}
-			
+
 			for(String selectedCustomerId : customerList){
 				if(!YFCUtils.isVoid(selectedCustomerId))
 					customerSet.add(selectedCustomerId);
@@ -535,12 +532,12 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 
 			customerList = (String[]) customerSet.toArray(new String[customerSet.size()]);
 */
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return customerList;
 	}
 
@@ -554,10 +551,10 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 		}
-		
+
 		return res;
 	}
-	
+
 	/*private void setModifyMap() {
 		Set<String> userNames = new HashSet<String>();
 		if(listModifiedByMap!=null && listModifiedByMap.size()>0) {
@@ -575,9 +572,9 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					exp.setAttribute("Value", userId);
 					SCXmlUtil.importElement(OrElem, exp);
 				}
-				
+
 				Element output =(Element) WCMashupHelper.invokeMashup("xpedxGetContactUserName", input, getWCContext().getSCUIContext());
-			
+
 				if(output!=null){
 					for(String listKey : listModifiedByMap.keySet()) {
 						String modifyBy = listModifiedByMap.get(listKey);
@@ -614,10 +611,10 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	public String execute() {
 		try {
 			Map<String, Element> out;
-			
+
 			//set some vars
 			setCustomerId(XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()));
-			
+
 			//Generate the shared list "or" values
 			setSharePrivate(getWCContext().getLoggedInUserId());
 //			setUserHRY(XPEDXMyItemsUtils.getCustomerPathAsHRY(getWCContext()));// This is same as getting path for the Logged in customer which is MSAP
@@ -630,28 +627,28 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 			     }
 			}
 			/**
-			 * Changes Start for CR 2774 
+			 * Changes Start for CR 2774
 			 * According to CR 2774 -Showing both persional and share records by default
-			 * 
+			 *
 			 * */
 				//generateSelectedLists();
 				generateSelectedLists(true);
-				
+
 				Element inXML = formInputXML();
-				
+
 				Object obj = WCMashupHelper.invokeMashup(
 						"XPEDXLandingMyItemsList", inXML, getWCContext()
 								.getSCUIContext());
 				outDoc = ((Element) obj).getOwnerDocument();
 				parsePageInfo(outDoc.getDocumentElement(), true);
-				
+
 				List<Element> itemLists = SCXmlUtil.getElements(outDoc.getDocumentElement(), "/Output/XPEDXLandingMILList/XPEDXLandingMIL");
 				setListOfItems(itemLists);
 					/*Added for Jira 4134*/
 				String modifyUsername="";
 				String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
-				
-								
+
+
 				for(Element elem : itemLists){
 					//List<Element> items = getXMLUtils().getElements(elem, "XPEDXMyItemsItemsList");
 					String itemCount="0";
@@ -659,22 +656,22 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					this.modifyUserid=elem.getAttribute("Modifyuserid");
 					this.createUserId=elem.getAttribute("Createuserid");
 					this.modifyts=elem.getAttribute("Modifyts");
-					String listKey = elem.getAttribute("MyItemsListKey");					
+					String listKey = elem.getAttribute("MyItemsListKey");
 					//Element itemElem=items.get(0);
 					itemCount=elem.getAttribute("NumberOFItems");
 					if(itemCount.trim().equals("0.00")){
 						itemCount = "0";
 					}else{
-					/*StringTokenizer st = new StringTokenizer(itemCount, ".00"); 
+					/*StringTokenizer st = new StringTokenizer(itemCount, ".00");
                     while(st.hasMoreTokens()){
                     	itemCount = st.nextToken();
                     }*/
-						String splited[]=itemCount.split("\\.00");						
+						String splited[]=itemCount.split("\\.00");
 						if(splited[0] != null)
 						itemCount=splited[0];
 
-                    
-                    }					
+
+                    }
 					listSizeMap.put(listKey, itemCount);
 					//modified for jira 4134
 					/*if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
@@ -684,19 +681,19 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 						if(YFCUtils.isVoid(this.modifyUserid)){
 							listModifiedByMap.put(listKey, modifyUserId);
 						}
-						else{						
+						else{
 								if(this.modifyUserid.contains("-M-XPED-CC.com"))
 									listModifiedByMap.put(listKey, modifyUserId);
 								else{
-									modifyUsername=XPEDXWCUtils.getLoginUserName(this.modifyUserid);					
+									modifyUsername=XPEDXWCUtils.getLoginUserName(this.modifyUserid);
 									listModifiedByMap.put(listKey, modifyUsername);
 								}
 						}
 					}//end of jira 4134*/
 					listModifiedByMap.put(listKey, modifyUserId);
 				}
-			
-			
+
+
 			if (filterByMyListChk || getFilterByAllChk()){
 				Element resultsPrivate = prepareAndInvokeMashup("XPEDXMyItemsListPrivate");
 				ArrayList<Element> tmpList = getXMLUtils().getElements(resultsPrivate, "XPEDXMyItemsList");
@@ -725,23 +722,23 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 					}
 				}
 			}
-			
+
 			//Sorting
 			boolean asc = true;
 			/*if (getOrderByLastModified().equals("desc")){ asc = false; }
 			Collections.sort(listOfItems, new XPEDXMILSortByLastModified(asc));*/
-			
+
 			//setModifyMap();
-			
+
 			processPermissions();
 			Set set = new HashSet();
 			List newList = new ArrayList();
-			
+
 			for(Element elem : listOfItems){
 				String MyItemsListKey = elem.getAttribute("MyItemsListKey");
 				if (set.add(MyItemsListKey))
 				      newList.add(elem);
-				    }			
+				    }
 			 listOfItems.clear();
 			 listOfItems.addAll(newList);
 			if (displayAsSubMenu){
@@ -750,23 +747,23 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 			if (displayAsDropdownList){
 				return "displayAsDropdownList";
 			}
-			if (displayAsRadioButton){	
+			if (displayAsRadioButton){
 				return "displayAsRadioButton";
 			}
-			
+
 			//Get the list of customers and bills tos
-			
+
 			/*try {
-				
+
 				setAssignedCustomersMap(
 					XPEDXWCUtils.getAssignedCustomersHashMap(
-						XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()) , 
+						XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()) ,
 						getWCContext().getLoggedInUserId()
 					)
 				);
-				
+
 				HashMap<String, ArrayList<String>> customerAssignmentsMap = XPEDXWCUtils.getAssignedCustomersMap(
-						XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()) , 
+						XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()) ,
 						getWCContext().getLoggedInUserId());
 				Set<String> keys = customerAssignmentsMap.keySet();
 				if(keys!=null && !keys.isEmpty())
@@ -779,34 +776,34 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 						getAssignedCustomersMap().put(currentKey, XPEDXWCUtils.getHashMapFromList(customerIdList));
 					}
 				}
-				
+
 			} catch (Exception e) {
 				LOG.error(e);
 			}*/
-			
-			
+
+
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 			XPEDXWCUtils.logExceptionIntoCent(e);   //JIRA 4289
 			return ERROR;
 		}
-		
+
 		return SUCCESS;
 	}
 
 	private void processPermissions(){
 		try {
-			
+
 			//New rules
 			if (isCurrentUserAdmin()){
 				canShare = true;
 			}
-			
+
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 		}
 	}
-	
+
 	private boolean isCurrentUserAdmin(){
 		boolean res = false;
 		try {
@@ -820,10 +817,10 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 		} catch (Exception e) {
 			LOG.error(e.toString());
 		}
-		
+
 		return res;
 	}
-	
+
 	public Document getOutDoc() {
 		return outDoc;
 	}
@@ -879,17 +876,17 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 
 
 	public void setListOfItems(List<Element> listOfItems) {
-		
+
 		try {
 			if (displayAsDropdownList){
-				Element root = (Element)getOutDoc().createElement("root");
+				Element root = getOutDoc().createElement("root");
 				root.setAttribute("Name", "Create new list");
 				root.setAttribute("MyItemsListKey", "root");
 				listOfItems.add(0, root);
 			}
 		} catch (Exception e) {
 		}
-		
+
 		this.listOfItems = listOfItems;
 	}
 
@@ -957,7 +954,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 		this.displayAsDropdownList = displayAsDropdownList;
 	}
 
-	
+
 	public boolean getDisplayAsRadioButton() {
 		return displayAsRadioButton;
 	}
@@ -1024,39 +1021,36 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 
 	public void setOrderByLastModified(String orderByLastModified) {
 		this.orderByLastModified = orderByLastModified;
-	}	
+	}
 	private Element formInputXML() throws CannotBuildInputException
 	{
 		Element input = WCMashupHelper.getMashupInput(
-				"XPEDXLandingMyItemsList", getWCContext()
-						.getSCUIContext());
-		String inputXml = SCXmlUtil.getString(input);
+				"XPEDXLandingMyItemsList", getWCContext().getSCUIContext());
 		Document inputDoc = input.getOwnerDocument();
-		
-		//NodeList milNodeList = input.getElementsByTagName("XPEDXMyItemsList");
-		//Element milNodeListEle = (Element)milNodeList.item(0);
-		
-		Element milNodeListEle = inputDoc.getDocumentElement();
-//		milNodeListEle.setAttribute("SharePrivate", getSharePrivate());
-		
-		NodeList inputNodeList = input.getElementsByTagName("Or");
-		Element inputNodeListElemt = (Element) inputNodeList.item(0);
-		Element expElement = null;
+
+		// if punchout user, then specify user on API input so filtered
+		if (XPEDXWCUtils.isPunchoutUser(getWCContext())) {
+			String userId = wcContext.getLoggedInUserId();
+			Element andNodeElement = (Element) input.getElementsByTagName("And").item(0);
+			Element expElement = YFCDocument.createDocument("Exp").getDocument().getDocumentElement();
+			expElement.setAttribute("Name", "Createuserid");
+			expElement.setAttribute("Value", userId);
+			andNodeElement.appendChild(inputDoc.importNode(expElement, true));
+		}
+
+		Element orNodeElement = (Element) input.getElementsByTagName("Or").item(0);
 		for (int i = 0; i < sharedListOrValues.size(); i++) {
-			Document expDoc = YFCDocument.createDocument("Exp").getDocument();
-			expElement = expDoc.getDocumentElement();
+			Element expElement = YFCDocument.createDocument("Exp").getDocument().getDocumentElement();
 			expElement.setAttribute("Name", sharedListOrNames.get(i));
-			expElement
-					.setAttribute("Value", sharedListOrValues.get(i));
+			expElement.setAttribute("Value", sharedListOrValues.get(i));
 			/*
-			 * Removing this as we are not supposed to fetch the 
+			 * Removing this as we are not supposed to fetch the
 			 * Lists shared with the childs of the selected customer
 			 * if(sharedListOrNames.get(i).equals("CustomerPath")){
 				expElement.setAttribute("QryType", "FLIKE");
 			}*/
 
-			inputNodeListElemt.appendChild(inputDoc
-					.importNode(expElement, true));
+			orNodeElement.appendChild(inputDoc.importNode(expElement, true));
 		}
 		Document expDoc1 = YFCDocument.createDocument("Exp").getDocument();
 		Element orderByElem=SCXmlUtil.createChild((Element)input.getElementsByTagName("XPEDXLandingMil").item(0), "OrderBy");
@@ -1066,9 +1060,9 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 		Element expElement1 = expDoc1.getDocumentElement();
 		expElement1.setAttribute("Name","SharePrivate");
 		expElement1.setAttribute("Value",getSharePrivate());
-		inputNodeListElemt.appendChild(inputDoc
+		orNodeElement.appendChild(inputDoc
 				.importNode(expElement1, true));
-	
+
 		input.setAttribute("PageNumber", getPageNumber().toString());
 		input.setAttribute("PageSize", getPageSize().toString());
 		input.setAttribute("PageSetToken", getPageSetToken());
@@ -1076,13 +1070,12 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 		valueMap.put("/Page/@PageNumber", "1");
 		valueMap.put("/Page/@PageSize", "15");
 		valueMap.put("input",input.toString());*/
-		
-		
-		inputXml = SCXmlUtil.getString(input);
-		LOG.debug("Input XML: " + inputXml);
-		
+
+		if(LOG.isDebugEnabled()) {
+			LOG.debug("Input XML: " + SCXmlUtil.getString(input));
+		}
 		return input;
-		
+
 	}
 	private void parsePageInfo(Element ele, boolean paginated) throws Exception {
 
@@ -1107,7 +1100,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
         if ((paginated) && (page != null)) {
             setPageNumber(getIntegerAttribute(page, "PageNumber", getPageNumber()));
         }
-        
+
         if ((paginated) && (page != null)) {
         	setPageSetToken(page.getAttribute("PageSetToken"));
         }
@@ -1243,7 +1236,7 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	}
 
 
-	public HashMap<String, String> getListModifiedByMap() {				
+	public HashMap<String, String> getListModifiedByMap() {
 		return listModifiedByMap;
 	}
 
@@ -1251,9 +1244,9 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	public void setListModifiedByMap(HashMap<String, String> listModifiedByMap) {
 		this.listModifiedByMap = listModifiedByMap;
 	}
-	
-	private String pageSetToken;	
-	
+
+	private String pageSetToken;
+
 	public String getPageSetToken() {
 		return pageSetToken;
 	}
@@ -1261,6 +1254,6 @@ public class XPEDXMyItemsListAction extends WCMashupAction {
 	public void setPageSetToken(String pageSetToken) {
 		this.pageSetToken = pageSetToken;
 	}
-	
+
 
 }

@@ -118,7 +118,7 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 
 		} catch(Exception e){
 			logError("Exception during authentication", e);
-			throw new WCException("Exception during XPEDXPunchoutServlet.processRequest", e);  //does this work right?
+			throw new WCException("Exception during XPEDXPunchoutCxmlServlet.processRequest", e);  //does this work right?
 		}
 	}
 
@@ -233,7 +233,7 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 			}
 		}
 		catch(Exception e) {
-			logError("Exception in XPEDXPunchoutServlet.processRequest",e);
+			logError("Exception in XPEDXPunchoutCxmlServlet.processRequest",e);
 			return sendFailureResponse("Post Authentication failed",
 					IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
 		}
