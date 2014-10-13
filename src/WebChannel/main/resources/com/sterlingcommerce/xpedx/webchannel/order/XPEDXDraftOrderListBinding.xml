@@ -8,6 +8,7 @@
   <entry key="orderDesc">xpedxDraftOrderList:/Page/API/Input/XPEDXOrderListView/OrderBy/Attribute/@Desc</entry>
   <entry key="WCContext.storefrontId">xpedxDraftOrderList:/Page/API/Input/XPEDXOrderListView/@EnterpriseCode</entry>
   <entry key="WCContext.customerId">xpedxDraftOrderList:/Page/API/Input/XPEDXOrderListView/@BuyerOrganizationCode</entry>
+  <entry key="customerContactID">xpedxDraftOrderList:/Page/API/Input/XPEDXOrderListView/@CustomerContactID</entry>
   <!-- RUgrani: Adding page size -->
   <entry key="recordPerPage">xpedxDraftOrderList:/Page/@PageSize</entry>
   

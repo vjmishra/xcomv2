@@ -2869,6 +2869,7 @@ function callAjaxForSorting(url,divId)
 	            </s:if>
 	            <s:else> <!-- Punchout user only gets My Carts so make top-level -->
 						<s:url id='myCartsLink' namespace='/order' action='draftOrderList'>
+							<s:param name="customerContactID" value="#loggedInUser" />
 						</s:url>		            	
 		            	<s:if test='#selectedHeaderTab=="OrderTab"'>
 		            		<li class="active">

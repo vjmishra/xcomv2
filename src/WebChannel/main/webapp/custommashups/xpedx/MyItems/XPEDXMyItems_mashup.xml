@@ -69,11 +69,12 @@
 					<API Name="getXPEDXLandingMilList" IsFlow="Y">
 						<Input>
 							<XPEDXLandingMil>
-
 								<ComplexQuery>
-									<Or>
-										<Exp Name="" Value="" />
-									</Or>
+									<And>
+										<Or>
+											<Exp Name="" Value="" />
+										</Or>
+									</And>
 								</ComplexQuery>
 							</XPEDXLandingMil>
 						</Input>

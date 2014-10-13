@@ -1,6 +1,6 @@
 /*
  * Action Class to load the Draft Order List Page..
- * 
+ *
  * @author: adsouza 	@date: 6-Apr-2010
  */
 
@@ -9,7 +9,6 @@ package com.sterlingcommerce.xpedx.webchannel.order;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.xpath.XPath;
@@ -25,19 +24,17 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
-import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
-import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
-import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
 
 public class XPEDXDraftOrderListAction extends WCMashupAction  {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 9013184679884854420L;
 	public XPEDXDraftOrderListAction() {
@@ -76,7 +73,8 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 		recordPerPage = null;
 		messageType = "";
 	}
-	
+
+	@Override
 	public String execute() {
 		try {
 			String val = YFSSystem.getProperty(CART_WIDGET_RECORD_PER_PAGE_PARAM);
@@ -86,10 +84,10 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			val = YFSSystem.getProperty(CART_LIST_RECORD_PER_PAGE_PARAM);
 			if (!YFCCommon.isVoid(val)){
 				CART_LIST_RECORD_PER_PAGE = new Integer(val.trim());
-			}		
-			
+			}
+
 			String messageType = getMessageType();
-			
+
 			if(messageType != null && messageType.equals("XPEDXCartListWidget"))
 	        {
 				setOrderByAttribute("Modifyts");
@@ -99,7 +97,9 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 	        {
 	            setRecordPerPage(CART_LIST_RECORD_PER_PAGE);
 	        }
-			outputDoc = prepareAndInvokeMashup("xpedxDraftOrderList");				
+
+			outputDoc = prepareAndInvokeMashup("xpedxDraftOrderList");
+
 			if(copyFlag!=null && copyFlag.trim().length()>0)
 			{
 				NodeList OrderList = outputDoc.getElementsByTagName("XPEDXOrderListView");
@@ -107,17 +107,17 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 				{
 					Element OrderElement = (Element)OrderList.item(OrderCounter);
 					String OrderName = OrderElement.getAttribute("OrderName");
-					String OrderNamewithparenthases="'"+OrderName+"'";	
+					String OrderNamewithparenthases="'"+OrderName+"'";
 					if(OrderName.equals(copyFlag)|| OrderNamewithparenthases.equals(copyFlag))
 					{
 						copyFlag=OrderElement.getAttribute("OrderHeaderKey");
 						return "copyCart";
-					}						
+					}
 				}
 			}
-			UtilBean utilBean=new UtilBean();
+
 			ArrayList<Element> orderList =SCXmlUtil.getElements(outputDoc, "Output/XPXOrderListViewList/XPXOrderListView");
-			
+
 			//Commented since the call is not required.
 			/*Map<String,String> userNameMap=createModifyUserNameMap(outputDoc);
 			for(Element order : orderList) {
@@ -132,7 +132,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			{
 				//Remove itemMap from Session, when cart change in context,  For Minicart Jira 3481
 				XPEDXWCUtils.removeObectFromCache("itemMap");
-				
+
 				Element orderNewList = orderList.get(0);
 				String orderHeaderKey = orderNewList.getAttribute("OrderHeaderKey");
 				Map<String, String> valueMap = new HashMap<String, String>();
@@ -149,7 +149,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 		} catch (Exception ex) {
 			XPEDXWCUtils.logExceptionIntoCent(ex);  //JIRA 4289
 			log.error(ex);
-		}				
+		}
 		return "success";
 	}
 	//Commented since this method is not called.
@@ -171,8 +171,8 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 				SCXmlUtil.importElement(OrElem, exp);
 			}
 			Element output =(Element) WCMashupHelper.invokeMashup("xpedxGetContactUserName", input, getWCContext().getSCUIContext());
-			
-			
+
+
 			List<Element> customerContactList =utilBean.getElements(output, "//CustomerContactList/CustomerContact");
 			for(Element customerContactElem : customerContactList) {
 				String userId = customerContactElem.getAttribute("UserID");
@@ -195,7 +195,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 				}
 				modifyUserMap.put(modifyBy, name);
 			}
-			
+
 		}
 		catch(Exception e)
 		{
@@ -449,7 +449,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			Node retVal = outputEl;
 			if (null != retVal) {
 				Document doc = retVal.getOwnerDocument();
-				
+
 				parsePageInfo(doc, true);
 				if (LOG.isDebugEnabled())
 					LOG.debug((new StringBuilder()).append("Output Doc is: ")
@@ -487,7 +487,7 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 			setPageNumber(getIntegerAttribute(page, "PageNumber", pageNumber));
 		if (paginated && page != null)
 			setPageSetToken(page.getAttribute("PageSetToken"));
-		
+
 		totalNumberOfPages = new Integer(0);
 		if (paginated && page != null)
 			setTotalNumberOfPages(getIntegerAttribute(page,
@@ -625,15 +625,15 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
     public boolean isAdminUser(){
       return true;
     }
-    
+
     public String getCopyFlag() {
 		return copyFlag;
 	}
 
 	public void setCopyFlag(String copyFlag) {
 		this.copyFlag = copyFlag;
-	}   
-	
+	}
+
 	public String getDeleteOrder() {
 		return deleteOrder;
 	}
@@ -648,6 +648,14 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 
 	public void setPageSetToken(String pageSetToken) {
 		this.pageSetToken = pageSetToken;
+	}
+
+	public String getCustomerContactID() {
+		return customerContactID;
+	}
+
+	public void setCustomerContactID(String customerContactID) {
+		this.customerContactID = customerContactID;
 	}
 
 	private static final Logger log = Logger.getLogger(XPEDXDraftOrderListAction.class);
@@ -683,11 +691,13 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 	private Boolean isLastPage;
 	private Boolean isValidPage;
 	private Integer totalNumberOfPages;
+	private String customerContactID;
+
 	protected static String queryTypeFlike = "FLIKE";
 	protected static String queryTypeEq = "EQ";
 	protected static String dateRange = "DATERANGE";
 	protected Map searchList;
-	
+
 	//RUgrani: Adding page size
 	private Integer recordPerPage;
 	private String messageType;
@@ -698,9 +708,9 @@ public class XPEDXDraftOrderListAction extends WCMashupAction  {
 
 	private static Integer CART_WIDGET_RECORD_PER_PAGE = Integer.valueOf(3);
     private static Integer CART_LIST_RECORD_PER_PAGE = Integer.valueOf(25);
- 
+
     private static final Integer CART_WIDGET_PAGE_NUMBER = Integer.valueOf(1);
-    private String pageSetToken;	
+    private String pageSetToken;
 
 }
 

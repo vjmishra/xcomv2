@@ -32,7 +32,8 @@
                     <PreviousPage PageNumber="" />
                     <API Name="XPXOrderListDetails" IsFlow="Y">
                         <Input>
-                            <XPEDXOrderListView EnterpriseCode="" DraftOrderFlag="Y" DocumentType="0001"
+                            <XPEDXOrderListView CustomerContactID="" 
+                            	EnterpriseCode="" DraftOrderFlag="Y" DocumentType="0001"
                                 BuyerOrganizationCode="" BuyerOrganizationCodeQryType="FLIKE">
                                  
                                 <OrderBy>
