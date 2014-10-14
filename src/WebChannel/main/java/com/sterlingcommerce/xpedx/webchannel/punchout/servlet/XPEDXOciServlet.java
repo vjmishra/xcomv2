@@ -34,6 +34,10 @@ import com.yantra.yfc.util.YFCCommon;
  */
 public class XPEDXOciServlet extends IntegrationServlet {
 
+	private static final String PARAM_DATA = "data";
+
+	private static final String PARAM_HOOK_URL = "hook_url";
+
 	private static final Logger log = Logger.getLogger(XPEDXOciServlet.class);
 
 	protected IWCContext wcContext = null;
@@ -76,10 +80,10 @@ public class XPEDXOciServlet extends IntegrationServlet {
 	// not sure if/when this gets called by parent (called directly from this doPost)
 	@Override
 	protected SCUISecurityResponse authenticateRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		if (req.getParameter("data") != null) {
+		if (req.getParameter(PARAM_DATA) != null) {
 			// eb-4834: encrypted user/pass
 			try {
-				OciCredentials cred = PunchoutOciUtil.decryptData(req.getParameter("data"));
+				OciCredentials cred = PunchoutOciUtil.decryptData(req.getParameter(PARAM_DATA));
 				id = cred.getUserId();
 				pwd = cred.getPassword();
 
@@ -87,16 +91,18 @@ public class XPEDXOciServlet extends IntegrationServlet {
 				logError("Failed to decrypt parameter: data");
 				throw new WCException("Parameter 'data' is not formatted properly", e);
 			}
-
-		} else if (req.getParameter("id") != null && req.getParameter("pwd") != null) {
+		}
+		//TODO remove this and switch error for lack of data param to use getParam(PARAM_DATA, res);
+		else if (req.getParameter("id") != null && req.getParameter("pwd") != null) {
 			// legacy mode: unencryptd user/pass (available until R17)
 			id = req.getParameter("id");
 			pwd = req.getParameter("pwd");
-
-		} else {
+		}
+		else {
 			// TODO return meaningful security response
-			logError("Missing required parameter: data");
-			throw new WCException("Missing required parameter: data");
+			final String errorString = "Missing required parameter: " + PARAM_DATA;
+			logError(errorString);
+			throw new WCException(errorString);
 		}
 
 		try {
@@ -118,16 +124,15 @@ public class XPEDXOciServlet extends IntegrationServlet {
 	protected WCIntegrationResponse processRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		try {
 			// Need to pass along the URL of the procurement system for later checkout
-			// [does hook that includes params pass through ok to this servlet and from here to pLogin.action ?]
-			String hookUrl = wcContext.getSCUIContext().getRequest().getParameter("hook_url");
+			String hookUrl = getParam(PARAM_HOOK_URL, res);
 			String encodedHookUrl = URLEncoder.encode(hookUrl, "UTF-8");
 
 			// Create custom URL and redirect to that
 			// -> reusing the login action from cXML
 			String sfId = wcContext.getStorefrontId();
 
-			if (req.getParameter("data") != null) {
-				String encodedData = URLEncoder.encode(req.getParameter("data"),"UTF-8");
+			if (req.getParameter(PARAM_DATA) != null) {
+				String encodedData = URLEncoder.encode(req.getParameter(PARAM_DATA),"UTF-8");
 				// TODO should we skip ociLogin.action and set the request attributes and display punchoutlogin.jsp directly?
 				landingURL = String.format("/swc/punchout/ociLogin.action?sfId=%s&data=%s&returnURL=%s", sfId, encodedData, encodedHookUrl);
 
@@ -147,6 +152,18 @@ public class XPEDXOciServlet extends IntegrationServlet {
 			logError("Error Code:" + errorCode + "& ErrorDesc:" + errorMessage + e.getMessage(), e);
 			return new WCIntegrationResponse(WCIntegrationResponse.FAILURE, new Error(errorCode, errorMessage));
 		}
+	}
+
+	private String getParam(final String paramName, HttpServletResponse res) throws IOException {
+		String param = wcContext.getSCUIContext().getRequest().getParameter(paramName);
+		if (param == null) {
+			errorMessage = "Missing required parameter: " + paramName;
+			errorCode = new Long(IWCIntegrationStatusCodes.REQUEST_VALIDATION_FAILED);
+			logError("Error Code: " + errorCode + ", ErrorDesc: "+ errorMessage);
+			res.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
+			throw new WCException("Missing required parameter: " + paramName);
+		}
+		return param;
 	}
 
 	// called directly from doPost above, and apparently called by parent on failure
