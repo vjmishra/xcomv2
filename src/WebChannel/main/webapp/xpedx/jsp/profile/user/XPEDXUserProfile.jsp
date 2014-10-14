@@ -1823,9 +1823,9 @@ a.underlink:hover {
 															</tr>
 														</tbody>
 													</table>
-													<div id="table-bottom-bar" style="width: 80%; clear: both;">
-														<div id="table-bottom-bar-L"></div>
-														<div id="table-bottom-bar-R"></div>
+													<div id="table-bottom-bar" style="width: 80%; clear: both;" class="table-bottom-bar">
+														<div id="table-bottom-bar-L" class="table-bottom-bar-L"></div>
+														<div id="table-bottom-bar-R" class="table-bottom-bar-R"></div>
 													</div>
 												</td>
 											</tr>
@@ -1915,9 +1915,9 @@ a.underlink:hover {
 															</tr>
 														</tbody>
 													</table>
-													<div id="table-bottom-bar" style="width: 80%; clear: both;">
-														<div id="table-bottom-bar-L"></div>
-														<div id="table-bottom-bar-R"></div>
+													<div id="table-bottom-bar" style="width: 80%; clear: both;" class="table-bottom-bar">
+														<div id="table-bottom-bar-L" class="table-bottom-bar-L"></div>
+														<div id="table-bottom-bar-R" class="table-bottom-bar-R"></div>
 													</div></td>
 											</tr>
 											<%-- 		<tr>
@@ -2797,9 +2797,9 @@ a.underlink:hover {
 															</tr>
 														</tbody>
 													</table>
-													<div id="table-bottom-bar" style="width: 80%; clear: both;">
-														<div id="table-bottom-bar-L"></div>
-														<div id="table-bottom-bar-R"></div>
+													<div id="table-bottom-bar" style="width: 80%; clear: both;" class="table-bottom-bar">
+														<div id="table-bottom-bar-L" class="table-bottom-bar-L"></div>
+														<div id="table-bottom-bar-R" class="table-bottom-bar-R"></div>
 													</div>
 												</td>
 											</tr>
@@ -2889,9 +2889,9 @@ a.underlink:hover {
 															</tr>
 														</tbody>
 													</table>
-													<div id="table-bottom-bar" style="width: 80%; clear: both;">
-														<div id="table-bottom-bar-L"></div>
-														<div id="table-bottom-bar-R"></div>
+													<div id="table-bottom-bar" style="width: 80%; clear: both;" class="table-bottom-bar">
+														<div id="table-bottom-bar-L" class="table-bottom-bar-L"></div>
+														<div id="table-bottom-bar-R" class="table-bottom-bar-R"></div>
 													</div></td>
 											</tr>
 											<%-- <tr>

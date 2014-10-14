@@ -3549,7 +3549,47 @@ table.catalog-row-five td img {
     margin-bottom: -2px;
     margin-left: 5px;
 }
-
+#signon-table {
+    background-color: white;
+    height: 320px;
+    width: 1000px;
+}
+#signon-table td img {
+    display: inline;
+}
+#signon-table td {
+    min-width: 249px;
+    vertical-align: top;
+}
+#signon-table td.stores-cell img {
+    height: 106px;
+    margin-bottom: 10px;
+    width: 240px;
+}
+#signon-table td.stores-cell {
+    height: 110px;
+    padding: 0 !important;
+}
+#signon-table td.promo-cell {
+    padding: 10px 10px 0;
+}
+#signon-table td.form-cell form {
+    min-height: 194px;
+}
+#signon-table td.form-cell {
+    min-width: 250px;
+    padding: 0;
+    text-align: left;
+}
+#signon-table td.form-cell input.x-input {
+    width: 180px;
+}
+#signon-table td.form-cell .login-lbl {
+    margin-top: 10px;
+}
+#signon-table td.form-cell .button-row {
+    margin: 10px 0 5px;
+}
 #signon-image-rotation {
     height: 300px;
     overflow: hidden;
