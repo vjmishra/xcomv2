@@ -20,6 +20,7 @@ import org.w3c.dom.Element;
 import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.sterlingcommerce.webchannel.compat.SCXmlUtils;
+import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
@@ -59,7 +60,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		//EB-225 - For retrieving the customer UOM of ItemID, from ItemIdcustomerUOM Map
 		String custUOM = validate(tag.getItemCustomerUomMap().get(itemID));
 		String isContractItem = tag.getContractItemMap().get(itemID);
-		String shortDesc = validate(info.getAttribute("ShortDescription"));
+		String customerSpecificItemDecription = ((HashMap<String, String>) tag.getWcContext().getWCAttribute("customerDescItemMap", WCAttributeScope.REQUEST)).get(itemID);
+		String shortDesc = !YFCCommon.isVoid(customerSpecificItemDecription) ? customerSpecificItemDecription:validate(info.getAttribute("ShortDescription"));
 		String desc = validate(info.getAttribute("Description"));
 		String itemKey = validate(item.getAttribute("ItemKey"));
 		String kitCode = validate(info.getAttribute("KitCode"));

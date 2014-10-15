@@ -406,6 +406,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 			Element xpxCatalogAllAPIServiceOutputElem = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", xpxCatalogAllAPIServiceInputElem, wcContext.getSCUIContext());
 			itemContract(xpxCatalogAllAPIServiceOutputElem);
+			setCustomerDescItem(xpxCatalogAllAPIServiceOutputElem);
 			Element pricelistLineListElem = SCXmlUtil.getChildElement(xpxCatalogAllAPIServiceOutputElem, "PricelistLineList");
 			if (pricelistLineListElem != null) {
 				List<Element> pricelistLineElems = SCXmlUtil.getChildren(pricelistLineListElem, "PricelistLine");
@@ -2801,4 +2802,25 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		return specificationGroups;
 	}
 
+	/**
+	 * set the customer specific description for Item if available
+	 * @param xpxCatalogAllAPIServiceOutput
+	 * @throws XPathExpressionException
+	 */
+	private void setCustomerDescItem(Element xpxCatalogAllAPIServiceOutput) throws XPathExpressionException {
+		Element itemEle = XMLUtilities.getElement(m_itemListElem, "Item");
+		ArrayList<Element> xpxItemcustXrefList = SCXmlUtil.getElements(xpxCatalogAllAPIServiceOutput, "XPXItemcustXrefList/XPXItemcustXref");
+		if (xpxItemcustXrefList != null) {
+			for (Element xpxItemcustXref : xpxItemcustXrefList) {
+				if (xpxItemcustXref != null && !YFCCommon.isVoid(xpxItemcustXref.getAttribute("CustomerDecription"))
+											&& !YFCCommon.isVoid(xpxItemcustXref.getAttribute("LegacyItemNumber"))
+											&& xpxItemcustXref.getAttribute("LegacyItemNumber").trim().equalsIgnoreCase(itemEle.getAttribute("ItemID"))) {
+					Element primaryInfoEle = XMLUtilities.getElement(itemEle,"PrimaryInformation");
+						if(primaryInfoEle!=null){
+							primaryInfoEle.setAttribute("ShortDescription", xpxItemcustXref.getAttribute("CustomerDecription"));
+						}
+				}
+			}
+		}
+	}
 }

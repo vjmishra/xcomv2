@@ -37,7 +37,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	// YFCDocument inputItemAttrDoc;
 	YFCDocument inputItemAttrDoc;
 	String sinputItmAttrDoc = "";
-	
+
 	private Map<String, Map<String, String>> msdsItemLinkMap = new HashMap<String, Map<String, String>>();
 	/*String[] sAttrDesc;
 
@@ -45,9 +45,9 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	String[] sArrNextDay;
 	String[] sArrTwoPlusDays;
 	String[] sArrAvailability;*/
-	
 
-	public Map<String, Map<String, String>> getMsdsItemLinkMap() {	
+
+	public Map<String, Map<String, String>> getMsdsItemLinkMap() {
 		return msdsItemLinkMap;
 	}
 
@@ -61,19 +61,20 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 
 
 
+	@Override
 	public String execute() {
 		String returnVal = null;
-		try {			
+		try {
 			returnVal = super.execute();
-			
+
 			/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 			setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
 			/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 			//PnA call removed as per Pawan's mail dated 9/4/2011
-			getProductComparisonOutputDetails();			
+			getProductComparisonOutputDetails();
 			/**** Code for adding of additional attributes ********/
 			String sProdComparisonDoc = SCXmlUtil
-					.getString(prodComparisonOutputDoc);			
+					.getString(prodComparisonOutputDoc);
 			String sItemAttributeE = "</ItemAttribute>";
 			int nodeLength = sItemAttributeE.length();
 			int lastIndex = sProdComparisonDoc.lastIndexOf(sItemAttributeE);
@@ -102,19 +103,19 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		return returnVal;
 	}
 
-	
-	/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/	
-	
+
+	/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/
+
 	private void setMSDSUrls(Element outputItem) {
 		String msdsLink="";
 		String msdsLinkDesc="";
-		String assetLinkDesc="";	
+		String assetLinkDesc="";
 		HashMap<String, String> assetLinkMap = new HashMap<String, String>();
 		Map<String, String> msdsLinkMap = new HashMap<String, String>();
 		if(outputItem!=null) {
 			NodeList outputItemList = outputItem.getElementsByTagName("Item");
-			for (int i = 0; i < outputItemList.getLength(); i++) {				
-				Element eleItmElement = (Element) outputItemList.item(i);				
+			for (int i = 0; i < outputItemList.getLength(); i++) {
+				Element eleItmElement = (Element) outputItemList.item(i);
 				String itemId = SCXmlUtil.getAttribute(eleItmElement, "ItemID");
 				NodeList list = SCXmlUtil.getXpathNodes(eleItmElement, "AssetList/Asset");
 				ArrayList<Element> assetList = new ArrayList<Element>();
@@ -127,7 +128,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 				boolean isMSDSLink=false;
 				String msdsAssetId = null;
 				String assetLink = null;
-				if(assetList!=null && assetList.size()>0) {					
+				if(assetList!=null && assetList.size()>0) {
 					Iterator<Element> assetIter = assetList.iterator();
 					while(assetIter.hasNext()) {
 						Element AssetElem = assetIter.next();
@@ -145,27 +146,27 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 						}else{
 							assetLink = msdsLocation+"/"+msdsContentId;
 							assetLinkDesc = xpedxSCXmlUtils.getAttribute(AssetElem, "Description");
-						}						
+						}
 						//Handling "/" if exist in msdsLocation, as an extra "/" was coming
 
 						if("ITEM_DATA_SHEET".equalsIgnoreCase(assetType)) {
-							msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;	
+							msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;
 							if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
-								msdsLink = msdsLocation+msdsContentId;							 
+								msdsLink = msdsLocation+msdsContentId;
 							}else{
-								msdsLink = msdsLocation+"/"+msdsContentId;							
+								msdsLink = msdsLocation+"/"+msdsContentId;
 							}
 							isMSDSLink=true;
 						}
 						if("URL".equalsIgnoreCase(assetType)){
-							msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;	
+							msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;
 							if(!SCUtil.isVoid(msdsLocation)){
-								msdsLink = msdsLocation;							 
+								msdsLink = msdsLocation;
 							}
 							isMSDSLink=true;
 						}if( msdsLinkMap.isEmpty())
 						{
-							msdsLinkMap = new HashMap<String, String>();						
+							msdsLinkMap = new HashMap<String, String>();
 						}
 						if(isMSDSLink)
 							msdsLinkMap.put(msdsLinkDesc, msdsLink);
@@ -175,14 +176,14 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 					}
 
 				}
-				
-				msdsItemLinkMap.put(itemId, assetLinkMap);				
+
+				msdsItemLinkMap.put(itemId, assetLinkMap);
 			}
 
-		}				
+		}
 	}
-		
-	
+
+
 
 	private void checkEmptyAttributeElements() {
 		Document docProdCmpOputDocDetails = prodComparisonOutputDoc;
@@ -207,7 +208,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			sAssignedValue = "";
 		}
 	}
-	
+
 	//PnA call removed as per Pawan's mail dated 9/4/2011
 	private void getProductComparisonOutputDetails()
 			throws InstantiationException, IllegalAccessException, YFSException, RemoteException, YIFClientCreationException {
@@ -216,7 +217,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		Document docProdCmpOputDocDetails = prodComparisonOutputDoc;
 		Element eleOrder = docProdCmpOputDocDetails.getDocumentElement();
 		int iTotItmList = Integer.parseInt(SCXmlUtil.getAttribute(eleOrder,
-				"TotalItemList"));		
+				"TotalItemList"));
 		NodeList nlItemDetails = docProdCmpOputDocDetails
 				.getElementsByTagName("Item");
 		Element eleItemDetails;
@@ -235,8 +236,8 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 				"Availability", "Immediate", "NextDay", "TwoPlusDays" */};
 		String[] sTmp = null;
 		Double price = 0.0;
-		
-		
+
+
 		for (int i = 0; i < iTotItmList; i++) {
 			eleItemDetails = (Element) nlItemDetails.item(i);
 			if(log.isDebugEnabled()){
@@ -252,11 +253,20 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			}
 			sArrListPrice[i] = price > 0 ? "$" + price : "";*/
 		}
-		
+
 			itemOrderMultipleMap = XPEDXOrderUtils
 					.getOrderMultipleFoXPXItems(items);
-		
-		/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/	
+			customerDescItemMap	=	XPEDXWCUtils.getCustomerDescItemMapForItems(this.getWCContext(),items);
+			if(customerDescItemMap!=null && customerDescItemMap.size() > 0){
+				for (int i = 0; i < iTotItmList; i++) {
+					eleItemDetails = (Element) nlItemDetails.item(i);
+					if(customerDescItemMap.containsKey(SCXmlUtil.getAttribute(eleItemDetails, "ItemID"))){
+						Element primaryInfoElement = (Element)eleItemDetails.getElementsByTagName("PrimaryInformation").item(0);
+						primaryInfoElement.setAttribute("ShortDescription", customerDescItemMap.get(SCXmlUtil.getAttribute(eleItemDetails, "ItemID")));
+					}
+				}
+			}
+		/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/
 		Element outputItem = null;
 		try {
 			outputItem = getItemElement(sItmIds);
@@ -269,7 +279,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			String sThisAttrDesc = sAttrDesc[k];
 			if ("__BRAND__#".equals(sThisAttrDesc)) {
 				sTmp = sItmIds;
-				
+
 				// eb-2405: Display brand instead of hard-coded 'xpedx'
 				sThisAttrDesc = sThisAttrDesc.replace("__BRAND__", getWCContext().getStorefrontId());
 			} else if ("BaseUom".equals(sThisAttrDesc)) {
@@ -308,7 +318,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			inputAttributeElement.setAttribute("LongDescription", "");
 			inputAttributeElement.setAttribute("SequenceNo", "");
 			inputAttributeElement.setAttribute("ShortDescription", "");
-			
+
 			inputItmAttrElement.appendChild(inputAttributeElement);
 			inputItmListElement = inputItemAttrDoc.createElement("ItemList");
 			inputItmAttrElement.appendChild(inputItmListElement);
@@ -356,7 +366,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna
 					.getItems());
 			if (pnaHoverMap.containsKey(sItmIds[i])) {
-				// 
+				//
 				JSONObject json = pnaHoverMap.get(sItmIds[i]);
 				sArrimmediate[i] = json.get("Immediate").toString();
 				sArrNextDay[i] = json.get("NextDay").toString();
@@ -381,7 +391,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		Element outputEl = outputDoc.getDocumentElement();
 
 		ArrayList<Element> listofWishLists = getXMLUtils().getElements(outputEl, "XPEDXMyItemsList");
-		
+
 		for(Element elem : listofWishLists){
 			List<Element> items = getXMLUtils().getElements(elem, "XPEDXMyItemsItemsList");
 			String itemCount="0";
@@ -391,7 +401,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			}
 			listSizeMap.put(elem.getAttribute("MyItemsListKey"), itemCount);
 		}
-		
+
 		if (listofWishLists != null) {
 			for (Element list : listofWishLists) {
 				itemListMap.put(list.getAttribute("MyItemsListKey"), list
@@ -403,7 +413,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	public Map getItemListMap() {
 		return itemListMap;
 	}
-	
+
 	@Override
 	protected void manipulateMashupInputs(Map<String, Element> mashupInputs)
 			throws CannotBuildInputException {
@@ -413,7 +423,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		checkForNullItemKey(prodComparisonExcludeInput);
 		super.manipulateMashupInputs(mashupInputs);
 	}
-	
+
 	private void checkForNullItemKey(Element prodComparisonInput) {
 		if(prodComparisonInput!=null) {
 			Element complexQuerElem = SCXmlUtil.getChildElement(prodComparisonInput, "ComplexQuery");
@@ -459,14 +469,14 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	public void setItemListMap(Map itemListMap) {
 		this.itemListMap = itemListMap;
 	}
-	
+
 	public String replaceChar(String string) {
 		if(string!=null) {
 			do {
 				string = string.replace("\'", "&#39;");
 				string = string.replace("\"", "&#34;");
-				string = string.replace(",", "");	
-				
+				string = string.replace(",", "");
+
 			}
 			while(string.indexOf("\'")!=-1 || string.indexOf("\"")!= -1 || string.indexOf(",")!= -1);
 		}
@@ -480,15 +490,16 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	protected String pricingUOMConvFactor = null;
 	protected String baseUOM = null;
 	protected String prodMweight = null;
-	protected Element m_itemListElem;	
+	protected Element m_itemListElem;
 	protected Map itemOrderMultipleMap;
-	
+	private Map<String, String> customerDescItemMap;
+
 	private static final Logger log = Logger
 			.getLogger(XPEDXProductComparisonAction.class);
 	private String itemListMapHTMLString;
 
 	private HashMap<String, String> listSizeMap = new HashMap<String, String>();
-	
+
 	public HashMap<String, String> getListSizeMap() {
 		return listSizeMap;
 	}
@@ -496,9 +507,9 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	public void setListSizeMap(HashMap<String, String> listSizeMap) {
 		this.listSizeMap = listSizeMap;
 	}
-	
+
 	private String itemDtlBackPageURL="";
-	
+
 	public String getItemDtlBackPageURL() {
 		return itemDtlBackPageURL;
 	}
@@ -515,9 +526,18 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	}
 
 	/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/
-	
+
+	public Map getCustomerDescItemMap() {
+		return customerDescItemMap;
+	}
+
+	public void setCustomerDescItemMap(Map customerDescItemMap) {
+		this.customerDescItemMap = customerDescItemMap;
+	}
+
+
 	private Element getItemElement(String[] itemId) throws Exception {
-    	Map<String, String> valueMap = new HashMap<String, String>();	
+    	Map<String, String> valueMap = new HashMap<String, String>();
     	Element outputItem=null;
     	try {
     	IWCContext wcContext = WCContextHelper
@@ -526,7 +546,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		String inputXpedxGetItemListXml = SCXmlUtil.getString(inputXpedxGetItemListElement);
 		Element complexQuery = SCXmlUtil.getChildElement(inputXpedxGetItemListElement, "ComplexQuery");
 		Element OrElem = SCXmlUtil.getChildElement(complexQuery, "Or");
-		
+
 		for(String itemIdlist : itemId) {
 			Element exp = inputXpedxGetItemListElement.getOwnerDocument().createElement("Exp");
 			exp.setAttribute("Name", "ItemID");
@@ -542,7 +562,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		}
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
-		}		
+		}
 		return outputItem;
     }
 }

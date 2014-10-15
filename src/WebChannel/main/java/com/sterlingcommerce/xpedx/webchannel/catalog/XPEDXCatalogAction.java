@@ -284,6 +284,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	private Map<String, String> orderMultipleMap;
 	private Map<String, String> contractItemMap;
+	private Map<String, String> customerDescItemMap;
 	private String itemDtlBackPageURL = "";
 	private String productCompareBackPageURL;
 
@@ -317,6 +318,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public void setContratItemMap(Map<String, String> contratItemMap) {
 		this.contractItemMap = contratItemMap;
+	}
+
+	public Map<String, String> getCustomerDescItemMap() {
+		return customerDescItemMap;
+	}
+
+	public void setCustomerDescItemMap(Map<String, String> customerDescItemMap) {
+		this.customerDescItemMap = customerDescItemMap;
 	}
 
 	public Map<String, String> getDefaultShowUOMMap() {
@@ -1293,15 +1302,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 		if (shipToCustomer != null) {
 			String envCode = shipToCustomer.getExtnEnvironmentCode();
-			String legacyCustomerNumber = shipToCustomer
-					.getExtnLegacyCustNumber();
-			//String custDivision = shipToCustomer.getExtnShipFromBranch();
+			String legacyCustomerNumber = shipToCustomer.getExtnLegacyCustNumber();
 			String custDivision = shipToCustomer.getExtnCustomerDivision();
 			HashMap<String, String> valueMap = new HashMap<String, String>();
 			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
 			valueMap.put("/XPXItemcustXref/@CustomerNumber", legacyCustomerNumber);
-			// valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemId);
-			// Filled using Complex Query
+			valueMap.put("/XPXItemcustXref/@CompanyCode", shipToCustomer.getExtnCompanyCode());
 			valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
 
 			Element xrefInput = null;
@@ -1368,6 +1374,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				itemIdIter = itemIds.iterator();
 				orderMultipleMap = new HashMap<String, String>();
 				contractItemMap = new HashMap<String, String>();
+
 				while (itemIdIter.hasNext()) {
 					// Complex query for XPXItemExtn input xml
 					Element expElement = SCXmlUtil.createChild(inputNodeListElemt, "Exp");
@@ -1415,6 +1422,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 				getOrderMultipleMapForItems();
 				getContractItemMapForItems();
+				getCustomerDescItemMapForItems();
 				String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
 				getReplacmentItemsMapForItems(envCode, shipFromBranch);
 				wcContext.setWCAttribute("replacmentItemsMap", replacmentItemsMap, WCAttributeScope.REQUEST);
@@ -1803,15 +1811,17 @@ public class XPEDXCatalogAction extends CatalogAction {
 		wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
 	}
 
-	private void getOrderMultipleMapForItems() {
-		ArrayList<Element> xpxItemExtnList = SCXmlUtil.getElements(allAPIOutputDoc, "XPXItemExtnList/XPXItemExtn");
-		if (xpxItemExtnList != null) {
-			for (Element xpxItemExtn : xpxItemExtnList) {
-				if (xpxItemExtn != null) {
-					orderMultipleMap.put(xpxItemExtn.getAttribute("ItemID"), xpxItemExtn.getAttribute("OrderMultiple"));
+	private void getCustomerDescItemMapForItems() {
+		customerDescItemMap = new HashMap<String, String>();
+		ArrayList<Element> xpxItemcustXrefList = SCXmlUtil.getElements(allAPIOutputDoc, "XPXItemcustXrefList/XPXItemcustXref");
+		if (xpxItemcustXrefList != null) {
+			for (Element xpxItemcustXref : xpxItemcustXrefList) {
+				if (xpxItemcustXref != null && !YFCCommon.isVoid(xpxItemcustXref.getAttribute("CustomerDecription"))) {
+					customerDescItemMap.put(xpxItemcustXref.getAttribute("LegacyItemNumber"), xpxItemcustXref.getAttribute("CustomerDecription"));
 				}
 			}
 		}
+		wcContext.setWCAttribute("customerDescItemMap", customerDescItemMap, WCAttributeScope.REQUEST);
 	}
 	private void getContractItemMapForItems() {
 		ArrayList<Element> xpxContractItemList = SCXmlUtil.getElements(allAPIOutputDoc, "ContractItemList/ContractItem");
@@ -1819,6 +1829,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 			for (Element xpxContractItemExtn : xpxContractItemList) {
 				if (xpxContractItemExtn != null) {
 					contractItemMap.put(xpxContractItemExtn.getAttribute("ItemID"), xpxContractItemExtn.getAttribute("ContractItem"));
+				}
+			}
+		}
+	}
+	private void getOrderMultipleMapForItems() {
+		ArrayList<Element> xpxItemExtnList = SCXmlUtil.getElements(allAPIOutputDoc, "XPXItemExtnList/XPXItemExtn");
+		if (xpxItemExtnList != null) {
+			for (Element xpxItemExtn : xpxItemExtnList) {
+				if (xpxItemExtn != null) {
+					orderMultipleMap.put(xpxItemExtn.getAttribute("ItemID"), xpxItemExtn.getAttribute("OrderMultiple"));
 				}
 			}
 		}
