@@ -181,7 +181,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
     private String qtyTextBox;
     private String[] names;//EB-760 Moved the export functionality after calling the validate UOM
     public boolean updatebuttonClicked;
-
+    private Map<String, String> customerDescItemMap;
     public boolean getIsContractItemFlag() {
 		return isContractItemFlag;
 	}
@@ -1364,6 +1364,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				exportList();
 				return "export";
 			}
+			setCustomerSpecificDescForReplacementItems();
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 			XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
@@ -2155,12 +2156,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				}
 			}
 		}
-		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
+		//if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
 			itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(allItemIds, getWCContext());
 			if(itemcustXrefDoc!=null) {
 				Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
 				ArrayList<Element> itemCustXrefElems = SCXmlUtil.getElements(itemCustXRefList, "XPXItemcustXref");
 				if(itemCustXrefElems!=null && itemCustXrefElems.size()>0) {
+					customerDescItemMap = new HashMap<String, String>();
 					Iterator<Element> xrefIter = itemCustXrefElems.iterator();
 					while(xrefIter.hasNext()) {
 						Element xref = xrefIter.next();
@@ -2178,12 +2180,34 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							skuMap.put(legacyItemNum, (HashMap<String, String>)itemSkuMap.clone());
 							itemSkuMap.clear();
 							}
+							String customerDecription = xref.getAttribute("CustomerDecription");
+							if(!SCUtil.isVoid(customerDecription)){
+								customerDescItemMap.put(legacyItemNum, customerDecription);
+							}
 						}
 					}
 				}
 			}
-	   }
+	  // }
 		// xb-805 code changes end
+
+			//Setting the customer specific description for My Items.
+			if(allItemsDoc != null) {
+				Element itemList = allItemsDoc.getDocumentElement();
+				Iterator<Element> itemIter = SCXmlUtil.getChildren(itemList);
+				while(itemIter.hasNext()) {
+					Element itemElement = itemIter.next();
+					if(!SCUtil.isVoid(itemElement)) {
+						String itemId = SCXmlUtil.getAttribute(itemElement, "ItemID");
+						if(!SCUtil.isVoid(itemId) && customerDescItemMap != null && customerDescItemMap.containsKey(itemId)) {
+							Element primeInfoElem = SCXmlUtil.getChildElement(itemElement, "PrimaryInformation");
+							if(primeInfoElem != null)	{
+								primeInfoElem.setAttribute("ShortDescription", customerDescItemMap.get(itemId));
+							}
+						}
+					}
+				}
+			}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -3288,6 +3312,31 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 	}
 
+	/**
+	 * setting the customer specific description for replacement Items If available
+	 */
+	private void setCustomerSpecificDescForReplacementItems(){
+		if(isEditMode() && xpedxItemIDUOMToReplacementListMap != null && !xpedxItemIDUOMToReplacementListMap.isEmpty() && customerDescItemMap != null && !customerDescItemMap.isEmpty()) {
+			Iterator<Map.Entry<String, ArrayList<Element>>> replacmentItemEntryIter = xpedxItemIDUOMToReplacementListMap.entrySet().iterator() ;
+			while(replacmentItemEntryIter.hasNext()){
+				Map.Entry<String, ArrayList<Element>> replacmentItemEntry = replacmentItemEntryIter.next();
+				if(replacmentItemEntry != null && replacmentItemEntry.getKey() != null){
+					List<Element> replacementItems =  replacmentItemEntry.getValue();
+					for (Element replacementItem : replacementItems) {
+						if(!SCUtil.isVoid(replacementItem)) {
+							String itemId = SCXmlUtil.getAttribute(replacementItem, "ItemID");
+							if(!SCUtil.isVoid(itemId) && customerDescItemMap.containsKey(itemId)) {
+								Element primeInfoElem = SCXmlUtil.getChildElement(replacementItem, "PrimaryInformation");
+								if(primeInfoElem != null) {
+									primeInfoElem.setAttribute("ShortDescription", customerDescItemMap.get(itemId));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 
 	public Document getOutDoc() {
@@ -4088,6 +4137,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 	public void setQtyTextBoxMap(Map<String, String> qtyTextBoxMap) {
 		this.qtyTextBoxMap = qtyTextBoxMap;
+	}
+
+	public Map<String, String> getCustomerDescItemMap() {
+		return customerDescItemMap;
 	}
 
 }
