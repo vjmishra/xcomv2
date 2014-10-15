@@ -1814,7 +1814,7 @@ public class XPEDXWCUtils {
 			}
 			log.error(ex.getMessage());
 			//throw new IllegalStateException(ex);  //Planning to fix in future on technical debt story EB-7877
-			
+
 		} finally {
 			if (scuiTransactionContext != null && wSCUIContext != null) {
 				try {
@@ -4256,16 +4256,16 @@ public class XPEDXWCUtils {
 	/**
 	 * This is written for JIRA EB-7204
 	 * The following method is invoked to get the inventory indicator of items.
-	 * 
+	 *
 	 *
 	 * @param outputDoc
 	 * @param shipFromBranch
 	 * @param wcContext
 	 * @return HashMap with the item id and inventory indicator.
-	 * 
+	 *
 	 */
 	public HashMap<String, String> getDisplayInventoryCheckMap(Document outputDoc, String shipFromBranch, IWCContext wcContext) {
-		
+
 		HashMap<String, String> displayInventoryCheckForItemsMap = new HashMap<String, String>();
 
 		if(null == shipFromBranch || shipFromBranch.equals("")) {
@@ -4307,23 +4307,23 @@ public class XPEDXWCUtils {
 					if(shipFromBranch.equalsIgnoreCase(division)) {
 						divisionFlag = true;
 						if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") ){
-							
+
 							displayInventoryCheckForItemsMap.put(itemId,"W");
 						}
 						else if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") ){
-						
+
 							displayInventoryCheckForItemsMap.put(itemId,"I");
 						}
 						else{
-					
+
 							displayInventoryCheckForItemsMap.put(itemId,"M");
 						}
 						break;
 					}
 				}
-				
+
 			}
-			
+
 		}
 		return displayInventoryCheckForItemsMap;
 	}
@@ -5183,7 +5183,7 @@ public class XPEDXWCUtils {
 	   }
 	   else
 		   categoryId = path;
-	   
+
 	}// end of try
 		catch (Exception e) {
 		// rollback the tran
@@ -5280,7 +5280,7 @@ public class XPEDXWCUtils {
 				}
 			}
 			throw new IllegalStateException(ex);
-		
+
 		} finally {
 			if (scuiTransactionContext != null && wSCUIContext != null) {
 				try {
@@ -6893,7 +6893,7 @@ public class XPEDXWCUtils {
 			}
 			throw new IllegalStateException(e);
 
-			
+
 		}
 		finally
 		{
@@ -7033,7 +7033,7 @@ public class XPEDXWCUtils {
 		try{
 			if (punchOutComments == null) {
 			// call api to get data
-			
+
 			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
 			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			YIFApi api = YIFClientFactory.getInstance().getApi();
@@ -7058,9 +7058,9 @@ public class XPEDXWCUtils {
 				punchOutComments = extnElem.getAttribute("ExtnPunchOutComments");
 				context.setWCAttribute("punchOutComments", punchOutComments, WCAttributeScope.LOCAL_SESSION);
 			}
-		
-		
-		} 
+
+
+		}
 			scuiTransactionContext.commit();
 			return punchOutComments;
 		} catch (Exception e) {
@@ -7083,8 +7083,8 @@ public class XPEDXWCUtils {
 				}
 			}
 		}
-		
-		
+
+
 	}
 	/**
 	 * For calling an any API before authentication
@@ -7195,4 +7195,19 @@ public class XPEDXWCUtils {
 		return extnElem != null && "CR".equalsIgnoreCase(extnElem.getAttribute("ExtnSourcingStatus"));
 	}
 
+	public static Map<String,String> getCustomerDescItemMapForItems(IWCContext wcContext,List<String> itemids) {
+		Map<String, String> customerDescItemMap = new HashMap<String, String>();
+		Document itemCustXrefDoc = getItemCustXrefDoc(wcContext, "LegacyItemNumber", new ArrayList(itemids));
+		if(itemCustXrefDoc!= null && itemCustXrefDoc.getDocumentElement()!=null){
+			ArrayList<Element> xpxItemcustXrefList = SCXmlUtil.getElements(itemCustXrefDoc.getDocumentElement(), "XPXItemcustXref");
+			if (xpxItemcustXrefList != null) {
+				for (Element xpxItemcustXref : xpxItemcustXrefList) {
+					if (xpxItemcustXref != null && !YFCCommon.isVoid(xpxItemcustXref.getAttribute("CustomerDecription"))) {
+						customerDescItemMap.put(xpxItemcustXref.getAttribute("LegacyItemNumber"), xpxItemcustXref.getAttribute("CustomerDecription"));
+					}
+				}
+			}
+		}
+		return customerDescItemMap;
+	}
 }
