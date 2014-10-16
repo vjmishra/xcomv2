@@ -75,6 +75,9 @@
 	<s:url id='salesRepLoginURLid' namespace='/home' action='salesReploginFullPage'></s:url>
 	<s:hidden id="salesRepLoginURL" value="%{#salesRepLoginURLid}" />
 	
+	<s:url id='logoutURL' namespace='/home' action='saleslogout' includeParams='none' />
+	<s:hidden id="logoutURL" value="%{#logoutURL}" />
+	
 	<div id="main-container">
 		<div id="main">
 			<div id="container" class="container content-container" style="display:none;">

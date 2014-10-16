@@ -87,6 +87,21 @@ function validateOnEnter(e){
 	  return ;     
 	} 
 }
+function loadWindow(){
+   <s:url id='alogoutURL' namespace='/common' action='salesrepLogout'></s:url>
+        
+    var url = "<s:property value='alogoutURL'/>";
+    url = ReplaceAll(url,"&amp;",'&');
+	Ext.Ajax.request({
+		url: url,
+		method: 'POST',
+		params: { logoutMethod: "AJAX" },
+		success: function (response, request){
+		},
+		failure: function (response, request){
+		}
+	});
+}
 
 </script>
 
@@ -173,7 +188,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 
 </head>
 
-<body onload="clearFields();">
+<body onload="clearFields();loadWindow();">
 <div id="container">
 <div id="login">
 <div>
@@ -268,7 +283,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 </s:form>
 
 <div id="footer">
-	<p>© 2014. All Rights Reserved.</p>
+	<p>Â© 2014. All Rights Reserved.</p>
 </div>
 
 </div> <!-- End id="login" -->
