@@ -8,7 +8,7 @@ $(document).ready(function() {
 		
 		var handleNullCustomerList = function() {
 			alert('Unable to retrieve customer list.\nPlease try again later.');
-			window.location.href = $('#salesRepLoginURL').val();
+			window.location.href = $('#logoutURL').val();
 		};
 
 		$.ajax({
