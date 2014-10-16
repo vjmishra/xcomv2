@@ -569,7 +569,6 @@ border-collapse: separate;
 width:100%; */
 }
 .cart-replaced {
-	margin: 0px;
 	color: #FF0000;
 	/* display: inline; */
 	font-weight: bold;/* margin-top: 99px; *//* position: relative; */
@@ -1331,11 +1330,8 @@ div.checkout-left {
 }
 .order-total {
 	background: #d6d6d6;
-	border: 1px solid #999;
-}
-.order-total th, .order-total td {
 	font-weight: bold;
-	padding: 4px
+	margin-bottom: 2px;
 }
 .mil-wrap {
 	width: auto;
@@ -2086,3 +2082,214 @@ div.specs-tab {
 	float: left;
 	clear: none;
 }
+
+/*-------------NEW CART STYLES-------------*/
+.cart-wrap {
+	border: 1px dotted #999999;
+	border-top: none;
+	padding: 15px 5px;
+	}
+.cart-wrap-header {
+	width: 100%;
+	background: #003399;
+	border-radius: 6px 6px 0 0;
+	height: 30px;
+	color: #ffffff;
+	text-align: right;
+	font-size:10px;
+	}
+.cart-wrap-header p {
+	padding-top: 6px;
+	padding-right: 10px;
+	}
+.cart-wrap-header p span {
+	margin-right: 38px;
+	}	
+.cart-checkbox-wrap {
+	display: inline-block;
+	vertical-align:top;
+	padding-top: 2px;
+}
+.cart-desc-wrap {
+	width: 40%;
+	float: left;
+	clear: none;
+}
+.cart-desc-wrap h3 {
+	display: inline-block;
+	vertical-align:top;
+	color: #003399;
+	padding-bottom: 0px;
+}
+.cart-desc-wrap ul.prodlist {
+	padding-left: 10px;
+	height: auto;
+	overflow: visible;
+}
+.cart-availability-wrap {
+	width: 30%;
+	float: left;
+	clear: none;
+}
+.cart-availability-wrap .avail-wrap {
+	padding-left: 20px;
+}
+.cart-quantity {
+	text-align: right;
+}
+.cart-qty-label {
+	width: 60px;
+}
+.cart-price-wrap {
+	width: 29%;
+	float: left;
+	clear: none;
+}
+.cart-price-row {
+	width: 100%;
+	display: block;
+	padding-bottom: 20px;
+	clear: both;
+	}
+.cart-price-row .col-1 {
+	width: 50%;
+	float: left;
+	clear: none;
+	text-align: right;
+}
+.cart-price-row .col-2 {
+	width: 50%;
+	float: left;
+	clear: none;
+	text-align: right;
+}
+.cart-price-row .col-1 span, .cart-price-row .col-2 span {
+	display: block;
+	clear: both;
+}
+.cart-instructions-wrap {
+	width: 100%;
+	clear: both;
+	padding: 12px 5px 5px 5px;
+}
+.cust-defined-fields {
+	float: left;
+	clear: none;
+	padding: 2px 0 6px;
+	width: 375px;
+	margin-left: 0px;
+}
+.cust-defined-wrap {
+	width: 375px;
+	float: left;
+}
+.cust-defined-fields .col-1 {
+	display: inline-block;
+	width: 168px;	
+	text-align: right;
+}
+.cust-defined-fields .col-2 {
+	display: inline-block;
+	width: 200px;
+}
+.cust-defined-fields input {
+	width: 180px;
+}
+.cart-special-instructions {
+	float: right;
+	clear: none;
+	width: 560px;
+    width: 545px;
+}
+.cart-special-instructions p {
+	display: inline-block;
+	width: auto;
+}
+.cart-special-instructions textarea {
+	width: 525px;
+	height: 35px;
+}
+.status-ready {
+	color: #008000;
+    font-size: 13px;
+}
+.status-alert {
+	color: #ff0000;
+    font-size: 13px;
+}
+.cart-wrap .non-stock-item-shorter {
+    padding: 0;
+}
+ .cart-sum-right-new {
+	background-color: #FAFAFA;
+	border: 1px solid #CCCCCC;
+	float: right;
+	padding: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	width: 300px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+} 
+.cart-sum-row {
+	padding: 2px;
+	}
+.cart-sum-row .col-1 {
+	display: inline-block;
+	width: 57%;
+}
+.cart-sum-row .col-2 {
+	display: inline-block;
+	width: 40%;
+	text-align: right;
+}
+/*******NEW FOR CART HEADER*********/
+.cart-info-wrap {
+	clear: none;
+	float: left;
+	width: 49%;
+}
+
+.cart-info-wrap label {
+	clear: both;
+	display: block;
+	margin-bottom: 2px;
+	width: auto;
+}
+
+.cart-info-wrap textarea,.cart-info-wrap input {
+	margin-bottom: 8px;
+}
+
+.cart-info-wrap textarea {
+	height: 50px;
+	width: 500px;
+}
+
+.cart-btn-wrap {
+	clear: none;
+	float: right;
+	width: 49%;
+}
+
+/*************CART LIST PAGE******************/
+table#carts-list td {
+    border-bottom: 1px solid #cccccc;
+    padding: 8px;
+}
+
+table#carts-list tbody img {
+    float: left;
+    margin-right: 5px;
+    margin-top: -2px;
+}
+table#carts-list .left-cell {
+	padding-top: 10px;
+	}
+
+.cart-list-desc{
+	font-size:11px;
+	color:#808080;
+	}
+/******/

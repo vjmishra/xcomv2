@@ -41,14 +41,12 @@
 	<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
 	<s:set name="myPriceValue" value="%{'false'}" />
 	
-    <table class="mil-top-border standard-table" border="0px solid red" class="float-right">
+    <table class="standard-table width100-percent">
 	   <tr>
 		<th class="text-right addpadright10"> Price (<s:property value='#currencyCode'/>) </th>
 		<th width="145"> Extended Price (<s:property value='#currencyCode'/>) &nbsp;</th>
 	   </tr>
 	</table>
-	
-	<%--<s:set name="subTotal" value='%{0.00}' /> --%>
 	<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />"/>
 	<%--jira 3788 --%>  
 	<s:set name="isOrderTBD" value="%{0}" />  
@@ -110,16 +108,6 @@
 				<s:hidden name="BaseUOMs" id="BaseUOMs_%{#orderLineKey}" value='%{#BaseUOMs}' /> 
 				
 		<s:hidden name="selectedCustomerContactId" id="selectedCustomerContactId" value="" />
-		
-		<%-- 
-		<s:set name="itemuomMap" value='itemUOMsMap[#itemIDUOM]' /> 
-		<s:set name="displayUomsMap" value='#_action.getDisplayItemUOMsMap()' />
-		<s:set name="displayUomMap" value='#displayUomsMap[#itemIDUOM]' />
-		<s:hidden name="itemUOMs" id="itemUOMs_%{#orderLineKey}" value='%{#uom}' /> 
-		<s:set name="convF" value='#itemuomMap[#uom]' />
-		<s:hidden name="UOMconversion" id="UOMconversion_%{#orderLineKey}" value="%{#convF}" />
-		--%>
-		
 		<s:set name="editOrderOrderExtn" value='%{""}' />
 		<s:set name="editOrderOrderLineExtn" value='%{""}' />
 		<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
@@ -157,61 +145,51 @@
 		</s:else>
 
 		
-		<!-- begin iterator -->       
-		<s:if test="#rowStatus.last == true ">
-	    	<div class="mil-wrap last" onmouseleave="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
-	    </s:if>
-	    <s:else>
-	    	 <div class="mil-wrap" onmouseleave="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
-	    </s:else>
-         	<div class="mil-container" >
-                <!--checkbox   -->
-                <div class="mil-checkbox-wrap">
+		<!-- begin iterator --> 
+	    	<div class="cart-wrap" onmouseleave="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
+	    	
+                <!--check box   -->
+                <div class="cart-desc-wrap">
+                <div class="cart-checkbox-wrap">
                      <%-- <s:checkbox name='selectedLineItem' id='selectedLineItem_%{#orderLineKey}' fieldValue='%{#orderLineKey}' disabled='%{!#canCancel}' tabindex="%{#tabIndex}" /> --%>                    
                    <s:checkbox name='selectedLineItem' id='selectedLineItem_%{#orderLineKey}' cssStyle="display:none" onclick="checkHiddenCheckboxAndDeleteItem(this, 'selectedLineItem_%{#orderLineKey}')" fieldValue='%{#orderLineKey}' disabled='%{!#canCancel}' tabindex="%{#tabIndex}" />
                    <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
                    	<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x.png" onclick="javascript:checkHiddenCheckboxAndDeleteItem(this,&#39;<s:text name='selectedLineItem_%{#orderLineKey}'/>&#39; );" title="Remove" alt="RemoveIcon" />
                    </s:if> 
-                  </div>
-                <!-- end checkbox   -->
+                 </div>
+                <!-- end check box   -->
                         
                 <!-- begin description  -->
                 <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-                <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
-	                <div class="mil-desc-wrap">
-	                    <div class="mil-wrap-condensed-desc item-short-desc" style="max-height:59px; height: auto;"> 
-	
-							<span class="short-description">
+               <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
+							<h3><span class="short-description">
 							<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
 								<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
 							</s:if>
 							<s:else>
 								<s:property escape='false'	value='%{#item.getAttribute("ItemShortDesc")}' />
-							</s:else></span>
-						</div>
-		                <div class="mil-attr-wrap">
+							</s:else></span></h3>
+							<div class="clearfix"></div>
+					
+		                <div class="float-left brand-info">
 							<s:if test='#item.getAttribute("ItemDesc") != ""'>
 								<ul class="prodlist">
 									<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
 								</ul>
 							</s:if>							
-		                </div>
-					</div>
+		               </div>
 				 </s:a>
 				</s:if>
 				<s:else>
-	                <div class="mil-desc-wrap">
-	                    <div class="mil-wrap-condensed-desc item-short-desc" style="max-height:59px; height: auto;"> 
-	
-							<span class="short-description_M">
+							<h3><span class="short-description_M">
 							<s:if test='#item.getAttribute("ItemShortDesc") == ""'>
 								<s:property escape='false'	value='%{#item.getAttribute("ItemDesc")}' />
 							</s:if>
 							<s:else>
 								<s:property escape='false'	value='%{#item.getAttribute("ItemShortDesc")}' />
-							</s:else></span>
-						</div>
-		                <div class="mil-attr-wrap">
+							</s:else></span></h3>
+						<div class="clearfix"></div>
+		              <div class="float-left brand-info">
 		                    <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 								<s:if test='#item.getAttribute("ItemDesc") != ""'>
 									<ul class="prodlist">
@@ -220,12 +198,33 @@
 								</s:if>
 							</s:if>
 		                </div>
-					</div>
 				</s:else>
-				
+			    	<div class="float-left brand-info">
+			    		<s:set name="itemID" value='#item.getAttribute("ItemID")' />
+			    		<p><b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")' /></b>
+				    		<s:if test='#certFlag=="Y"'>
+							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
+							 </s:if>
+			    		</p>
+			    		<s:if test='#orderLine.getAttribute("LineType") != "M"'>
+									<s:if test='skuMap!=null && skuMap.size()>0'>
+										<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/> 
+										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
+									</s:if>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
+												<p>
+												<span class="fields-padding"><s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></span></p>
+											 </s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+												<p>
+													<span class="fields-padding"><s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></span></p>
+											</s:if>		
+							</s:if>	
+			    </div>
+			</div>
 				<!-- Disable the fields for line type C -->
 				<s:if test='(#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" 
-						<%-- || (!#_action.isDraftOrder() && (!#_action.getIsEditOrder().contains("true") ))--%>
 					)'>
 					<s:set name="disblForLnTypCOrNonDrftOdr" value="%{true}"></s:set>
 				</s:if>
@@ -237,14 +236,10 @@
                 	<s:set name="isReadOnly" value="#disblForLnTypCOrNonDrftOdr"></s:set>
                 </s:if>
                 <!-- Disable the fields for line type C -->
-                
                 <s:set name='qty' value='#lineTran.getAttribute("OrderedQty")' />
 				<s:set name='qty' value='%{#strUtil.replace(#qty, ".00", "")}' />
-				<div class="cart-availability-section">
-	            	<table width="100%" cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config availability-table">
-	                	<tbody>
-	                    	<tr>
-								<td class="text-right" style="padding:0px;">
+				<div class="cart-availability-wrap">
+	            	<div class="cart-quantity">
 								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<label style="font-size:12px">Qty: </label>
 								</s:if>
@@ -252,7 +247,7 @@
 								  <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<s:textfield name='tempOrderLineQuantities'
 									theme="simple" id="tempOrderLineQuantities_%{#orderLineKey}" size='1'
-									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
+									cssClass="cart-qty-label" value='%{#qty}'
 									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
 								 </s:if>
 									<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
@@ -261,7 +256,7 @@
 								  <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<s:textfield name='orderLineQuantities'
 									theme="simple" id="orderLineQuantities_%{#orderLineKey}" size='1'
-									cssClass="mil-action-list-wrap-qty-label" value='%{#qty}'
+									cssClass="cart-qty-label" value='%{#qty}'
 									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
 								  </s:if>
 								  <s:else>
@@ -272,21 +267,15 @@
 									<s:hidden name="#qaQuantity.type" value="OrderedQty" />
 									<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 										  <s:select name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}"
-											cssClass="xpedx_select_sm mil-action-list-wrap-select" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
+											cssClass="xpedx_select_sm width-140" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
 											list="#displayUomMap" listKey="key" listValue='value'
 											disabled="#isUOMAndInstructions" value='%{#uom}' tabindex="%{#tabIndex}" theme="simple"/>
 											<s:hidden id="custUOM_%{#orderLineKey}" name="custUOM" value="%{#customerUOM}" />
-											 
 									</s:if>
+									</div>
 									<s:if test='#isUOMAndInstructions'>
 										<s:hidden name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='%{#uom}' />
-									</s:if>
-                         		</td>
-						 	</tr>
-						 	<tr>
-						 		<td>
-						 		<br/>
-						 						 		
+									</s:if>	 		
 						 			<s:if test='%{#customerUOM==#MultiUom}'>
 											<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
 											<s:set name="multiUomDesc" value="#customerUomWithoutM" />										
@@ -305,250 +294,41 @@
 										</s:else>
 															 				
                 						<s:if test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}'>						 			
-						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value="#orderMultipleUomDesc"></s:property><br/>
+						 						<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" ><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value="#orderMultipleUomDesc"></s:property></div>
 						 				</s:if>
 						 				<s:else>
-						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/>
+						 						<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" ><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property></div>
 						 				</s:else>
                 					</s:if>
                 					<s:elseif test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}' >
-                						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/>
+                						<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" ><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property></div>
                 					</s:elseif>
                 					<s:else>
 						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/></div>
+						 			<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" ><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/></div>
 						 		</s:if>
 						 			</s:else>
-						 		
-						 		</div>
-						 		</td>
-						 	</tr>
-					 	</tbody>
-				 	</table>
-				 <%--	Using CustomerContactBean object from session
-				 <s:if test='%{#session.viewPricesFlag == "Y"}'>
-				 --%>
-				 <s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-				 	<s:if test="#rowStatus.first == true ">
-				 		<table class="float-right pricing-table" style="font-size:12px">
-				 	</s:if>
-				 	<s:else>
-				 		<table class="float-right pricing-table" style="font-size:12px">
-				 	</s:else>
-				 	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
-				 	
-						<tbody>
-							<%-- 
-				  	  		<tr>
-				  	  			<td class="text-right" width="147">
-				  	  			<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
-					 				TBD
-					 			</s:if>
-					 			<s:else>
-									<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #json.get("UnitPricePerRequestedUOM"))' />
-								</s:else>
-								</td>
-                            	<td class="text-right" width="147"><span class="mil-action-list-wrap-num-span">
-                            	<s:if test='#orderLine.getAttribute("LineType")=="C"'>
-									TBD
-								</s:if>
-								<s:else>
-									<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#json.get("ExtendedPrice"),"1","0"))' />
-								</s:else>
-								</span></td>
-                        	</tr>
-                        	<tr>
-            	            	<td class="text-right">
-            	            	<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
-					 				&nbsp;
-					 			</s:if>
-					 			<s:else>
-									/&nbsp;<s:property value="#XPEDXWCUtils.getUOMDescription(#json.get('UOM'))" />
-								</s:else>
-								</td>
-                    	    </tr>
-                        	<s:if test='#orderLine.getAttribute("LineType") !="C"'>
-					 			<s:if test="#displayPriceForUoms.size()>0" >
-					 			<s:set name="pricingUOM" value="#json.get('PricingUOM')" />
-					 			
-					 			<s:set name="displayIndex" value="1" />
-					 			<s:if test="#pricingUOM == 'A_CWT' || #pricingUOM == 'M_CWT' || #pricingUOM == 'M_M' || #pricingUOM == 'A_M' ">
-					 				<s:set name="displayIndex" value="2" />
-					 			</s:if>
-					 			<s:iterator value='displayPriceForUoms' id='disUOM' status='disUOMStatus'>
-					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
-									<s:set name="bracketUOMDesc" value="bracketUOM" />
-									
-					 				<s:if test='%{#disUOMStatus.index < #displayIndex && (#XPEDXWCUtils.getUOMDescription(#json.get("UOM")) != #bracketUOMDesc) }' >
-									
-										<tr>
-				                        	<td class="text-right">
-												<s:property	value='#bracketPriceForUOM' />
-											</td>
-		    	                    	</tr>
-			        	                <tr>
-			            	            	<td class="text-right">
-												/&nbsp;<s:property value="#bracketUOMDesc" />
-											</td>
-			                	            <td></td>
-			                    	    </tr>
-			                    	    </s:if>
-								</s:iterator>
-								
-	                    	    </s:if>
-					 		</s:if> 
-					 		--%>
-					 		
-					 		<s:set name="isMyPriceZero" value="%{'false'}" />
-					 	
-					 		<s:set name="break" value="false"></s:set>
-					 		<s:if test="#displayPriceForUoms!=null && #displayPriceForUoms.size()>0" >
-					 			<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
-					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
-					 				
-					 				<s:set name="temp" value="bracketUOM" />
-									<s:set name="customerUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#customerUOM)"/>
-									<s:if test='%{#customerUOMDesc==#temp}'>	
-										<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />
-										<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
-									</s:if>
-									<s:else>
-										<s:set name="bracketUOMDesc" value="bracketUOM" />
-									</s:else>		
-									
-									
-									<s:if test='%{!#disUOMStatus.last}' >
-										<s:if test='%{#disUOMStatus.first}' >
-											<tr>
-											<s:if test="%{#break == false}">
-								  	  			<td class="text-right" width="130">
-								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
-									 				
-									 			</s:if>
-									 			<s:else>
-									 			
-									 			  <s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
-									 			  <s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
-									 			    	<s:set name="myPriceValue" value="%{'true'}" />
-									 			    	
-														<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span>  
-														<s:set name="break" value="true"></s:set>
-												  </s:if>
-												  <s:else>
-												  <s:if test="%{#bracketPriceForUOM != #priceWithCurrencyTemp1}">
-												    <s:property value="#bracketPriceForUOM" /><br/>
-													per&nbsp;<s:property value="#bracketUOMDesc" /></s:if>
-												  </s:else>
-												</s:else>
-												</td></s:if>
-				                            	<td class="text-right" width="147" valign="top">
-					                            	<span class="mil-action-list-wrap-num-span">
-					                            	<s:set name= 'extendedPrice'  value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
-					                            	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
-					                            	<s:if test='#orderLine.getAttribute("LineType")=="C"'>
-														
-													</s:if>
-													<s:else>
-														<%-- <s:if test='%{#editOrderFlag == "true"}'>
-															<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#editOrderOrderLineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
-														</s:if>
-														<s:else> --%>														  
-											 			  <s:if test="%{#extendedPrice == #priceWithCurrencyTemp}">											 			  
-																<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
-																<s:set name="isOrderTBD" value="%{#isOrderTBD+1}" /> 
-														  </s:if>
-														  <s:else>
-														   		<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
-														  </s:else>
-														<%-- 	
-														</s:else>
-														--%>
-													</s:else>
-													</span>
-												</td>
-				                        	</tr>
-				                        	<tr><td>&nbsp;</td></tr>											
-				                    	 </s:if>
-				                    	 <s:else>										
-				                    	 	<tr>
-					                        	<td class="text-right">
-					                        		<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
-										 				&nbsp;
-										 			</s:if>
-										 			<s:else>
-										 				<s:if test="%{#break == false}">
-										 			    	<s:property	value='#bracketPriceForUOM' />
-													    </s:if>
-										 			</s:else>					                        														  
-												</td>
-			    	                    	</tr>
-				                    	 <tr>
-			            	            	<td class="text-right">
-			            	            	<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
-								 				&nbsp;
-								 			</s:if>
-								 			<s:else>									 			
-												<s:if test="%{#break == false}">
-													per&nbsp;<s:property value="#bracketUOMDesc" />
-												</s:if>											
-											</s:else>
-											</td>											 
-			                    	    </tr>
-			                    	    <!--  Add empty space between each price / UOM  -->
-			                    	    <tr><td>&nbsp;</td></tr>										
-				                    	</s:else>
-		                    	    </s:if>
-			                    	   
-					 			</s:iterator>
-					 		</s:if>
-						</tbody>
-				 	</table>
-				 </s:if>
-				 	<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
+						<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
 						<s:set name="calculatedLineTotal" value='{0}' />
 					</s:if>
 					<s:else>
 							<s:set name="calculatedLineTotal" value='#priceUtil.getLineTotal(#json.get("UnitPricePerRequestedUOM"),#qty,#lineTotals.getAttribute("DisplayLineAdjustments"))' />
 							<s:set name='deliveryMethod' value='#orderLine.getAttribute("DeliveryMethod")' />
 							<s:set name='deliveryMethods' value='deliveryMethodHelper.getDeliveryMethodsForLine(#orderLine)' />
-							
-							<!-- commenting delivery methods code - to decide where to put this on the screen -->
-							<%-- <br />
-							<s:if test='!#isProcurementUser'>
-								<s:if test='#deliveryMethods.size() > 0'>
-									<s:select name="selectedDeliveryMethods"
-										id="selectedDeliveryMethods_%{#orderLineKey}"
-										list="deliveryMethods"
-										disabled="%{!(#canChangeOrderDate && #canChangeShipNode && #canChangeDeliveryCode && #canChangeLineOrderDate && #canChangeLineReqShipDate)}"
-										value='%{#deliveryMethod}'
-										tabindex="%{#tabIndexForDeliveryMethod}" />
-								</s:if>
-								<s:else>
-									<s:property value='deliveryMethodHelper.allDeliveryMethods[#deliveryMethod]' />
-								</s:else>
-							</s:if>--%>
 							<s:if test="(!(#canChangeOrderDate && #canChangeShipNode && #canChangeDeliveryCode && #canChangeLineOrderDate && #canChangeLineReqShipDate)) || (#deliveryMethods.size() == 0) || (#isProcurementUser)">
 								<s:hidden name="selectedDeliveryMethods" id="selectedDeliveryMethods_%{#orderLineKey}" value="%{#deliveryMethod}" />
 							</s:if> 
 							<s:hidden name="originalDeliveryMethods" id="originalDeliveryMethods_%{#orderLineKey}" value="%{#deliveryMethod}" />
 							<s:hidden name="canChangeStore" id="canChangeStore_%{#orderLineKey}" value="%{(#canChangeOrderDate && #canChangeShipNode && #canChangeLineOrderDate && #canChangeLineReqShipDate)}" />
 					</s:else>
-				 	<%-- 
-				 	<s:if test='( #json.get("UnitPricePerRequestedUOM") != null && #json.get("UnitPricePerRequestedUOM") != "")'> 
-                           <s:set name="subTotal" value='%{#subTotal+#calculatedLineTotal}' />
-                 	</s:if>
-				 	--%>
 				 	<s:if test="(#json.get('Immediate') == null)">
 						<s:set name="jsonImmediate" value="'0'" />
 					</s:if>
 					<s:else>
 						<s:set name="jsonImmediate" value="#json.get('Immediate')" />
 					</s:else>
-					
 					<s:set name="jsonImmediate" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonImmediate)"/>
 					<s:set name="jsonCommaFmtImmediate" value='#xpedxUtilBean.formatQuantityForCommas( #jsonImmediate )' />
- 
-					
 					<s:if test="(#json.get('NextDay') == null)">
 						<s:set name="jsonNextDay" value="'0'" />
 					</s:if>
@@ -558,17 +338,14 @@
 					
 					<s:set name="jsonNextDay" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonNextDay)"/>
 					<s:set name="jsonFmtNextDay" value='#xpedxUtilBean.formatQuantityForCommas( #jsonNextDay )' />
-					
 					<s:if test="(#json.get('TwoPlusDays') == null)">
 						<s:set name="jsonTwoPlus" value="'0'" />
 					</s:if>
 					<s:else>
 						<s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" />
 					</s:else>
-					
 					<s:set name="jsonTwoPlus" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTwoPlus)"/>
 					<s:set name="jsonFmtTwoPlus" value='#xpedxUtilBean.formatQuantityForCommas( #jsonTwoPlus )' />
-					
 					<s:set name="jsonUOM" value="#json.get('UOM')" />
 					<s:if test='%{#customerUOM==#jsonUOM}'>
 						<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
@@ -577,7 +354,6 @@
 					<s:else>
 						<s:set name="jsonUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#jsonUOM)" />
 					</s:else>	
-					
 					<s:set name="jsonAvailability" value="#json.get('Availability')" />
 					<s:set name="jsonTotal" value="#json.get('Total')" />
 					<s:set name="jsonImage1" value="#XPEDXWCUtils.getImage('Immediate')" />
@@ -602,38 +378,27 @@
 					<s:set name="jsonAvailabilityMessage" value="#json.get('AvailabilityMessage')" />
 					<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
 					<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
-					
-					<%-- <s:if test="(#jsonTotal != null)"> --%>
-					
-				     	<div class="cart-availability text-left">
-				     	 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />"></div> 
-				     	 <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config" style="font-size:12px">
-						    	<tbody>
-									<tr>
-										<td align="left" style="color:${jsonAvailabilityMessageColor};font-size:13px;"><strong>${jsonAvailabilityMessage}</strong></td>
-									</tr>					    		
-						    		<tr>
-										<td><p class="left"><strong>Next Day: </strong></p></td>
-										<td class="text-right"><p> <strong>${jsonFmtNextDay}</strong> </p></td>
-										<td class="text-left"><%-- ${jsonUOMDesc} --%></td>									
-						    		</tr>
-						    		<tr>
-										<td><p class="left" style="padding-left:15px;">2+ Days: </p></td>
-										<td class="text-right"><p> ${jsonFmtTwoPlus} </p></td>
-										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>
-						    		</tr>
-						    		<tr>
-										<td><p class="left" style="width:110px;padding-left:15px;">Total Available: </p></td>
-										<td class="text-right">${jsonFmtTotal} </td>
-										<td class="text-left">&nbsp;${jsonUOMDesc}</td>
-						    		</tr>
-						    		<%-- <s:if test="(#divName != null)"> --%>
-						    		
+				     	<div class="pa-avail">
+							<div class="avail-wrap">
+				     			 <div id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />"></div> 
+				     	 			<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
+									<div class="pa-row pa-status ready-to-ship addpadtop10" style="color:${jsonAvailabilityMessageColor}">${jsonAvailabilityMessage}</div>
+									<div class="pa-row">
+										<div class="col-1 bold">Next Day: </div>
+										<div class="col-2 bold">${jsonFmtNextDay}</div>
+						    		</div>
+						    		<div class="pa-row">
+										<div class="col-1">2+ Days: </div>
+										<div class="col-2">${jsonFmtTwoPlus} </div>
+										
+						    		</div>
+						    		<div class="pa-row">
+										<div class="col-1">Total Available: </div>
+										<div class="col-2">${jsonFmtTotal} </div>
+										<div class="col-3">&nbsp;${jsonUOMDesc}</div>
+						    	</div>
 						    		<s:if test='%{#jsonAvailabilityBalance != null}'>
-						    		<tr>
-						    		<td colspan="3">
-						    			<div class="clearfix"></div>
+						    			<div class="pa-row">
 										<div class="warning-icon">
 											<img width="12" height="12" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/warning.png"/>
 										</div>
@@ -641,45 +406,22 @@
 										<div class="qty-unavailable"><s:property value="#xpedxUtilBean.formatQuantityForCommas(#jsonAvailabilityBalance)"/> 
 											<s:property value='%{#jsonUOMDesc}'/> currently unavailable
 										</div>
-										</td>
-										</tr>
+										</div>
 									</s:if>
-						    		<tr>
-										<%-- <td colspan="3"><p class="italic">${jsonImmediate} available today at ${DivisionName}</p></td> --%>
-										<td colspan="3"><p class="italic">${jsonCommaFmtImmediate} &nbsp;${jsonUOMDesc}&nbsp;available today at ${DivisionName}</p></td> 
-								    </tr>
-								    <%-- </s:if> --%>
-							    </tbody>
-					    	</table>
+										<div class="pa-row pa-location">${jsonCommaFmtImmediate} &nbsp;${jsonUOMDesc}&nbsp;available today at ${DivisionName}</div>
 					    	</s:if>
-				    	</div>
-			    	
-			    	
-			    	<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
-						<a href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
-							tabindex="100"> Complimentary </a>
-					</s:if>
-					<s:if test='(xpedxItemIDUOMToAlternativeListMap.containsKey(#itemIDUOM))'>
-						<a href='javascript:showXPEDXAlternateItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
-							tabindex="100"> Alternate </a>
-					</s:if>
-					<%-- Commenting the Replacement link as 'This item has been replaced' is the link to replacement items.
-					<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID).size()>0)'>
-						<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
-							tabindex="100"> Replacement </a>
-					</s:if>
-					--%>
-				<%-- </s:if> --%>
-				
-				<div class="clearall">&nbsp; </div>
-			    	<div class="red float-left">
-			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
+					    	<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>
+    							<s:if test='%{#lineStatusCodeMsg != null || #lineStatusCodeMsg != ""}'>
+									<h5 class="suspended-item addpadleft5"><s:property value="%{#lineStatusCodeMsg}" /></h5>
+								</s:if>
+					</div>
+					<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 				    	<s:iterator value="displayInventoryMap" id="displayInventoryMap" status="status" >
 							<s:set name="inventoryChk" value="value" />
 							<s:set name="itemId" value="key" />
 							<s:if test='#item.getAttribute("ItemID") == #itemId'>
 								<s:if test='%{#inventoryChk=="I"}'>
-									<div class="non-stock-item-shorter addmarginleft145 addmargintop10">
+									<div class="non-stock-item-shorter">
 										<div class="stock-icon">
 											<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25" title="Contact Customer Service to confirm pricing and any additional charges" />
 										</div>
@@ -695,172 +437,207 @@
 									</div>
 								</s:if>
 								<s:if test='%{#inventoryChk=="W"}'>
-														
 								</s:if>
 							</s:if>	
 						</s:iterator>
-						</s:if>
+					</s:if>
+				 </div>
+			</div>
+				 <s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
+					 <div class="cart-price-wrap">
+				 	<s:if test="#rowStatus.first == true ">
+				 	</s:if>
+				 	<s:else>
+				 	</s:else>
+				 	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
+					 		<s:set name="isMyPriceZero" value="%{'false'}" />
+					 		<s:set name="break" value="false"></s:set>
+					 		<s:if test="#displayPriceForUoms!=null && #displayPriceForUoms.size()>0" >
+					 			<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
+					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
+					 				<s:set name="temp" value="bracketUOM" />
+									<s:set name="customerUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#customerUOM)"/>
+									<s:if test='%{#customerUOMDesc==#temp}'>	
+										<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />
+										<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
+									</s:if>
+									<s:else>
+										<s:set name="bracketUOMDesc" value="bracketUOM" />
+									</s:else>		
+									<s:if test='%{!#disUOMStatus.last}' >
+										<s:if test='%{#disUOMStatus.first}' >
+											<div class="cart-price-row">
+											<s:if test="%{#break == false}">
+								  	  			<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
+									 			</s:if>
+									 			<s:else>
+									 			  <s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
+									 			  <s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
+									 			    	<s:set name="myPriceValue" value="%{'true'}" />
+														<div class="col-1"><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span></div> 
+														<s:set name="break" value="true"></s:set>
+												  </s:if>
+												  <s:else>
+												  <s:if test="%{#bracketPriceForUOM != #priceWithCurrencyTemp1}">
+												    <div class="col-2"><s:property value="#bracketPriceForUOM" /><span>
+													per&nbsp;<s:property value="#bracketUOMDesc" /></span></div></s:if>
+												  </s:else>
+												</s:else>
+				                            	</s:if>
+				                            	<div class="col-2">
+					                            	<s:set name= 'extendedPrice'  value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
+					                            	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
+					                            	<s:if test='#orderLine.getAttribute("LineType")=="C"'>
+													</s:if>
+													<s:else>											  
+											 			  <s:if test="%{#extendedPrice == #priceWithCurrencyTemp}">											 			  
+																<span class="red bold"><s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+																<s:set name="isOrderTBD" value="%{#isOrderTBD+1}" /> 
+														  </s:if>
+														  <s:else>
+														   		<s:property value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode,#priceUtil.getLineTotal(#lineExtn.getAttribute("ExtnExtendedPrice"),"1","0"))' />
+														  </s:else>
+													</s:else>
+													</div>
+				                        	<div class="clearfix"></div>
+				                        	</div>									
+				                    	 </s:if>
+				                    	 <s:else>
+					                        	<div class="cart-price-row">
+					                        	<div class="col-1">
+					                        		<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
+										 				&nbsp;
+										 			</s:if>
+										 			<s:else>
+										 				<s:if test="%{#break == false}">
+										 			    	<s:property	value='#bracketPriceForUOM' />
+													    </s:if>
+										 			</s:else>
+			            	            	<s:if test='#orderLine.getAttribute("LineType") =="C" || #orderLine.getAttribute("LineType") =="M" '>
+								 				&nbsp;
+								 			</s:if>
+								 			<s:else>						 			
+												<s:if test="%{#break == false}"><span>
+													per&nbsp;<s:property value="#bracketUOMDesc" /></span>
+												</s:if>							
+											</s:else>
+										</div>
+										<div class="clearfix"></div>
+			                    	   		</div>					
+				                    	</s:else>
+		                    	    </s:if>
+					 			</s:iterator>
+					 		</s:if>
+					 		</div>
+				 </s:if>
+			    	<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
+						<a href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
+							tabindex="100"> Complimentary </a>
+					</s:if>
+					<s:if test='(xpedxItemIDUOMToAlternativeListMap.containsKey(#itemIDUOM))'>
+						<a href='javascript:showXPEDXAlternateItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
+							tabindex="100"> Alternate </a>
+					</s:if>
+				 <div class="red float-left">
 						<s:set name='linelineoverallTotals' value='#util.getElement(#orderLine, "LineOverallTotals")'/>
 						<s:set name='adjustment' value='%{0.00}' />
-						<%--<s:if test='%{#editOrderFlag == "true"}'>
-								<s:set name='adjustment' value='#xutil.getDoubleAttribute(#editOrderOrderLineExtn,"ExtnAdjDollarAmt")' />
-						</s:if>
-						<s:else>
-						     --%><s:set name='adjustment' value='#xutil.getDoubleAttribute(#lineExtn,"ExtnLegOrderLineAdjustments")' />
-						<%--</s:else>
-				    	
-						--%><s:if test='%{#adjustment != 0.00}'>
+						<s:if test='%{#adjustment != 0.00}'>
 							<p>A Discount of <a id='tip_<s:property value="#orderLineKey"/>' href="javascript:displayLineAdjustments('adjustmentsLightBox','<s:property value='#orderLineKey'/>')">
 							<s:property value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#adjustment)'/></a> has applied to this line.</p>
 						</s:if>
 				    	<br/>
+			    	</div>	
+			    	<div>
+						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
+			    			<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing floatright addmarginright10">This item will be replaced once inventory is depleted.</p></a>
+			    		</s:if>
 			    	</div>
-				</div>
-			
-				<div class="clearall">&nbsp;</div>
-			    
-			    <div class="bottom-mil-info">
-			    	<div class="float-left brand-info">
-			    		<s:set name="itemID" value='#item.getAttribute("ItemID")' />
-			    		<p><b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")' /></b>
-				    		<s:if test='#certFlag=="Y"'>
-							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
-							 </s:if>
-			    		</p>
-			    		<s:if test='#orderLine.getAttribute("LineType") != "M"'>
-						<s:if test='skuMap!=null && skuMap.size()>0'>
-										<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/> 
-										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
-										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
-									</s:if>
-										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
-											<p class="fields-padding">
-												<s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></p>
-											 </s:if>
-											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
-											<p class="fields-padding">
-												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
-											</s:if>		
-							</s:if>
-						
-											    		
-			    	</div>			    	
-    
-			    	<div class="cust-defined-fields">
-			    		<table style="font-size:12px">
-			    			<tbody>
+    			<div class="cart-instructions-wrap">
+					<div class="cust-defined-wrap">
 				    			<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 				    			<s:if test="%{requiredCustFieldsErrorMap!=null && requiredCustFieldsErrorMap.size>0}" >
                 					<s:set name="requiredFieldsForOLK" value="%{requiredCustFieldsErrorMap.get(#orderLineKey)}" />
                 				</s:if>
 								<s:iterator value='customerFieldsMap'>
+									<div class="cust-defined-fields">
 									<s:set name='FieldLabel' value='key' />
 									<s:set name='FieldValue' value='value' />
 									<s:set name='customLbl' value='%{"Extn" + #FieldLabel}' />
-										<tr>
-		                                	<td class="float-right" colspan="2">
 		                                	<s:if test='(#orderLineType =="P" || #orderLineType =="S")'>
-		                                		<label>
+		                                		<div class="col-1"><label>
 		                                			<s:text name="%{#FieldValue}" />:
-		                                		</label>
+		                                		</label></div>
 		                                		<s:if test=' (#FieldLabel == "CustomerPONo") || (#FieldLabel == "CustomerLinePONo") '>
 													<%--Added if-else condn for giving border-color when CustomerPONo and CustomerLinePONo are blank - Jira 3966 --%>
 													<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
-													<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
-														cssClass="x-input bottom-mill-info-avail"
+													<div class="col-2"><s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#orderLine.getAttribute(#FieldLabel)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" cssStyle="border-color:#FF0000"/>
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" cssStyle="border-color:#FF0000"/></div>
 													</s:if>
 													<s:else>
-													<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
-														cssClass="x-input bottom-mill-info-avail"
+													<div class="col-2"><s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#orderLine.getAttribute(#FieldLabel)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22"  />
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22"  /></div>
 													</s:else>
 												</s:if>
 												<s:else>
 												<%--Added if-else condn for giving border-color when Line Acc# and PO# are blank - Jira 3966 --%>
 												<%-- For 24 Characters EB -449 --%>
-												
 													<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
-														<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
+														<div class="col-2"><s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#lineExtn.getAttribute(#customLbl)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" cssStyle="border-color:#FF0000"/>
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" cssStyle="border-color:#FF0000"/></div>
 													</s:if>
 													<s:else>
-														<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
+														<div class="col-2"><s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#lineExtn.getAttribute(#customLbl)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" />
-													
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" /></div>
 													</s:else>
-													
 												</s:else>
 												<%-- Show error message against each required customer field --%>
 												<%--   EB 771 for I should not see extra  spacing between the entry fields & error messages, 
 														so that the page is more compact & easier to read.  --%>
-												<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >													
-												<%-- <br/><br/><span class="error">Required fields missing. Please review and try again.</span> <br/><br/> --%>													
+												<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
 													<div style="padding: 10px 0px 10px 0px;">		
 														<span class="error">Required fields missing. Please review and try again.</span>
 													</div>	
 												</s:if>
-												
-												<%-- --%>
 												<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 											</s:if>
 											<s:else> 
 												<s:hidden name='orderLine%{#FieldLabel}' id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="" />
-											
 											</s:else>
-											</td>
-										</tr>
+									</div>	
                                 </s:iterator>
-                            </tbody>
-                        </table>
-					</div>				
-	
-					<div class="clearall">&nbsp; </div>
-					<div style="padding-left:25px;">
-						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
-			    			<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This item will be replaced once inventory is depleted.</p></a>
-			    		</s:if>
-			    	</div>	
+				</div>
+			    	<div class="cart-special-instructions">
 					<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-		    				<p style='MARGIN-LEFT: 25px;' class="line-spacing">Special Instructions:</p>
-				    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
-							<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionDetailKey")}' />				    														
-							<P style='MARGIN-LEFT: 140px; MARGIN-TOP: -25px;'>	
+		    				<p>Special Instructions:</p>
+				    			<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
+								<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionDetailKey")}' />				    														
+								
 								<s:textarea name="orderLineNote" rows="4" cols="90" onkeyup="javascript:restrictTextareaMaxLength(this,250);"
 									id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'
-									cssClass="special-instructions-input" tabindex="%{#tabIndex}" theme="simple" disabled="%{#isUOMAndInstructions}"/>									
-							</P>	
+									 tabindex="%{#tabIndex}" theme="simple" disabled="%{#isUOMAndInstructions}"/>									
+						
 							<s:if test='#isUOMAndInstructions'>
 								<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
 							</s:if>	
 		    		</s:if>
-		    		<s:else>
-		    			<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
-		    			<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='' />
-		    		</s:else>										
+		    			<s:else>
+		    				<s:hidden name="orderLineNote" id="orderLineNote_%{#orderLineKey}" value='%{#lineNotes.getAttribute("InstructionText")}'/>
+		    				<s:hidden name="lineNotesKey" id="lineNotesKey_%{#orderLineKey}" value='' />
+		    			</s:else>										
+					</div>
 				</div>
-				<%--jira 2885 --%>
-    				<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>
-    				<s:if test='%{#lineStatusCodeMsg != null || #lineStatusCodeMsg != ""}'>
-						<div id="mid-col-mil">
-							<h5 class="suspended-item"><s:property value="%{#lineStatusCodeMsg}" /></font></b></h5>
-						</div>
-					</s:if>
-    				<%-- end of it 2885 --%>
-                <br/>
-				<div class="clear"></div>
-			</div>
+				<div class="clearfix"></div> 
 		</div>
 		<s:set name='isReadOnly' value='%{#tempIsReadOnly}' />
 </s:iterator>     <!-- end iterator -->

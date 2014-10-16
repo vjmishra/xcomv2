@@ -701,9 +701,12 @@ $(document).ready(function(){
 
 </s:else>	
 	</div>
-	<div class="cart-btn-wrap">
-	
-	
+	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+		<div class="cart-btn-wrap addmargintop66">
+	</s:if>
+	<s:else>
+		<div class="cart-btn-wrap addmarginbottom10">
+	</s:else>
 		<s:url id='quickAddURL' namespace="/order" action='quickAdd' escapeAmp="false">
 			<s:param name="selectedHeaderTab">QuickAdd</s:param>
 			<s:param name="quickAdd" value="%{true}" />
@@ -744,7 +747,7 @@ $(document).ready(function(){
 
 	
 	
-	<div class="mil-wrap-condensed-container">
+	 <div class="mil-wrap-condensed-container"> 
 
 	<s:include value="XPEDXCoreDraftOrderDetail.jsp" />
 
@@ -1034,88 +1037,63 @@ var currentAadd2ItemList = new Object();
 <s:if test='%{#session.viewPricesFlag == "Y"}'>
 --%>
 <s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-<div class="cart-sum-right">
-	<table cellspacing="0" align="right" style="font-size:12px">
+<div class="cart-sum-right-new">
 	<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
-		<tr>
-			<th>Subtotal:</th>
-			<td>
-				<%--<s:if test='%{#editOrderFlag == "true"}'>
-					<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#editOrderOrderExtn.getAttribute("ExtnOrderSubTotal"))' />
-				</s:if>
-				<s:else>
-					--%>	
+		<div class="cart-sum-row">
+			<div class="col-1">Subtotal:</div>
 					<s:set name='extnOrderSubTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
  			  		 <s:if test="%{(#extnOrderSubTotal == #priceWithCurrencyTemp) && #setTBD == true && #_action.getMajorLineElements().size() > 0}">
 						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 			  		</s:if>						  
 				  	<s:else>
-				    	&nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
-				  	</s:else>					
-						  
-				<%--</s:else>
-			
-			--%></td>
-		</tr>
-		<tr>
-			<th>Order Total Adjustments:</th>
-			<td><%--<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#headerAdjustmentWithoutShipping)' /> --%>
-				
-				<%--<s:if test='%{#editOrderFlag == "true"}'>
-					<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#editOrderOrderExtn.getAttribute("ExtnTotOrderAdjustments"))' />
-				</s:if>
-				<s:else>
-					--%>
-				&nbsp;
+				    	<div class="col-2"><s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' /></div>
+				  	</s:else>
+		</div>
+		<div class="cart-sum-row">
+			<div class="col-1">Order Total Adjustments:</div>
+				<div class="col-2">
 			  	    <a
 						href="javascript:displayLightbox('orderTotalAdjustmentLightBox')" id='tip_<s:property value="#orderHeaderKey"/>'
 						tabindex="<s:property value='%{#tabIndex}'/>"> <span
 						class="nowrap underlink"><s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnLegTotOrderAdjustments"))' /></span>
 						</a>
-						 												
-				<%--</s:else>
-			--%></td>
-		</tr>
-		<tr>
-			<th>Adjusted Subtotal:</th>
-			<td><%-- <s:property value='#adjustedSubtotalWithoutTaxes' /> --%>
-				<%--<s:if test='%{#editOrderFlag == "true"}'>
-					<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#editOrderOrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
-				</s:if>
-				<s:else>
-					--%>
+					</div> 												
+			</div> 
+			<div class="cart-sum-row">	
+		
+			<div class="col-1">Adjusted Subtotal:</div>
+			<div class="col-2">
 					<s:set name='extnTotOrdValWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
 	 			  <s:if test="%{(#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp) && #setTBD == true && #_action.getMajorLineElements().size() > 0}">
 						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 				  </s:if>					
 					<s:else>
-							&nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />																			
+						<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />																			
 					</s:else>					
-			<%-- </s:else>
-				
-			--%></td>
-		</tr>
-		<tr>
-			<th>Tax:</th>
-			<td class="red bold">
+			</div> 												
+			</div> 
+		<div class="cart-sum-row">	
+		
+			<div class="col-1">Tax:</div>
+			
+		
+			<div class="col-2 red bold">
 					<s:text name='MSG.SWC.ORDR.OM.INFO.TBD' />
-			</td>
-		</tr>
-		<tr class="bottom-padding">
-			<th>Shipping &amp; Handling:</th>
-			<td class="red bold">
+			</div>
+		</div>
+		
+		<div class="cart-sum-row">
+		<!-- <tr class="bottom-padding"> -->
+			<div class="col-1">Shipping &amp; Handling:</div>
+			<div class="col-2 red bold">
 					<s:text name='MSG.SWC.ORDR.OM.INFO.TBD' />
-			</td>
-		</tr>
-		<%-- <s:set name="subTotAdjusted" value='%{#priceUtil.getLineTotal(#subTotal,"1",#headerAdjustmentWithoutShipping)}' /> --%>
-		<tr class="order-total">
-			<th>Order Total (<s:property value='#currencyCode'/>):</th>
-			<td>
-				<%--<s:if test='%{#editOrderFlag == "true"}'>
-					<s:property value='%{#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#editOrderOrderExtn.getAttribute("ExtnTotalOrderValue"))}' />
-				</s:if>
-				<s:else>
-					--%>
+			</div>
+		</div>
+		
+		<div class="cart-sum-row order-total">
+		<!-- <tr class="order-total"> -->
+			<div class="col-1">Order Total (<s:property value='#currencyCode'/>):</div>
+			<div class="col-2">
 				<s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
 		 			  		 <s:if test="%{(#extnTotalOrderValue == #priceWithCurrencyTemp)  && #setTBD == true && #_action.getMajorLineElements().size() > 0}">
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
@@ -1124,13 +1102,8 @@ var currentAadd2ItemList = new Object();
 							<s:set name='adjustedSubtotalWithoutTaxes'  value='#orderExtn.getAttribute("ExtnTotalOrderValue")' />
 								<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
 					     </s:else>					
-					
-
-				<%--</s:else>
-			
-			--%></td>
-		</tr>
-	</table>
+					</div>
+			</div>
 </div>
 </s:if>
 </div>

@@ -56,157 +56,6 @@
 	text-align: right;
 	padding-bottom: 8px;
 }
-
-/*--------------basic layout adjustments-------------*/
-.addpadbottom20 {
-	padding-bottom: 20px;	
-}
-.addpadleft5 {
-	padding-left: 5px;
-}
-.addpadtop20{
-	padding-top: 20px;
-}
-.addpadleft20{
-	padding-left: 20px;
-}
-.addpadright20{
-	padding-right: 20px;
-}
-.addpad3 {
-	padding: 3px;
-}
-.addpadtop5 {
-	padding-top: 5px;
-}
-.addpadtop10 {
-	padding-top: 10px;
-}
-.addpadtop15 {
-	padding-top: 15px;
-}
-.addpadtop2 {
-	padding-top: 2px;
-}
-.addpadright5 {
-	padding-right: 5px;
-}
-.addpad20 {
-	padding: 20px;
-}
-
-.marginleft10 {
-	margin-left: 10px;
-}
-.addmargintop5{
-	margin-top: 5px;
-}
-.addmargintop-10 {
-	margin-top: -10px;
-}
-
-.addmargintop-20 {
-	margin-top: -20px;
-}
-.addmargintop2 {
-	margin-top: 2px;
-}
-.indent20px {
-	padding-left: 20px;
-}
-.boldtype {
-	font-weight: 600;
-}
-.lesspadbottom10 {
-	margin-bottom: -10px;
-}
-.lesspadtop10 {
-	margin-top: -10px;
-}
-.lesspadtop3 {
-	margin-top: -3px;
-}
-.addmarginright10 {
-	margin-right: 10px;
-}
-.addmarginleft10 {
-	margin-left: 10px;
-}
-.addmarginleft40 {
-	margin-left: 40px;
-}
-.addmarginleft0 {
-	margin-left: 0px;
-}
-.addmarginleft230 {
-	margin-left: 230px;
-}
-.addmarginright5 {
-	margin-right: 5px;
-}
-.addmarginright-3 {
-	margin-right: -3px;
-}
-.addmarginbottom5 {
-	margin-bottom: 5px;
-}
-.addmarginbottom10 {
-	margin-bottom: 10px;
-}
-.addmargintop10 {
-	margin-top: 10px;
-}
-.addmargintop20 {
-	margin-top: 20px;
-}
-.addmarginright30 {
-	margin-right: 30px;
-}
-.addmarginright20 {
-	margin-right: 20px;
-}
-.addmarginbottom15 {
-	margin: 0 0 15px;
-}
-.floatleft {
-	float: left;
-}
-.floatright {
-	float: right;
-}
-.textright {
-	text-align: right;
-}
-.addmarginleft130 {
-	margin-left: 130px;
-}
-
-.addmarginleft145 {
-	margin-left: 145px;
-}
-.addmarginright50 {
-	margin-right: 50px;
-}
-
-.addpadright10{
-	padding-right:10px;
-}
-
-.small-text {
-	font-size: 11px;
-}
-.width100-percent{
-	width:100%;
-}
-
-.inline {
-	display:inline;
-}
-.pointer {
-	cursor: hand;
-	cursor: pointer;
-}
-/*---------------*/
 .form input.btn-gradient.floatright{
 	display: inline;
 	float: right;
@@ -226,7 +75,6 @@
 	margin-left: 10px;
 }
 
-
 .prod-config .button-wrap {
 	width: 100%;
 	padding: 10px 0px 0px 0px;
@@ -235,10 +83,6 @@
 	right: 0px;
 	float: left;
 }
-.addmarginleft5 {
-	margin-left: 5px;
-}
-				
 /*------------Reset Password---------------*/
 .reset-wrap {
 	width: 800px;
@@ -342,10 +186,6 @@
 	background: url(../../images/998x107_xpedx-veritiv.png) no-repeat scroll 0 0 transparent;
 	height: 115px;
 }
-.addmarginleft20 {
-	margin-left: 20px;
-}
-
 /*--------------catalog brands page-------------*/
 .alphabet {
 	width: 94%;
@@ -588,7 +428,7 @@
 }
 .pa-location {
 	font-style: italic;
-	padding-top: 7px;
+	padding-top: 5px;
 }
 .extended {
 	padding-top: 7px;
@@ -1077,9 +917,6 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	font-style: italic;
 	padding-left: 4px;
 }
-.addmarginbottom15 {
-	margin: 0px 0px 15px 0px;
-}
 .qa-rightcol {
 	float: left;
 	width: 100px;
@@ -1164,9 +1001,6 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	color: #333333;
 	line-height: 18px;
 }
-.addmargintop12 {
-	margin-top: 12px;
-}
 .qa-listrow label div.error {
 	color: #B50007;
 	float: left;
@@ -1176,12 +1010,6 @@ div#fancybox-content .error, div#fancybox-content .notice {
 input.error {
 	border: 1px solid #B50007;
 	background: #FFF;
-}
-.addmargintop12 {
-	margin-top: 12px;
-}
-.addmargintop17 {
-	margin-top: 17px;
 }
 .label-item {
 	clear: none;
@@ -1724,3 +1552,175 @@ hr.shade {
 	margin-left:auto;
 	margin-right: 160px;
 }
+
+/*--------------basic layout adjustments-------------*/
+.addpadbottom20 {
+	padding-bottom: 20px;	
+}
+.addpadleft5 {
+	padding-left: 5px;
+}
+.addpadtop20{
+	padding-top: 20px;
+}
+.addpadleft20{
+	padding-left: 20px;
+}
+.addpadright20{
+	padding-right: 20px;
+}
+.addpad3 {
+	padding: 3px;
+}
+.addpadtop5 {
+	padding-top: 5px;
+}
+.addpadtop10 {
+	padding-top: 10px;
+}
+.addpadtop15 {
+	padding-top: 15px;
+}
+.addpadtop2 {
+	padding-top: 2px;
+}
+.addpadright5 {
+	padding-right: 5px;
+}
+.addpad20 {
+	padding: 20px;
+}
+
+.marginleft10 {
+	margin-left: 10px;
+}
+.addmargintop5{
+	margin-top: 5px;
+}
+.addmargintop-10 {
+	margin-top: -10px;
+}
+
+.addmargintop-20 {
+	margin-top: -20px;
+}
+.addmargintop2 {
+	margin-top: 2px;
+}
+.indent20px {
+	padding-left: 20px;
+}
+.boldtype {
+	font-weight: 600;
+}
+.lesspadbottom10 {
+	margin-bottom: -10px;
+}
+.lesspadtop10 {
+	margin-top: -10px;
+}
+.lesspadtop3 {
+	margin-top: -3px;
+}
+.addmarginright10 {
+	margin-right: 10px;
+}
+.addmarginleft10 {
+	margin-left: 10px;
+}
+.addmarginleft40 {
+	margin-left: 40px;
+}
+.addmarginleft0 {
+	margin-left: 0px;
+}
+.addmarginleft230 {
+	margin-left: 230px;
+}
+.addmarginright5 {
+	margin-right: 5px;
+}
+.addmarginright-3 {
+	margin-right: -3px;
+}
+.addmarginbottom5 {
+	margin-bottom: 5px;
+}
+.addmarginbottom10 {
+	margin-bottom: 10px;
+}
+.addmargintop10 {
+	margin-top: 10px;
+}
+.addmargintop20 {
+	margin-top: 20px;
+}
+.addmarginright30 {
+	margin-right: 30px;
+}
+.addmarginright20 {
+	margin-right: 20px;
+}
+.addmarginbottom15 {
+	margin-bottom:15px;
+}
+.floatleft {
+	float: left;
+}
+.floatright {
+	float: right;
+}
+.textright {
+	text-align: right;
+}
+.addmarginleft130 {
+	margin-left: 130px;
+}
+
+.addmarginleft145 {
+	margin-left: 145px;
+}
+.addmarginright50 {
+	margin-right: 50px;
+}
+
+.addpadright10{
+	padding-right:10px;
+}
+
+.small-text {
+	font-size: 11px;
+}
+.width100-percent{
+	width:100%;
+}
+
+.inline {
+	display:inline;
+}
+.pointer {
+	cursor: hand;
+	cursor: pointer;
+}
+.addmargintop12 {
+	margin-top: 12px;
+}
+.addmargintop17 {
+	margin-top: 17px;
+}
+.addmargintop12 {
+	margin-top: 12px;
+}
+.addmarginleft5 {
+	margin-left: 5px;
+}
+.addmarginleft-5 {
+	margin-left: -5px;
+}
+.addmarginleft20 {
+	margin-left: 20px;
+}
+.addmargintop66 {
+	margin-top:66px;
+}
+/*---------------*/
