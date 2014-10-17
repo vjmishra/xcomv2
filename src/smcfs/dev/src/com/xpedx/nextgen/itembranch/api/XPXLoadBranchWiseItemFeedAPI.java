@@ -396,6 +396,7 @@ private void writetoFile(String errorMessage,String itemId, String division) thr
 					if (getItemAssociationsDoc.getDocumentElement()
 							.getElementsByTagName("XPXItemAssociations")
 							.item(0) == null) {
+						writetoFile("Invalid Item Association Details passed in Item Branch Header for process code Delete",eleWMAssoItem.getAttribute("ItemNumber"),"");
 						throw new YFSException("Invalid Item Association.",
 								"ERROR_LOAD_03",
 								"Invalid Item Association Details passed in Item Branch Header.");
