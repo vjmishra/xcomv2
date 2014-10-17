@@ -18,6 +18,7 @@ webservices must start with a lower case letter.
 <WebServices>
 
 	<Services>
+	    <Service ServiceName="XPXLoadContractItems" ExposedName="loadContractItems"/>
 	    <Service ServiceName="XPXStockCheckRequestService" ExposedName="b2bStockCheck"/>
 	    <Service ServiceName="XPXCreateReferenceOrderForB2BInput" ExposedName="b2bOrderPlace"/>
 		<Service ServiceName="XPXLegacyOrderUpdateService" ExposedName="legacyOrderUpdate"/>
