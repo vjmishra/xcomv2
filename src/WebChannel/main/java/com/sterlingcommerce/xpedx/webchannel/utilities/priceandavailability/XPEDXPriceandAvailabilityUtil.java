@@ -1454,6 +1454,25 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		return pnALineErrorMessage;
 	}
+	
+	
+	public static Map<String,String> getLineStatusCodeMap(Vector<XPEDXItem> items)
+	{
+		HashMap<String,String> pnALineStatusCode=new HashMap<String,String>();
+		
+		if(items !=null)
+		{
+			for(int i=0;i<items.size();i++)
+			{
+				XPEDXItem item=items.get(i);
+				String itemID=item.getLegacyProductCode();
+				String lineStatusCode=item.getLineStatusCode();
+				pnALineStatusCode.put(itemID, lineStatusCode);
+			}
+		}
+		return pnALineStatusCode;
+	}
+	
 
 	/**
 	 * Logger

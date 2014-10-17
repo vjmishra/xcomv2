@@ -47,6 +47,7 @@ public class PriceAndAvailabilityForItemsAction extends WCAction {
 	private Map<String, String> uomDescriptions;
 	private Map<String, String> itemCategories;
 	private Map<String, String> lineErrorMessages;
+	private Map<String, String> lineStatusCode;
 
 	@Override
 	public String execute() throws Exception {
@@ -66,6 +67,7 @@ public class PriceAndAvailabilityForItemsAction extends WCAction {
 		userHasViewPricesRole = "Y".equals(xpedxCustomerContactInfoBean.getExtnViewPricesFlag());
 
 		lineErrorMessages = XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(priceAndAvailability.getItems());
+		lineStatusCode = XPEDXPriceandAvailabilityUtil.getLineStatusCodeMap(priceAndAvailability.getItems());
 
 		divisionName = XPEDXWCUtils.getDivisionName();
 
@@ -78,6 +80,7 @@ public class PriceAndAvailabilityForItemsAction extends WCAction {
 				uomDescriptions.put(xItem.getOrderMultipleUOM(), XPEDXWCUtils.getUOMDescription(xItem.getOrderMultipleUOM()));
 			}
 		}
+		
 
 		itemCategories = new LinkedHashMap<String, String>();
 		// TODO need to pull PriceInfoDoc?
@@ -197,5 +200,15 @@ public class PriceAndAvailabilityForItemsAction extends WCAction {
 	public Map<String, String> getLineErrorMessages() {
 		return lineErrorMessages;
 	}
+
+	public Map<String, String> getLineStatusCode() {
+		return lineStatusCode;
+	}
+
+	public void setLineStatusCode(Map<String, String> lineStatusCode) {
+		this.lineStatusCode = lineStatusCode;
+	}
+	
+	
 
 }

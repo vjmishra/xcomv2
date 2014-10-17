@@ -90,6 +90,7 @@ function getPriceAndAvailabilityForItems(options) {
 				}
 				
 				var lineErrorMessage = data.lineErrorMessages[pnaItem.legacyProductCode];
+				var lineStatusCode = data.lineStatusCode[pnaItem.legacyProductCode];
 				
 				/*if (lineErrorMessage && lineErrorMessage.trim().length > 0) {
 					
@@ -187,6 +188,11 @@ function getPriceAndAvailabilityForItems(options) {
 					}
 				}
 				html.push('					<div class="pa-row pa-location">', numberWithCommas(pnaAvail['0']), ' ', data.uomDescriptions[pnaItem.requestedQtyUOM], ' available today at ', data.divisionName, '</div>');
+				if (lineStatusCode!=null && lineStatusCode.trim()=='15'&& lineErrorMessage && lineErrorMessage.trim().length > 0) {
+					html.push('		<div class="pa-row">');
+					html.push('			<h5 class="suspended-item addpadleft0">', htmlEncode(lineErrorMessage), '</h5>');
+					html.push('		</div>');
+				}
 				html.push('				</div>'); // close avail-wrap
 				html.push('			</div>'); // close pa-avail
 				
@@ -255,8 +261,8 @@ function getPriceAndAvailabilityForItems(options) {
 				}
 					
 				$divItemAvailability.show().get(0).innerHTML = html.join('');
-			}
-			if (lineErrorMessage && lineErrorMessage.trim().length > 0) {
+			
+			if (lineStatusCode.trim()!='15'&& lineErrorMessage && lineErrorMessage.trim().length > 0) {
 				html.push('		</div>');
 				html.push('		<div class="pa-wrap">');
 				html.push('			<h5 class="suspended-item">', htmlEncode(lineErrorMessage), '</h5>');
@@ -265,6 +271,8 @@ function getPriceAndAvailabilityForItems(options) {
 				pnaSuccess = false;
 				
 			}
+			}
+			
 			if (pnaSuccess && typeof(options.success) === 'function') {
 				options.success(data);
 			}
