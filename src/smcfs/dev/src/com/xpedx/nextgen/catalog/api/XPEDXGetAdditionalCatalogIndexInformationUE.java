@@ -4,20 +4,21 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.catalog.api.ItemIndexUtil.ItemMetadata;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.ycm.japi.ue.YCMGetAdditionalCatalogIndexInformationUE;
@@ -71,8 +72,11 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		}
 	}
 
+	/**
+	 * Writes the input xml to a file in the temp directory. This method is guaranteed to not throw exceptions.
+	 */
 	private static void dumpInputXml(Document inDocumentUE) {
-		File xmlFile = new File(System.getProperty("java.io.tmpdir"), "XPEDXGetAdditionalCatalogIndexInformationUE-input.xml");
+		File xmlFile = new File(System.getProperty("java.io.tmpdir"), "XPEDXGetAdditionalCatalogIndexInformationUE-input_" + new Date().getTime() + ".xml");
 		System.out.println("Logging inDocumentUE to file: " + xmlFile);
 
 		try {
@@ -88,10 +92,11 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			Writer writer = null;
 			try {
 				writer = new FileWriter(xmlFile);
-				writer.write("Failed to write inDocumentUE to this file: " + e.getMessage() + "\n");
+				writer.write("Failed to write inDocumentUE to this file. Exception.message: " + e.getMessage() + "\n");
 
 			} catch (Exception ignore) {
 				// do nothing
+
 			} finally {
 				if (writer != null) {
 					try {
@@ -161,12 +166,31 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		return list;
 	}
 
-	public static void main(String[] args) throws Exception {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document inDocumentUE = builder.parse(new File("C:/dev/xcomv2/src/WebChannel/buildScripts/dev_merge.xml"));
+	// TODO integrate this with Jim's query for entitled items
+	private static void removeUnentitledItems(Document inDocumentUE, Set<String> entitledItemIDs) {
+		Element searchIndexTriggerElem = inDocumentUE.getDocumentElement();
+		Element itemListElem = SCXmlUtil.getChildElement(searchIndexTriggerElem, "ItemList");
+		List<Element> itemElems = SCXmlUtil.getElements(itemListElem, "Item");
 
-		dumpInputXml(inDocumentUE);
+		// remove the unentitled items from the dom
+		for (Element itemElem : itemElems) {
+			String itemID = itemElem.getAttribute("ItemID");
+			if (!entitledItemIDs.contains(itemID)) {
+				itemListElem.removeChild(itemElem);
+			}
+		}
+
+		System.out.println(SCXmlUtil.getElements(itemListElem, "Item").size());
 	}
+
+//	public static void main(String[] args) throws Exception {
+//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder builder = factory.newDocumentBuilder();
+//		Document inDocumentUE = builder.parse(new File("C:/Users/THOWA14/Desktop/8038/XPEDXGetAdditionalCatalogIndexInformationUE-input-1.xml"));
+//
+//		Set<String> entitledItemIDs = new LinkedHashSet<String>(Arrays.asList("5421865", "2278085"));
+//
+//		removeUnentitledItems(inDocumentUE, entitledItemIDs);
+//	}
 
 }
