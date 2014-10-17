@@ -402,6 +402,7 @@ private void writetoFile(String errorMessage,String itemId, String division) thr
 					}
 					/** ******************************************************************************************* */
 				} else {
+					writetoFile("Invalid Item Details passed in Item Branch Header",eleWMAssoItem.getAttribute("ItemNumber"),"");
 					// invalid Item Branch
 					throw new YFSException("Invalid Item Branch.",
 							"ERROR_LOAD_02",
