@@ -1,10 +1,20 @@
 package com.xpedx.nextgen.catalog.api;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
@@ -38,6 +48,8 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			log.debug("inStockStatus = " + inStockStatus);
 		}
 
+		dumpInputXml(inDocumentUE);
+
 		try {
 			YFCDocument inDoc = YFCDocument.getDocumentFor(inDocumentUE);
 			YFCElement inElem = inDoc.getDocumentElement();
@@ -56,6 +68,38 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		} catch (Exception ex) {
 			log.error("Problem creating Search Index additional info in user exit", ex);
 			throw new YFSUserExitException(ex.getMessage());
+		}
+	}
+
+	private static void dumpInputXml(Document inDocumentUE) {
+		File xmlFile = new File(System.getProperty("java.io.tmpdir"), "XPEDXGetAdditionalCatalogIndexInformationUE-input.xml");
+		System.out.println("Logging inDocumentUE to file: " + xmlFile);
+
+		try {
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer();
+
+			DOMSource source = new DOMSource(inDocumentUE);
+			StreamResult result = new StreamResult(xmlFile);
+			transformer.transform(source, result);
+
+		} catch (Exception e) {
+			// if unable to write the input xml, at least record that an error occurred. do NOT rethrow exception here
+			Writer writer = null;
+			try {
+				writer = new FileWriter(xmlFile);
+				writer.write("Failed to write inDocumentUE to this file: " + e.getMessage() + "\n");
+
+			} catch (Exception ignore) {
+				// do nothing
+			} finally {
+				if (writer != null) {
+					try {
+						writer.close();
+					} catch (Exception ignore2) {
+					}
+				}
+			}
 		}
 	}
 
@@ -115,6 +159,14 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			list.add(itemElem.getAttribute("ItemID"));
 		}
 		return list;
+	}
+
+	public static void main(String[] args) throws Exception {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document inDocumentUE = builder.parse(new File("C:/dev/xcomv2/src/WebChannel/buildScripts/dev_merge.xml"));
+
+		dumpInputXml(inDocumentUE);
 	}
 
 }
