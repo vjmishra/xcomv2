@@ -4640,6 +4640,14 @@
     IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
     Modifyts="2014-10-01T15:09:40-04:00" Modifyuserid="admin"
     OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2014-10-16T13:31:00-04:00" Createuserid="admin"
+    FlowGroupName="XPXDataLoad" FlowKey="2014101613310090109"
+    FlowName="XPXLoadContractItems" FlowType="00"
+    GraphUIKey="2014101613310390112" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
+    Modifyts="2014-10-16T13:32:37-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
 <Flow Createprogid="XMLMigrator" Createts="2011-07-14T14:41:43-04:00"
     Createuserid="SYSTEM" FlowGroupName="DefaultAgentGroup"
     FlowKey="ACCEPT_WAVE" FlowName="ACCEPT_WAVE" FlowType="01"
