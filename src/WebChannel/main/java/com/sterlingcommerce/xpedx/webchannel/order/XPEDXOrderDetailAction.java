@@ -33,6 +33,7 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -1130,4 +1131,29 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		}
 		return false;
 	}
+
+	/**
+	 * Get the Item description from Order line Element, so that it will display Item description at the time order placed.
+	 * If there is no Item description from Order line Element then it will display Item description from Item Element.
+	 */
+	@Override
+	public String getShortDescriptionForOrderLine(Element orderLineEl)  throws Exception  {
+	        String returnValue = null;
+	        if(orderLineEl != null)
+	        {
+	        	  Element item = XMLUtilities.getElement(orderLineEl, "Item");
+	                if(item != null){
+	                    returnValue = item.getAttribute("ItemShortDesc");
+	                }
+	                if(YFCCommon.isVoid(returnValue)) {
+			        	Element itemDetails = XMLUtilities.getElement(orderLineEl, "ItemDetails");
+			            if(itemDetails != null)
+			            {
+			                Element primaryInfo = XMLUtilities.getElement(itemDetails, "PrimaryInformation");
+			                returnValue = primaryInfo.getAttribute("ShortDescription");
+			            }
+	            }
+	        }
+	        return returnValue;
+	    }
 }

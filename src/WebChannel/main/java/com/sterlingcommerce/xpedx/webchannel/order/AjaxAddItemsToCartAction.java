@@ -201,7 +201,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@OrderedQty", row.getQty());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@TransactionalUOM", defaultTransUOMMap.get(row.getItem())!=null?defaultTransUOMMap.get(row.getItem()):itemDetails.get(row.getItem()).getUom());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@UnitOfMeasure", itemDetails.get(row.getItem()).getUom());
-				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemShortDesc", ""); // not needed
+				//valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemShortDesc", ""); // not needed Added logic 'To add customer specific description' if available otherwise Item description in XPXBeforeChangeOrderUE class
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ProductClass", ""); // not needed
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@LineType", "P"); // we always add items to the cart using xpedx item number, so this is always 'P'
 				rowCount += 1;
