@@ -1,6 +1,5 @@
 package com.xpedx.nextgen.item;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,6 +17,8 @@ import java.util.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
@@ -300,35 +301,47 @@ public class XPXLoadContractItems implements YIFCustomApi {
 
 	// returns # of valid entries found in file
 	private int loadEntriesFromFile(File file) throws FileNotFoundException, IOException {
-		BufferedReader br = new BufferedReader(new FileReader(file));
-		origEntries = new ArrayList<Pair>(1000);
-		origCustIds = new HashMap<String,String>(1000);
-		Set<String> alreadyRead = new HashSet<String>(1000);
-		int num = 0;
-		String line;
+		CSVReader reader = null;
+		try {
+			reader = new CSVReader(new FileReader(file));
+			origEntries = new ArrayList<Pair>(1000);
+			origCustIds = new HashMap<String,String>(1000);
+			Set<String> alreadyRead = new HashSet<String>(1000);
+			int num = 0;
+			String[] ids;
 
-		while ((line = br.readLine()) != null) {
-			num++;
-			String[] ids = line.split(",");
-			if (ids.length != 2) {
-				log.warn("XPXLoadContractItems: Invalid entry on line " + num +": "+ line);
-			}
-			else {
-				final String itemId = ids[0];
-				final String custId = ids[1];
-				final String combo = ids[0] + ids[1];
-				if (alreadyRead.contains(combo)) {
-					log.info("XPXLoadContractItems: Dup entry found - " + itemId +" : "+custId);
+			while ((ids = reader.readNext()) != null) {
+				num++;
+				if (ids.length==1 & ids[0].equals("")) {
 					continue;
 				}
-				alreadyRead.add(combo);
+				if (ids.length != 2) {
+					log.warn("XPXLoadContractItems: Invalid entry on line " + num);
+				}
+				else {
+					final String itemId = ids[0];
+					final String custId = ids[1];
+					final String combo = ids[0] + ids[1];
+					if (alreadyRead.contains(combo)) {
+						log.info("XPXLoadContractItems: Dup entry found - " + itemId +" : "+custId);
+						continue;
+					}
+					alreadyRead.add(combo);
 
-				origEntries.add(new Pair(itemId, custId));
-				origCustIds.put(custId,""); // ignores dups
+					origEntries.add(new Pair(itemId, custId));
+					origCustIds.put(custId,""); // ignores dups
+				}
+				// check for itemIds not in DB (ignore and/or warn) or load regardless?
 			}
-			//TODO check for itemIds not in DB (ignore and/or warn) or load regardless?
 		}
-		br.close();
+		finally {
+		    if (reader != null) {
+		        try {
+		            reader.close();
+		        } catch (Exception ignore) {
+		        }
+		    }
+		}
 		log.info("XPXLoadContractItems: file contains " + origEntries.size() + " items");
 		return origEntries.size();
 	}
