@@ -9,12 +9,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -46,6 +46,8 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 
 	private static final YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 
+	private static AtomicLong atomicLong = new AtomicLong(1);
+
 	@Override
 	public Document getAdditionalCatalogIndexInformation(YFSEnvironment env, Document inDocumentUE) throws YFSUserExitException {
 		String inStockStatus = YFSSystem.getProperty("inventory_indicator_for_in_stock_status");
@@ -57,9 +59,10 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			log.debug("inStockStatus = " + inStockStatus);
 		}
 
-		dumpInputXml(inDocumentUE, "input");
+		long count = atomicLong.getAndAdd(1);
+		dumpInputXml(inDocumentUE, count, "input");
 		removeUnentitledItems(inDocumentUE);
-		dumpInputXml(inDocumentUE, "filtered");
+		dumpInputXml(inDocumentUE, count, "filtered");
 
 		try {
 			YFCDocument inDoc = YFCDocument.getDocumentFor(inDocumentUE);
@@ -86,8 +89,8 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 	/**
 	 * Writes the input xml to a file in the temp directory. This method is guaranteed to not throw exceptions.
 	 */
-	private static void dumpInputXml(Document inDocumentUE, String label) {
-		String filename = "XPEDXGetAdditionalCatalogIndexInformationUE" + "_" + new Date().getTime() + "_" + label + ".xml";
+	private static void dumpInputXml(Document inDocumentUE, long count, String label) {
+		String filename = String.format("XPEDXGetAdditionalCatalogIndexInformationUE_%s_%s.xml", String.valueOf(count), label);
 		File xmlFile = new File(System.getProperty("java.io.tmpdir"), filename);
 		System.out.println("Logging inDocumentUE to file: " + xmlFile);
 
@@ -180,29 +183,33 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		return list;
 	}
 
-	// TODO integrate this with Jim's query for entitled items
+	/**
+	 * Modifies inDocumentUE to remove all Item elements that are not entitlemed (for any user). This method is guaranteed to not throw exceptions.
+	 */
 	private static void removeUnentitledItems(Document inDocumentUE) {
-		Element searchIndexTriggerElem = inDocumentUE.getDocumentElement();
-		Element itemListElem = SCXmlUtil.getChildElement(searchIndexTriggerElem, "ItemList");
-		List<Element> itemElems = SCXmlUtil.getElements(itemListElem, "Item");
+		try {
+			Element searchIndexTriggerElem = inDocumentUE.getDocumentElement();
+			Element itemListElem = SCXmlUtil.getChildElement(searchIndexTriggerElem, "ItemList");
+			List<Element> itemElems = SCXmlUtil.getElements(itemListElem, "Item");
 
-		Set<String> allItemIDs = new LinkedHashSet<String>(itemElems.size());
-		for (Element itemElem : itemElems) {
-			String itemID = itemElem.getAttribute("ItemID");
-			allItemIDs.add(itemID);
-		}
-
-		Set<String> entitledItemIDs = pocGetEntitledItemIDs(allItemIDs);
-
-		// remove the unentitled items from the dom
-		for (Element itemElem : itemElems) {
-			String itemID = itemElem.getAttribute("ItemID");
-			if (!entitledItemIDs.contains(itemID)) {
-				itemListElem.removeChild(itemElem);
+			Set<String> allItemIDs = new LinkedHashSet<String>(itemElems.size());
+			for (Element itemElem : itemElems) {
+				String itemID = itemElem.getAttribute("ItemID");
+				allItemIDs.add(itemID);
 			}
-		}
 
-//		System.out.println(SCXmlUtil.getElements(itemListElem, "Item").size());
+			Set<String> entitledItemIDs = pocGetEntitledItemIDs(allItemIDs);
+
+			// remove the unentitled items from the dom
+			for (Element itemElem : itemElems) {
+				String itemID = itemElem.getAttribute("ItemID");
+				if (!entitledItemIDs.contains(itemID)) {
+					itemListElem.removeChild(itemElem);
+				}
+			}
+
+		} catch (Exception ignore) {
+		}
 	}
 
 	private static Set<String> pocGetEntitledItemIDs(Set<String> allItemIDs) {
@@ -216,7 +223,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 
 			int parameterIndex = 1;
 			for (String itemID : allItemIDs) {
-				stmt.setString(parameterIndex++, itemID);
+				stmt.setString(parameterIndex++, pad(itemID, 40));
 			}
 
 			ResultSet res = stmt.executeQuery();
@@ -241,6 +248,16 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		}
 	}
 
+	private static String pad(String str, int len) {
+		StringBuilder buf = new StringBuilder(len);
+
+		buf.append(str);
+		while (buf.length() < len) {
+			buf.append(" ");
+		}
+		return buf.toString();
+	}
+
 	private static String createQuestionMarks(int num) {
 		StringBuilder buf = new StringBuilder(2 * num);
 		for (int i = 0; i < num; i++) {
@@ -258,8 +275,27 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
 		String jdbcPassword = Manager.getProperty("jdbcService", "oraclePool.password");
 
+//		String jdbcDriver = "oracle.jdbc.OracleDriver";
+//		String jdbcURL = "jdbc:oracle:thin:@oratst08.ipaper.com:1521:NGD1";
+//		String jdbcUser = "ng";
+//		String jdbcPassword = "ng1";
+
 		Class.forName(jdbcDriver);
 		return DriverManager.getConnection(jdbcURL, jdbcUser, jdbcPassword);
+	}
+
+	public static void main(String[] args) {
+		Set<String> allItemIDs = new LinkedHashSet<String>();
+		allItemIDs.add("2030733");
+		allItemIDs.add("2137515");
+		allItemIDs.add("2181279");
+		allItemIDs.add("2052954");
+		allItemIDs.add("2190881");
+		allItemIDs.add("5126797");
+		allItemIDs.add("5126835");
+		allItemIDs.add("5052667");
+
+		pocGetEntitledItemIDs(allItemIDs);
 	}
 
 //	public static void main(String[] args) throws Exception {
