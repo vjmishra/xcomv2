@@ -74,6 +74,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	private String mfgItemFlag;
 	private int [] quickaddItemLines= new int[200];
 	private int displayItemLines =5;
+	private Map<String, String> customerDescItemMap;
 	public String getCustomerItemFlag() {
 		return customerItemFlag;
 	}
@@ -318,7 +319,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			{
 				setEditOrdersMap(orderHeaderKey);
 			}*/
-
+			setCustomerSpecificDescForReplacementItems();
 			XPEDXWCUtils.releaseEnv(wcContext);
 		} catch (Exception ex) {
 			if (ex != null && ex.toString() != null
@@ -2317,13 +2318,14 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				itemIdList.add(itemId);
 			}
 		}
-		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
+		//if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
 			//Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
 			Element itemCustXRefList=(Element)ServletActionContext.getRequest().getAttribute("XPXItemcustXrefList");
 			if(itemCustXRefList!=null) {
 				//Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
 				ArrayList<Element> itemCustXrefElems = SCXmlUtil.getElements(itemCustXRefList, "XPXItemcustXref");
 				if(itemCustXrefElems!=null && itemCustXrefElems.size()>0) {
+					customerDescItemMap = new HashMap<String, String>();
 					Iterator<Element> xrefIter = itemCustXrefElems.iterator();
 					while(xrefIter.hasNext()) {
 						Element xref = xrefIter.next();
@@ -2342,10 +2344,14 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 							itemSkuMap.clear();
 							}
 						}
+						String customerDecription = xref.getAttribute("CustomerDecription");
+						if(!SCUtil.isVoid(customerDecription)){
+							customerDescItemMap.put(legacyItemNum, customerDecription);
+						}
 					}
 				}
 			}
-	   }
+	   //}
 	}
 	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
@@ -3338,6 +3344,36 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			}
 		}
 		return imageUrl;
+	}
+	/**
+	 * setting the customer specific description for replacement Items If available
+	 */
+	private void setCustomerSpecificDescForReplacementItems(){
+		if((xpedxItemIDUOMToReplacementListMap != null && !xpedxItemIDUOMToReplacementListMap.isEmpty() && customerDescItemMap != null && !customerDescItemMap.isEmpty())) {
+			Iterator<Map.Entry<String, ArrayList<Element>>> replacmentItemEntryIter = xpedxItemIDUOMToReplacementListMap.entrySet().iterator() ;
+			while(replacmentItemEntryIter.hasNext()){
+				Map.Entry<String, ArrayList<Element>> replacmentItemEntry = replacmentItemEntryIter.next();
+				if(replacmentItemEntry != null && replacmentItemEntry.getKey() != null){
+					List<Element> replacementItems =  replacmentItemEntry.getValue();
+					for (Element replacementItem : replacementItems) {
+						if(!SCUtil.isVoid(replacementItem)) {
+							String itemId = SCXmlUtil.getAttribute(replacementItem, "ItemID");
+							if(!SCUtil.isVoid(itemId) && customerDescItemMap.containsKey(itemId)) {
+								Element primeInfoElem = SCXmlUtil.getChildElement(replacementItem, "PrimaryInformation");
+								if(primeInfoElem != null) {
+									primeInfoElem.setAttribute("ShortDescription", customerDescItemMap.get(itemId));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	public Map<String, String> getCustomerDescItemMap() {
+		return customerDescItemMap;
 	}
 
 }
