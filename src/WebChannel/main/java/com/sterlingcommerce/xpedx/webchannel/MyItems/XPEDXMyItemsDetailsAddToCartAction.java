@@ -7,22 +7,23 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
+import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.validators.WCValidationUtils;
 import com.sterlingcommerce.webchannel.order.DraftOrderAddOrderLinesAction;
-import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
-import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.core.YFCIterable;
@@ -44,7 +45,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	 */
 	 protected ArrayList<String> orderedLineTypeList = new ArrayList<String>();
 	 protected ArrayList<String> entereditemTypeList = new ArrayList<String>();
-	
+
 	private static final Logger LOG = Logger
 			.getLogger(XPEDXMyItemsDetailsAddToCartAction.class);
 	private String productID;
@@ -74,6 +75,10 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	protected ArrayList<String> orderedCustomerPONo = new ArrayList<String>();
 	protected ArrayList<String> orderedCustomerLinePONo = new ArrayList<String>();
 	protected ArrayList<String> transactionalUOMs = new ArrayList<String>();
+	private ArrayList<String> enteredInstructionsText;
+	protected ArrayList<String> orderedInstructionsText = new ArrayList<String>();
+	protected ArrayList<String> orderedInstructionsType = new ArrayList<String>();
+	protected ArrayList<String> orderedInstructionsAction = new ArrayList<String>();
 	public String addToCartError;
 	protected boolean addingSingleItem = false;
 	protected ArrayList<String> isEditNewline=new ArrayList<String>();
@@ -84,6 +89,39 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	//Added for EB 3372
 	protected String requestedJobId;
 	protected String requestedCustomerLinePONo;
+
+	public ArrayList<String> getOrderedInstructionsText() {
+		return orderedInstructionsText;
+	}
+
+	public void setOrderedInstructionsText(ArrayList<String> orderedInstructionsText) {
+		this.orderedInstructionsText = orderedInstructionsText;
+	}
+
+	public ArrayList<String> getEnteredInstructionsText() {
+		return enteredInstructionsText;
+	}
+
+	public void setEnteredInstructionsText(ArrayList<String> enteredInstructionsText) {
+		this.enteredInstructionsText = enteredInstructionsText;
+	}
+
+	public ArrayList<String> getOrderedInstructionsType() {
+		return orderedInstructionsType;
+	}
+
+	public void setOrderedInstructionsType(ArrayList<String> orderedInstructionsType) {
+		this.orderedInstructionsType = orderedInstructionsType;
+	}
+
+	public ArrayList<String> getOrderedInstructionsAction() {
+		return orderedInstructionsAction;
+	}
+
+	public void setOrderedInstructionsAction(
+			ArrayList<String> orderedInstructionsAction) {
+		this.orderedInstructionsAction = orderedInstructionsAction;
+	}
 
 	public String getRequestedJobId() {
 		return requestedJobId;
@@ -103,7 +141,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	//ENd of EB 3372
 	//For Order multiple CR
 	protected HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
-	
+
 	protected List<String> orderMultipleErrorItems = new ArrayList<String>();
 
 	public List<String> getOrderMultipleErrorItems() {
@@ -131,14 +169,16 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	public String execute() {
 		long startTime=System.currentTimeMillis();
 		try {
-			
+
 			// If a currency wasn't passed, use the effective currency.
 			if (currency == null) {
 				currency = getWCContext().getEffectiveCurrency();
 			}
 
-			// Process the product list.
 
+
+
+			// Process the product list.
 			String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 			isEditNewline.clear();
 			if(!YFCCommon.isVoid(editedOrderHeaderKey))
@@ -161,31 +201,31 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					if((orderHeaderKey==null || orderHeaderKey.equals("") || orderHeaderKey.equals("_CREATE_NEW_")) && XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())){
 						 XPEDXOrderUtils.createNewCartInContext(getWCContext());
 						 //orderHeaderKey =getWCContext().getWCAttribute("CommerceContextObject")
-							
+
 						 orderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");//XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 					}
-					
+
 					//start of XBT 252 & 248
 					if(YFCCommon.isVoid(editedOrderHeaderKey)){
-						draftOrderflag="Y";	
+						draftOrderflag="Y";
 					}
 					else {
-						draftOrderflag="N";	
+						draftOrderflag="N";
 					}
-					//end of XBT 252 & 248   
+					//end of XBT 252 & 248
 					try {
 						XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
 						long changeOrderStartTime=System.currentTimeMillis();
 						changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
 						long changeOrderEndTime=System.currentTimeMillis();
-						
+
 						System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction for ChangeOrder : "+(changeOrderEndTime-changeOrderStartTime));
-						
-					} 
+
+					}
 					catch(XMLExceptionWrapper e)
 					 {
 						 YFCElement errorXML=e.getXML();
-						 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+						 YFCElement errorElement=errorXML.getElementsByTagName("Error").item(0);
 						 String errorDeasc=errorElement.getAttribute("ErrorDescription");
 						 if(errorDeasc.contains("Key Fields cannot be modified."))
 						 {
@@ -200,7 +240,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 								 }
 							 }
 						 }
-						 
+
 						 if(errorDeasc.contains("value larger than specified precision allowed for this column"))
 						 {
 							 quantitydraftError = "true";
@@ -226,11 +266,11 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					//refreshCartInContext(orderHeaderKey);
 				}
 			}
-		} 
+		}
 		catch(XMLExceptionWrapper e)
 		 {
 			 YFCElement errorXML=e.getXML();
-			 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+			 YFCElement errorElement=errorXML.getElementsByTagName("Error").item(0);
 			 String errorDeasc=errorElement.getAttribute("ErrorDescription");
 			 if(errorDeasc.contains("Key Fields cannot be modified."))
 			 {
@@ -263,15 +303,15 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		long endTime=System.currentTimeMillis();
 		System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction class : "+(endTime-startTime));
 		//return SUCCESS;
-		if(useOrdermultipleMapFromSourcing!=null && useOrdermultipleMapFromSourcing.size()>0 && requestedItemID==null){				
+		if(useOrdermultipleMapFromSourcing!=null && useOrdermultipleMapFromSourcing.size()>0 && requestedItemID==null){
 			return "MaxError";
 		}
 		return null;
 	}
 
-	
+
 	public void processPNAResponseForOrderMultiple(){
-		
+
 			try
  			{
          		Integer maxItemLineNum = null;
@@ -279,31 +319,31 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
          		String responseXML = null;
          		String orderMultipleQty = "";
          		String orderMultipleUOM = "";
-         		
-         		
+
+
          		Element additionalAttrXmlList = SCXmlUtil.getChildElement(changeOrderOutputDoc.getDocumentElement(), "Extn");
          		Element additionalAttrXml = XMLUtilities.getElement(additionalAttrXmlList,"XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
          		if(additionalAttrXml != null){
 	         	    responseXML = additionalAttrXml.getAttribute("ResponseXML");
 	         		Document attrXml =SCXmlUtil.createFromString(responseXML);
 					Element priceAvailXml = attrXml.getDocumentElement();
-	         		
+
 					Element itemPrice = XMLUtilities.getElement(priceAvailXml, "Items/Item");
 					Document doc  = itemPrice.getOwnerDocument();
 					YFCElement rootEle = YFCDocument.getDocumentFor(doc).getDocumentElement();
-					
+
 					if (rootEle.hasChildNodes()) {
 						YFCElement lineItem =  rootEle.getChildElement("Items");
-						YFCIterable<YFCElement> yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
-						
-						yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
+						YFCIterable<YFCElement> yfcItr = lineItem.getChildren("Item");
+
+						yfcItr = lineItem.getChildren("Item");
 						while (yfcItr.hasNext()) {
-							YFCElement lineElem = (YFCElement) yfcItr.next();
+							YFCElement lineElem = yfcItr.next();
 							YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
 							YFCElement legacyProductCodeElem = lineElem.getChildElement("LegacyProductCode");
 							YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
 							YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
-							YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
+							YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty");
 							YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
 							if(orderMultipleQtyElem!=null){
 								orderMultipleQty= orderMultipleQtyElem.getNodeValue();
@@ -312,7 +352,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 							if(orderMultipleUOMElem!=null){
 								orderMultipleUOM= orderMultipleUOMElem.getNodeValue();
 							}
-							String lineNumber = lineStatusCodeElem.getNodeValue();							
+							String lineNumber = lineStatusCodeElem.getNodeValue();
 							String legacyProductCode = legacyProductCodeElem.getNodeValue();
 							String requestedQty = requestedQtyElem.getNodeValue();
 							String requestedUom = requestedUomElem.getNodeValue();
@@ -321,9 +361,9 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 								orderMultipleErrorItems.add(legacyProductCode+"_"+requestedQty+"_"+requestedUom);
 							}
 						}
-						
+
 					}
-					
+
          		}
  			}
  			catch(Exception e)
@@ -331,7 +371,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
  				LOG.error("Exception while getting item from PnA Response "+e.getMessage());
  			}
 	}
-	
+
 	private boolean getProductInformationForEnteredProducts() {
 		// enteredProductIDs should never be null in this situation - if it is,
 		// then we log an error and return to the page
@@ -389,6 +429,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		if(isVaidquantity != null){
 			isVaidquantityArray = isVaidquantity.split(",");
 		}
+		int j = 0;
 		// Loop through each product ID that was entered.
 		for (int i = 0; i < this.enteredProductIDs.size(); i++) {
 			String itemID = enteredProductIDs.get(i);
@@ -411,7 +452,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			{
 				isEditNewline.add("N");
 			}
-			String enteredUOMStr = (String)this.enteredUOMs.get(i);
+			String enteredUOMStr = this.enteredUOMs.get(i);
 			String itemType=entereditemTypeList.get(i);
 			/*if("99.00".equals(itemType) || "99".equals(itemType) || "0.00".equals(itemType) || "0".equals(itemType))
 			{
@@ -420,7 +461,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			else{*/
 				orderedLineTypeList.add("P");
 			//}
-			
+
 			// Fix the Long to integer problem. -PN
 			enteredQtyStr = StringUtils.replace(enteredQtyStr, ".00", "");
 			enteredQtyStr = StringUtils.replace(enteredQtyStr, ",", "");
@@ -451,7 +492,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			}
 
 			// Retrieve the associated output document.
-			Element itemListEl = (Element) this.verificationOutputMap
+			Element itemListEl = this.verificationOutputMap
 					.get(itemID);
 
 			ItemValidationResult result = processGetCompleteItemListResult(
@@ -473,7 +514,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					orderedProductUOMs.add(result.getUOM());
 					if(enteredUOMStr!=null && enteredUOMStr.trim().length()>0)
 					{
-						
+
 						transactionalUOMs.add(enteredUOMStr);
 					}
 					else
@@ -482,6 +523,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					}
 					orderedProductClasses.add(result.getDefaultProductClass());
 					setCustomerFieldsForOrderedItems(i);
+					orderedInstructionsText.add(enteredInstructionsText.get(i));
 				}
 			} catch (Exception e) {
 				LOG.error(e.getStackTrace());
@@ -489,10 +531,11 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		}
 
 	}
-	
+
+	@Override
 	protected ItemValidationResult processGetCompleteItemListResult(String itemID, Element itemEl)
     throws XPathExpressionException {
-		
+
 	    ItemValidationResult result = new ItemValidationResult();
 	    result.setItemID(itemID);
 	    ArrayList messageArgs = new ArrayList();
@@ -581,36 +624,37 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	    result.setValid(true);
 	    return result;
 	}
-	
-	private void setCustomerFieldsForOrderedItems(int index) 
+
+	private void setCustomerFieldsForOrderedItems(int index)
 	{
-		
+
 			String customerFieldVal = null;
 			customerFieldVal = this.enteredCustLineAccNo!=null?this.enteredCustLineAccNo.get(index):"";
 			if(customerFieldVal!=null && customerFieldVal.length()>0)
 				orderedCustLineAccNo.add(customerFieldVal);
-			
+
 			customerFieldVal = this.enteredCustLineField1!=null?this.enteredCustLineField1.get(index):"";
 			if(customerFieldVal!=null && customerFieldVal.length()>0)
 				orderedCustLineField1.add(customerFieldVal);
-			
+
 			customerFieldVal = this.enteredCustLineField2!=null?this.enteredCustLineField2.get(index):"";
 			if(customerFieldVal!=null && customerFieldVal.length()>0)
 				orderedCustLineField2.add(customerFieldVal);
-			
+
 			customerFieldVal = this.enteredCustLineField3!=null?this.enteredCustLineField3.get(index):"";
 			if(customerFieldVal!=null && customerFieldVal.length()>0)
 				orderedCustLineField3.add(customerFieldVal);
-			
+
 			customerFieldVal = this.enteredCustomerPONo!=null?this.enteredCustomerPONo.get(index):"";
 			if(customerFieldVal!=null && customerFieldVal.length()>0)
 				orderedCustomerPONo.add(customerFieldVal);
-			
+
 			customerFieldVal = this.enteredCustomerLinePONo!=null?this.enteredCustomerLinePONo.get(index):"";
 			if(customerFieldVal!=null && customerFieldVal.length()>0)
 				orderedCustomerLinePONo.add(customerFieldVal);
+
 	}
-	
+
 	public String addMyItemToCart(){
 		enteredProductIDs = new ArrayList<String>();
 		enteredQuantities = new ArrayList<String>();
@@ -648,15 +692,15 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			addToCartError = "Error while adding item to cart";
 		}
 		else if(useOrdermultipleMapFromSourcing!=null && useOrdermultipleMapFromSourcing.containsKey(requestedItemID+"_"+requestedQty+"_"+requestedUOM)){
-			addToCartError = "Item has been added to your cart. Please review the cart to update the item with a valid quantity.";	
+			addToCartError = "Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
 			return "MaxError";
 		}
 		else
 			addToCartError="";
-		 
+
 		return returnVal;
 	}
-	
+
 	protected Document getsapCustExtnFieldsFromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
@@ -665,7 +709,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		Document sapCustExtnFields = (Document)XPEDXWCUtils.getObjectFromCache("sapCustExtnFields");
         return sapCustExtnFields;
 	}
-	
+
 	private void setCustomerDisplayFields(String customerFieldsString) {
 		if(customerFieldsString!=null && customerFieldsString.trim().length()>0) {
 			try {
@@ -695,19 +739,19 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 						}
 					}
 				}
-	
+
 			} catch (Exception e) {
 				LOG.error(e.getStackTrace());
 			}
 		}
 	}
-	
+
 	/*@Override
 	protected void manipulateMashupInputs(Map<String, Element> mashupInputs)
 			throws CannotBuildInputException {
 		Element input = mashupInputs.get(MASHUP_DO_ADD_ORDER_LINES);
 		if(input!=null && addingSingleItem) {
-		
+
 			Element transactionalElem = input.getOwnerDocument().createElement("OrderLineTranQuantity");
 			transactionalElem.setAttribute("TransactionalUOM", requestedUOM);
 			requestedQty = StringUtils.replace(requestedQty, ".00", "");
@@ -718,12 +762,12 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		}
 		Element input1 = mashupInputs.get(MASHUP_DO_GET_COMPLETE_ITEM_LIST);
 		if(input1!=null && addingSingleItem) {
-		
+
 		}
 		// TODO Auto-generated method stub
 		super.manipulateMashupInputs(mashupInputs);
 	}*/
-	
+
 	@Override
 	protected void manipulateMashupInputs(Map<String, Element> mashupInputs)
 			throws CannotBuildInputException {
@@ -733,6 +777,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			YFCElement orderLines = inp.getChildElement("OrderLines");
 			Iterator orderLineIter = orderLines.getChildren();
 			List remElems = new ArrayList();
+			int index = 0;
 			while (orderLineIter.hasNext())
 			{
 				YFCElement orderLineEle = (YFCElement)orderLineIter.next();
@@ -744,18 +789,26 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					}
 				}
 				else {
-					remElems.add(orderLineEle);					
+					remElems.add(orderLineEle);
 				}
+				if(orderedInstructionsText!=null && orderedInstructionsText.size() > index && !YFCCommon.isVoid(orderedInstructionsText.get(index))){
+					YFCElement instructionsElememt = orderLineEle.createChild("Instructions");
+					YFCElement instructionElment = instructionsElememt.createChild("Instruction");
+					instructionElment.setAttribute("InstructionType", "LINE");
+					instructionElment.setAttribute("Action", "CREATE");
+					instructionElment.setAttribute("InstructionText", orderedInstructionsText.get(index));
+				}
+				index++;
 			}
 			for (int i=0; i < remElems.size(); i++){
 				orderLines.removeChild((YFCElement)remElems.get(i));
 			}
-		
+
 			input = inp.getOwnerDocument().getDocument().getDocumentElement();
 		}
 		/*
 		if(input!=null && addingSingleItem) {
-		
+
 			Element transactionalElem = input.getOwnerDocument().createElement("OrderLineTranQuantity");
 			transactionalElem.setAttribute("TransactionalUOM", requestedUOM);
 			requestedQty = StringUtils.replace(requestedQty, ".00", "");
@@ -773,7 +826,8 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		// TODO Auto-generated method stub
 		super.manipulateMashupInputs(mashupInputs);
 	}
-	
+
+	@Override
 	public String getProductID() {
 		String res = productID;
 		try {
@@ -857,7 +911,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	public void setRequestedCustomerFields(String requestedCustomerFields) {
 		this.requestedCustomerFields = requestedCustomerFields;
 	}
-	
+
 	public String getExtnCustLineAccNo() {
 		return ExtnCustLineAccNo;
 	}
@@ -889,7 +943,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	public void setExtnCustLineField3(String extnCustLineField3) {
 		ExtnCustLineField3 = extnCustLineField3;
 	}
-	
+
 
 	public String getExtnCustomerPONo() {
 		return ExtnCustomerPONo;
@@ -1038,7 +1092,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	public void setIsEditNewline(ArrayList<String> isEditNewline) {
 		this.isEditNewline = isEditNewline;
 	}
-	
+
 	public String getQuantitydraftError() {
 		return quantitydraftError;
 	}
@@ -1047,6 +1101,26 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	public void setQuantitydraftError(String quantitydraftError) {
 		this.quantitydraftError = quantitydraftError;
 	}
-	
+
+	private Element prepareAndInvokeMashup() throws XMLExceptionWrapper, CannotBuildInputException{
+	       Element inputElemet =  WCMashupHelper.getMashupInput(MASHUP_DO_ADD_ORDER_LINES, wcContext.getSCUIContext());
+	       System.out.println(com.sterlingcommerce.framework.utils.SCXmlUtils.getString(inputElemet));
+	       ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(inputElemet,"OrderLines/OrderLine");
+	       if(orderLineElemList !=null && orderLineElemList.size() > 0){
+	              for (Element orderLineElem : orderLineElemList) {
+	                     Node  instructionsNode = SCXmlUtil.getChildElement(orderLineElem, "Instructions");
+	                     ArrayList<Element> orderLineInstructionList = SCXmlUtil.getElements(orderLineElem, "Instructions/Instruction");
+	                     if(orderLineInstructionList !=null && orderLineInstructionList.size() >0){
+	                           Element instructionElement =  orderLineInstructionList.get(0);
+	                           if(instructionElement != null && SCUtil.isVoid(instructionElement.getAttribute("InstructionText"))){
+	                                  orderLineElem.removeChild(instructionsNode);
+	                           }
+	                     }
+	              }
+	       }
+	       System.out.println(com.sterlingcommerce.framework.utils.SCXmlUtils.getString(inputElemet));
+	       return (Element)WCMashupHelper.invokeMashup(MASHUP_DO_ADD_ORDER_LINES, inputElemet, wcContext.getSCUIContext());
+	}
+
 
 }

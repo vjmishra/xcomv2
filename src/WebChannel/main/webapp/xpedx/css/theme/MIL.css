@@ -133,7 +133,7 @@ div#replacementItemBody .mil-wrap-condensed {
 }
 .mil-action-list-wrap {
 	float: right;
-	padding-top: 10px;
+/* 	padding-top: 10px; */
 	width: 250px;
 	position: relative;
 }
@@ -214,22 +214,30 @@ div#replacementItemBody .mil-wrap-condensed {
     float: right;
 }
 
-input.x-input {
+/* input.x-input {
 	height: 11px;	
 }
+} */
 select, table.mil-config select.xpedx_select_sm {
 	
 	display: block;
     float: right;
-    height: 19px;
+    height: 24px;
     margin-left: 3px;
 }
 
 select.xpedx_select_sm {
-	float: none;
-	margin: auto;
+	/* float: none;
+	margin: auto; */
 }
 
+.mil-input-wrap {
+    clear: none;
+    float: right;
+    margin-right: 5px;
+    text-align: right;
+    width: 400px;
+}
 .mil-wrap-condensed-container.mil-only.last div.mil-wrap-condensed-bot {
 	border-radius: 0 0 5px 5px;
 }
@@ -460,10 +468,10 @@ div#main.userProfile { min-height: 850px; }
 }
 
 
-.x-input {
+/* .x-input {
 	padding-left: 0px;
 	padding-right: 0px;	
-}
+} */
 /* Begin - Changes made by Mitesh Parikh for JIRA#3186 */
 .jcarousel-container a
 {

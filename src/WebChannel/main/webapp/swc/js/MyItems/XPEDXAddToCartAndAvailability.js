@@ -19,6 +19,10 @@
 			document.getElementById('entered'+custFieldName+'_'+uid).value= value;
 			
 		}
+		/*if(name.indexOf('specialIns')>-1)
+		{
+			document.getElementById('specialIns'+uid).value= "Extn" + name + "@"+value;
+		}*/
 	}
 	
 	function updateHidden(component,uid,fieldCount,jsonMap)
@@ -48,9 +52,14 @@
 		{
 			var custFieldName = name.substring(name.indexOf('customField')+11, name.length - 1);
 			document.getElementById('customerField_'+fieldCount+"_"+uid).value= "Extn" + custFieldName + "@"+value;
+			document.getElementById('specialIns'+uid).value= "Extn" + name + "@"+value;
 			document.getElementById('entered'+custFieldName+'_'+uid).value= value;
 			
 		}
+		/*if(name.indexOf('specialIns')>-1)
+		{
+			document.getElementById('specialIns'+uid).value= "Extn" + name + "@"+value;
+		}*/
 	}
 	function addItemToCart(itemId,uid) {
 		//added for jira 3974
@@ -70,6 +79,7 @@
 		var selectedUomDesc = document.getElementById('UOM_desc_'+uid).value;
 		var itemType = document.getElementById('entereditemTypeList_'+uid).value;
 		var customerFieldSize = document.getElementById('customerFieldsSize_'+uid).value;
+		var specialInstructions =  document.getElementById('enteredInstructionsText_'+uid).value;
 		var customerFields="";
 		//var selCart = document.getElementById("draftOrders");
 		var draftOrder;
@@ -106,7 +116,8 @@
 					requestedItemType: itemType,
 					requestedCustomerFields: customerFields,
 					requestedOrderHeaderKey: selCart,
-					draft: draftOrder
+					draft: draftOrder,
+					enteredInstructionsText: specialInstructions
 			    },
 			    method: 'POST',
 				success: function (response, request){

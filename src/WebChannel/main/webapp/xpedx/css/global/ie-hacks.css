@@ -44,3 +44,6 @@ div.narrowbyattributes ul li {
 	filter: alpha(opacity=100);
 	overflow: visible;
 }
+.ie-margintop {
+	margin-top: 0px !important ; 
+}
