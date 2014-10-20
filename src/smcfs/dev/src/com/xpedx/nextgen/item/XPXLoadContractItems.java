@@ -132,7 +132,7 @@ public class XPXLoadContractItems implements YIFCustomApi {
 		return resultPairList;
 	}
 
-	private void saveEntriesToDB(ArrayList<Pair> outputPairList) {
+	private void saveEntriesToDB(ArrayList<Pair> outputPairList) throws Exception {
 
 		// Clear all old entries in XPX_ITEM_CONTRACT_EXTN before inserting new
 		deleteExistingEntriesFromTable();
@@ -153,20 +153,21 @@ public class XPXLoadContractItems implements YIFCustomApi {
 			}
 			catch (YFCDBException ye) {
 				if (ye.getSqlException() instanceof SQLIntegrityConstraintViolationException) {
-				log.error("XPXLoadContractItems: SQLIntegrityConstraintViolationException on " +
+				log.warn("XPXLoadContractItems: SQLIntegrityConstraintViolationException on " +
 						"ItemID: " +itemId+ " CustomerID: " +custId + ye.getSqlException().getMessage());
 				}
 			}
 			catch (Exception e) {
 				log.error("XPXLoadContractItems: problem inserting row with " +
 						"ItemID: " +itemId+ " CustomerID: " +custId,  e);
+				throw e;
 			}
 		}
 		log.warn("XPXLoadContractItems: Rows written to DB: " + count+ " out of " +outputPairList.size());
 	}
 
 	// Clear table. Returns # of rows deleted.
-	private int deleteExistingEntriesFromTable() {
+	private int deleteExistingEntriesFromTable() throws Exception {
 		int deleteFlag = 0;
 		log.warn("XPXLoadContractItems: Deleting all rows from XPX_ITEM_CONTRACT_EXTN...");
 		try {
@@ -178,6 +179,7 @@ public class XPXLoadContractItems implements YIFCustomApi {
 		}
 		catch (Exception e) {
 			log.error("XPXLoadContractItems: problem deleting old rows from XPX_ITEM_CONTRACT_EXTN - " + e.getMessage());
+			throw e;
 		}
 		return deleteFlag;
 	}
@@ -331,7 +333,7 @@ public class XPXLoadContractItems implements YIFCustomApi {
 		return origEntries.size();
 	}
 
-	private File getUsersListExcelFile(){
+	private File getUsersListExcelFile() throws FileNotFoundException{
 
 		String pathName = YFSSystem.getProperty(CONTRACT_FILE_PROP_NAME);
 		log.info("XPXLoadContractItems: file specified in properties: "+ pathName);
@@ -344,7 +346,7 @@ public class XPXLoadContractItems implements YIFCustomApi {
 		File file = new File(pathName);
 		if (!file.exists()){
 			log.error("XPXLoadContractItems couldn't find file to load: " + pathName);
-			return null;
+			throw new FileNotFoundException(pathName);
 		}
 
 		return file;
