@@ -90,7 +90,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 	 * Writes the input xml to a file in the temp directory. This method is guaranteed to not throw exceptions.
 	 */
 	private static void dumpInputXml(Document inDocumentUE, long count, String label) {
-		String filename = String.format("XPEDXGetAdditionalCatalogIndexInformationUE_%s_%s.xml", String.valueOf(count), label);
+		String filename = String.format("XPEDXGetAdditionalCatalogIndexInformationUE_%s_%s.xml", pad(String.valueOf(count), 3, "0"), label);
 		File xmlFile = new File(System.getProperty("java.io.tmpdir"), filename);
 		System.out.println("Logging inDocumentUE to file: " + xmlFile);
 
@@ -216,17 +216,19 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		// TODO if this works, will refactor into an API call of some sort
 		//      guaranteed to not throw any exceptions since this query will fail in non-dev environments
 		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet res = null;
 		try {
 			conn = getConnection();
 
-			PreparedStatement stmt = conn.prepareStatement("select item_id from trey_entitled_item where item_id in (" + createQuestionMarks(allItemIDs.size()) + ")");
+			stmt = conn.prepareStatement("select item_id from trey_entitled_item where item_id in (" + createQuestionMarks(allItemIDs.size()) + ")");
 
 			int parameterIndex = 1;
 			for (String itemID : allItemIDs) {
-				stmt.setString(parameterIndex++, pad(itemID, 40));
+				stmt.setString(parameterIndex++, pad(itemID, 40, " "));
 			}
 
-			ResultSet res = stmt.executeQuery();
+			res = stmt.executeQuery();
 
 			Set<String> entitledItemIDs = new LinkedHashSet<String>();
 			while (res.next()) {
@@ -238,6 +240,18 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			return entitledItemIDs;
 
 		} catch (Exception ignore) {
+			if (res != null) {
+				try {
+					res.close();
+				} catch (Exception ignore2) {
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception ignore2) {
+				}
+			}
 			if (conn != null) {
 				try {
 					conn.close();
@@ -248,12 +262,12 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		}
 	}
 
-	private static String pad(String str, int len) {
+	private static String pad(String str, int len, String token) {
 		StringBuilder buf = new StringBuilder(len);
 
 		buf.append(str);
 		while (buf.length() < len) {
-			buf.append(" ");
+			buf.append(token);
 		}
 		return buf.toString();
 	}
