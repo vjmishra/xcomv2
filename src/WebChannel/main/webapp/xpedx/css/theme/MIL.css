@@ -735,7 +735,7 @@ BEGIN 2014 styles
 }	
 
 .mil-wrap-condensed-desc {
-	width: 350px;
+	width: 340px;
 	margin-left: 160px;
 	height: auto;
 }
@@ -793,7 +793,7 @@ BEGIN 2014 styles
 
 .mil-replacement-adjust {
 	display:inline;
-	margin: 5px 0;
+	margin: 5px 5px 5px 0;
 }
 
 .mil-edit-replacement-adjust {

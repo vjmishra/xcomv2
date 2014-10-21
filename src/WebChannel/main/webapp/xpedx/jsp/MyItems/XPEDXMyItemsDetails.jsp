@@ -3596,13 +3596,11 @@ function showSharedListForm(){
 					 uid = uid.substring(5);
 					var id = parseInt(uid);
 			if(document.getElementById('qtys_' + uid).value != "" && pid == id){
-				document.getElementById('instructions-content_' + uid).style.display = "block";
-		}
+				$("#instructions-content_" + uid).slideToggle("slow");
+				$("#instructions-content_" + uid).focus();
+			}
 		} 
 		}
-		
-
-				
 		window.onload = addSpecialInst;
 	</script>
 	</s:if>
