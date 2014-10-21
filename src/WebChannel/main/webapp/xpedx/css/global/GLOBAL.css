@@ -1402,7 +1402,6 @@ inStoreIcon {
     background-image: url("../../images/theme/theme-1/mil/mil-cart-rpt-bg.gif");
     background-repeat: repeat-x;
     height: 206px;
-    margin-left: 20px;
     margin-top: 50px;
     padding-top: 15px;
     width: 950px;
@@ -3449,7 +3448,6 @@ table.catalog-row-five td img {
     width: 334px;
 }
 #homepage-table {
-    margin-left: -5px;
     padding: 0;
     width: 1000px;
 }

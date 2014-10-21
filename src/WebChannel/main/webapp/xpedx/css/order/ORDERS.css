@@ -1858,6 +1858,32 @@ table#prod-details-tbl  {
 	color:#000000;
 }
 
+.detail-view .special-text {
+	height: 15px;
+	width: 500px;
+	text-align: right;
+	margin: -4px 20px 8px 0;
+	color: #003399;
+}
+.detail-view input.special-input {
+	float: right;
+	width: 390px;
+	margin: 10px 20px 0 0;
+	padding: 2px;
+ 	height: 26px;
+}
+.detail-view .input-watermark {
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 0;
+    color: #000000;
+    font-size: 12px;
+	float: right;
+    height: 30px;
+    margin: 10px 20px 0 0;
+    padding: 2px;
+    width: 394px;
+}
 /******ITEM DETAIL SPEC TOGGLE STYLES******/
 
 .specs-wrap {

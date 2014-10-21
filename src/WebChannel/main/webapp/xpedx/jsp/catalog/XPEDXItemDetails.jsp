@@ -324,6 +324,7 @@
 											<s:textfield name='qtyBox' id="%{'Qty_' + #itemID}" size="6" maxlength="7"	
 													value="%{#_action.getRequestedQty()}"
 													theme="simple" onkeyup="isValidQuantityRemoveAlpha(this,event);"
+													onkeyup="addSpecialInst();"
 													onchange="isValidQuantity(this); qtyInputCheck(this);"
 													onmouseover="qtyInputCheck(this);"
 													/>
@@ -395,7 +396,29 @@
 						<s:if test='%{#displayInventoryIndicator=="W"}'>
 							
 						</s:if>
-						
+
+						<div id="instructions-trigger"
+							class="special-text">
+							<p id="instructions-link"
+								class="gray instructions-link addmargintop10"
+								onclick="specialInstBox()">
+								Add Special Instructions</p>
+						</div>
+						<div class="clearfix"></div>
+
+						<div id="instructions-content"
+							style="display: none;" class="instructions-content">
+							<s:textarea name="textarea"
+								cssClass="instructions-content-textfield"
+								onkeyup="javascript:restrictTextareaMaxLength(this,250);"
+								value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
+								id="enteredInstructionsText"
+								name="enteredInstructionsText" />
+							<div class="clearfix"></div>
+							<p class="text-smaller italic addmarginbottom10">Special
+								Instructions are Saved to Cart</p>
+						</div>
+
 						<s:if test="(replacementAssociatedItems!=null && replacementAssociatedItems.size() > 0)">
 							<div class="replacement-item">
 								This item will be replaced once inventory is depleted.<br/>Select item:

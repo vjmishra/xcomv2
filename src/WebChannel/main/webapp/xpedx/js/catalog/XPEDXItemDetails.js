@@ -5,6 +5,7 @@ var currentAadd2ItemListIndex = null;
 $(document).ready(function() {
 	var itemId = $('#itemID').val();
 	$('#Qty_' + itemId).focus();
+	
 });
 
 $(document).ready(function() {
@@ -75,6 +76,31 @@ $(document).ready(function() {
 	}
 });
 
+function addSpecialInst(){
+	var itemId = $('#itemID').val();
+	var qtyBox = $('#Qty_' + itemId);
+	if(qtyBox.val() !=null && qtyBox.val() != "")
+	{
+	$instructionlink = $('.special-text');
+	$btn = $instructionlink.find('.instructions-link');
+	if ($btn.hasClass('gray')) {
+		$btn.removeClass('gray');
+		$btn.addClass('active-link');
+	} 
+	return false;
+	} else {
+		$('#instructions-link').addClass("gray");
+	}
+}
+
+function specialInstBox(){
+	var itemId = $('#itemID').val();
+	var qtyBox = $('#Qty_' + itemId);
+	if(qtyBox.val() !=null && qtyBox.val() != "")
+	{
+		$("#instructions-content").slideToggle("slow");
+	}
+}
 function successCallback_PriceAndAvailability(data) {
 	var html = [];
 
@@ -165,19 +191,20 @@ function addItemToCart() {
 		if(document.getElementById("Customer")!=null) {
 			var customer=document.getElementById("Customer").value;
 		}
-
+		var specialInstructions =  document.getElementById('enteredInstructionsText').value;
 		var customerPO = "";
 		if(document.getElementById("customerPONo") != null && document.getElementById("customerPONo") != undefined) {
 			customerPO=document.getElementById("customerPONo").value; 
 		}
-		listAddToCartItem($('#addToCartURL').val(), itemId, UOM, Qty, Job, customer, customerPO, '');
+		listAddToCartItem($('#addToCartURL').val(), itemId, UOM, Qty, Job, customer, customerPO, specialInstructions, '');
 	}
 } // end addItemToCart
 
-function listAddToCartItem(url, productID, UOM, quantity, Job, customer, customerPO) {
+function listAddToCartItem(url, productID, UOM, quantity, Job, customer, customerPO, specialInstructions) {
 	var itemId = $('#itemID').val();
 	showProcessingIcon();
 	var baseUOM;
+	
 	if (document.getElementById("baseUnitOfMeasure") != null && document.getElementById("baseUnitOfMeasure") != undefined) {
 		baseUOM = document.getElementById("baseUnitOfMeasure").value;
 	}
@@ -190,7 +217,8 @@ function listAddToCartItem(url, productID, UOM, quantity, Job, customer, custome
 			quantity: quantity,
 			reqJobId: Job,
 			customerPONo: customerPO,
-			reqCustomer: customer
+			reqCustomer: customer,
+			enteredInstructionsText: specialInstructions
 		},
 		method: 'GET',
 		success: function (response, request) {
