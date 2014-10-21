@@ -2719,7 +2719,7 @@ function showSharedListForm(){
 													
 													<s:if test='editMode != true'>
 													<div id="instructions-trigger_<s:property value='#id' />" class="special-text">
-															<p id="instructions-link_<s:property value='#id' />" class="instructions-link" onclick="specialInstBox(<s:property value='#id' />);">Add
+															<p id="instructions-link_<s:property value='#id' />" class="gray instructions-link addpadtop5" onclick="specialInstBox(<s:property value='#id' />);">Add
 																Special Instructions</p>
 													</div>
 													<div class="clearfix"></div>
@@ -2759,163 +2759,196 @@ function showSharedListForm(){
 											</s:if>
 											
 										</div> <%-- / mil-desc-wrap --%>
-		
-												<div class="mil-input-wrap addpadtop10">
-		<div class="row">
-			<s:if test='editMode == true'>
-			<tr>
-				<td width="182" align="right"></td>
-				<td width="53" align="right" colspan="2">
-					<label style="text-align: right;">Sequence:</label>
-					<s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;"
-							name="orders" list="itemValue" value='%{itemOrder2}'
-							onfocus="populate(this.id);"
-							onchange="populateValue(this,this.id);"
-							id="itemOrder_%{#itemOrder2}" headerKey='%{itemOrder2}'
-							headerValue='%{itemOrder2}' emptyOption="false"
-							theme="simple" />
-				</td>
-			</tr>
-			</s:if>
-			
-			<div class="col-1 textright">Qty:</div>
-			
-			<div class="col-2 addmarginleft10">
-				<%-- Qty --%>
-				<s:hidden name="itemQty" value="%{#qty}" />
-				<s:hidden id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" />
-				<s:hidden id="custUOM_%{#id}" name="custUOM" value="%{#customerUOM}" />
-				<s:hidden name='initialQTY_%{#id}' id='initialQTY_%{#id}' value='%{#qty}' />
-				
-				<%-- UOM & Custom Fields --%>
-				<s:if test="%{#itemType != '99.00'}">
-					<s:textfield title="QTY" cssClass="x-input"
-							cssStyle="width:53px;" name="qtys" id="qtys_%{#id}"
-							maxlength="7" tabindex="1" value="%{#qty}"
-							onkeyup="isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);addSpecialInst();"
-							theme="simple" />
-					<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
-					<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
-					<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM" value="%{#itemBaseUom}" />
-					<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}" />
-				</s:if>
-				<s:else> <%-- itemType == '99.00' --%>
-					<s:textfield title="QTY" cssClass="x-input"
-							cssStyle="width:53px;" name="qtys" id="qtys_%{#id}"
-							tabindex="1" value="%{#qty}"
-							onkeyup="isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);addSpecialInst();"
-							theme="simple" readonly="true" />
-					<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
-				</s:else>
-			
-			
-				<%-- UOM & Custom Fields --%>
-				<s:if test="%{#itemType != '99.00'}">
-					<s:if test="#uomList != null">
-						<s:select cssClass="xpedx_select_sm inline-block ie-margintop"
-								cssStyle="width:109px;" name="uoms" id="uoms_%{#id}"
-								list="#uomList" listKey="key" listValue="value"
-								value='itemUomId'
-								onchange="updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');"
-								theme="simple" />
-						<s:hidden name='initialUOM_key_%{#id}' id='initialUOM_key_%{#id}' value='%{#itemUomId}' />
-						<s:set name="itemUomIdDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)" />
-						<s:hidden name='UOM_desc_%{#id}' id='UOM_desc_%{#id}' value="%{#itemUomIdDesc}" />
-					</s:if>
-					<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}" />
-				</s:if>
-				<s:else> <%-- itemType == '99.00' --%>
-					<s:textfield cssClass="x-input" cssStyle="width:109px;"
-							name="uoms" value="%{#itemUomId}"
-							onchange="updateHidden(this,'%{#id}');"
-							theme="simple" readonly="true" />
-					<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' ' />
-				</s:else>
-			</div>
-		</div>
 
-		<s:set name="mulVal" value='itemOrderMultipleMap.get(#itemId1)' />
-		<s:set name="erroMsg" value='%{erroMsg}' />
-		<s:set name="itemIdUOMsMap" value='itemIdConVUOMMap.get(#itemId1)' />
-		<s:iterator value='itemIdUOMsMap'>
-			<s:set name='currentUomConvFact' value='value' />
-			<s:hidden name='convF_%{#currentUomId}' id="convF_%{#currentUomId}" value="%{#currentUomConvFact}" />
-		</s:iterator>
+											<div class="mil-input-wrap addpadtop10">
+												
+													<s:if test='editMode == true'>
+													  
+                 
+														<div class="row">
+														<div class="col-1 textright">&nbsp;</div>
+															<div class="col-2 width-188 textright"><span class="inline-block addmargintop2">Sequence:</span></div>
+															 <s:select
+																	cssClass="xpedx_select_sm inline floatright" cssStyle="width: 50px;"
+																	name="orders" list="itemValue" value='%{itemOrder2}'
+																	onfocus="populate(this.id);"
+																	onchange="populateValue(this,this.id);"
+																	id="itemOrder_%{#itemOrder2}" headerKey='%{itemOrder2}'
+																	headerValue='%{itemOrder2}' emptyOption="false"
+																	theme="simple" />
+														</div>
+														<div class="clearfix addmarginbottom5"></div>
+													</s:if>
+													<div class="row">
+													<div class="col-1 textright">Qty:</div>
 
-		<s:set name="defaultConvF" value='#itemIdUOMsMap.get(#itemUomId)' />
-		<s:hidden name="orderLineOrderMultiple" id="orderLineOrderMultiple_%{#id}" value="%{#mulVal}" />
-		<s:hidden name="orderLineItemIDs" id="orderLineItemIDs_%{#id}" value='%{#itemId}' />
-		<s:hidden name="UOMconversion" id="UOMconversion_%{#id}" value="%{#defaultConvF}" />
+													<div class="col-2 addmarginleft10 ">
+														<%-- Qty --%>
+														<s:hidden name="itemQty" value="%{#qty}" />
+														<s:hidden id="enteredQuantities_%{#id}"
+															name="enteredQuantities" value="%{#qty}" />
+														<s:hidden id="custUOM_%{#id}" name="custUOM"
+															value="%{#customerUOM}" />
+														<s:hidden name='initialQTY_%{#id}' id='initialQTY_%{#id}'
+															value='%{#qty}' />
 
-		<s:hidden name='customerFieldsSize_%{#id}' id='customerFieldsSize_%{#id}' value='%{#_action.getCustomerFieldsMap().size()}' />
-		<s:iterator value='customerFieldsMap' status='custFieldStatus'>
-			<s:set name='FieldLabel' value='key' />
-			<s:set name='FieldValue' value='value' />
+														<%-- UOM & Custom Fields --%>
+														<s:if test="%{#itemType != '99.00'}">
+															<s:textfield title="QTY" cssClass="x-input"
+																cssStyle="width:45px;" name="qtys" id="qtys_%{#id}"
+																maxlength="7" tabindex="1" value="%{#qty}"
+																onkeyup="isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);addSpecialInst();"
+																theme="simple" />
+															<s:hidden name='QTY_%{#id}' id='QTY_%{#id}'
+																value='%{#qty}' />
+															<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs"
+																value="%{#itemUomId}" />
+															<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM"
+																value="%{#itemBaseUom}" />
+															<s:hidden name='UOM_%{#id}' id='UOM_%{#id}'
+																value="%{#itemUomId}" />
+														</s:if>
+														<s:else>
+															<%-- itemType == '99.00' --%>
+															<s:textfield title="QTY" cssClass="x-input"
+																cssStyle="width:53px;" name="qtys" id="qtys_%{#id}"
+																tabindex="1" value="%{#qty}"
+																onkeyup="isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);addSpecialInst();"
+																theme="simple" readonly="true" />
+															<s:hidden name='QTY_%{#id}' id='QTY_%{#id}'
+																value='%{#qty}' />
+														</s:else>
 
-			<s:set name='customKey' value='%{customerFieldsDBMap.get(#FieldLabel)}' />
-			<s:set name='CustomFieldValue' value="%{' '}" />
 
-			<s:if test="%{#item.getAttribute(#customKey)!=null && #item.getAttribute(#customKey)!=''}">
-				<s:set name='CustomFieldValue' value='%{#item.getAttribute(#customKey)}' />
-			</s:if>
-			<div class="row">
-				<div class="col-1 textright">
-					<label style="text-align: right;">
-						<s:property value="%{#FieldValue}" />:
-					</label>
-				</div>
-				<div class="col-2 addmarginleft10">
-					<%-- Creating text field with name as the Customer field name --%>
+														<%-- UOM & Custom Fields --%>
+														<s:if test="%{#itemType != '99.00'}">
+															<s:if test="#uomList != null">
+																<s:select
+																	cssClass="xpedx_select_sm inline-block ie-margintop width-117"
+																	name="uoms" id="uoms_%{#id}"
+																	list="#uomList" listKey="key" listValue="value"
+																	value='itemUomId'
+																	onchange="updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');"
+																	theme="simple" />
+																<s:hidden name='initialUOM_key_%{#id}'
+																	id='initialUOM_key_%{#id}' value='%{#itemUomId}' />
+																<s:set name="itemUomIdDesc"
+																	value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)" />
+																<s:hidden name='UOM_desc_%{#id}' id='UOM_desc_%{#id}'
+																	value="%{#itemUomIdDesc}" />
+															</s:if>
+															<s:hidden name='UOM_%{#id}' id='UOM_%{#id}'
+																value="%{#itemUomId}" />
+														</s:if>
+														<s:else>
+															<%-- itemType == '99.00' --%>
+															<s:textfield cssClass="x-input width-117"
+																name="uoms" value="%{#itemUomId}"
+																onchange="updateHidden(this,'%{#id}');" theme="simple"
+																readonly="true" />
+															<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' ' />
+														</s:else>
+													</div>
+												</div>
 
-					<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
-					<s:if test="%{#FieldLabel == 'CustLineAccNo'}">
-						<s:textfield cssStyle="width:165px;" cssClass="x-input"
-							maxlength="24" name='customField%{#FieldLabel}s'
-							id="customField%{#FieldLabel}s" size='10'
-							value="%{@com.sterlingcommerce..webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
-							title="%{#FieldValue}"
-							onchange="updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
-						<s:hidden
-							name='customerField_%{#custFieldStatus.count}_%{#id}'
-							id='customerField_%{#custFieldStatus.count}_%{#id}'
-							value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
-						<s:hidden id="entered%{#FieldLabel}_%{#id}"
-							name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
-					</s:if>
-					<s:elseif test="%{#FieldLabel == 'CustomerPONo'}">
-						<s:textfield cssStyle="width:165px;" cssClass="x-input"
-							maxlength="22" name='customField%{#FieldLabel}s'
-							id="customField%{#FieldLabel}s" size='10'
-							value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
-							title="%{#FieldValue}"
-							onchange="updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
-						<s:hidden
-							name='customerField_%{#custFieldStatus.count}_%{#id}'
-							id='customerField_%{#custFieldStatus.count}_%{#id}'
-							value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
-						<s:hidden id="entered%{#FieldLabel}_%{#id}"
-							name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
-					</s:elseif>
-					<s:else>
-						<s:textfield cssStyle="width:165px;" cssClass="x-input"
-							maxlength="25" name='customField%{#FieldLabel}s'
-							id="customField%{#FieldLabel}s" size='10'
-							value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
-							title="%{#FieldValue}"
-							onchange="updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
-						<s:hidden
-							name='customerField_%{#custFieldStatus.count}_%{#id}'
-							id='customerField_%{#custFieldStatus.count}_%{#id}'
-							value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
-						<s:hidden id="entered%{#FieldLabel}_%{#id}"
-							name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
-					</s:else>
-				</div>
-			</div>
-		</s:iterator>
-	</div>
-	
-										<div class="mil-action-list-wrap">
+												<s:set name="mulVal"
+													value='itemOrderMultipleMap.get(#itemId1)' />
+												<s:set name="erroMsg" value='%{erroMsg}' />
+												<s:set name="itemIdUOMsMap"
+													value='itemIdConVUOMMap.get(#itemId1)' />
+												<s:iterator value='itemIdUOMsMap'>
+													<s:set name='currentUomConvFact' value='value' />
+													<s:hidden name='convF_%{#currentUomId}'
+														id="convF_%{#currentUomId}" value="%{#currentUomConvFact}" />
+												</s:iterator>
+
+												<s:set name="defaultConvF"
+													value='#itemIdUOMsMap.get(#itemUomId)' />
+												<s:hidden name="orderLineOrderMultiple"
+													id="orderLineOrderMultiple_%{#id}" value="%{#mulVal}" />
+												<s:hidden name="orderLineItemIDs"
+													id="orderLineItemIDs_%{#id}" value='%{#itemId}' />
+												<s:hidden name="UOMconversion" id="UOMconversion_%{#id}"
+													value="%{#defaultConvF}" />
+
+												<s:hidden name='customerFieldsSize_%{#id}'
+													id='customerFieldsSize_%{#id}'
+													value='%{#_action.getCustomerFieldsMap().size()}' />
+												<s:iterator value='customerFieldsMap'
+													status='custFieldStatus'>
+													<s:set name='FieldLabel' value='key' />
+													<s:set name='FieldValue' value='value' />
+
+													<s:set name='customKey'
+														value='%{customerFieldsDBMap.get(#FieldLabel)}' />
+													<s:set name='CustomFieldValue' value="%{' '}" />
+
+													<s:if
+														test="%{#item.getAttribute(#customKey)!=null && #item.getAttribute(#customKey)!=''}">
+														<s:set name='CustomFieldValue'
+															value='%{#item.getAttribute(#customKey)}' />
+													</s:if>
+													<div class="row">
+														<div class="col-1 textright">
+															<label style="text-align: right;"> <s:property
+																	value="%{#FieldValue}" />:
+															</label>
+														</div>
+														<div class="col-2 addmarginleft10">
+															<%-- Creating text field with name as the Customer field name --%>
+
+															<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
+															<s:if test="%{#FieldLabel == 'CustLineAccNo'}">
+																<s:textfield cssStyle="width:165px;" cssClass="x-input"
+																	maxlength="24" name='customField%{#FieldLabel}s'
+																	id="customField%{#FieldLabel}s" size='10'
+																	value="%{@com.sterlingcommerce..webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
+																	title="%{#FieldValue}"
+																	onchange="updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
+																<s:hidden
+																	name='customerField_%{#custFieldStatus.count}_%{#id}'
+																	id='customerField_%{#custFieldStatus.count}_%{#id}'
+																	value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
+																<s:hidden id="entered%{#FieldLabel}_%{#id}"
+																	name="entered%{#FieldLabel}"
+																	value="%{#CustomFieldValue}" />
+															</s:if>
+															<s:elseif test="%{#FieldLabel == 'CustomerPONo'}">
+																<s:textfield cssStyle="width:165px;" cssClass="x-input"
+																	maxlength="22" name='customField%{#FieldLabel}s'
+																	id="customField%{#FieldLabel}s" size='10'
+																	value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
+																	title="%{#FieldValue}"
+																	onchange="updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
+																<s:hidden
+																	name='customerField_%{#custFieldStatus.count}_%{#id}'
+																	id='customerField_%{#custFieldStatus.count}_%{#id}'
+																	value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
+																<s:hidden id="entered%{#FieldLabel}_%{#id}"
+																	name="entered%{#FieldLabel}"
+																	value="%{#CustomFieldValue}" />
+															</s:elseif>
+															<s:else>
+																<s:textfield cssStyle="width:165px;" cssClass="x-input"
+																	maxlength="25" name='customField%{#FieldLabel}s'
+																	id="customField%{#FieldLabel}s" size='10'
+																	value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
+																	title="%{#FieldValue}"
+																	onchange="updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
+																<s:hidden
+																	name='customerField_%{#custFieldStatus.count}_%{#id}'
+																	id='customerField_%{#custFieldStatus.count}_%{#id}'
+																	value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
+																<s:hidden id="entered%{#FieldLabel}_%{#id}"
+																	name="entered%{#FieldLabel}"
+																	value="%{#CustomFieldValue}" />
+															</s:else>
+														</div>
+													</div>
+												</s:iterator>
+											</div>
+
+											<div class="mil-action-list-wrap">
 											
 											<s:set name="baseUOM" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:set>
 											<s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}" />
@@ -2946,7 +2979,7 @@ function showSharedListForm(){
 												
 												<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
 												
-													<div  id="errorDiv_qtys_<s:property value='%{#id}' />"><p class="notice addmarginbottom10">
+													<div  id="errorDiv_qtys_<s:property value='%{#id}' />"><p class="notice addmarginbottom10 addmarginright5">
 														<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
 														<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}" />
 														<s:property value="#baseUOMDesc"></s:property></p>
@@ -2986,7 +3019,7 @@ function showSharedListForm(){
 												</s:else>
 											</s:else>
 											<s:if test='%{#displayInventoryIndicator=="I"}'>
-												<div class='non-stock-item mil-nonstock-adjust'><div class='stock-icon'><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25"/>
+												<div class='non-stock-item mil-nonstock-adjust'><div class='stock-icon addmarginright5'><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25"/>
 												</div>Not a Stocked Item<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>
 											</s:if>
 											<s:if test='%{#displayInventoryIndicator=="M"}'>
@@ -3530,7 +3563,7 @@ function showSharedListForm(){
 
 	<div class="hp-ad">
 	</div>
-
+<s:if test='editMode != true'>
 	<script type="text/javascript">
 		function updateValidation(){
 			$(".numeric").numeric();	
@@ -3572,6 +3605,7 @@ function showSharedListForm(){
 				
 		window.onload = addSpecialInst;
 	</script>
+	</s:if>
 
 	<!-- Web Trends tag start -->
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>

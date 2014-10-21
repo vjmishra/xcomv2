@@ -1743,11 +1743,11 @@ hr.shade {
     margin: 0 0 8px;
     width: 365px;
 }
-#instructions-content {
+.instructions-content {
 	float: left;
 	clear: none;
 }
-#instructions-link {
+.instructions-link {
 	float: left;
 	clear: none;
 	}
@@ -1760,7 +1760,7 @@ hr.shade {
 	margin-bottom: 5px;
 }
 .col-1 {
-	width: 210px;
+	
 	display: inline-block;
 }
 .col-2 {
@@ -1770,4 +1770,10 @@ hr.shade {
 }
 .addpadleft0 {
 	padding-left:0px;
+}
+.width-188 {
+	width: 188px;
+}
+.width-117 {
+	width: 117px;
 }
