@@ -15,6 +15,7 @@
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 	<s:set name="SelectedCustomerId" value="wCContext.customerId" />
 	<s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
+	<s:set name="canEditMIL" value='%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@canPunchoutUserEditMil()}'/>
 	
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -668,8 +669,10 @@
 				</div>
 				
 				<div class="mil-lists-toolbar" style="margin-right:0">
-					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
-					
+					<s:if test='%{#canEditMIL}'>
+						<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
+					</s:if>
+ 						
 					<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
 				</div>
 				<div class="clearfix"></div>
@@ -816,14 +819,18 @@
 									<s:else>
 										<td class="actions right-cell">
 											<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
-												<option value="select" selected="selected">- Select Action -</option>
-												<option value="view">Open List</option>
-												<option value="edit">Edit List</option>
+													<option value="select" selected="selected">- Select Action -</option>
+													<option value="view">Open List</option>
+												<s:if test='%{#canEditMIL}'>
+													<option value="edit">Edit List</option>
+												</s:if>
 												<option value="export">Export List</option>
-												<option value="import">Import New Items</option>
-												<option value="copy">Copy List</option>
-												<option value="delete">Delete List</option>
-											</select>
+												<s:if test='%{#canEditMIL}'>
+													<option value="import">Import New Items</option>
+													<option value="copy">Copy List</option>
+													<option value="delete">Delete List</option>
+												</s:if>
+										</select>
 										</td>
 									</s:else>
 								</tr>

@@ -30,8 +30,9 @@ public class XPEDXCustomerContactInfoBean {
     private String addEmailID;  //JIRA 3382
     private String spendingLimit;
     private String orderApproveFlag ; //added for XB 226
-    private String extnIsSalesRep;    
-    private Boolean extnPunchOutUser;
+    private String extnIsSalesRep;
+    private String extnPunchOutUser; //using for whether Po user allowed MIL edit
+    private Boolean hasPunchoutRole;  //a role indicates whether po user (not CustCont flag
     private String extnStockCheckWS;
 	//JIRA 3488 Start
 	 private String extnmaxOrderAmount;
@@ -42,7 +43,7 @@ public class XPEDXCustomerContactInfoBean {
 		return extnmaxOrderAmount;
 	}
  //JIRA 3488 End
-  
+
   // Added for JIRA 3589 - Performance : XPEDXMyItemsGetShareListAction
     private String extnSuffixType = "";
     public String getExtnSuffixType() {
@@ -51,8 +52,8 @@ public class XPEDXCustomerContactInfoBean {
 	public void setExtnSuffixType(String extnSuffixType) {
 		this.extnSuffixType = extnSuffixType;
 	}
-	//Start- Code added to fix XNGTP 2964	
-    private String msapExtnUseOrderMulUOMFlag;    
+	//Start- Code added to fix XNGTP 2964
+    private String msapExtnUseOrderMulUOMFlag;
 		public XPEDXCustomerContactInfoBean() {
 		super();
 	}
@@ -63,13 +64,13 @@ public class XPEDXCustomerContactInfoBean {
 		public void setMsapExtnUseOrderMulUOMFlag(String msapExtnUseOrderMulUOMFlag) {
 			this.msapExtnUseOrderMulUOMFlag = msapExtnUseOrderMulUOMFlag;
 		}
-		//End- Code added to fix XNGTP 2964	
+		//End- Code added to fix XNGTP 2964
       public XPEDXCustomerContactInfoBean(String firstName, String lastName, String customerContactID, String msapEmailID,
 			String localecode, String extnViewInvoices, Boolean isEstimator,
 			String extnViewReportsFlag, String extnViewPricesFlag,
 			ArrayList<String> usergroupKeyList, String extnDefaultShipTo,
 			String extnPrefCatalog, String isApprover, Boolean usergroupKeyListActive, String extnMyItemsLink, Integer numberOfAssignedShioTos, String extnB2BCatalogView
-			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID,String maxOrderAmt,String spendingLimit,String orderApproveFlag, Boolean extnPunchOutUser, String extnStockCheckWS) {//added maxOrderAmt for JIRA 3488 orderApproveFalg for Jira226
+			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID,String maxOrderAmt,String spendingLimit,String orderApproveFlag, String extnPunchOutUser, Boolean hasPunchoutRole, String extnStockCheckWS) {//added maxOrderAmt for JIRA 3488 orderApproveFalg for Jira226
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -92,19 +93,20 @@ public class XPEDXCustomerContactInfoBean {
 		this.emailID=emailID;
 		this.personInfoEmailID=personInfoEmailID;
 		this.msapExtnUseOrderMulUOMFlag=extnUseOrderMulUOMFlag;
-		this.extnmaxOrderAmount=maxOrderAmt;//JIRA 3488 
+		this.extnmaxOrderAmount=maxOrderAmt;//JIRA 3488
 		this.spendingLimit=spendingLimit;
 		this.orderApproveFlag = orderApproveFlag;//XB 226
 		this.extnPunchOutUser=extnPunchOutUser;
+		this.hasPunchoutRole=hasPunchoutRole;
 		this.extnStockCheckWS=extnStockCheckWS;
 	}
-      
+
     public String getExtnIsSalesRep() {
   		return extnIsSalesRep;
   	}
   	public void setExtnIsSalesRep(String extnIsSalesRep) {
   		this.extnIsSalesRep = extnIsSalesRep;
-  	}  
+  	}
 
 	public String getFirstName() {
 		return firstName;
@@ -145,7 +147,7 @@ public class XPEDXCustomerContactInfoBean {
 	public void setIsEstimator(Boolean isEstimator) {
 		this.isEstimator = isEstimator;
 	}
-	
+
 	public String getExtnViewReportsFlag() {
 		return extnViewReportsFlag;
 	}
@@ -185,7 +187,7 @@ public class XPEDXCustomerContactInfoBean {
 	public void setExtnPrefCatalog(String extnPrefCatalog) {
 		this.extnPrefCatalog = extnPrefCatalog;
 	}
-	
+
 	public String getIsApprover() {
 		return isApprover;
 	}
@@ -277,36 +279,41 @@ public class XPEDXCustomerContactInfoBean {
 	public void setAddEmailID(String addEmailID) {
 		this.addEmailID = addEmailID;
 	}
-	
+
 	public String getSpendingLimit() {
 		return spendingLimit;
 	}
-	
+
 	public void setSpendingLimit(String spendingLimit) {
 		this.spendingLimit = spendingLimit;
 	}
-	
+
 	public String getOrderApproveFlag() {
 		return orderApproveFlag;
 	}
-	
+
 	public void setOrderApproveFlag(String orderApproveFlag) {
 		this.orderApproveFlag = orderApproveFlag;
 	}
-	
-	public boolean isExtnPunchOutUser() {
+
+	public String getExtnPunchOutUser() {
 		return extnPunchOutUser;
 	}
-	public void setExtnPunchOutUser(boolean extnPunchOutUser) {
+	public void setExtnPunchOutUser(String extnPunchOutUser) {
 		this.extnPunchOutUser = extnPunchOutUser;
 	}
+	public boolean hasPunchoutRole() {
+		return hasPunchoutRole;
+	}
+	public void setHasPunchoutRole(boolean hasPunchoutRole) {
+		this.hasPunchoutRole = hasPunchoutRole;
+	}
+
 	public String getExtnStockCheckWS() {
 		return extnStockCheckWS;
 	}
 	public void setExtnStockCheckWS(String extnStockCheckWS) {
 		this.extnStockCheckWS = extnStockCheckWS;
 	}
-	
-	
-	
+
 }

@@ -962,10 +962,8 @@ var selectedShipCustomer = null;
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
 <s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
-<s:set name="extnPunchOutUser" value='%{#xpedxCustomerContactInfoBean.isExtnPunchOutUser()}' />
-<s:hidden id='extnPunchOutUserValue' value='%{#extnPunchOutUser}' /> 
+<s:set name="hasPunchoutRole" value='%{#xpedxCustomerContactInfoBean.hasPunchoutRole()}' />
 <s:set name="extnStockCheck" value='%{#xpedxCustomerContactInfoBean.getExtnStockCheckWS()}' />
-<s:hidden id='extnstockCheckValue' value='%{#extnStockCheck}' />
 <s:set name="logUser" value ="%{#_action.getWCContext().getSCUIContext().getSecurityContext().getLoginId()}"/>
 <s:set name="assgnCustomers" value="#_action.getAssignedShipTos()" />
 <s:set name="fromWhichPage" value="#_action.getIsFromWhichPage()"/>
@@ -1881,14 +1879,14 @@ function passwordUpdateModal()
 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
 		var isSalesRep = "<s:property value='%{wCContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP")}'/>";
 		var isPunchoutUser = '<s:property value="#isPunchoutUser"/>';
-		var extnPunchOutUser='<s:property value="#extnPunchOutUser"/>'
+		var hasPunchoutRole='<s:property value="#hasPunchoutRole"/>'
 		var extnStockCheck='<s:property value="#extnStockCheck"/>';
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
 			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";		
 			
-			if((isPunchoutUser=="false") && (extnPunchOutUser=="true")){				
+			if((isPunchoutUser=="false") && (hasPunchoutRole=="true")){				
 				$("#extnPunchOutModal").fancybox({					
 					'onStart' 	: function(){
 						if(isguestuser!="true"){

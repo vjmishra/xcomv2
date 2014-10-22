@@ -358,7 +358,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		} else {
 			this.isChildCustomer = "TRUE";
 		}
-		//commented for EB-309 for performance fix 
+		//commented for EB-309 for performance fix
 		/*try {
 			putAllAvailableAndAuthorizeLocationTOCache(wcContext);
 		} catch (Exception e) {
@@ -2350,7 +2350,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	/* ENDS - Customer-User Profile Changes - adsouza */
 	private String estimator = "N";
 	private String stockCheckWebservice = "F";
-	private String punchoutUsers = "F";
+	private String punchoutUsers = "Y"; // indicates if punchout user has MIL write
 	private String viewInvoices = "N";
 	private Map b2bCatalogViewMap;
 	protected boolean orderFlagForApproval = false;// xb-226

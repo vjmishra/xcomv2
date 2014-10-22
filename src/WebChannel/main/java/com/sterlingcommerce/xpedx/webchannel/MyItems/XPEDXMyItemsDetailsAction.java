@@ -3281,8 +3281,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if (isCurrentUserAdmin()) {
 				canShare = true;
 			}
-			if (getShareAdminOnly().equals("Y")
-					&& isCurrentUserAdmin() == false) {
+			if ((getShareAdminOnly().equals("Y") && !isCurrentUserAdmin()) ||
+					!XPEDXWCUtils.canPunchoutUserEditMil() ) {
 				canEditItem = false;
 			}
 

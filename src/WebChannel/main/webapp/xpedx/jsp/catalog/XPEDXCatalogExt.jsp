@@ -6,6 +6,7 @@
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 <s:set name='isGuestUser' value="wCContext.guestUser" />
 <s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
+<s:set name="canEditMIL" value='%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@canPunchoutUserEditMil()}'/>
 <s:set name="pageName" value="#wcUtil.setPageName('XPEDXCatalogExt.jsp')" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -97,20 +98,12 @@
 <s:url action='setSelectedView' namespace='/catalog' id='selectedViewURL' />
 <s:set name='myParam' value='{"searchTerm", "", "cname"}' />
 <s:url id='addToCartURL' namespace='/order' action='addToCart' />
-<%-- <s:url id='punchOutURL' namespace='/order' action='configPunchOut' /> --%>
 <%-- <s:url id='selectedViewURL' action='setSelectedView' namespace='/catalog' /> --%>
 <s:set name='appFlowContext' value='#session.FlowContext' />
 <%-- <s:set name='isFlowInContext' value='#util.isFlowInContext(#appFlowContext)' /> --%>
 
 <%-- Component Included --%>
 <swc:breadcrumb id="searchBreadcrumb" rootURL='#myUrl' group='catalog' displayGroup='search' displayParam='#myParam' />
-
-<%-- <s:url id='punchOutURLOrderChange' namespace='/order'
-	action='configPunchOut'>
-	<s:param name='orderHeaderKey' value='%{#appFlowContext.key}' />
-	<s:param name='currency' value='%{#appFlowContext.currency}' />
-	<s:param name='flowID' value='%{#appFlowContext.type}' />
-</s:url> --%>
 
 <%-- <s:url id='addToMyItemListURLid' namespace='/xpedx/myItems' action='XPEDXMyItemsDetailsAddFromCatalog'/>
 <!--  <s:a id='addToMyItemListURL' href='%{#addToMyItemListURLid}'/> --> --%>
@@ -788,7 +781,9 @@ function getNormalView() {
 							<s:if test='!#guestUser'>
 								'<div class="cart-pa-button-wrap addmarginbottom10">',
 									'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
-									'<input class="btn-neutral" type="button" onclick="javascript:addItemToWishList(\'{itemid}\'); return false;" value="Add to List">',
+									<s:if test='%{#canEditMIL}'>
+										'<input class="btn-neutral" type="button" onclick="javascript:addItemToWishList(\'{itemid}\'); return false;" value="Add to List">',
+									</s:if>
 									'<div class="availablelink">',
 										'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
 										'<div class=\"itemOption\">',

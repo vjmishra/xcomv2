@@ -13,7 +13,6 @@
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils' id='utilMIL' />
 <s:set name='scuicontext' value="uiContext" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
-<s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <swc:html isXhtml="true">
@@ -47,8 +46,11 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/XPEDXItemDetails<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
+	<s:set name="canEditMIL" value='%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@canPunchoutUserEditMil()}'/>
 	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
-	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
+	
+	<s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
+	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' /> <%-- is this actually used? --%>
 	<s:if test = '%{#isEstUser == null || #isEstUser == ""}'>
 		<s:set name="isEstUser" value="false"/>
 	</s:if>
@@ -371,8 +373,10 @@
 								</s:if>
 								<s:else>
 									<input name="button" type="button" onclick="addItemToCart();" class="btn-gradient floatright  addmarginright18" value="Add to Order"/>
-								</s:else>						
-								<input name="button" class="btn-neutral floatright  addmarginright10"  value="Add to List" onclick="addItemToWishList(); return false;" type="button" />
+								</s:else>
+								<s:if test='%{#canEditMIL}'>
+									<input name="button" class="btn-neutral floatright  addmarginright10"  value="Add to List" onclick="addItemToWishList(); return false;" type="button" />
+								</s:if>
 								<s:include value="../modals/XPEDXSelectWishListModal.jsp" />
 								
 								<div class="show-pa">

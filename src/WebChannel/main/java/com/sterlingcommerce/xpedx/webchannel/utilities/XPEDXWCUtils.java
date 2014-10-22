@@ -2938,6 +2938,16 @@ public class XPEDXWCUtils {
 		return ociFields;
 	}
 
+	/*
+	 * If punchout user, may not be allowed to edit MIL (Sonoco EB-8133)
+	 * Using old EXTN_PUNCH_OUT_USER field to represent whether MIL allowed.
+	 */
+	public static boolean canPunchoutUserEditMil() {
+		XPEDXCustomerContactInfoBean customerContactInfoBean = (XPEDXCustomerContactInfoBean)getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+		boolean hasPunchoutRole = customerContactInfoBean.hasPunchoutRole();
+		String canPoUserEditMil = customerContactInfoBean.getExtnPunchOutUser();
+		return !hasPunchoutRole || !"N".equals(canPoUserEditMil);
+	}
 
 	public static XPEDXShipToCustomer getShipToAddressOfCustomer(Element CustomerDetails) {
 
@@ -6068,6 +6078,7 @@ public class XPEDXWCUtils {
 			String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");
 			String maxOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMaxOrderAmount");//JIRA 3488 start
 			String orderApproveFlag = SCXmlUtil.getAttribute(extnElem, "ExtnOrderApprovalFlag");//added for XB 226
+			String extnPunchoutUser= SCXmlUtil.getAttribute(extnElem, "ExtnPunchOutUser");
 			String stockCheckWS= SCXmlUtil.getAttribute(extnElem, "ExtnStockCheckWS");
 
 			if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
@@ -6087,7 +6098,7 @@ public class XPEDXWCUtils {
 			}
 			boolean usergroupKeyListActive = false;
 			boolean isEstimator = false;
-			boolean extnPunchoutUser=false;
+			boolean hasPunchoutRole=false;
 
 			Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
 			Element approverElem = SCXmlUtil.getElementByAttribute(userElem, "UserGroupLists/UserGroupList", "UsergroupKey", "BUYER-APPROVER");
@@ -6103,7 +6114,7 @@ public class XPEDXWCUtils {
 			}
 
 			if(newusergroupkey.contains("PROCUREMENT-USER")){
-				extnPunchoutUser=true;
+				hasPunchoutRole=true;
 			}
 			String isApprover = "N";
 			if(approverElem!=null) {
@@ -6150,7 +6161,7 @@ public class XPEDXWCUtils {
 						viewReportFlag, viewPricesFlag,
 						newusergroupkey, defaultShipTo,
 						userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-						emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag, extnPunchoutUser, stockCheckWS);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
+						emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag, extnPunchoutUser, hasPunchoutRole, stockCheckWS);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
 		}
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 		return xpedxCustomerContactInfoBean;
