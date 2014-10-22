@@ -2056,8 +2056,9 @@ div.specs-tab {
 }
 
 .detail-view .show-pa {
-	margin: 0px 0px 0px 65px;
-	padding-top: 7px;
+    float: right;
+    margin: 0 10px 0 0;
+    padding-top: 7px;
 }
 .detail-view .list-price h4 {
     background: none repeat scroll 0 0 #E1E1E1;
