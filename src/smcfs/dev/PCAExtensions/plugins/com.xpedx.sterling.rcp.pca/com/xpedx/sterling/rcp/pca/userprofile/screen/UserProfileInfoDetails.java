@@ -779,7 +779,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		unusedSpacerButton.setData("name", "chkUnusedSpacerButton");
 
 		chkPunchoutMilEdit = new Button(pnlUserTypeChkButtons, SWT.CHECK);
-		chkPunchoutMilEdit.setText("Punchout User to Manage MIL");
+		chkPunchoutMilEdit.setText("Allow Punchout User to Manage MIL");
 		chkPunchoutMilEdit.setVisible(true); // may be set false depending on punchout user data
 		chkPunchoutMilEdit.setData("yrc:customType", "Label");
 		chkPunchoutMilEdit.setData("name", "chkPunchoutMilEdit");

@@ -16,8 +16,9 @@
 					DefaultValue="F" Description=" " Nullable="false" XMLName="ExtnStockCheckWS"
 					XMLGroup="Extn">
 				</Attribute>
+				<!-- This field is now being used for whether punchout user can edit MIL -->
 				<Attribute ColumnName="EXTN_PUNCH_OUT_USER" DataType="Flag"
-					DefaultValue="F" Description=" " Nullable="false" XMLName="ExtnPunchOutUser"
+					DefaultValue="Y" Description=" " Nullable="false" XMLName="ExtnPunchOutUser"
 					XMLGroup="Extn">
 				</Attribute>
 				<!-- Added for XB-258 Commenting to revert the changes -->
