@@ -2143,10 +2143,12 @@ div.specs-tab {
 	clear: none;
 }
 .cart-desc-wrap h3 {
-	display: inline-block;
-	vertical-align:top;
 	color: #003399;
-	padding-bottom: 0px;
+   display: inline-block;
+   padding-bottom: 0;
+   vertical-align: top;
+   width: 340px;
+
 }
 .cart-desc-wrap ul.prodlist {
 	padding-left: 10px;

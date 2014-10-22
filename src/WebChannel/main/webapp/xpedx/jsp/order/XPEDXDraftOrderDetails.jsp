@@ -190,18 +190,6 @@ $(document).ready(function(){
 			//mil-wrap-condensed-desc item-short-desc
 			// $('.mil-desc-wrap mil-wrap-condensed-desc item-short-desc short-description').each(function() { 
 
-		$('.short-description').each(function() { 
-				var html = $(this).html();
-				var shortHTML = html.substring(0, 70);
-				if( html.length > shortHTML.length )
-				{
-					$(this).html(shortHTML);
-					$(this).append('...');	
-					$(this).attr('title', html );
-				}
-		});
-		
-
 		$('.full-description-replacement-model').each(function() { 
 				var html = $(this).html();
 				var shortHTML = html.substring(0, 175);
