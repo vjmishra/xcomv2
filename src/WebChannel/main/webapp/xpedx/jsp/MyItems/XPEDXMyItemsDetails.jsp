@@ -3579,7 +3579,7 @@ function showSharedListForm(){
 					 var uid = arrQty[i].id;
 					 uid = uid.substring(5);
 					if(document.getElementById('qtys_' + uid).value != ""){
-				document.getElementById('instructions-link_' + uid).className= "active-link addpadtop5";
+				document.getElementById('instructions-link_' + uid).className= "active-link pointer addpadtop5";
 				} else {
 				document.getElementById('instructions-link_' + uid).className= "gray addpadtop5";
 				}

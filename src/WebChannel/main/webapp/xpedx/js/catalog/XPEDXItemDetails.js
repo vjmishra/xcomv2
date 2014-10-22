@@ -5,7 +5,7 @@ var currentAadd2ItemListIndex = null;
 $(document).ready(function() {
 	var itemId = $('#itemID').val();
 	$('#Qty_' + itemId).focus();
-	
+	addSpecialInst();
 });
 
 $(document).ready(function() {
@@ -86,6 +86,7 @@ function addSpecialInst(){
 	if ($btn.hasClass('gray')) {
 		$btn.removeClass('gray');
 		$btn.addClass('active-link');
+		$btn.addClass('pointer');
 	} 
 	return false;
 	} else {

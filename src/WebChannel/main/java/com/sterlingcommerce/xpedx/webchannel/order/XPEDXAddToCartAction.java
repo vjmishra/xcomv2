@@ -61,12 +61,12 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 					else {
 						remElems.add(orderLineEle);
 					}
-					if(orderedInstructionsText!=null && orderedInstructionsText.size() > index && !YFCCommon.isVoid(orderedInstructionsText.get(index))){
+					if(enteredInstructionsText!=null && enteredInstructionsText != ""){
 						YFCElement instructionsElememt = orderLineEle.createChild("Instructions");
 						YFCElement instructionElment = instructionsElememt.createChild("Instruction");
 						instructionElment.setAttribute("InstructionType", "LINE");
 						instructionElment.setAttribute("Action", "CREATE");
-						instructionElment.setAttribute("InstructionText", orderedInstructionsText.get(index));
+						instructionElment.setAttribute("InstructionText", enteredInstructionsText);
 					}
 					index++;
 				}
@@ -170,7 +170,6 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 									if (rootEle.hasChildNodes()) {
 										YFCElement lineItem =  rootEle.getChildElement("Items");
 										YFCIterable<YFCElement> yfcItr = lineItem.getChildren("Item");
-										int index =0;
 										while (yfcItr.hasNext()) {
 											YFCElement lineElem = yfcItr.next();
 											YFCElement lineNumberElem = lineElem.getChildElement("LineNumber");
@@ -213,14 +212,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 													maxLineNum=currentLine;
 												}
 											}
-											if(orderedInstructionsText!=null && orderedInstructionsText.size() > index && !YFCCommon.isVoid(orderedInstructionsText.get(index))){
-												YFCElement instructionsElememt = lineElem.createChild("Instructions");
-												YFCElement instructionElment = instructionsElememt.createChild("Instruction");
-												instructionElment.setAttribute("InstructionType", "LINE");
-												instructionElment.setAttribute("Action", "CREATE");
-												instructionElment.setAttribute("InstructionText", orderedInstructionsText.get(index));
-											}
-											index++;
+
 										}
 										yfcItr = lineItem.getChildren("Item");
 
@@ -330,7 +322,6 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		throws XPathExpressionException
 		{
 			XPEDXWCUtils.setYFSEnvironmentVariables(wcContext);
-			orderedInstructionsText.add(enteredInstructionsText);
 
 			/* Begin - Changes made by Mitesh Parikh
 			 * Service call to getItemListForOrdering API commented to improve performance of addToCart action.
@@ -497,15 +488,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	private String draftError= "false";
 	private String quantitydraftError="false";
 	private String enteredInstructionsText="";
-	protected ArrayList<String> orderedInstructionsText = new ArrayList<String>();
 
-	public ArrayList<String> getOrderedInstructionsText() {
-		return orderedInstructionsText;
-	}
-
-	public void setOrderedInstructionsText(ArrayList<String> orderedInstructionsText) {
-		this.orderedInstructionsText = orderedInstructionsText;
-	}
 
 	public String getEnteredInstructionsText() {
 		return enteredInstructionsText;

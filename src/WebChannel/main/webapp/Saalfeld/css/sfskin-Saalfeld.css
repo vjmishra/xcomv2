@@ -1399,4 +1399,9 @@ li.icon-grid-view-select{
 	background:url(../images/catalog/pricing-icon-sf.png) top right no-repeat;
 	margin-top: 2px;
 }
-	
+.special-text {
+	color: #006a3a;
+}
+.detail-view .special-text {
+	color: #006a3a;
+}

@@ -1412,7 +1412,6 @@ inStoreIcon {
     margin-left: 20px;
 }
 #item-ct dd {
-    cursor: pointer;
     float: left;
     margin: 0;
     padding: 3px;

@@ -709,6 +709,7 @@ function getNormalView() {
 							'<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
 						'</div>',
 						'<input type=\'hidden\' id=\'baseUOMItem_{itemid}\' name=\'baseUOMItem_{itemid}\' value=\'{uom}\'/>',
+						
 						'<div class="contents">',
 							'<p class="pprice">{price}</p>',
 							'<div class="descriptions">',
@@ -738,14 +739,23 @@ function getNormalView() {
 									'{contractitemdiv}',
 							</s:if>
 						'</div>', //end contents
-						'<div class="clearfix"></div>',
+						'<div id="instructions-trigger"	class="special-text">',
+						'<p id=\'instructions-link_{itemid}\' class="gray instructions-link addmargintop10" onclick="javascript:specialInstBox(\'{itemid}\')">Add Special Instructions</p>',
+					'</div>',
+					'<div class="clearfix"></div>',
+					'<div id=\"instructions-content_{itemid}\"	style="display: none;" class="instructions-content addmarginleft10">',
+						'<input name="textarea" class="instructions-content-textfield" onkeyup="javascript:restrictTextareaMaxLength(this,250);" value="" id=\'enteredInstructionsText_{itemid}\' name="enteredInstructionsText"> </input>',
+					'<div class="clearfix"></div>',
+						'<p class="text-smaller italic addmarginbottom10">Special Instructions are Saved to Cart</p>',
+					'</div>',
+							'<div class="clearfix"></div>',
 						'<div class="order-input-wrap">',
 							'<div class="order-row">',
 								<s:if test='!#guestUser'>
 									'<div class="order-label">Qty:</div>',
 									'<div class="order-input">',
 										'<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',
-										'<input type="textfield" id=\'Qty_{itemid}\' name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this, \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />',
+										'<input type="textfield" id=\'Qty_{itemid}\' name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);javascript:addSpecialInst(\'{itemid}\');" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this, \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />',
 										'{uomdisplay}',
 									'</div>',
 								</s:if>
@@ -1452,7 +1462,10 @@ function processDetail(itemid, uom) {
 }
 <s:set name='wccontext' value="#_action.getWCContext()"/>
 var compCount = <s:property value='#catUtil.getComparisonSetSize(#wccontext)'/>;
-                    
+       
+
+
+
 function addCompare(itemKey) {
 	if (compCount == 4)
 	{

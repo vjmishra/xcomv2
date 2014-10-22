@@ -504,7 +504,6 @@ width:100%;
 }
 
 .normal-view #item-ct dd {
-	cursor: pointer;
 	float: left;
 	margin: 0;
 	padding: 3px;
@@ -541,13 +540,12 @@ width:100%;
 	clear: both;
 }
 .normal-view #item-ct dd .order-input-wrap {
-	float: right;
 	clear: none;
 	width: 365px;
 	top: 10px;
-	left: 424px;
-	margin-top:-155px;
 	width: 400px;
+	position: absolute;
+	right: 0px;
 }
 .normal-view #item-ct dd .order-row {
 	height: 25px;
@@ -605,6 +603,9 @@ width:100%;
 }
 .normal-view #item-ct dd .order-input-wrap .order-input select {
 	margin-left: 3px;
+}
+.normal-view .special-text{
+	margin: 0 0 8px 10px;
 }
 
 .itemdiv .imgs {

@@ -60,7 +60,7 @@ function addItemToCart(itemId) {
 				 draftOrder="Y";
 			 }
 			 var url = document.getElementById('addItemToCartURL').value;
-				
+			 var specialInstructions =  document.getElementById('enteredInstructionsText_'+itemId).value;
 			 if(url!=null) {
 				//Ext.Msg.wait("Adding Item "+itemId+"to cart...Please wait!"); 
 				Ext.Ajax.request({
@@ -74,7 +74,8 @@ function addItemToCart(itemId) {
 						requestedJobId: Job,
 				    	        requestedCustomerLinePONo: customerPONo,
 						requestedOrderHeaderKey: selCart,
-						draft: draftOrder
+						draft: draftOrder,
+						enteredInstructionsText: specialInstructions
 				    },
 				    method: 'POST',
 					success: function (response, request){
@@ -82,6 +83,7 @@ function addItemToCart(itemId) {
 						//Added for EB 560
 		    	   			if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
 		    	   				window.location.reload(true);
+		    	   				addSpecialInst();
 		    	   				hideProcessingIcon();
 		    					return;
 		    	   			}
@@ -514,4 +516,30 @@ var priceCheck;
     	    }
     	}
     }
+	function addSpecialInst(itemId){
+		//var itemId = $('#itemID').val();
+		var qtyBox = $('#Qty_' + itemId);
+		if(qtyBox.val() !=null && qtyBox.val() != "")
+		{
+		$instructionlink = $('.special-text');
+		$btn = $instructionlink.find('#instructions-link_'+itemId);
+		if ($btn.hasClass('gray')) {
+			$btn.removeClass('gray');
+			$btn.addClass('active-link');
+			$btn.addClass('pointer');
+		} 
+		return false;
+		} else {
+			$('#instructions-link_'+itemId).addClass("gray");
+		}
+	}
+
+	function specialInstBox(itemId){
+		//var itemId = $('#itemID').val();
+		var qtyBox = $('#Qty_' + itemId);
+		if(qtyBox.val() !=null && qtyBox.val() != "")
+		{
+			$("#instructions-content_"+itemId).slideToggle("slow");
+		}
+	}
  
