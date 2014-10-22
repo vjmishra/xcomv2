@@ -68,26 +68,24 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		try {
 			YFCDocument inDoc = YFCDocument.getDocumentFor(inDocumentUE);
 
-			System.out.println(started + ": BEFORE YFCElement inElem");
 			YFCElement inElem = inDoc.getDocumentElement();
 
-			System.out.println(started + ": BEFORE YFCIterable<YFCElement> searchFieldListIterator");
 			YFCIterable<YFCElement> searchFieldListIterator = inElem.getChildElement("SearchIndexFieldList").getChildren("SearchField");
 
-			System.out.println(started + ": BEFORE YFCIterable<YFCElement> itemListIterator");
 			YFCIterable<YFCElement> itemListIterator = inElem.getChildElement("ItemList").getChildren("Item");
 
-			System.out.println(started + ": BEFORE List<String> allItemIDs");
 			List<String> allItemIDs = getItemIds(inElem.getChildElement("ItemList").getChildren("Item"));
 
-			System.out.println(started + ": BEFORE Map<String, ItemMetadata> metadataForItems");
 			Map<String, ItemMetadata> metadataForItems = new ItemIndexUtil().getMetadataForItems(env, allItemIDs, inStockStatus);
 
-			System.out.println(started + ": BEFORE YFCDocument outDoc");
 			YFCDocument outDoc = YFCDocument.createDocument("ItemList");
 			if ("en_US".equals(inElem.getAttribute("LocaleCode"))) {
 				getLocaleDoc(env, outDoc, searchFieldListIterator, itemListIterator, metadataForItems);
 			}
+
+			long stopped = System.currentTimeMillis();
+			System.out.println(started + ": total time = " + (started - stopped));
+
 			return outDoc.getDocument();
 
 		} catch (Exception ex) {
@@ -102,7 +100,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 	private void dumpInputXml(Document inDocumentUE, String label) {
 		String filename = String.format("XPEDXGetAdditionalCatalogIndexInformationUE_%s_%s.xml", started, label);
 		File xmlFile = new File(System.getProperty("java.io.tmpdir"), filename);
-		System.out.println("Logging inDocumentUE to file: " + xmlFile);
+		System.out.println(started + ": Logging inDocumentUE to file: " + xmlFile);
 
 		Writer writer = null;
 		try {
@@ -212,7 +210,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 
 			Set<String> entitledItemIDs = pocGetEntitledItemIDs(allItemIDs);
 
-			System.out.println(started + ": entitledItemIDs = " + entitledItemIDs);
+			System.out.println(started + ": " + entitledItemIDs.size() + " / " + allItemIDs.size() + " entitledItemIDs = " + entitledItemIDs);
 
 			// remove the unentitled items from the dom
 			for (Element itemElem : itemElems) {
@@ -238,7 +236,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		try {
 			conn = getConnection();
 
-			stmt = conn.prepareStatement("select trim(item_id) from trey_entitled_item where item_id in (" + createQuestionMarks(allItemIDs.size()) + ")");
+			stmt = conn.prepareStatement("select trim(item_id) as item_id from trey_entitled_item where item_id in (" + createQuestionMarks(allItemIDs.size()) + ")");
 
 			int parameterIndex = 1;
 			for (String itemID : allItemIDs) {
@@ -252,11 +250,14 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 				entitledItemIDs.add(res.getString("item_id"));
 			}
 
-			System.out.println("Entitlement query succeeded: " + entitledItemIDs.size() + " / " + allItemIDs.size() + " are entitled items");
+			System.out.println(started + ": Entitlement query succeeded: " + entitledItemIDs.size() + " / " + allItemIDs.size() + " are entitled items");
 
 			return entitledItemIDs;
 
 		} catch (Exception ignore) {
+			System.out.print("started: ");
+			ignore.printStackTrace(System.out);
+
 			if (res != null) {
 				try {
 					res.close();
@@ -333,8 +334,6 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document inDocumentUE = builder.parse(new File("C:/Users/THOWA14/Desktop/8038/XPEDXGetAdditionalCatalogIndexInformationUE-input-1.xml"));
-
-//		Set<String> entitledItemIDs = new LinkedHashSet<String>(Arrays.asList("5421865", "2278085"));
 
 		new XPEDXGetAdditionalCatalogIndexInformationUE().removeUnentitledItems(inDocumentUE);
 	}
