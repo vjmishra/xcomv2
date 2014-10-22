@@ -1,7 +1,5 @@
 package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 
-import javax.xml.xpath.XPathConstants;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
@@ -11,29 +9,18 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.w3c.dom.Element;
 
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
-import com.yantra.yfc.rcp.IYRCCellModifier;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
-import com.yantra.yfc.rcp.IYRCTableColumnTextProvider;
 import com.yantra.yfc.rcp.YRCButtonBindingData;
 import com.yantra.yfc.rcp.YRCConstants;
-import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCScrolledCompositeListener;
 import com.yantra.yfc.rcp.YRCStyledTextBindingData;
-import com.yantra.yfc.rcp.YRCTableBindingData;
-import com.yantra.yfc.rcp.YRCTblClmBindingData;
 import com.yantra.yfc.rcp.YRCTextBindingData;
-import com.yantra.yfc.rcp.YRCXPathUtils;
-import com.yantra.yfc.rcp.YRCXmlUtils;
 
 public class CustomerProfileMaintIntegDataPanel extends Composite implements IYRCComposite {
 
@@ -57,13 +44,14 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
     private Text txtReplaceChars;
     private Button chkUseOCISAPParam;
     private Text txtComments;
-	
+    private Text txtPunchoutNotes;
+
 	private StyledText stxtMasterCustomerNo;
 	private StyledText stxtMasterCustomerName;
-//	Removed - JIRA 1109 - stxtCustomerNo,stxtCustomerName 
+//	Removed - JIRA 1109 - stxtCustomerNo,stxtCustomerName
 //	private StyledText stxtCustomerNo;
 //	private StyledText stxtCustomerName;
-    
+
 	private Text txtBuyerID;
 	private Button radIsEdiUom;
 	private Button radIsXpedxUom;
@@ -82,8 +70,8 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 	private Text txtUserpwdParam;
 	private Text txtUserEmailTemplate;
 	private Text txtPathOfUserId;
-	
-	public CustomerProfileMaintIntegDataPanel(Composite parent, int style, 
+
+	public CustomerProfileMaintIntegDataPanel(Composite parent, int style,
 			Object inputObject, CustomerProfileMaintenance parentObj) {
 		super(parent, style);
 		initialize();
@@ -92,18 +80,18 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 	}
 
 	private void setBindingForComponents() {
-		
+
 		YRCTextBindingData tbd = null;
 		YRCButtonBindingData chkBd = null;
 		YRCButtonBindingData radBd = null;
 		YRCStyledTextBindingData stbd = null;
-		
+
 //		Removed - JIRA 1109 - stxtCustomerNo,stxtCustomerName
 //		stbd = new YRCStyledTextBindingData();
 //		stbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/ParentCustomer/Customer/@CustomerID");
 //		stbd.setName("stxtCustomerNo");
 //		stxtCustomerNo.setData( YRCConstants.YRC_STYLED_TEXT_BINDING_DEFINATION, stbd);
-//		
+//
 //		stbd = new YRCStyledTextBindingData();
 //		stbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/ParentCustomer/Customer/@OrganizationName");
 //		stbd.setName("stxtCustomerName");
@@ -113,39 +101,39 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		stbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/ParentMasterCustomer/Customer/@CustomerID");
 		stbd.setName("stxtMasterCustomerNo");
 		stxtMasterCustomerNo.setData( YRCConstants.YRC_STYLED_TEXT_BINDING_DEFINATION, stbd);
-		
+
 		stbd = new YRCStyledTextBindingData();
 		stbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/ParentMasterCustomer/Customer/@OrganizationName");
 		stbd.setName("stxtMasterCustomerName");
 		stxtMasterCustomerName.setData( YRCConstants.YRC_STYLED_TEXT_BINDING_DEFINATION, stbd);
-		
+
 		// PunchOut Panel Fields binding
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustIdentity");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustIdentity");
 		tbd.setName("txtIdentity");
 		txtIdentity.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSharedSecret");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSharedSecret");
 		tbd.setName("txtSharedSecret");
 		txtSharedSecret.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
 
-		
+
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnXSLTFileName");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnXSLTFileName");
 		tbd.setName("txtXSLTFilename");
 		txtXSLTFilename.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 //		tbd = new YRCTextBindingData();
 //		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCXmlUserXPath");
 //		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCXmlUserXPath");
 //		tbd.setName("txtPathOfUserId");
 //		txtPathOfUserId.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 //		chkBd = new YRCButtonBindingData();
 //		chkBd.setCheckedBinding("Y");
 //		chkBd.setUnCheckedBinding("N");
@@ -153,7 +141,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 //		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMyItemsLink");
 //		chkBd.setName("chkShowMyItems");
 //		chkShowMyItems.setData("YRCButtonBindingDefination", chkBd);
-		
+
 //		chkBd = new YRCButtonBindingData();
 //		chkBd.setCheckedBinding("Y");
 //		chkBd.setUnCheckedBinding("N");
@@ -161,13 +149,13 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 //		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUNSPSCRequired");
 //		chkBd.setName("chkUNSPSCCodeReg");
 //		chkUNSPSCCodeReg.setData("YRCButtonBindingDefination", chkBd);
-	    
+
 //	    tbd = new YRCTextBindingData();
 //		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnReplaceCharacter");
 //		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnReplaceCharacter");
 //		tbd.setName("txtReplaceChars");
 //		txtReplaceChars.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 //		chkBd = new YRCButtonBindingData();
 //		chkBd.setCheckedBinding("Y");
 //		chkBd.setUnCheckedBinding("N");
@@ -176,38 +164,44 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 //		chkBd.setName("chkUseOCISAPParam");
 //		chkUseOCISAPParam.setData("YRCButtonBindingDefination", chkBd);
 
-		
+
 	    tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUsernameParam");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUsernameParam");
 		tbd.setName("txtUserNameParam");
 		txtUserNameParam.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 //	    tbd = new YRCTextBindingData();
 //		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUserEmailTemplate");
 //		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUserEmailTemplate");
 //		tbd.setName("txtUserEmailTemplate");
 //		txtUserEmailTemplate.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-//		
+//
 	    tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUserPwdParam");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUserPwdParam");
 		tbd.setName("txtUserpwdParam");
 		txtUserpwdParam.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 	    tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPunchOutComments");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPunchOutComments");
 		tbd.setName("txtComments");
 		txtComments.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
+		tbd = new YRCTextBindingData();
+		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPunchOutNotes");
+		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPunchOutNotes");
+		tbd.setName("txtPunchoutNotes");
+		txtPunchoutNotes.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+
 		// B2B Transaction Attributes binding.
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnBuyerID");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnBuyerID");
 		tbd.setName("txtBuyerID");
 		txtBuyerID.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		radBd = new YRCButtonBindingData();
 		radBd.setName("radIsEdiUom");
 		radBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUomType");
@@ -221,7 +215,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		radBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUomType");
 		radBd.setCheckedBinding("N");
 		radIsXpedxUom.setData("YRCButtonBindingDefination", radBd);
-		
+
 		chkBd = new YRCButtonBindingData();
 		chkBd.setCheckedBinding("Y");
 		chkBd.setUnCheckedBinding("N");
@@ -229,13 +223,13 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnStockCheckOption");
 		chkBd.setName("chkStockChkWeb");
 		chkStockChkWeb.setData("YRCButtonBindingDefination", chkBd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSupportEmailAddress");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSupportEmailAddress");
 		tbd.setName("txtSupportEmailAddr");
 		txtSupportEmailAddr.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		chkBd = new YRCButtonBindingData();
 		chkBd.setCheckedBinding("Y");
 		chkBd.setUnCheckedBinding("N");
@@ -243,7 +237,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPurchaseOrderFlag");
 		chkBd.setName("chkPurchaseOrd");
 		chkPurchaseOrd.setData("YRCButtonBindingDefination", chkBd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPurchaseOrderFlagComments");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPurchaseOrderFlagComments");
@@ -256,7 +250,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPOAckFlag");
 		chkBd.setName("chkPuchkPOConfirmationrchaseOrd");
 		chkPOConfirmation.setData("YRCButtonBindingDefination", chkBd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPOConfirmComments");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPOConfirmComments");
@@ -269,7 +263,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@Extn810InvoiceFlag");
 		chkBd.setName("chkInvoice");
 		chkInvoice.setData("YRCButtonBindingDefination", chkBd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnInvoiceEDIComments");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnInvoiceEDIComments");
@@ -282,21 +276,21 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPnAEDIFlag");
 		chkBd.setName("chkPnAFlag");
 		chkPnAFlag.setData("YRCButtonBindingDefination", chkBd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnPnAEDIFlagComments");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnPnAEDIFlagComments");
 		tbd.setName("txtPnAFlagComments");
 		txtPnAFlagComments.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
-        
+
+
 	}
 
 	private void initialize() {
 		createRootPanel();
 		this.setLayout(new FillLayout());
 		setSize(new org.eclipse.swt.graphics.Point(1000, 200));
-		
+
 	}
 
 	private void createRootPanel() {
@@ -314,29 +308,30 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		createComposite();
 		createPunchoutMaintComposite();
 		createB2BMaintComposite();
-		
+
 		GridData gridData = new GridData();
         gridData.horizontalAlignment = SWT.BEGINNING;
         gridData.verticalAlignment = SWT.BEGINNING;
         gridData.grabExcessHorizontalSpace = true;
         gridData.horizontalIndent = 3;
 //        gridData.widthHint = 500;
-        
+
 		btnUpdate = new Button(pnlBody, 0);
 		btnUpdate.setText("Update");
 		btnUpdate.setLayoutData(gridData);
 		btnUpdate.setData("name", "btnUpdate");
-		btnUpdate.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+		btnUpdate.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+			@Override
 			public void widgetSelected( org.eclipse.swt.events.SelectionEvent e) {
 				 myBehavior.update();
-				 
+
 			}
 		}
 		);
-		
+
 		adjustScrollPnl(bodyScrolledPanel, pnlBody,
 				getRootPanel(), true, true);
-		
+
 	}
 	public void adjustScrollPnl(ScrolledComposite scrPnl, Composite scrChild,
 			Composite scrParent, boolean isHScrollReqd, boolean isVScrollReqd) {
@@ -375,23 +370,23 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 	private void createPunchoutMaintComposite() {
 		GridLayout gridLayout5 = new GridLayout(2,true);
 		gridLayout5.verticalSpacing = 2;
-		
+
 		GridData gridData = new GridData();
         gridData.horizontalAlignment = SWT.BEGINNING;
         gridData.verticalAlignment = SWT.TOP;
         gridData.grabExcessHorizontalSpace = true;
         gridData.horizontalIndent = 3;
         gridData.widthHint = 500;
-        
+
 		Composite pnlPunchOut = new Composite(pnlBody, SWT.NONE);
 //		pnlPunchOut.setData("yrc:customType", "TaskComposite");
 		pnlPunchOut.setData("name", "pnlPunchOut");
 		pnlPunchOut.setLayout(gridLayout5);
 		pnlPunchOut.setLayoutData(gridData);
-		
+
         XPXUtils.addGradientPanelHeader(pnlPunchOut, "Punch_Out_Maintenance",true);
-		
-     // Controls 
+
+     // Controls
 		GridData gridData1 = new GridData();
         gridData1.horizontalAlignment = SWT.END;
         gridData1.widthHint = 200;
@@ -399,17 +394,17 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         GridData gridData2 = new GridData();
         gridData2.horizontalAlignment = SWT.BEGINNING;
         gridData2.widthHint = 200;
-        
+
         GridData gridDataSpan2 = new GridData();
         gridDataSpan2.horizontalAlignment = SWT.FILL;
         gridDataSpan2.grabExcessHorizontalSpace = true;
         gridDataSpan2.horizontalSpan = 3;
         gridDataSpan2.minimumWidth = 150;
-        
+
         Label lblcXmlOCI = new Label(pnlPunchOut, SWT.BOLD);
         lblcXmlOCI.setText("cXML and OCI :");
         lblcXmlOCI.setLayoutData(gridDataSpan2);
-        
+
 //      XSLT Filename
         Label lblXSLTFilename = new Label(pnlPunchOut, SWT.RIGHT);
         lblXSLTFilename.setText("XSLT_Filename");
@@ -421,32 +416,11 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtXSLTFilename.setText("12345678B");
         txtXSLTFilename.setTextLimit(60);
 
-//      Comments
-        Label lblComments = new Label(pnlPunchOut, SWT.BOLD);
-        lblComments.setText("Comments: (will appear on the landing page)");
-        lblComments.setLayoutData(gridDataSpan2);
-        lblComments.setData("name", "lblComments");
-        
-        GridData gridDataSpan2b = new GridData();
-		gridDataSpan2b.horizontalAlignment = SWT.FILL;
-		gridDataSpan2b.verticalAlignment = SWT.FILL;
-		gridDataSpan2b.grabExcessHorizontalSpace = true;
-		gridDataSpan2b.grabExcessVerticalSpace = true;
-		gridDataSpan2b.heightHint = 75;
-		gridDataSpan2b.horizontalSpan = 2;
-		
-		txtComments = new Text(pnlPunchOut, 2626);
-		txtComments.setLayoutData(gridDataSpan2b);
-		txtComments.setData("yrc:customType", "Text");
-		txtComments.setData("name", "txtComments");
-		txtComments.setText("Enter Comments");
-		txtComments.setTextLimit(500);
-		
-		
+
 		Label lblcXmlOnly = new Label(pnlPunchOut, SWT.BOLD);
 		lblcXmlOnly.setText("cXML Only :");
 		lblcXmlOnly.setLayoutData(gridDataSpan2);
-        
+
 // 		Identity
         Label lblIdentity = new Label(pnlPunchOut, SWT.RIGHT);
         lblIdentity.setText("Identity");
@@ -467,7 +441,6 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtSharedSecret.setData("name", "txtSharedSecret");
         txtSharedSecret.setText("12345678B");
         txtSharedSecret.setTextLimit(30);
-        
 
 //      Username
         Label lblUserNameParam = new Label(pnlPunchOut, SWT.RIGHT);
@@ -478,7 +451,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtUserNameParam.setLayoutData(gridData2);
         txtUserNameParam.setData("name", "txtUserNameParam");
         txtUserNameParam.setTextLimit(255);
-        
+
 //      Password
         Label lblUserpwdParam = new Label(pnlPunchOut, SWT.RIGHT);
         lblUserpwdParam.setText("Password");
@@ -488,34 +461,68 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtUserpwdParam.setLayoutData(gridData2);
         txtUserpwdParam.setData("name", "txtUserpwdParam");
         txtUserpwdParam.setTextLimit(255);
-        
+
+
+//      Comments
+        Label lblComments = new Label(pnlPunchOut, SWT.BOLD);
+        lblComments.setText("Comments: (will appear on the landing page)");
+        lblComments.setLayoutData(gridDataSpan2);
+        lblComments.setData("name", "lblComments");
+
+        GridData gridDataSpan2b = new GridData();
+		gridDataSpan2b.horizontalAlignment = SWT.FILL;
+		gridDataSpan2b.verticalAlignment = SWT.FILL;
+		gridDataSpan2b.grabExcessHorizontalSpace = true;
+		gridDataSpan2b.grabExcessVerticalSpace = true;
+		gridDataSpan2b.heightHint = 75;
+		gridDataSpan2b.horizontalSpan = 2;
+
+		txtComments = new Text(pnlPunchOut, 2626);
+		txtComments.setLayoutData(gridDataSpan2b);
+		txtComments.setData("yrc:customType", "Text");
+		txtComments.setData("name", "txtComments");
+		txtComments.setText("Enter Comments");
+		txtComments.setTextLimit(500);
+
+//      Internal Notes
+        Label lblPunchoutNotes = new Label(pnlPunchOut, SWT.BOLD);
+        lblPunchoutNotes.setText("Internal Notes:");
+        lblPunchoutNotes.setLayoutData(gridDataSpan2); //Ok to reuse?
+        lblPunchoutNotes.setData("name", "lblPunchoutNotes");
+
+		txtPunchoutNotes = new Text(pnlPunchOut, 2626);
+		txtPunchoutNotes.setLayoutData(gridDataSpan2b);
+		txtPunchoutNotes.setData("yrc:customType", "Text");
+		txtPunchoutNotes.setData("name", "txtPunchoutNotes");
+		txtPunchoutNotes.setText("Internal Notes");
+		txtPunchoutNotes.setTextLimit(500);
 
 	}
 
 	private void createB2BMaintComposite() {
 		GridLayout gridLayout5 = new GridLayout(2,false);
 		gridLayout5.verticalSpacing = 2;
-		
+
 		GridData gridData = new GridData();
         gridData.horizontalAlignment = SWT.BEGINNING;
         gridData.verticalAlignment = SWT.TOP;
         gridData.grabExcessHorizontalSpace = true;
         gridData.horizontalIndent = 3;
         gridData.widthHint = 500;
-        
+
 		Composite pnlB2BMaint = new Composite(pnlBody, SWT.NONE);
 //		pnlB2BMaint.setData("yrc:customType", "TaskComposite");
 		pnlB2BMaint.setData("name", "pnlPunchOut");
 		pnlB2BMaint.setLayout(gridLayout5);
 		pnlB2BMaint.setLayoutData(gridData);
-		
+
         XPXUtils.addGradientPanelHeader(pnlB2BMaint, "B2B Maintenance",true);
-		
-     // Controls 
+
+     // Controls
 		GridData gridData1 = new GridData();
         gridData1.horizontalAlignment = SWT.BEGINNING;
         gridData1.widthHint = 150;
-        
+
         GridData gridData2 = new GridData();
         gridData2.horizontalAlignment = SWT.BEGINNING;
         gridData2.grabExcessHorizontalSpace = true;
@@ -559,7 +566,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		radIsXpedxUom.setText("xpedx");
 		radIsXpedxUom.setData("name", "radIsXpedxUom");
 		radIsXpedxUom.setData("yrc:customType", "Label");
-		
+
 		//Stock Check Web Service
 		Label lblStockCheckWeb = new Label(pnlB2BMaint, SWT.LEFT);
 		lblStockCheckWeb.setText("Stock Check Web Service");
@@ -571,7 +578,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkStockChkWeb.setData("yrc:customType", "Label");
 		chkStockChkWeb.setLayoutData(gridData2);
 		chkStockChkWeb.setData("name", "chkStockChkWeb");
-		
+
 		// Support Email Address
         Label lblSupportEmailAddr = new Label(pnlB2BMaint, SWT.LEFT);
         lblSupportEmailAddr.setText("Support_Email_Address");
@@ -583,22 +590,22 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtSupportEmailAddr.setText("12345678");
         txtSupportEmailAddr.setToolTipText("Comma Seperated Value; To notify on missing/invalid e Trading IDs.");
         txtSupportEmailAddr.setTextLimit(200);
-        
+
         GridData gridDataSpan2 = new GridData();
         gridDataSpan2.horizontalAlignment = SWT.BEGINNING;
         gridDataSpan2.grabExcessHorizontalSpace = true;
         gridDataSpan2.horizontalSpan = 2;
 //        gridDataSpan2.minimumWidth = 150;
-        
+
         StyledText stxtSupportEmailAddressStaticComments = new StyledText(pnlB2BMaint, 72);
         stxtSupportEmailAddressStaticComments.setText("Comma Seperated Value; To notify on missing/invalid e Trading IDs.");
         stxtSupportEmailAddressStaticComments.setLayoutData(gridDataSpan2);
         stxtSupportEmailAddressStaticComments.setData("name", "stxtSupportEmailAddressStaticComments");
-        
+
         GridLayout gridLayoutChld = new GridLayout(4,false);
 		gridLayoutChld.verticalSpacing = 2;
 		gridLayoutChld.numColumns = 4;
-		
+
 		GridData gridDataChld = new GridData();
         gridDataChld.horizontalAlignment = SWT.FILL;
         gridDataChld.verticalAlignment = SWT.TOP;
@@ -607,28 +614,28 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         gridDataChld.horizontalIndent = 3;
         gridDataChld.horizontalSpan = 2;
 //        gridDataChld.widthHint = 500;
-        
+
 		Composite pnlB2BMaintChild = new Composite(pnlB2BMaint, SWT.NONE);
 //		pnlB2BMaintChild.setData("yrc:customType", "TaskComposite");
 		pnlB2BMaintChild.setData("name", "pnlB2BMaintChild");
 		pnlB2BMaintChild.setLayout(gridLayoutChld);
 		pnlB2BMaintChild.setLayoutData(gridDataChld);
-//		
+//
 		GridData gridDataLbl = new GridData();
 		gridDataLbl.horizontalAlignment = SWT.END;
 		gridDataLbl.verticalAlignment = SWT.TOP;
 		gridDataLbl.widthHint = 140;
-		
+
 		GridData gridDataChk = new GridData();
 		gridDataChk.horizontalAlignment = SWT.BEGINNING;
 		gridDataChk.verticalAlignment = SWT.TOP;
 		gridDataChk.widthHint = 40;
-		
+
 		GridData gridDataLbl1 = new GridData();
 		gridDataLbl1.horizontalAlignment = SWT.END;
 		gridDataLbl1.verticalAlignment = SWT.TOP;
 		gridDataLbl1.widthHint = 80;
-		
+
 		GridData gridDataTA = new GridData();
         gridDataTA.horizontalAlignment = SWT.FILL;
         gridDataTA.grabExcessHorizontalSpace = true;
@@ -648,7 +655,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkPurchaseOrd.setData("yrc:customType", "Label");
 		chkPurchaseOrd.setLayoutData(gridDataChk);
 		chkPurchaseOrd.setData("name", "chkPurchaseOrd");
-		
+
 		Label lblPOComments = new Label(pnlB2BMaintChild, SWT.RIGHT);
         lblPOComments.setText("Comments");
         lblPOComments.setLayoutData(gridDataLbl1);
@@ -658,7 +665,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtPOComments.setData("yrc:customType", "Text");
         txtPOComments.setData("name", "txtPOComments");
         txtPOComments.setTextLimit(200);
-        
+
 //		Purchase Order Confirmation
 		Label lblPOConfirmation = new Label(pnlB2BMaintChild, SWT.RIGHT);
 		lblPOConfirmation.setText("PO Confirmation");
@@ -670,7 +677,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkPOConfirmation.setData("yrc:customType", "Label");
 		chkPOConfirmation.setLayoutData(gridDataChk);
 		chkPOConfirmation.setData("name", "chkPOConfirmation");
-		
+
 		Label lblPOConfirmationComments = new Label(pnlB2BMaintChild, SWT.RIGHT);
         lblPOConfirmationComments.setText("Comments");
         lblPOConfirmationComments.setLayoutData(gridDataLbl1);
@@ -680,7 +687,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtPOConfirmationComments.setData("yrc:customType", "Text");
         txtPOConfirmationComments.setData("name", "txtPOConfirmationComments");
         txtPOConfirmationComments.setTextLimit(200);
-        
+
 //		Invoice
 		Label lblInvoice = new Label(pnlB2BMaintChild, SWT.RIGHT);
 		lblInvoice.setText("Invoice");
@@ -692,7 +699,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkInvoice.setData("yrc:customType", "Label");
 		chkInvoice.setLayoutData(gridDataChk);
 		chkInvoice.setData("name", "chkInvoice");
-		
+
 		Label lblInvoiceComments = new Label(pnlB2BMaintChild, SWT.RIGHT);
         lblInvoiceComments.setText("Comments");
         lblInvoiceComments.setLayoutData(gridDataLbl1);
@@ -714,7 +721,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		chkPnAFlag.setData("yrc:customType", "Label");
 		chkPnAFlag.setLayoutData(gridDataChk);
 		chkPnAFlag.setData("name", "chkPnAFlag");
-		
+
 		Label lblPnAFlagComments = new Label(pnlB2BMaintChild, SWT.RIGHT);
         lblPnAFlagComments.setText("Comments");
         lblPnAFlagComments.setLayoutData(gridDataLbl1);
@@ -732,14 +739,14 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		// Header Panel
 		GridLayout gridLayout5 = new GridLayout(3,false);
 		gridLayout5.verticalSpacing = 2;
-		
+
 		GridData gridData = new GridData();
         gridData.horizontalAlignment = SWT.BEGINNING;
         gridData.verticalAlignment = SWT.TOP;
         gridData.grabExcessHorizontalSpace = true;
         gridData.horizontalIndent = 3;
         gridData.widthHint = 500;
-        
+
 		Composite pnlHeader = new Composite(pnlBody, SWT.NONE);
 //		pnlHeader.setData("yrc:customType", "TaskComposite");
 		pnlHeader.setData("name", "pnlHeader");
@@ -747,7 +754,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		pnlHeader.setLayoutData(gridData);
 		XPXUtils.paintPanel(pnlHeader);
 
-		// Controls 
+		// Controls
 		GridData gridData1 = new GridData();
         gridData1.horizontalAlignment = SWT.BEGINNING;
         gridData1.widthHint = 110;
@@ -763,17 +770,17 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         lblMasterCustomer.setText("Master_Customer");
         lblMasterCustomer.setLayoutData(gridData1);
         lblMasterCustomer.setData("name", "lblMasterCustomer");
-        
+
         stxtMasterCustomerNo = new StyledText(pnlHeader, 72);
         stxtMasterCustomerNo.setLayoutData(gridData2);
         stxtMasterCustomerNo.setData("name", "stxtMasterCustomerNo");
         stxtMasterCustomerNo.setWordWrap(true);
-        
+
         stxtMasterCustomerName = new StyledText(pnlHeader, 72);
         stxtMasterCustomerName.setLayoutData(gridData3);
         stxtMasterCustomerName.setData("name", "stxtMasterCustomerName");
         stxtMasterCustomerName.setWordWrap(true);
-        	
+
 //        Removed - JIRA 1109 - stxtCustomerNo,stxtCustomerName
 //      Customer
 //        Label lblCustomer = new Label(pnlHeader, SWT.NONE);
@@ -784,16 +791,16 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 //        stxtCustomerNo.setLayoutData(gridData2);
 //        stxtCustomerNo.setData("name", "stxtCustomerNo");
 //        stxtCustomerNo.setWordWrap(true);
-//        
+//
 //        stxtCustomerName = new StyledText(pnlHeader, 72);
 //        stxtCustomerName.setLayoutData(gridData3);
 //        stxtCustomerName.setData("name", "stxtCustomerName");
 //        stxtCustomerName.setWordWrap(true);
-        
+
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void createScrollCmpstForPnlBody() {
 		// Scroll Panel Start
@@ -841,7 +848,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		// Scroll Panel End
 	}
 
-	
+
 	public String getFormId() {
 		return FORM_ID;
 	}
@@ -851,7 +858,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		return null;
 	}
 
-	
+
 	public IYRCPanelHolder getPanelHolder() {
 		// TODO Auto-generated method stub
 		return null;
@@ -861,7 +868,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		// TODO Auto-generated method stub
 		return pnlRoot;
 	}
-	
+
 	public void showRootPanel(boolean show) {
 		pnlRoot.setVisible(show);
 	}
