@@ -3350,18 +3350,25 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	 */
 	private void setCustomerSpecificDescForReplacementItems(){
 		if((xpedxItemIDUOMToReplacementListMap != null && !xpedxItemIDUOMToReplacementListMap.isEmpty() && customerDescItemMap != null && !customerDescItemMap.isEmpty())) {
-			Iterator<Map.Entry<String, ArrayList<Element>>> replacmentItemEntryIter = xpedxItemIDUOMToReplacementListMap.entrySet().iterator() ;
-			while(replacmentItemEntryIter.hasNext()){
-				Map.Entry<String, ArrayList<Element>> replacmentItemEntry = replacmentItemEntryIter.next();
-				if(replacmentItemEntry != null && replacmentItemEntry.getKey() != null){
-					List<Element> replacementItems =  replacmentItemEntry.getValue();
-					for (Element replacementItem : replacementItems) {
-						if(!SCUtil.isVoid(replacementItem)) {
-							String itemId = SCXmlUtil.getAttribute(replacementItem, "ItemID");
-							if(!SCUtil.isVoid(itemId) && customerDescItemMap.containsKey(itemId)) {
-								Element primeInfoElem = SCXmlUtil.getChildElement(replacementItem, "PrimaryInformation");
-								if(primeInfoElem != null) {
-									primeInfoElem.setAttribute("ShortDescription", customerDescItemMap.get(itemId));
+			Set<Map.Entry<String, ArrayList<Element>>> replacementEntrySet = xpedxItemIDUOMToReplacementListMap.entrySet();
+			if(replacementEntrySet != null && replacementEntrySet.size() > 0 ){
+				Iterator<Map.Entry<String, ArrayList<Element>>> replacmentItemEntryIter = replacementEntrySet.iterator();
+				if(replacmentItemEntryIter != null){
+					while(replacmentItemEntryIter.hasNext()){
+						Map.Entry<String, ArrayList<Element>> replacmentItemEntry = replacmentItemEntryIter.next();
+						if(replacmentItemEntry != null && replacmentItemEntry.getKey() != null){
+							List<Element> replacementItems =  replacmentItemEntry.getValue();
+							if(replacementItems != null && replacementItems.size() > 0){
+								for (Element replacementItem : replacementItems) {
+									if(!SCUtil.isVoid(replacementItem)) {
+										String itemId = SCXmlUtil.getAttribute(replacementItem, "ItemID");
+										if(!SCUtil.isVoid(itemId) && customerDescItemMap.containsKey(itemId)) {
+											Element primeInfoElem = SCXmlUtil.getChildElement(replacementItem, "PrimaryInformation");
+											if(primeInfoElem != null) {
+												primeInfoElem.setAttribute("ShortDescription", customerDescItemMap.get(itemId));
+											}
+										}
+									}
 								}
 							}
 						}
