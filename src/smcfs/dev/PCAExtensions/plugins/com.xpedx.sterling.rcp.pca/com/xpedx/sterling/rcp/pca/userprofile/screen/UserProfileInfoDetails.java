@@ -71,7 +71,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	 Text txtMinOrderAmount;
 	private Text txtCustomerID;
 	private Text txtPOList;
-	
+
 	private Text  txtDefaultShipToAddress;
 	private Combo comboPrefferedCatalog;
 	public Table itemPOList;
@@ -87,9 +87,11 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Button btnRmv;
 	private Button defaultShipto;
 	private Text txtInvoiceEmailId;
-	private Button chkViewPrices;	
-	private Button chkViewReports;	
+	private Button chkViewPrices;
+	private Button chkViewReports;
 	private Button chkProcurementUser;
+	private Button unusedSpacerButton;
+	private Button chkPunchoutMilEdit;
 	private Button chkReceiveOrderConfirmationEmail;
 	private Button chkReceiveOrderCancellationEmail;
 	private Button chkReceiveOrderShipmentEmail;
@@ -172,7 +174,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 
 	private Button btnDelete;
 	private Composite compositeMiscPnl;
-	
+
 //	private Composite pnlRadioButtons;
 //	private Button radInternal;
 //	private Button radExternal;
@@ -187,7 +189,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	public UserProfileInfoDetails(Composite parent, int style,
 			Object inputObject, Element customerContactEle) {
 		super(parent, style);
-		this.inputObject = inputObject;		
+		this.inputObject = inputObject;
 		initialize();
 		setBindingForComponents();
 		myBehavior = new UserProfileInfoDetailsBehavior(this, inputObject,
@@ -199,7 +201,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	/**
 	 * This method validates the user authorization
 	 * to update the screen controls
-	 */	
+	 */
 	private void checkUserPermissions() {
 		if (!YRCPlatformUI
 				.hasPermission(XPXConstants.RES_ID_MANAGE_CUSTOMER_CONTACT)) {
@@ -214,9 +216,9 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 //		}
 		if(!YRCPlatformUI.hasPermission(XPXConstants.RES_ID_RESET_PASSWORD)){
 			setControlsEnabled(new Control[]{btnPassword},false);
-			
+
 		}
-		
+
 	}
 //	private Control[] getIntegrationDataControls() {
 //		System.out.println("inside getIntegrationDataControls method");
@@ -225,7 +227,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 
 	private Control[] getAllEditableControls() {
 		//removed txtAdditionalEmailAddress, comboReceiveOrderConfirmEmails, itemAdditionalEmails,
-		// should we have this editable: txtEmployeeId, 
+		// should we have this editable: txtEmployeeId,
 		return new Control[] { btnUpdate,btnDelete,txtLastName, txtMaxOrderAmount, txtMinOrderAmount,
 				txtPOList, defaultShipto,
 				comboPrefferedCatalog, itemPOList,
@@ -237,8 +239,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 				chkeceiveBackOrderEmail, chkAcceptTAndC, txtFaxNumber,
 				txtLastLoginDate, comboB2BCatalogView, fullView, condensedView,
 				miniView, paperGridView, btnAssign, btnRemove,chkApproveOrders};
-	}	
-	
+	}
+
 	private void setControlsEnabled(Control[] controls, boolean enabled) {
 		for (Control control : controls) {
 			if (null != control)
@@ -263,7 +265,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
         pnlRoot.setData("yrc:customType", "TaskComposite");
         GridLayout pnlRootlayout = new GridLayout(1, false);
         pnlRoot.setLayout(pnlRootlayout);
-		
+
 		GridData pnlRootLayoutData = new GridData();
 		pnlRootLayoutData.horizontalAlignment = SWT.FILL;
 		pnlRootLayoutData.verticalAlignment = 3;
@@ -278,11 +280,11 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		createLocationsPnl();
 		createSiteSettingsHeaderPnl();
 		createSiteSettingsPnl();
-		
+
 //		adjustScrollPnl(bodyScrolledPanel, pnlBody,
 //				getRootPanel(), true, true);
 	}
-	
+
 	private void createMiscPnl() {
 		GridData gridData10 = new GridData();
 		gridData10.heightHint = 25;
@@ -296,36 +298,36 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		//gridData2.verticalAlignment = SWT.END;
 		GridLayout gridLayout2 = new GridLayout();
 		gridLayout2.numColumns = 4;
-		
+
 		compositeMiscPnl = new Composite(pnlRoot, 0);
 		compositeMiscPnl.setLayoutData(gridData2);
 		compositeMiscPnl.setLayout(gridLayout2);
 		compositeMiscPnl.setData("yrc:customType", "TaskComposite");
 		compositeMiscPnl.setData("name", "compositeMiscPnl");
-		
-	
+
+
 		GridData gridData6 = new GridData();
 		gridData6.heightHint = 25;
 		gridData6.widthHint = 145;
 		gridData6.verticalAlignment = SWT.BEGINNING;
-		
-		
+
+
 		btnDelete = new Button(compositeMiscPnl, 0);
 		//btnDelete.setAlignment(SWT.LEFT);
 		btnDelete.setText("Delete User Profile ");
 		btnDelete.setLayoutData(gridData2);
 		btnDelete.setData("name", "btnDelete");
-		
+
 		btnUpdate = new Button(compositeMiscPnl, 1);
 		btnUpdate.setText("Update_User_Profile");
 		btnUpdate.setLayoutData(gridData6);
 		btnUpdate.setData("name", "btnUpdate");
-		
-	
-		
+
+
+
 	}
 
-	
+
 	private void createScrollCmpstForPnlBody() {
 		// Scroll Panel Start
 		GridData gridDataScroll = new GridData();
@@ -356,7 +358,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		gridData0.grabExcessVerticalSpace = true;
 		gridData0.grabExcessHorizontalSpace = true;
 		gridData0.verticalAlignment = SWT.FILL;
-		
+
 		pnlBody = new Composite(bodyScrolledPanel, 0);
 		pnlBody.setLayoutData(gridData0);
 		pnlBody.setLayout(gridLayout);
@@ -367,10 +369,10 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		bodyScrolledPanel.setContent(pnlBody);
 //		bodyScrolledPanel.setData("yrc:customType", "TaskComposite");
 		bodyScrolledPanel.setData("name", "bodyScrolledPanel");
-		
+
 		// Scroll Panel End
 	}
-	
+
 	//added by madhura
 	private void createGeneralInfoHeaderPnl() {
 		Composite pnlGeneralInfoHeader = new Composite(pnlBody,SWT.NONE);
@@ -383,30 +385,30 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		pnlGeneralInfoHeaderLayout.marginWidth = 2;
 		pnlGeneralInfoHeaderLayout.numColumns = 3;
 		pnlGeneralInfoHeader.setLayout(pnlGeneralInfoHeaderLayout);
-		
+
 		GridData pnlGeneralInfoHeaderLayoutData = new GridData();
 		pnlGeneralInfoHeaderLayoutData.horizontalAlignment = 4;
 		pnlGeneralInfoHeaderLayoutData.grabExcessHorizontalSpace = true;
 		//pnlGeneralInfoHeaderLayoutData.grabExcessVerticalSpace = true;
 		pnlGeneralInfoHeader.setLayoutData(pnlGeneralInfoHeaderLayoutData);
 		pnlGeneralInfoHeader.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "PanelHeader");
-		
-		
+
+
 		Label lblGeneralInfo = new Label(pnlGeneralInfoHeader, SWT.LEFT);
 		GridData GenralInfoData = new GridData();
 		GenralInfoData.grabExcessHorizontalSpace = true;
 		lblGeneralInfo.setLayoutData(GenralInfoData);
 		lblGeneralInfo.setText("General Info");
 		lblGeneralInfo.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "PanelHeader");
-		
+
 	}
-	
+
 	private void createGeneralInfoPnl() {
-		
+
 		Composite pnlGeneralInfo = new Composite(pnlBody,SWT.NONE);
 		pnlGeneralInfo.setBackgroundMode(SWT.INHERIT_NONE);
 		pnlGeneralInfo.setData(YRCConstants.YRC_CONTROL_NAME, "pnlGeneralInfo");
-		
+
 		GridLayout pnlGeneralInfoLayout = new GridLayout(3,true);
 		pnlGeneralInfoLayout.horizontalSpacing = 30;
 		pnlGeneralInfoLayout.verticalSpacing = 1;
@@ -414,13 +416,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		pnlGeneralInfoLayout.marginWidth = 2;
 		//pnlGeneralInfoLayout.numColumns = 3;
 		pnlGeneralInfo.setLayout(pnlGeneralInfoLayout);
-		
+
 		GridData pnlGeneralInfoLayoutData = new GridData();
 		pnlGeneralInfoLayoutData.horizontalAlignment = 4;
 		pnlGeneralInfoLayoutData.grabExcessHorizontalSpace = true;
 		pnlGeneralInfoLayoutData.grabExcessVerticalSpace = true;
 		pnlGeneralInfo.setLayoutData(pnlGeneralInfoLayoutData);
-		
+
 		GridData gridData2 = new GridData();
         gridData2.horizontalAlignment = 4;
         gridData2.horizontalIndent = 100;
@@ -430,8 +432,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
         gridData3.horizontalAlignment = SWT.BEGINNING;
         gridData3.widthHint = 300;
         gridData3.horizontalSpan = 2;
-        
-		
+
+
         //controls
         lblUserID = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblUserID.setText("User_ID");
@@ -442,7 +444,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtUserID.setLayoutData(gridData3);
 		txtUserID.setTextLimit(60);
 		txtUserID.setData("name", "txtUserID");
-		
+
 		lblUserStatus = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblUserStatus.setText("User_Status");
 		lblUserStatus.setLayoutData(gridData2);
@@ -450,7 +452,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		Composite pnlUserRadButtons = new Composite(pnlGeneralInfo,SWT.NONE);
 		pnlUserRadButtons.setLayout(pnlGeneralInfoLayout);
 		pnlUserRadButtons.setLayoutData(gridData3);
-		
+
 		radUserActive = new Button(pnlUserRadButtons, SWT.RADIO);
 		radUserActive.setText("Active");
 		radUserActive.setData("name", "radUserActive");
@@ -459,7 +461,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		radUserSuspend.setText("Suspend");
 		radUserSuspend.setData("name", "radUserSuspend");
 		radUserSuspend.setData("yrc:customType", "Label");
-		
+
 		lblAcceptTAndC = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblAcceptTAndC.setText("TC_Accepted");
 		lblAcceptTAndC.setLayoutData(gridData2);
@@ -467,7 +469,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtTCAccepted = new Text(pnlGeneralInfo, SWT.READ_ONLY);
 		txtTCAccepted.setLayoutData(gridData3);
 		txtTCAccepted.setData("name", "txtTCAccepted");
-		
+
 		lblLastLoginDate = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblLastLoginDate.setText("Last_Login_Date");
 		lblLastLoginDate.setLayoutData(gridData2);
@@ -475,7 +477,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastLoginDate = new Text(pnlGeneralInfo, SWT.READ_ONLY);
 		txtLastLoginDate.setLayoutData(gridData3);
 		txtLastLoginDate.setData("name", "txtLastLoginDate");
-		
+
 		lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblLastModBy.setText("Last Modified By");
 		lblLastModBy.setLayoutData(gridData2);
@@ -491,11 +493,11 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastModDate = new Text(pnlGeneralInfo, SWT.READ_ONLY);
 		txtLastModDate.setLayoutData(gridData3);
 		txtLastModDate.setData("name", "txtLastModDate");
-		
-		
-		
+
+
+
 		this.addUserTypeControls(pnlGeneralInfo, pnlGeneralInfoLayout, gridData2);
-		
+
 		lblPassword = new Label(pnlGeneralInfo, SWT.NONE);
 		lblPassword.setText("Contact_Password");
 		lblPassword.setLayoutData(gridData2);
@@ -504,13 +506,14 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnPassword.setText("Reset_Password");
 		btnPassword.setLayoutData(gridData3);
 		btnPassword.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+
 				resetCustomPassword();
-				
+
 			}
 		});
-		
+
 		lblFirstName = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblFirstName.setText("First_Name");
 		lblFirstName.setLayoutData(gridData2);
@@ -520,7 +523,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtFirstName.setLayoutData(gridData3);
 		txtFirstName.setTextLimit(64);
 		txtFirstName.setData("name", "txtFirstName");
-		
+
 		lblLastName = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblLastName.setText("Last_Name");
 		lblLastName.setLayoutData(gridData2);
@@ -530,7 +533,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastName.setLayoutData(gridData3);
 		txtLastName.setTextLimit(64);
 		txtLastName.setData("name", "txtLastName");
-		
+
 		lblEmailAddress = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblEmailAddress.setText("Email_Addresses");
 		lblEmailAddress.setLayoutData(gridData2);
@@ -540,7 +543,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtEmailAddress.setLayoutData(gridData3);
 		txtEmailAddress.setTextLimit(150);
 		txtEmailAddress.setData("name", "txtEmailAddress");
-		
+
 		lblPhone = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblPhone.setText("Phone");
 		lblPhone.setLayoutData(gridData2);
@@ -549,7 +552,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtPhone.setLayoutData(gridData3);
 		txtPhone.setTextLimit(40);
 		txtPhone.setData("name", "txtPhone");
-		
+
 		lblFaxNumber = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblFaxNumber.setText("Contact_Fax_Number");
 		lblFaxNumber.setLayoutData(gridData2);
@@ -558,22 +561,22 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtFaxNumber.setLayoutData(gridData3);
 		txtFaxNumber.setTextLimit(40);
 		txtFaxNumber.setData("name", "txtFaxNumber");
-		
+
 		this.addContactAddress(pnlGeneralInfo, gridData2, gridData3);
-		
-		// hidden fields to 
+
+		// hidden fields to
 		txtDummy1 = new Text(pnlGeneralInfo, SWT.BORDER);
 		txtDummy1.setLayoutData(gridData3);
 		txtDummy1.setVisible(false);
-		
+
 		txtDummy2 = new Text(pnlGeneralInfo, SWT.BORDER);
 		txtDummy2.setLayoutData(gridData3);
 		txtDummy2.setVisible(false);
-		
+
 		txtDummy3 = new Text(pnlGeneralInfo, SWT.BORDER);
 		txtDummy3.setLayoutData(gridData3);
 		txtDummy3.setVisible(false);
-		
+
 	}
 	/**
 	 * @param pnlGeneralInfo
@@ -589,7 +592,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtAddressLine1.setLayoutData(gridData3);
 		txtAddressLine1.setTextLimit(70);
 		txtAddressLine1.setData("name", "txtAddressLine1");
-		
+
 		lblAddressLine2 = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblAddressLine2.setText("Address_Line_2");
 		lblAddressLine2.setLayoutData(gridData2);
@@ -598,7 +601,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtAddressLine2.setLayoutData(gridData3);
 		txtAddressLine2.setTextLimit(70);
 		txtAddressLine2.setData("name", "txtAddressLine2");
-		
+
 		lblAddressLine3 = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblAddressLine3.setText("Address_Line_3");
 		lblAddressLine3.setLayoutData(gridData2);
@@ -607,7 +610,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtAddressLine3.setLayoutData(gridData3);
 		txtAddressLine3.setTextLimit(70);
 		txtAddressLine3.setData("name", "txtAddressLine3");
-		
+
 		lblCity = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblCity.setText("City");
 		lblCity.setLayoutData(gridData2);
@@ -616,7 +619,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtCity.setLayoutData(gridData3);
 		txtCity.setTextLimit(35);
 		txtCity.setData("name", "txtCity");
-		
+
 		lblState = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblState.setText("State/Province");
 		lblState.setLayoutData(gridData2);
@@ -625,38 +628,38 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtState.setLayoutData(gridData3);
 		txtState.setTextLimit(35);
 		txtState.setData("name", "txtState");
-		
+
 		lblZipCode = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblZipCode.setText("ZipCode+Zip4");
 		lblZipCode.setLayoutData(gridData2);
 		lblZipCode.setData("name", "lblZipCode");
-		
+
 		GridData gridData5 = new GridData();
 		gridData5.horizontalAlignment = 4;
        	gridData5.widthHint = 200;
 		gridData5.horizontalSpan = 2;
 		gridData5.grabExcessVerticalSpace = true;
-				
+
 		Composite pnlZipText = new Composite(pnlGeneralInfo,SWT.NONE);
 		GridLayout pnlZipTextLayout = new GridLayout(2,false);
 		pnlZipTextLayout.verticalSpacing = 1;
 		pnlZipTextLayout.marginWidth = 0;
 		pnlZipText.setLayout(pnlZipTextLayout);
-		
+
 		GridData pnlZipTextLayoutData = new GridData();
 		pnlZipTextLayoutData.horizontalAlignment = SWT.BEGINNING;
 		pnlZipTextLayoutData.horizontalSpan = 2;
 		pnlZipText.setLayoutData(pnlZipTextLayoutData);
 		pnlZipText.setLayout(pnlZipTextLayout);
 		pnlZipText.setLayoutData(pnlZipTextLayoutData);
-		
+
 		GridData gridData10 = new GridData();
 		gridData10.horizontalAlignment = SWT.BEGINNING;
 		gridData10.widthHint = 100;
 		GridData gridData11 = new GridData();
 		gridData11.horizontalAlignment = SWT.BEGINNING;
 		gridData11.widthHint = 60;
-		
+
 		txtZipCode = new Text(pnlZipText, SWT.BORDER);
 		txtZipCode.setTextLimit(35);
 		txtZipCode.setLayoutData(gridData10);
@@ -665,7 +668,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtZip4.setLayoutData(gridData11);
 		txtZip4.setTextLimit(10);
 		txtZip4.setData("name", "txtZip4");
-		
+
 		lblCountry = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblCountry.setText("Country");
 		lblCountry.setLayoutData(gridData2);
@@ -685,13 +688,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		lblUserType.setText("Contact_User_Type");
 		lblUserType.setLayoutData(gridData2);
 		lblUserType.setData("name", "lblUserType");
-		
+
 		GridData gridData4 = new GridData();
         gridData4.horizontalAlignment = 5;
         gridData4.widthHint = 900;
         gridData4.horizontalSpan = 2;
         gridData4.grabExcessVerticalSpace = true;
-		
+
 		Composite pnlUserTypeChkButtons = new Composite(pnlGeneralInfo,SWT.NONE);
 		pnlUserTypeChkButtons.setLayout(pnlGeneralInfoLayout);
 		pnlUserTypeChkButtons.setLayoutData(gridData4);
@@ -721,7 +724,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkAdmin.setVisible(true);
 		chkAdmin.setData("yrc:customType", "Label");
 		chkAdmin.setData("name", "chkAdmin");
-		
+
 		chkViewInvoices = new Button(pnlUserTypeChkButtons, SWT.CHECK);
 		chkViewInvoices.setText("View_Invoices");
 		chkViewInvoices.setVisible(true);
@@ -742,7 +745,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkProcurementUser.setVisible(true);
 		chkProcurementUser.setData("yrc:customType", "Label");
 		chkProcurementUser.setData("name", "chkProcurementUser");
-		
+
 		btnUsrRolesHelpInfo=new Button(pnlUserTypeChkButtons,SWT.ICON_INFORMATION);
 		btnUsrRolesHelpInfo.setImage(YRCPlatformUI.getImage("Help"));
 		btnUsrRolesHelpInfo.setText("User Roles Description");
@@ -751,23 +754,37 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 			 "Buyer:  Permission to use the site. Required for all users." + "\n"+
 			 "Approver:  Authorizes submission of orders."+"\n"+
 			 "Estimator:  Can view pricing and inventory availability. Cannot submit an order." + "\n"+
-			 "Stock Check Web Service User:  Stock Check Web Service User for system integrations. (Does not" + 
+			 "Stock Check Web Service User:  Stock Check Web Service User for system integrations. (Does not" +
 			 " control inventory display for regular site user)." + "\n" +
-			 "Admin:  Permission to create user profiles, assign roles and ship to locations within" + "\n"+ 
+			 "Admin:  Permission to create user profiles, assign roles and ship to locations within" + "\n"+
 			 "               the account." +"\n"+
 			 "View Invoices:  Can view invoices online." + "\n"	+
-			 "View Reports:  Can view reports. (Note: User should not view reports if cannot view" + "\n"+ "\t"+ 
+			 "View Reports:  Can view reports. (Note: User should not view reports if cannot view" + "\n"+ "\t"+
 			 "        pricing)." + "\n"	+
 			 "View Prices:  Can view pricing." + "\n"+
 			 "Punch Out User:  Punchout User (punchout integration customers only).";
 		//Providing Help icon for User Roles while updating profile. XNGTP-1185 -Fixed
 		btnUsrRolesHelpInfo.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				YRCPlatformUI.showInformation("User Roles Description", usrRoleHelpInfo);
 			}
 		});
+
+		// add this to push other punchout button under main one
+		unusedSpacerButton = new Button(pnlUserTypeChkButtons, SWT.CHECK);
+		unusedSpacerButton.setText(" "); //This space left intentionally blank
+		unusedSpacerButton.setVisible(false);
+		unusedSpacerButton.setData("yrc:customType", "Label");
+		unusedSpacerButton.setData("name", "chkUnusedSpacerButton");
+
+		chkPunchoutMilEdit = new Button(pnlUserTypeChkButtons, SWT.CHECK);
+		chkPunchoutMilEdit.setText("Punchout User to Manage MIL");
+		chkPunchoutMilEdit.setVisible(true); // may be set false depending on punchout user data
+		chkPunchoutMilEdit.setData("yrc:customType", "Label");
+		chkPunchoutMilEdit.setData("name", "chkPunchoutMilEdit");
 	}
-	
+
 //	added by madhura
 	private void createLocationsHeaderPnl() {
 		Composite pnlLocationHeader = new Composite(pnlBody,SWT.NONE);
@@ -780,32 +797,32 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		pnlLocationHeaderLayout.marginWidth = 2;
 		pnlLocationHeaderLayout.numColumns = 3;
 		pnlLocationHeader.setLayout(pnlLocationHeaderLayout);
-		
+
 		GridData pnlLocationHeaderLayoutData = new GridData();
 		pnlLocationHeaderLayoutData.horizontalAlignment = 4;
 		pnlLocationHeaderLayoutData.grabExcessHorizontalSpace = true;
 		pnlLocationHeader.setLayoutData(pnlLocationHeaderLayoutData);
 		pnlLocationHeader.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "PanelHeader");
-		
-		
+
+
 		Label lblGeneralInfo = new Label(pnlLocationHeader, SWT.LEFT);
 		GridData GenralInfoData = new GridData();
 		GenralInfoData.grabExcessHorizontalSpace = true;
 		lblGeneralInfo.setLayoutData(GenralInfoData);
 		lblGeneralInfo.setText("Locations");
 		lblGeneralInfo.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "PanelHeader");
-		
+
 	}
-	
+
 	private void createLocationsPnl() {
-		
+
 		pnlLocations = new Composite(pnlBody,SWT.NONE);
 		GridLayout pnlLocationsLayout = new GridLayout(4,true);
 		pnlLocationsLayout.verticalSpacing = 1;
 		pnlLocationsLayout.marginHeight = 2;
 		pnlLocationsLayout.marginWidth = 2;
 		pnlLocations.setLayout(pnlLocationsLayout);
-		
+
 		GridData pnlLocationsLayoutData = new GridData();
 		pnlLocationsLayoutData.horizontalAlignment = 4;
 //		pnlLocationsLayoutData.verticalAlignment = 4;
@@ -813,7 +830,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		pnlLocationsLayoutData.grabExcessVerticalSpace = true;
 		pnlLocations.setLayoutData(pnlLocationsLayoutData);
 		pnlLocations.setData(YRCConstants.YRC_CONTROL_NAME, "pnlLocations");
-		
+
 		GridData gridData2 = new GridData();
         gridData2.horizontalAlignment = 4;
         gridData2.horizontalIndent = 100;
@@ -823,17 +840,17 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
         gridData3.horizontalAlignment = SWT.BEGINNING;
         gridData3.widthHint = 150;
 		//gridData3.horizontalSpan = 2;
-        
+
         GridData gridData4 = new GridData();
         gridData4.horizontalAlignment = SWT.BEGINNING;
         gridData4.widthHint = 150;
         gridData4.heightHint = 100;
-        
+
         GridData gridDataCustID = new GridData();
         gridDataCustID.horizontalAlignment = SWT.BEGINNING;
         gridDataCustID.widthHint = 200;
 //        gridDataCustID.horizontalSpan = 2;
-        
+
         lblDefaultShipTo = new Label(pnlLocations, SWT.NONE);
 		lblDefaultShipTo.setText("Contact_Default_ShipTo");
 		lblDefaultShipTo.setLayoutData(gridData2);
@@ -849,7 +866,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	     defaultShipto.setText("Select Default Ship to");
 	     defaultShipto.setLayoutData(gridData3);
 	     defaultShipto.setData("name", "defaultShipto");
-		
+
 		//added by suneetha
 		txtDefaultShipToAddress=new Text(pnlLocations,SWT.WRAP);
 		txtDefaultShipToAddress.setLayoutData(gridData4);
@@ -859,15 +876,16 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		/*	public void widgetDefaultSelected(SelectionEvent e) {
 				addDefaultShipToAddress("ShipTo");
 			}*/
-			
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
-				myBehavior.addDefaultShipToAddress("defaultShipto");	
+
+			@Override
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+				myBehavior.addDefaultShipToAddress("defaultShipto");
 			}
 		});
-		
-		
+
+
 	}
-	
+
 	private void createSiteSettingsHeaderPnl() {
 		Composite pnlSiteSettingsHeader = new Composite(pnlBody,SWT.NONE);
 		pnlSiteSettingsHeader.setBackgroundMode(SWT.INHERIT_NONE);
@@ -879,14 +897,14 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		pnlpnlSiteSettingsHeaderHeaderLayout.marginWidth = 2;
 		pnlpnlSiteSettingsHeaderHeaderLayout.numColumns = 3;
 		pnlSiteSettingsHeader.setLayout(pnlpnlSiteSettingsHeaderHeaderLayout);
-		
+
 		GridData pnlSiteSettingsHeaderLayoutData = new GridData();
 		pnlSiteSettingsHeaderLayoutData.horizontalAlignment = 4;
 		pnlSiteSettingsHeaderLayoutData.grabExcessHorizontalSpace = true;
 		pnlSiteSettingsHeader.setLayoutData(pnlSiteSettingsHeaderLayoutData);
 		pnlSiteSettingsHeader.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "PanelHeader");
-		
-		
+
+
 		Label lblGeneralInfo = new Label(pnlSiteSettingsHeader, SWT.LEFT);
 		GridData GenralInfoData = new GridData();
 		GenralInfoData.grabExcessHorizontalSpace = true;
@@ -894,7 +912,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		lblGeneralInfo.setText("Site Settings");
 		lblGeneralInfo.setData(YRCConstants.YRC_CONTROL_CUSTOMTYPE, "PanelHeader");
 	}
-	
+
 	private void createSiteSettingsPnl() {
 		//to do
 		pnlSiteSettings = new Composite(pnlBody,SWT.NONE);
@@ -904,17 +922,17 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		pnlGeneralInfoLayout.marginHeight = 2;
 		pnlGeneralInfoLayout.marginWidth = 2;
 		//pnlGeneralInfoLayout.horizontalSpacing = 9;
-		
+
 		//pnlGeneralInfoLayout.numColumns = 3;
 		pnlSiteSettings.setLayout(pnlGeneralInfoLayout);
-		
+
 		GridData pnlGeneralInfoLayoutData = new GridData();
 		pnlGeneralInfoLayoutData.horizontalAlignment = 4;
 		pnlGeneralInfoLayoutData.grabExcessHorizontalSpace = true;
 		pnlGeneralInfoLayoutData.grabExcessVerticalSpace = true;
 		pnlSiteSettings.setLayoutData(pnlGeneralInfoLayoutData);
 		pnlSiteSettings.setData(YRCConstants.YRC_CONTROL_NAME, "pnlSiteSettings");
-		
+
 		GridData gridData2 = new GridData();
         gridData2.horizontalAlignment = 4;
         gridData2.horizontalIndent = 100;
@@ -925,7 +943,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
         //gridData3.grabExcessHorizontalSpace = true;
         gridData3.widthHint = 200;
         gridData3.horizontalSpan = 2;
-		
+
 		lblMinOrderAmount = new Label(pnlSiteSettings, SWT.LEFT);
 		lblMinOrderAmount.setText("Minimum_Order_Amount");
 		lblMinOrderAmount.setLayoutData(gridData2);
@@ -935,7 +953,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtMinOrderAmount.setLayoutData(gridData3);
 		txtMinOrderAmount.setTextLimit(20);
 		txtMinOrderAmount.setData("name", "txtMinOrderAmount");
-		
+
 		lblMaxOrderAmount = new Label(pnlSiteSettings, SWT.LEFT);
 		lblMaxOrderAmount.setText("Maximum_Order_Amount");
 		lblMaxOrderAmount.setLayoutData(gridData2);
@@ -945,7 +963,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtMaxOrderAmount.setLayoutData(gridData3);
 		txtMaxOrderAmount.setTextLimit(20);
 		txtMaxOrderAmount.setData("name", "txtMaxOrderAmount");
-		
+
 		//Added For CR 2407
 		lblPrimApprover = new Label(pnlSiteSettings, SWT.NONE);
 		lblPrimApprover.setText("Primary Approver");
@@ -955,8 +973,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		comboPrimApprover.setLayoutData(gridData3);
 		comboPrimApprover.setTextLimit(50);
 		comboPrimApprover.setData("name", "comboPrimApprover");
-		
-		
+
+
 		lblAlterApprover = new Label(pnlSiteSettings, SWT.NONE);
 		lblAlterApprover.setText("Alternate Approver");
 		lblAlterApprover.setLayoutData(gridData2);
@@ -965,7 +983,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		comboAlterApprover.setLayoutData(gridData3);
 		comboAlterApprover.setTextLimit(50);
 		comboAlterApprover.setData("name", "comboAlterApprover");
-		
+
 		/* Start- For Jira 3264 */
 		lblCurrencyType = new Label(pnlSiteSettings, SWT.NONE);
 		lblCurrencyType.setText("Currency Type");
@@ -975,7 +993,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		comboCurrencyType.setLayoutData(gridData3);
 		comboCurrencyType.setTextLimit(50);
 		comboCurrencyType.setData("name", "comboCurrencyType");
-		
+
 		lblSpendingLimit = new Label(pnlSiteSettings, SWT.LEFT);
 		lblSpendingLimit.setText("Spending Limit");
 		lblSpendingLimit.setLayoutData(gridData2);
@@ -985,9 +1003,9 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtSpendingLimit.setLayoutData(gridData3);
 		txtSpendingLimit.setTextLimit(15);
 		txtSpendingLimit.setData("name", "txtSpendingLimit");
-		
+
 		/*End- For Jira 3264 */
-		
+
 		//Added for JIRA XB-258
 		lblApproveOrders = new Label(pnlSiteSettings, SWT.LEFT);
 		lblApproveOrders.setText("Submit_Orders");
@@ -997,13 +1015,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkApproveOrders.setVisible(true);
 		chkApproveOrders.setData("yrc:customType", "Label");
 		chkApproveOrders.setData("name", "chkApproveOrders");
-		
+
 		Label lblApproveOrdersDummy = new Label(pnlSiteSettings, SWT.LEFT);
 		lblApproveOrdersDummy.setText("");
 		lblApproveOrdersDummy.setLayoutData(gridData2);
 		lblApproveOrdersDummy.setVisible(false);
 		lblApproveOrdersDummy.setData("name", "lblApproveOrdersDummy");
-		
+
 		lblPreferredCatalogView = new Label(pnlSiteSettings, SWT.LEFT);
 		lblPreferredCatalogView.setText("Preferred_Catalog_View");
 		lblPreferredCatalogView.setLayoutData(gridData2);
@@ -1014,7 +1032,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
         gridData4.widthHint = 200;
         gridData4.horizontalSpan = 2;
         gridData4.grabExcessVerticalSpace = true;
-		
+
 		Composite pnlPreferredCatRadButtons = new Composite(pnlSiteSettings,SWT.NONE);
 		pnlPreferredCatRadButtons.setLayout(pnlGeneralInfoLayout);
 		pnlPreferredCatRadButtons.setLayoutData(gridData4);
@@ -1034,7 +1052,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		radMatrix.setText("Matrix-No_Images");
 		radMatrix.setData("name", "radMatrix");
 		radMatrix.setData("yrc:customType", "Label");
-		
+
 		lblPrefferedCatalog = new Label(pnlSiteSettings, SWT.LEFT);
 		lblPrefferedCatalog.setText("Preffered_Catalog");
 		lblPrefferedCatalog.setLayoutData(gridData2);
@@ -1044,59 +1062,59 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 //		txtPrefferedCatalog.setLayoutData(gridData3);
 //		txtPrefferedCatalog.setTextLimit(500);
 //		txtPrefferedCatalog.setData("name", "txtPrefferedCatalog");
-		
+
 		comboPrefferedCatalog = new Combo(pnlSiteSettings, 8);
 		comboPrefferedCatalog.setLayoutData(gridData3);
 		comboPrefferedCatalog.setData("name", "comboPrefferedCatalog");
-		
-		
+
+
 		GridData gridData12 = new GridData();
         gridData12.horizontalAlignment = 4;
         gridData12.horizontalIndent = 100;
         //gridData12.widthHint = 175;
         gridData12.verticalIndent = 8;
-        
+
 		lblOrderConfirmationAddressList = new Label(pnlSiteSettings, SWT.WRAP);
 		lblOrderConfirmationAddressList.setText("Order_Confirmation_Address_List");
 		lblOrderConfirmationAddressList.setLayoutData(gridData12);
 		lblOrderConfirmationAddressList.setData("name", "lblOrderConfirmationAddressList");
-		
+
 		GridLayout gridLayoutx1 = new GridLayout(3,false);
 		gridLayoutx1.horizontalSpacing = 1;
 		gridLayoutx1.verticalSpacing = 5;
 		gridLayoutx1.marginHeight = 2;
 		gridLayoutx1.marginWidth = 2;
-		
-		
+
+
 		GridData gridDatax1 = new GridData();
 		gridDatax1.horizontalAlignment = SWT.BEGINNING;
 		gridDatax1.horizontalSpan = 2;
 		gridDatax1.verticalIndent = 10;
-		
+
 		GridData gridData8 = new GridData();
 		gridData8.horizontalAlignment = 4;
-		
+
 		pnlOrderConfirmList = new Composite(pnlSiteSettings, SWT.NONE);
 		pnlOrderConfirmList.setLayout(gridLayoutx1);
 		pnlOrderConfirmList.setLayoutData(gridDatax1);
 		pnlOrderConfirmList.setData("name", "pnlOrderConfirmList");
-		
+
 		txtOrderConfirmationList = new Text(pnlOrderConfirmList, SWT.BORDER);
 		txtOrderConfirmationList.setText("");
 		txtOrderConfirmationList.setLayoutData(gridData8);
 		txtOrderConfirmationList.setTextLimit(500);
-		txtOrderConfirmationList.setData("name", "txtOrderConfirmationList");	
-		
+		txtOrderConfirmationList.setData("name", "txtOrderConfirmationList");
+
 		createPnlOrderConfirmListButtons();
 		createPnlOrderConfirmListHolder();
 		//createPnlAdditionalEmailsButtons();
 		//createPnlAdditionalEmailsHolder();
-		
+
 		lblReceiveOrderConfirmEmails = new Label(pnlSiteSettings, SWT.LEFT);
 		lblReceiveOrderConfirmEmails.setText("Receive_E-Mails");
 		lblReceiveOrderConfirmEmails.setLayoutData(gridData2);
 		lblReceiveOrderConfirmEmails.setData("name", "lblReceiveOrderConfirmEmails");
-		
+
 		GridLayout pnlChkInfoLayout = new GridLayout(1,false);
 		pnlChkInfoLayout.horizontalSpacing = 1;
 		pnlChkInfoLayout.verticalSpacing = 1;
@@ -1110,8 +1128,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		gridData6.verticalSpan = 1;
 		gridData6.grabExcessVerticalSpace = true;
 		gridData6.verticalIndent =10;
-		
-		
+
+
 		Composite pnlReceiveEmailChkButtons = new Composite(pnlSiteSettings,SWT.NONE);
 		pnlReceiveEmailChkButtons.setLayout(pnlChkInfoLayout);
 		pnlReceiveEmailChkButtons.setLayoutData(gridData6);
@@ -1126,7 +1144,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkReceiveOrderCancellationEmail.setData("yrc:customType", "Label");
 		chkReceiveOrderCancellationEmail.setData("name", "chkReceiveOrderCancellationEmail");
 
-		//Removed for the BugFix id-1004	
+		//Removed for the BugFix id-1004
 /*		chkReceiveOrderUpdateEmail = new Button(pnlReceiveEmailChkButtons, SWT.CHECK);
 		chkReceiveOrderUpdateEmail.setText("Received_Order_Update_Email_By_CSR");
 		chkReceiveOrderUpdateEmail.setVisible(true);
@@ -1138,36 +1156,36 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkReceiveOrderShipmentEmail.setVisible(true);
 		chkReceiveOrderShipmentEmail.setData("yrc:customType", "Label");
 		chkReceiveOrderShipmentEmail.setData("name", "chkReceiveOrderShipmentEmail");
-		
+
 		chkeceiveBackOrderEmail = new Button(pnlReceiveEmailChkButtons, SWT.CHECK);
 		chkeceiveBackOrderEmail.setText("Received_Back_Order_Email");
 		chkeceiveBackOrderEmail.setVisible(true);
 		chkeceiveBackOrderEmail.setData("yrc:customType", "Label");
 		chkeceiveBackOrderEmail.setData("name", "chkeceiveBackOrderEmail");
-		
-		
+
+
 		/**********************************/
-		
+
 		lblInvoiceEmailId = new Label(pnlSiteSettings, SWT.WRAP);
 		lblInvoiceEmailId.setText("Email_Address_For_Invoice");
 		lblInvoiceEmailId.setLayoutData(gridData12);
 		lblInvoiceEmailId.setData("name", "lblInvoiceEmailId");
-		
+
 		GridLayout gridLayoutx2 = new GridLayout(3,false);
 		gridLayoutx2.horizontalSpacing = 1;
 		gridLayoutx2.verticalSpacing = 1;
 		gridLayoutx2.marginHeight = 2;
 		gridLayoutx2.marginWidth = 2;
-		
+
 		GridData gridDatax2 = new GridData();
 		gridDatax2.horizontalAlignment = SWT.BEGINNING;
 		gridDatax2.horizontalSpan = 2;
 		gridDatax2.verticalIndent = 10;
-		
+
 		GridData gridData9 = new GridData();
 		gridData9.horizontalAlignment = 4;
 
-        			
+
 		pnlInvoiceList = new Composite(pnlSiteSettings, SWT.NONE);
 		pnlInvoiceList.setLayout(gridLayoutx2);
 		pnlInvoiceList.setLayoutData(gridDatax2);
@@ -1177,29 +1195,29 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtInvoiceEmailId.setText("");
 		txtInvoiceEmailId.setLayoutData(gridData9);
 		txtInvoiceEmailId.setTextLimit(500);
-		txtInvoiceEmailId.setData("name", "txtInvoiceEmailId");	
-		
+		txtInvoiceEmailId.setData("name", "txtInvoiceEmailId");
+
 		createPnlInvoiceListButtons();
 		createPnlInvoiceListHolder();
-		
+
 		/**********************************/
-		
+
 		lblPOList = new Label(pnlSiteSettings, SWT.NONE);
 		lblPOList.setText("PO_List");
 		lblPOList.setLayoutData(gridData2);
 		lblPOList.setData("name", "lblPOList");
-		
+
 		GridLayout gridLayoutx = new GridLayout(3,false);
 		gridLayoutx.horizontalSpacing = 1;
 		gridLayoutx.verticalSpacing = 1;
 		gridLayoutx.marginHeight = 2;
 		gridLayoutx.marginWidth = 2;
-		
+
 		GridData gridDatax = new GridData();
 		gridDatax.horizontalAlignment = SWT.BEGINNING;
 		gridDatax.horizontalSpan = 2;
 		gridDatax.verticalIndent = 10;
-		
+
 		GridData gridData7 = new GridData();
 		gridData7.horizontalAlignment = 4;
 
@@ -1212,13 +1230,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtPOList.setText("");
 		txtPOList.setLayoutData(gridData7);
 		txtPOList.setTextLimit(22);
-		txtPOList.setData("name", "txtPOList");	
-		
+		txtPOList.setData("name", "txtPOList");
+
 		createPnlPOListButtons();
 		createPnlPOListHolder();
 
 	}
-	
+
 	private void createPnlInvoiceListButtons() {
 		pnlInvoiceListButtons = new Composite(pnlInvoiceList, SWT.NONE);
 		pnlInvoiceListButtons.setBackgroundMode(0);
@@ -1237,6 +1255,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnAdd.setLayoutData(btnAddListlayoutData);
 		btnAdd.setText("Btn_Add");
 		btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				addInvoiceEmail();
 				txtInvoiceEmailId.setFocus();
@@ -1249,12 +1268,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnRmv.setLayoutData(btnRemovelayoutData);
 		btnRmv.setText("Btn_Remove");
 		btnRmv.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				removeInvoiceEmails();
 			}
 		});
 	}
-	
+
 	private void createPnlInvoiceListHolder() {
 		pnlInvoiceListHolder = new Composite(pnlInvoiceList, SWT.NONE);
 		pnlInvoiceListHolder.setBackgroundMode(0);
@@ -1273,7 +1293,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		pnlInvoiceListHolder.setLayout(pnlInvoiceListHolderlayout);
 		createInvoiceList();
 	}
-	
+
 	private void createInvoiceList() {
 		invoiceList = new Table(pnlInvoiceListHolder, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		invoiceList.setHeaderVisible(true);
@@ -1290,7 +1310,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tblInvoiceListId.setResizable(true);
 		tblInvoiceListId.setMoveable(true);
 	}
-	
+
 	private void createPnlOrderConfirmListButtons() {
 		pnlOrderConfirmListButtons = new Composite(pnlOrderConfirmList, 0);
 		pnlOrderConfirmListButtons.setBackgroundMode(0);
@@ -1309,6 +1329,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnAdd.setLayoutData(btnOrderConfirmationListlayoutData);
 		btnAdd.setText("Btn_Add");
 		btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				addEmail();
 				txtOrderConfirmationList.setFocus();
@@ -1320,12 +1341,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnRmv.setLayoutData(btnRemovelayoutData);
 		btnRmv.setText("Btn_Remove");
 		btnRmv.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				removeEmailss();
 			}
 		});
 	}
-	
+
 	private void createPnlOrderConfirmListHolder() {
 		pnlOrderConfirmListHolder = new Composite(pnlOrderConfirmList, 0);
 		pnlOrderConfirmListHolder.setBackgroundMode(0);
@@ -1344,7 +1366,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		pnlOrderConfirmListHolder.setLayout(pnlOrderConfirmListHolderlayout);
 		createOrderConfirmList();
 	}
-	
+
 	private void createOrderConfirmList() {
 		//to do
 		orderConfirmList = new Table(pnlOrderConfirmListHolder, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
@@ -1419,6 +1441,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnAdd.setLayoutData(btnPOListlayoutData);
 		btnAdd.setText("Btn_AddPO_Arrow");
 		btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				addPONumber();
 				txtPOList.setFocus();
@@ -1430,6 +1453,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnRmv.setLayoutData(btnRemovelayoutData);
 		btnRmv.setText("Btn_Remove_PO");
 		btnRmv.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				removePOs();
 			}
@@ -1472,14 +1496,14 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/@UserID");
 		tbd.setName("txtUserID");
 		txtUserID.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		YRCButtonBindingData rdbBindingData = new YRCButtonBindingData();
 		rdbBindingData.setName("radUserActive");
 		rdbBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@Status");
 		rdbBindingData.setTargetBinding("XPXResultOut:/CustomerContact/@Status");
 		rdbBindingData.setCheckedBinding("10");
 		radUserActive.setData("YRCButtonBindingDefination",rdbBindingData);
-		
+
 		YRCButtonBindingData rdbBindingData1 = new YRCButtonBindingData();
 		rdbBindingData1.setName("radUserSuspend");
 		rdbBindingData1.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@Status");
@@ -1487,20 +1511,20 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		//rdbBindingData1.setCheckedBinding("20");
 		rdbBindingData1.setCheckedBinding("30"); //---Binding value change to 30 for BugFixId-966
 		radUserSuspend.setData("YRCButtonBindingDefination",rdbBindingData1);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomercontactExtn:/XPXCustomercontactExtn/@TAndCAcceptedOn");
 		tbd.setDataType("Date");
 		tbd.setName("txtTCAccepted");
 		txtTCAccepted.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomercontactExtn:/XPXCustomercontactExtn/@LastLoginDate");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnLastLoginDate");
 		tbd.setDataType("Date");
 		tbd.setName("txtLastLoginDate");
 		txtLastLoginDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 	/*	tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
 		tbd.setTargetBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
@@ -1516,7 +1540,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tbd.setName("txtLastModDate");
 		txtLastModDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 */
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1524,7 +1548,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/User/UserGroupLists/@BuyerUser");
 		chkBoxBindingData.setName("chkBuyer");
 		chkBuyer.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1532,7 +1556,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/User/UserGroupLists/@BuyerApprover");
 		chkBoxBindingData.setName("chkApprover");
 		chkApprover.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1540,7 +1564,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/User/UserGroupLists/@BuyerAdmin");
 		chkBoxBindingData.setName("chkAdmin");
 		chkAdmin.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1548,7 +1572,32 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/User/UserGroupLists/@ProcurementUser");
 		chkBoxBindingData.setName("chkProcurementUser");
 		chkProcurementUser.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
+		chkBoxBindingData = new YRCButtonBindingData();
+		//chkBoxBindingData.setCheckedBinding("Y");
+		//chkBoxBindingData.setUnCheckedBinding("N");
+		//chkBoxBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/xxx");
+		//chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/xxx");
+		chkBoxBindingData.setName("chkUnusedSpacerButton");
+		unusedSpacerButton.setData("YRCButtonBindingDefination", chkBoxBindingData);
+
+		chkBoxBindingData = new YRCButtonBindingData();
+		chkBoxBindingData.setCheckedBinding("Y");
+		chkBoxBindingData.setUnCheckedBinding("N");
+		chkBoxBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnPunchOutUser");
+		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnPunchOutUser");
+		chkBoxBindingData.setName("chkPunchoutMilEdit");
+		chkPunchoutMilEdit.setData("YRCButtonBindingDefination", chkBoxBindingData);
+
+		// only make the MIL Edit checkbox visible on punchout users
+		chkProcurementUser.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				setPunchoutMilCheckBoxBehavior();
+			}
+		});
+
+
 		// Binding Value to Y/N instead of T/F for JIRA XBT-211
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
@@ -1557,7 +1606,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnEstimator");
 		chkBoxBindingData.setName("chkEstimator");
 		chkEstimator.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1565,7 +1614,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnStockCheckWS");
 		chkBoxBindingData.setName("chkStockCheckWS");
 		chkStockCheckWS.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1573,7 +1622,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnViewInvoices");
 		chkBoxBindingData.setName("chkViewInvoices");
 		chkViewInvoices.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1581,7 +1630,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnViewReportsFlag");
 		chkBoxBindingData.setName("chkViewReports");
 		chkViewReports.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1589,79 +1638,79 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnViewPricesFlag");
 		chkBoxBindingData.setName("chkViewPrices");
 		chkViewPrices.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@FirstName");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/@FirstName");
 		tbd.setName("txtFirstName");
 		txtFirstName.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@LastName");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/@LastName");
 		tbd.setName("txtLastName");
 		txtLastName.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@EmailID");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/@EmailID");
 		tbd.setName("txtEmailAddress");
 		txtEmailAddress.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@DayPhone");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/@DayPhone");
 		tbd.setName("txtPhone");
 		txtPhone.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1");
 		tbd.setName("txtAddressLine1");
 		txtAddressLine1.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine2");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine2");
 		tbd.setName("txtAddressLine2");
 		txtAddressLine2.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine3");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine3");
 		tbd.setName("txtAddressLine3");
 		txtAddressLine3.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@City");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@City");
 		tbd.setName("txtCity");
 		txtCity.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
 		tbd.setName("txtState");
 		txtState.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode");
 		tbd.setName("txtZipCode");
 		txtZipCode.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/Extn/@ExtnZip4");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/Extn/@ExtnZip4");
 		tbd.setName("txtZip4");
 		txtZip4.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
 		tbd.setName("txtCountry");
 		txtCountry.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnMaxOrderAmount");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnMaxOrderAmount");
@@ -1693,7 +1742,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		cbd.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnDefaultShipTo");
 		cbd.setName("comboDefaultShipTo");
 		comboDefaultShipTo.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);*/
-		
+
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@CustomerContactID");
 		cbd.setDescriptionBinding("@CustomerContactID");
@@ -1702,7 +1751,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		//cbd.setTargetBinding("XPXCustomercontactExtn:/CustomerContact/@ApproverUserId");
 		cbd.setName("comboPrimApprover");
 		comboPrimApprover.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
-		
+
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@CustomerContactID");
 		cbd.setDescriptionBinding("@CustomerContactID");
@@ -1711,7 +1760,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		//cbd.setTargetBinding("CustomerContactDetails:/CustomerContactList/CustomerContact/@CustomerContactID");
 		cbd.setName("comboAlterApprover");
 		comboAlterApprover.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
-		
+
 		/*Start- For Jira 3264*/
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@CurrencyValue");
@@ -1720,34 +1769,34 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		cbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@SpendingLimitCurrency");
 		cbd.setName("comboCurrencyType");
 		comboCurrencyType.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@SpendingLimit");
 		tbd.setName("txtSpendingLimit");
 		txtSpendingLimit.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		/*End- For Jira 3264*/
-		
+
 		YRCButtonBindingData radItem1ButtonBindingData = new YRCButtonBindingData();
 		radItem1ButtonBindingData.setName("radItem1");
 		radItem1ButtonBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnB2BCatalogView");
 		radItem1ButtonBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnB2BCatalogView");
 		radItem1ButtonBindingData.setCheckedBinding("0");
 		radItem1.setData("YRCButtonBindingDefination",radItem1ButtonBindingData);
-		
+
 		YRCButtonBindingData radItem2ButtonBindingData = new YRCButtonBindingData();
 		radItem2ButtonBindingData.setName("radItem2");
 		radItem2ButtonBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnB2BCatalogView");
 		radItem2ButtonBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnB2BCatalogView");
 		radItem2ButtonBindingData.setCheckedBinding("1");
 		radItem2.setData("YRCButtonBindingDefination",radItem2ButtonBindingData);
-		
+
 		YRCButtonBindingData radItem4ButtonBindingData = new YRCButtonBindingData();
 		radItem4ButtonBindingData.setName("radItem4");
 		radItem4ButtonBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnB2BCatalogView");
 		radItem4ButtonBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnB2BCatalogView");
 		radItem4ButtonBindingData.setCheckedBinding("2");
 		radItem4.setData("YRCButtonBindingDefination",radItem4ButtonBindingData);
-		
+
 		YRCButtonBindingData radItemMatrixButtonBindingData = new YRCButtonBindingData();
 		radItemMatrixButtonBindingData.setName("radMatrix");
 		radItemMatrixButtonBindingData.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnB2BCatalogView");
@@ -1779,7 +1828,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		bindingData.setName("orderConfirmList");
 		bindingData.setTblClmBindings(colBindings1);
 		orderConfirmList.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION,bindingData);
-		
+
 		bindingData = new YRCTableBindingData();
 		YRCTblClmBindingData colBindings2[] = new YRCTblClmBindingData[1];
 		colBindings2[0] = new YRCTblClmBindingData();
@@ -1803,35 +1852,35 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		bbdel.setActionHandlerEnabled(true);
 		bbdel.setActionId("com.xpedx.sterling.rcp.pca.userprofile.action.XPXDeleteUserProfileAction");
 		btnDelete.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbdel);
-		
-		
+
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@DayFaxNo");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/@DayFaxNo");
 		tbd.setName("txtFaxNumber");
-		txtFaxNumber.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);	
-		
+		txtFaxNumber.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@CustomerContactKey");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/@CustomerContactKey");
 		tbd.setName("txtDummy1");
 		txtDummy1.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		txtDummy1.setVisible(false);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/@CustomerAdditionalAddressKey");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/@CustomerAdditionalAddressKey");
 		tbd.setName("txtDummy2");
 		txtDummy2.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		txtDummy2.setVisible(false);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@PersonInfoKey");
 		tbd.setName("txtDummy3");
 		txtDummy3.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		txtDummy3.setVisible(false);
-		
+
 //		tbd = new YRCTextBindingData();
 //		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnPrefCatalog");
 //		tbd.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnPrefCatalog");
@@ -1841,10 +1890,10 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 //		radMfgButtonBindingData.setName("radExternal");
 //		radMfgButtonBindingData
 //				.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnUserType");
-//		
+//
 //		 * radMfgButtonBindingData
 //		 * .setTargetBinding("XPXResultOut:/CustomerContact/@UserType");
-//		 
+//
 //		radMfgButtonBindingData.setCheckedBinding("EXTERNAL");
 //		radExternal.setData("YRCButtonBindingDefination",
 //				radMfgButtonBindingData);
@@ -1853,10 +1902,10 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 //		radInternalButtonBindingData.setName("radInternal");
 //		radInternalButtonBindingData
 //				.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnUserType");
-//		
+//
 //		 * radInternalButtonBindingData
 //		 * .setTargetBinding("XPXResultOut:/CustomerContact/@UserType");
-//		 
+//
 //		radInternalButtonBindingData.setCheckedBinding("INTERNAL");
 //		radInternal.setData("YRCButtonBindingDefination",
 //				radInternalButtonBindingData);*/
@@ -1873,14 +1922,14 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 //		cbd.setName("comboReceiveOrderConfirmEmails");
 //		//comboReceiveOrderConfirmEmails.setData(
 //		//		YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);*/
-//		
+//
 //		/*Screen updates begin:Anjanee*/
 //		tbd = new YRCTextBindingData();
 //		tbd
 //				.setSourceBinding("XPXCustomerContactIn:/CustomerContact//Extn/@ExtnInvoiceEMailID");
 //		tbd.setTargetBinding("XPXResultOut:/CustomerContact//Extn/@ExtnInvoiceEMailID");
 //		tbd.setName("txtInvoiceEmailId");
-//		txtInvoiceEmailId.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);	
+//		txtInvoiceEmailId.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 //
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
@@ -1889,7 +1938,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnOrderConfEmailFlag");
 		chkBoxBindingData.setName("chkReceiveOrderConfirmationEmail");
 		chkReceiveOrderConfirmationEmail.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1897,7 +1946,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnOrderCancelEmailFlag");
 		chkBoxBindingData.setName("chkReceiveOrderCancellationEmail");
 		chkReceiveOrderCancellationEmail.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		//Removed for the BugFix id-1004
 		// TODO Order Update Email Flag is not present in the Customer Contact extensions.
 /*		chkBoxBindingData = new YRCButtonBindingData();
@@ -1907,9 +1956,9 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnOrderUpdateEmailFlag");
 		chkBoxBindingData.setName("chkReceiveOrderUpdateEmail");
 		chkReceiveOrderUpdateEmail.setData("YRCButtonBindingDefination", chkBoxBindingData);*/
-		
+
 		//End of Removed for the BugFix id-1004
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1917,7 +1966,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnOrderShipEmailFlag");
 		chkBoxBindingData.setName("chkReceiveOrderShipmentEmail");
 		chkReceiveOrderShipmentEmail.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1925,9 +1974,9 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnBackOrderEmailFlag");
 		chkBoxBindingData.setName("chkeceiveBackOrderEmail");
 		chkeceiveBackOrderEmail.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
-		
-		//Begin - Added for JIRA XB-258		
+
+
+		//Begin - Added for JIRA XB-258
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -1935,12 +1984,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkBoxBindingData.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnOrderApprovalFlag");
 		chkBoxBindingData.setName("chkApproveOrders");
 		chkApproveOrders.setData("YRCButtonBindingDefination", chkBoxBindingData);
-		
+
 		chkApproveOrders.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {				
+			@Override
+			public void widgetSelected(SelectionEvent event) {
 				setSpendingLimitTextBoxBehavior();
 			}
-		});	
+		});
 
 //		/*chkBoxBindingData = new YRCButtonBindingData();
 //		chkBoxBindingData.setCheckedBinding("Y");
@@ -1962,7 +2012,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 //		fullViewButtonBindingData.setCheckedBinding("0");
 //		//fullView.setData("YRCButtonBindingDefination",
 //		//		fullViewButtonBindingData);
-//		
+//
 //		YRCButtonBindingData condensedViewButtonBindingData = new YRCButtonBindingData();
 //		condensedViewButtonBindingData.setName("condensedView");
 //		condensedViewButtonBindingData
@@ -1972,7 +2022,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 //		condensedViewButtonBindingData.setCheckedBinding("1");
 //		//condensedView.setData("YRCButtonBindingDefination",
 //		//		condensedViewButtonBindingData);
-//		
+//
 //		YRCButtonBindingData miniViewButtonBindingData = new YRCButtonBindingData();
 //		miniViewButtonBindingData.setName("miniView");
 //		miniViewButtonBindingData
@@ -1982,7 +2032,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 //		miniViewButtonBindingData.setCheckedBinding("2");
 //		//miniView.setData("YRCButtonBindingDefination",
 //		//		miniViewButtonBindingData);
-//		
+//
 //		YRCButtonBindingData paperGridViewButtonBindingData = new YRCButtonBindingData();
 //		paperGridViewButtonBindingData.setName("paperGridView");
 //		paperGridViewButtonBindingData
@@ -1993,13 +2043,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 //		//paperGridView.setData("YRCButtonBindingDefination",
 //		//		paperGridViewButtonBindingData);*/
 //		/*Screen updates end:Anjanee*/
-//		
+//
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/Extn/@ExtnDefaultShipTo");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@ExtnDefaultShipTo");
 		tbd.setName("txtCustomerID");
 		txtCustomerID.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("DefaultShipToAddress:/ShipTo/@FirstName;DefaultShipToAddress:/ShipTo/@LastName;"
 				+"DefaultShipToAddress:/ShipTo/@AddressLine1;DefaultShipToAddress:/ShipTo/@AddressLine2;"
@@ -2009,10 +2059,10 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tbd.setKey("xpedx_ShipToBillTo_address_key");
 		tbd.setName("txtDefaultShipToAddress");
 		txtDefaultShipToAddress.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+
 	}
 
-	
+
 	private void resetCustomPassword() {
 		myBehavior.resetCustomPassword();
 	}
@@ -2023,7 +2073,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		int HEIGHT = 5;
 		int WIDTH = 5;
 		int selectedHeight = 0;
-		
+
 		int selectedPanelHeight = 0;
 		for (int k = 0; k < noOfChildren; k++) {
 			int boundHeight = childIterator[k].getBounds().height;
@@ -2094,26 +2144,30 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	public UserProfileInfoDetailsBehavior getBehavior() {
 		return myBehavior;
 	}
-	
+
 	private void setSpendingLimitTextBoxBehavior() {
 		boolean isApproveOrdersChecked = chkApproveOrders.getSelection();
-		
-		if(isApproveOrdersChecked) {
+
+		if (isApproveOrdersChecked) {
 			txtSpendingLimit.setText("");
 			txtSpendingLimit.setEnabled(false);
-				
-		} else {
-			txtSpendingLimit.setEnabled(true);
-			
 		}
-		
+		else {
+			txtSpendingLimit.setEnabled(true);
+		}
 	}
+
+	// have to call after data loaded - call from handleApi (better place?)
+	void setPunchoutMilCheckBoxBehavior() {
+		chkPunchoutMilEdit.setVisible(chkProcurementUser.getSelection());
+	}
+
 	//added by suneetha
 	/*private void addDefaultShipToAddress(String fieldName) {
 		myBehavior.addDefaultShipToAddress(fieldName);
 	}*/
-	
-	/* Removed Additional EMails 
+
+	/* Removed Additional EMails
 	private void createPnlAdditionalEmailsHolder() {
 		//pnlAdditionalEmailsHolder = new Composite(pnlAdditionalEmails, 0);
 		pnlAdditionalEmailsHolder = new Composite(pnlSiteSettings, 0);

@@ -9,7 +9,6 @@ import javax.xml.xpath.XPathConstants;
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -52,30 +51,30 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	private boolean isSalesRep=false;
 	Element multiAPIDocElement=null;
 	Element deleteCCDocElement=null;
-	
+
 	public UserProfileInfoDetailsBehavior(
 			UserProfileInfoDetails userProfileInfoDetails,
 			Object inputObject,Element customerContactEle) {
-		
-		
-		super((Composite) userProfileInfoDetails, userProfileInfoDetails.getFormId(), inputObject);
+
+
+		super(userProfileInfoDetails, userProfileInfoDetails.getFormId(), inputObject);
 		this.page = userProfileInfoDetails;
 		this.inputElement=((YRCEditorInput) inputObject).getXml();
-		orgCode= (String)YRCXmlUtils.getAttribute(this.inputElement, "OrganizationCode");
-		userID= (String)YRCXmlUtils.getAttribute(this.inputElement, "UserID");
-		customerKey = (String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
-		customerContactID =(String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerContactID");
+		orgCode= YRCXmlUtils.getAttribute(this.inputElement, "OrganizationCode");
+		userID= YRCXmlUtils.getAttribute(this.inputElement, "UserID");
+		customerKey = YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
+		customerContactID =YRCXmlUtils.getAttribute(this.inputElement, "CustomerContactID");
 		this.reInitPage();
 		initPage();
 		getCurrencyType();
-		
+
 	}
 	/* Start- For Jira 3264  */
 	public void getCurrencyType(){
 		Element elemModel = YRCXmlUtils.createDocument("GetCurrenyType").getDocumentElement();
-		
+
 		Element attrElemComplex1 = YRCXmlUtils.createChild(elemModel, "CurrencyType");
-		
+
 		attrElemComplex1.setAttribute("CurrencyType", "US Dollar");
 		attrElemComplex1.setAttribute("CurrencyValue", "USD");
 
@@ -83,13 +82,13 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 
 		attrElemComplex2.setAttribute("CurrencyType", "Canadian Dollar");
 		attrElemComplex2.setAttribute("CurrencyValue", "CAD");
-		
+
 		setModel("GetCurrencyType",elemModel);
 	}
-	
+
 	//Spending limit and currency type fields are made editable for all user irrespective of their role, according to the comment of Andrea. #JIRA 3409.
 	/*public void getApprover(){
-		
+
 		Element eleApprover = getModel("XPXCustomerContactIn");
 		Element eleBuyerApprover = YRCXmlUtils.getXPathElement(eleApprover, "/CustomerContact/User/UserGroupLists");
 		String buyerApprover = eleBuyerApprover.getAttribute("BuyerApprover");
@@ -104,7 +103,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	}*/
 	/*End- For Jira 3264 */
 	public void getUserGroupInfo(){
-		customerKey = (String)YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
+		customerKey = YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
 		String apinames = "getCustomerContactList";
 		if(!YRCPlatformUI.isVoid(customerKey)){
 			Document docInput = YRCXmlUtils.createFromString("<CustomerContact CustomerKey='"+customerKey+"'/>");
@@ -116,7 +115,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				callApi(ctx, page);
 		}
 	}
-	
+
 	private void setCoustomerContactModel(Element customerContactElement) {
 		this.updateAdditionalAttributes(customerContactElement);
 		String viewInvoices =  YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices");
@@ -124,30 +123,30 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			YRCXmlUtils.setAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices","Y");
 		}
 		setModel("XPXCustomerContactIn", customerContactElement);
-		setSpendingLmtTextBoxBehaviorOnLoad(YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnOrderApprovalFlag"));		
+		setSpendingLmtTextBoxBehaviorOnLoad(YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnOrderApprovalFlag"));
 		defaultShipTo = getFieldValue("txtCustomerID");
 		this.createModelForInvoiceEmails();
 		this.getDefaultShipToAddress();
-		//Commented for 3409		
+		//Commented for 3409
 		//this.getApprover();
 	}
 
 	private void getDefaultShipToAddress() {
 		Element eleCustomerContactInfo = getModel("XPXCustomerContactIn");
 		String strExtnDefaultShipTo = YRCXmlUtils.getAttributeValue(eleCustomerContactInfo, "/CustomerContact/Extn/@ExtnDefaultShipTo");
-		
+
 		if(!YRCPlatformUI.isVoid(strExtnDefaultShipTo)){
-			
-			
+
+
 			if(isSalesRep){
 				 if(!"".equalsIgnoreCase(this.modifyUserId.trim()))
 				 {
 					 String[] apinames = {"getDefaultShipToList","getUserList"};
 					 Document[] docInput = {
-								
-								YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") , 
-								YRCXmlUtils.createFromString("<User><Extn ExtnEmployeeId ='"+ this.modifyUserId +"'/></User>") , 
-						}; 
+
+								YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") ,
+								YRCXmlUtils.createFromString("<User><Extn ExtnEmployeeId ='"+ this.modifyUserId +"'/></User>") ,
+						};
 					 YRCApiContext ctx = new YRCApiContext();
 						ctx.setFormId(getFormId());
 						ctx.setApiNames(apinames);
@@ -156,11 +155,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							callApi(ctx, page);
 				 }
 				 else
-				 {		
+				 {
 					 String[] apinames = {"getDefaultShipToList"};
 					Document[] docInput = {
-							
-							YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>"), 
+
+							YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>"),
 					};
 					YRCApiContext ctx = new YRCApiContext();
 					ctx.setFormId(getFormId());
@@ -169,18 +168,18 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					if (!page.isDisposed())
 						callApi(ctx, page);
 				 }
-				
-				
-				
+
+
+
 			}else{
 				 if("".equalsIgnoreCase(this.modifyUserId.trim()))
-				 {	
+				 {
 					 String[] apinames = {"getDefaultShipToList"};
 					Document[] docInput = {
-							
+
 							YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>")
 					};
-					
+
 					YRCApiContext ctx = new YRCApiContext();
 					ctx.setFormId(getFormId());
 					ctx.setApiNames(apinames);
@@ -192,11 +191,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				 {
 					 String[] apinames = {"getDefaultShipToList","getUserList"};
 					 Document[] docInput = {
-								
-								YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") , 
-								YRCXmlUtils.createFromString("<User Loginid='"+ this.modifyUserId +"'/>") , 
+
+								YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") ,
+								YRCXmlUtils.createFromString("<User Loginid='"+ this.modifyUserId +"'/>") ,
 						};
-						
+
 						YRCApiContext ctx = new YRCApiContext();
 						ctx.setFormId(getFormId());
 						ctx.setApiNames(apinames);
@@ -205,33 +204,33 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							callApi(ctx, page);
 						}
 				 }
-			
-			
-			
+
+
+
 		}else{
 
 			String[] apinames = {"getUserList"};
 			if(isSalesRep){
 				Document[] docInput = {
-						
-					
-						YRCXmlUtils.createFromString("<User><Extn ExtnEmployeeId ='"+ this.modifyUserId +"'/></User>") , 
+
+
+						YRCXmlUtils.createFromString("<User><Extn ExtnEmployeeId ='"+ this.modifyUserId +"'/></User>") ,
 				};
-				
+
 				YRCApiContext ctx = new YRCApiContext();
 				ctx.setFormId(getFormId());
 				ctx.setApiNames(apinames);
 				ctx.setInputXmls(docInput);
 				if (!page.isDisposed() && "".equalsIgnoreCase(this.modifyUserId.trim()))
 					callApi(ctx, page);
-				
+
 			}else{
-				
+
 			Document[] docInput = {
-					
-					YRCXmlUtils.createFromString("<User Loginid='"+ this.modifyUserId +"'/>") , 
+
+					YRCXmlUtils.createFromString("<User Loginid='"+ this.modifyUserId +"'/>") ,
 			};
-			
+
 			YRCApiContext ctx = new YRCApiContext();
 			ctx.setFormId(getFormId());
 			ctx.setApiNames(apinames);
@@ -240,11 +239,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				callApi(ctx, page);
 			}
 		}
-		
+
 	}
 	@Override
 	public void init() {
-		
+
 	}
 
 	public void initPage() {
@@ -253,15 +252,15 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		invokeCustomerPOListAPI();
 		getUserGroupInfo();
 
-	}	
+	}
 	private void invokeCustomerPOListAPI() {
-		
+
 
 		String[] apinames = {"getXPXCustContExtn"};
 		Document inputXML=YRCXmlUtils.createFromString("<XPXCustomerContactExtn CustomerKey='"+ customerKey +"' />");
 		inputXML.getDocumentElement().setAttribute("CustomerContactID", customerContactID);
 		Document[] docInput = {
-				
+
 				//YRCXmlUtils.createFromString("<XPXCustomerContactExtn CustomerKey='"+ customerKey +"' CustomerContactID='"+customerContactID+"'/>")
 				inputXML
 		};
@@ -270,39 +269,39 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		ctx.setApiNames(apinames);
 		ctx.setInputXmls(docInput);
 		if (!page.isDisposed())
-			callApi(ctx, page);		
-	
-		
+			callApi(ctx, page);
+
+
 	}
 
 	private void invokeSearchCatalogIndexAPI() {
 
 		YRCApiContext apiContext = new YRCApiContext();
 		apiContext.setApiName("searchCatalogIndex");
-		
+
 		/*Begin - Changes made for EB-1680. There would be just one active catalog and it will be of 'xpedx' as its the parent enterprise.*/
 		apiContext.setInputXml(YRCXmlUtils.createFromString("<SearchCatalogIndex  CategoryDepth='1' CallingOrganizationCode='xpedx' />"));
 		//apiContext.setInputXml(YRCXmlUtils.createFromString("<SearchCatalogIndex  CategoryDepth='1' CallingOrganizationCode='"+orgCode+"' />"));
 		/*End - Changes made for EB-1680*/
-		
+
 		apiContext.setFormId(getFormId());
 		callApi(apiContext);
 	}
-	
+
 	public void addDefaultShipToAddress(String fieldName){
 		if("defaultShipto".equalsIgnoreCase(fieldName)){
-			
+
 			// Create Input XML
     		Document docInput = YRCXmlUtils.createDocument("User");
-    		
+
     		Element eleInput = docInput.getDocumentElement();
     		eleInput.setAttribute("UserID", userID);
 			if(YRCPlatformUI.isTraceEnabled()){
     			YRCPlatformUI.trace("Shared Task: Launching with Input XML - "+YRCXmlUtils.getString(docInput));
     		}
-			
+
 			Element customerContactElement =  getModel("XPXCustomerContactIn");
-			
+
 			String b2bCatView = YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnB2BCatalogView");
 			setB2bCatalogView(b2bCatView);
 			String defaultShipTo = YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnDefaultShipTo");
@@ -310,23 +309,23 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 
 			//Launch Shared Task
     		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXShipToLookupSharedTask", eleInput);
-    		
-    		// Get the response 
+
+    		// Get the response
     		Element eleContactPersonInfo = output.getOutput();
     		if(!YRCPlatformUI.isVoid(eleContactPersonInfo)){
     			setModel("DefaultShipToAddress", eleContactPersonInfo);
-    			
+
     			if(YRCPlatformUI.isTraceEnabled()){
 					YRCPlatformUI.trace("Shared Task: Output from XPXShipToLookupSharedTask - "+YRCXmlUtils.getString(eleContactPersonInfo));
 				}
 	    		if(eleContactPersonInfo.getAttribute("CustomerID") != null ) {
 	    			setFieldValue("txtCustomerID", eleContactPersonInfo.getAttribute("CustomerID"));
-	    			
+
 	    			if(YRCPlatformUI.isVoid(defaultShipTo) && YRCPlatformUI.isVoid(b2bCatView)){
 		    			String selectedBilltoCustID=eleContactPersonInfo.getAttribute("BillToCustomerID");
 		    			invokeCustomerListAPI(selectedBilltoCustID);
 	    			}
-	    			
+
 				} else {
 					setFieldValue("txtCustomerID", "");
 				}
@@ -337,7 +336,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	private void reInitPage() {
 		String[] apinames = {"getCustomerDetails"};
 		Document[] docInput = {
-				YRCXmlUtils.createFromString("<Customer CustomerKey='" + customerKey + "' />")						
+				YRCXmlUtils.createFromString("<Customer CustomerKey='" + customerKey + "' />")
 		};
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId("com.yantra.pca.ycd.rcp.tasks.customerContactDetails.wizards.YCDCustomerContactWizard");
@@ -357,7 +356,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.yantra.yfc.rcp.YRCBaseBehavior#handleApiCompletion(com.yantra.yfc.rcp.YRCApiContext)
 	 */
 	@Override
@@ -371,8 +370,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					String apiname = apinames[i];
 					/*if ("getCustomerAssignmentList".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						setModel("XPXCustomerAssignmentList",outXml);						
-						
+						setModel("XPXCustomerAssignmentList",outXml);
+
 					}*/
 					if ("searchCatalogIndex".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
@@ -384,13 +383,13 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						String firstName = YRCXmlUtils.getAttributeValue(outXml,"/UserList/User/ContactPersonInfo/@FirstName" );
 						//(Element) YRCXPathUtils.evaluate(ctx.getOutputXmls()[i].getDocumentElement(), "UserList/User/ContactPersonInfo",XPathConstants.NODE);
 						String lastName =  YRCXmlUtils.getAttributeValue(outXml, "/UserList/User/ContactPersonInfo/@LastName");
-						
-						YRCXmlUtils.setAttribute(outXml, "ContactModifiedDate", this.modifyTs);						
+
+						YRCXmlUtils.setAttribute(outXml, "ContactModifiedDate", this.modifyTs);
 						//System.out.println(YRCXmlUtils.getString(outXml));
 						setModel("UserList" , outXml);
 					}
 					else if ("getCustomerDetails".equals(apiname)) {
-						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();	
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						//customerContactID=customerContactID.replace("'", "\'");
 						Element customerContactElement =null;
 						ArrayList<Element> customerContactsEleme=YRCXmlUtils.getChildren(YRCXmlUtils.getChildElement(outXml, "CustomerContactList"), "CustomerContact");
@@ -402,6 +401,9 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							//Element customerContactElement = (Element)YRCXPathUtils.evaluate(outXml, "/Customer/CustomerContactList/CustomerContact[@CustomerContactID='"+customerContactID+"']", XPathConstants.NODE);
 						this.setCoustomerContactModel(customerContactElement);
 						customerContactID=customerContactID.replace("\'", "'");
+
+						// checkboxes now updated from data so can check
+						page.setPunchoutMilCheckBoxBehavior();
 					}
 					else if("getDefaultShipToList".equals(apiname)){
 						Element eleOutput = ctx.getOutputXmls()[i].getDocumentElement();
@@ -420,19 +422,18 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					}
 					else if ("createXPXCustContExtn".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						
+
 					}
 					else if ("changeXPXCustContExtn".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						
-					}					
+
+					}
 					else if ("getXPXCustContExtn".equals(apiname)) {
 						this.docPOList=ctx.getOutputXmls()[i];
 						Element outXml =null;
 						if(!YRCPlatformUI.isVoid(docPOList)){
 							outXml=docPOList.getDocumentElement();
 							setModel("XPXCustomercontactExtn",outXml);
-						
 						}
 						else{
 							Element outXMElement=YRCXmlUtils.createFromString("<XPXCustomercontactExtn/>").getDocumentElement();
@@ -453,20 +454,19 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					}
 					else if ("getCustomerContactList".equals(ctx.getApiName())) {
 						Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
-						adminCustomerContact(eleCustomerContactList);						
+						adminCustomerContact(eleCustomerContactList);
 						this.UpdateCustomer();
-						
 					}
 					else if ("getBilltoExtnCustomerClass".equals(ctx.getApiName())) {
-						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();			
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						String billToCustomerClass=YRCXmlUtils.getAttributeValue(outXml,"/CustomerList/Customer/Extn/@ExtnCustomerClass" );
 						Combo combo = (Combo)getControl("comboPrefferedCatalog");
-						
+
 						if("CA".equals(billToCustomerClass)) {
 							Button radMatrix = (Button)getControl("radMatrix");
 							Button radItem1 = (Button)getControl("radItem1");
 							Button radItem2 = (Button)getControl("radItem2");
-							Button radItem4 = (Button)getControl("radItem4");							
+							Button radItem4 = (Button)getControl("radItem4");
 							radMatrix.setSelection(true);
 							radItem1.setSelection(false);
 							radItem2.setSelection(false);
@@ -477,9 +477,9 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							radItemMatrixButtonBindingData.setTargetBinding("3");
 							radItemMatrixButtonBindingData.setCheckedBinding("3");
 							radMatrix.setData("YRCButtonBindingDefination",radItemMatrixButtonBindingData);
-							
-							combo.select(3);		
-						
+
+							combo.select(3);
+
 						} else {
 							Button radMatrix = (Button)getControl("radMatrix");
 							Button radItem1 = (Button)getControl("radItem1");
@@ -489,27 +489,27 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							radItem1.setSelection(true);
 							radItem2.setSelection(false);
 							radItem4.setSelection(false);
-							
+
 							YRCButtonBindingData radItem1ButtonBindingData= (YRCButtonBindingData)radItem1.getData("YRCButtonBindingDefination");
 							radItem1ButtonBindingData.setSourceBinding("0");
 							radItem1ButtonBindingData.setTargetBinding("0");
 							radItem1ButtonBindingData.setCheckedBinding("0");
-							
+
 							if ("CJ".equals(billToCustomerClass)) {
 								combo.select(1);
-							
+
 							} else if ("CU".equals(billToCustomerClass)){
 								combo.select(2);
-							
+
 							} else if ("CG".equals(billToCustomerClass)){
 								combo.select(4);
-							
 							}
-						
 						}
 						setBillToExtnCustomerClass(billToCustomerClass);
 					}
-					 
+
+					// checkboxes now updated from data so can check
+					page.setPunchoutMilCheckBoxBehavior();
 				}
 				if (ctx.getApiName().equals("manageCustomer")) {
 					Element outXml = ctx.getOutputXml().getDocumentElement();
@@ -517,7 +517,6 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					this.reInitPage();
 					((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
 				}
-				
 			}
 		}
 		//In case of Invoke API failure
@@ -532,11 +531,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						YRCPlatformUI.showError("Failed!", errorEle
 								.getAttribute("ErrorDescription"));
 					}
-				}			
+			}
 		}
-		
+
 		super.handleApiCompletion(ctx);
-		
+
 	}
 	private void adminCustomerContact(Element eleCustomerContactList){
 		Element elemModel = YRCXmlUtils.createDocument("CustomerContactList").getDocumentElement();
@@ -552,16 +551,16 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				if(!"admin".equalsIgnoreCase(eleCust.getAttribute("Modifyuserid"))){
 					this.modifyUserId=eleCust.getAttribute("Modifyuserid");
 				}
-				
+
 				if(modifyUserId!= null && modifyUserId.contains("@CD-")){
 					List<String> words = Arrays.asList(this.modifyUserId.split("@"));
 					System.out.println("here " + words);
 					this.modifyUserId = words.get(0);
 					isSalesRep = true;
 				}
-				
+
 			}
-				NodeList nodGroupLists=eleCust.getElementsByTagName("UserGroupLists");			
+				NodeList nodGroupLists=eleCust.getElementsByTagName("UserGroupLists");
 				for(int j=0;j<nodGroupLists.getLength();j++){
 					Element eleGroup=(Element) nodGroupLists.item(j);
 					NodeList nodGroupList=eleGroup.getElementsByTagName("UserGroupList");
@@ -573,7 +572,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							k = nodGroupList.getLength();
 						}
 					}
-					
+
 				}
 		}
 		//Element inputElement = getModel("XPXCustomerContactIn");
@@ -596,11 +595,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				eleCustomerContactList.removeChild(elementCust);
 				i--;
 			}
-			
+
 		}*/
 		setModel("CustomerContactDetails",adminCustomerList);
 	}
-	
+
 public void UpdateCustomer(){
 	Document inputDoc = YRCXmlUtils.createDocument("UserList");
 	System.out.println("here");
@@ -609,29 +608,29 @@ public void UpdateCustomer(){
 	Element userElement = inputDoc.createElement("User");
 	inputRestPasswordElement.appendChild(userElement);
 	userElement.setAttribute("Loginid", this.modifyUserId);
-   
+
 	String[] apinames = {"getUserList"};
     if(isSalesRep){
 		Document[] docInput = {
-				
-			
-				YRCXmlUtils.createFromString("<User><Extn ExtnEmployeeId ='"+ this.modifyUserId +"'/></User>") , 
+
+
+				YRCXmlUtils.createFromString("<User><Extn ExtnEmployeeId ='"+ this.modifyUserId +"'/></User>") ,
 		};
-		
+
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId(getFormId());
 		ctx.setApiNames(apinames);
 		ctx.setInputXmls(docInput);
 		if (!page.isDisposed() && "".equalsIgnoreCase(this.modifyUserId.trim()))
 			callApi(ctx, page);
-		
+
 	}else{
-		
+
 	Document[] docInput = {
-			
-			YRCXmlUtils.createFromString("<User Loginid='"+ this.modifyUserId +"'/>") , 
+
+			YRCXmlUtils.createFromString("<User Loginid='"+ this.modifyUserId +"'/>") ,
 	};
-	
+
 	YRCApiContext ctx = new YRCApiContext();
 	ctx.setFormId(getFormId());
 	ctx.setApiNames(apinames);
@@ -640,16 +639,16 @@ public void UpdateCustomer(){
 		callApi(ctx, page);
 	}
 }
-    
-  
-	
+
+
+
 
 
 	private void updateAdditionalAttributes(Element customerContactElement) {
 		Element eleUserGroupsList = (Element) YRCXPathUtils.evaluate(customerContactElement, "./User/UserGroupLists", XPathConstants.NODE);
 		ArrayList listOfAssignedUserGroups = YRCXmlUtils.getChildren(eleUserGroupsList, "UserGroupList");
 		for (Object assignedUserGroup : listOfAssignedUserGroups) {
-			Element eleAssignedUserGroup = (Element) assignedUserGroup; 
+			Element eleAssignedUserGroup = (Element) assignedUserGroup;
 			String strUserGroupKey = eleAssignedUserGroup.getAttribute("UsergroupKey");
 			if(YRCPlatformUI.equals("BUYER-USER", strUserGroupKey)){
 				eleUserGroupsList.setAttribute("BuyerUser", "Y");
@@ -661,7 +660,7 @@ public void UpdateCustomer(){
 				eleUserGroupsList.setAttribute("ProcurementUser", "Y");
 			}
 		}
-		
+
 		Element statusElement = YRCXmlUtils.getXPathElement(customerContactElement, "/CustomerContact/User");
 		String stausflag=statusElement.getAttribute("Activateflag");
 		if("Y".equals(stausflag))
@@ -677,7 +676,7 @@ public void UpdateCustomer(){
 		String[] poListSplit = strPOList.split(",");
 		for (int i = 0; i < poListSplit.length; i++) {
 			Element optionEle = YRCXmlUtils.createChild(optionListDoc, "PO");
-			optionEle.setAttribute("PONumber", poListSplit[i]);			
+			optionEle.setAttribute("PONumber", poListSplit[i]);
 		}
 		}
 		setModel("XPXPOList",optionListDoc);
@@ -689,7 +688,7 @@ public void UpdateCustomer(){
 		String[] poListSplit = strEmailList.split(",");
 		for (int i = 0; i < poListSplit.length; i++) {
 			Element optionEle = YRCXmlUtils.createChild(optionListDoc, "Email");
-			optionEle.setAttribute("Address", poListSplit[i]);			
+			optionEle.setAttribute("Address", poListSplit[i]);
 		}
 		}
 		setModel("XPXEmailList",optionListDoc);
@@ -701,7 +700,7 @@ public void UpdateCustomer(){
 		String[] invoiceListSplit = strInvoiceEmailList.split(",");
 		for (int i = 0; i < invoiceListSplit.length; i++) {
 			Element optionEle = YRCXmlUtils.createChild(optionListDoc, "InvoiceEmail");
-			optionEle.setAttribute("InvoiceAddress", invoiceListSplit[i]);			
+			optionEle.setAttribute("InvoiceAddress", invoiceListSplit[i]);
 		}
 		}
 		setModel("XPXInvoiceEmailList",optionListDoc);
@@ -713,7 +712,7 @@ public void UpdateCustomer(){
 		ctx.setInputXml(inputXml);
 		if (!page.isDisposed())
 			callApi(ctx, page);
-	}	
+	}
 	public void removePOs(){
 		Element tempPOList = getModel("XPXPOList");
 		Table temp2 = page.itemPOList;
@@ -724,10 +723,10 @@ public void UpdateCustomer(){
             {
                 Element poEle = (Element)ti.getData();
                 tempPOList.removeChild(poEle);
-                
+
             }
         }
-        setModel("XPXPOList", tempPOList);        
+        setModel("XPXPOList", tempPOList);
 	}
 	public void addPONumber(){
 		Element tempPOList = getModel("XPXPOList");
@@ -737,12 +736,12 @@ public void UpdateCustomer(){
 			optionEle.setAttribute("PONumber", enteredPO);
 			setFieldValue("txtPOList", "");
 		}
-		setModel("XPXPOList", tempPOList);        
+		setModel("XPXPOList", tempPOList);
 	}
 	public void removeEmails(){
 		Element tempEmailList = getModel("XPXEmailList");
 		Table temp2 = page.orderConfirmList;
-		
+
         for(int i = temp2.getSelectionCount() - 1; i >= 0; i--)
         {
             TableItem ti = temp2.getItem(temp2.getSelectionIndices()[i]);
@@ -750,10 +749,10 @@ public void UpdateCustomer(){
             {
                 Element emailEle = (Element)ti.getData();
                 tempEmailList.removeChild(emailEle);
-                
+
             }
         }
-        setModel("XPXEmailList", tempEmailList);        
+        setModel("XPXEmailList", tempEmailList);
 	}
 	public void addEmail(){
 		String enteredEmail = getFieldValue("txtOrderConfirmationList");
@@ -779,7 +778,7 @@ public void UpdateCustomer(){
 			}
 	    }
         else
-        {	
+        {
         	setFieldInError("txtOrderConfirmationList", new YRCValidationResponse(YRCValidationResponse.YRC_VALIDATION_ERROR,"Invalid Email ID"));
         	String exception = "Invalid Email Format.";
         	YRCPlatformUI.showError("Error", exception);
@@ -801,11 +800,11 @@ public void UpdateCustomer(){
 		}
 		return emailMatchExists;
 	}
-	
+
 	public void removeInvoiceEmails(){
 		Element tempEmailList = getModel("XPXInvoiceEmailList");
 		Table temp2 = page.invoiceList;
-		
+
         for(int i = temp2.getSelectionCount() - 1; i >= 0; i--)
         {
             TableItem ti = temp2.getItem(temp2.getSelectionIndices()[i]);
@@ -813,13 +812,13 @@ public void UpdateCustomer(){
             {
                 Element emailEle = (Element)ti.getData();
                 tempEmailList.removeChild(emailEle);
-                
+
             }
         }
-        setModel("XPXInvoiceEmailList", tempEmailList);        
+        setModel("XPXInvoiceEmailList", tempEmailList);
 	}
 	public void addInvoiceEmail() {
-		
+
 		Element tempEmailList1 = getModel("XPXInvoiceEmailList");
 		String enteredEmail = getFieldValue("txtInvoiceEmailId");
 		NodeList nodeList = tempEmailList1.getElementsByTagName("InvoiceEmail");
@@ -837,21 +836,21 @@ public void UpdateCustomer(){
 					optionEle.setAttribute("InvoiceAddress", enteredEmail);
 					setFieldValue("txtInvoiceEmailId", "");
 				}
-				setModel("XPXInvoiceEmailList", tempEmailList1);      
+				setModel("XPXInvoiceEmailList", tempEmailList1);
 			setFieldInError("txtInvoiceEmailId", new YRCValidationResponse(YRCValidationResponse.YRC_VALIDATION_ERROR,"Email ID added."));
 			}
 	    }
         else
-        {	
+        {
        	String exception = "Invalid Email Format.";
-        	
+
         	YRCPlatformUI.showError("Error", exception);
-        	
+
         	setFieldInError("txtInvoiceEmailId", new YRCValidationResponse(YRCValidationResponse.YRC_VALIDATION_ERROR,"Invalid Email ID"));
         	       }
-		
+
 	}
-	
+
 	public void resetCustomPassword()
 	{
 		//form the input Element
@@ -864,7 +863,7 @@ public void UpdateCustomer(){
 		String loginID = ExistingoutPut.getAttribute("UserID");
 		userElement.setAttribute("Loginid", loginID);
 		String newUserStatus = ExistingoutPut.getAttribute("Status");
-		Element inputElement = getModel("XPXCustomerContactIn");		
+		Element inputElement = getModel("XPXCustomerContactIn");
 		String origUserStatus = YRCXmlUtils.getAttributeValue(inputElement, "/CustomerContact/@Status");
 		if((newUserStatus!=null && newUserStatus.equals("30")) || (origUserStatus!=null && origUserStatus.equals("30"))){
 			YRCPlatformUI.showError("Reset Password",YRCPlatformUI.getString("Reset_Password_For_Susp_User_Error"));
@@ -925,9 +924,9 @@ public void UpdateCustomer(){
 	//	YRCXmlUtils.setAttributeValue(outPut, "/CustomerContact/Extn/@ExtnAddnlEmailAddrs",strEmailList);
 		YRCXmlUtils.setAttributeValue(outPut, "/CustomerContact/Extn/@ExtnInvoiceEMailID",strInvoiceEmailList);
 		return outPut;
-		
+
 	}
-	
+
 	private Document formNewInput(Element outputElement)
 	{
 		String inputstring = YRCXmlUtils.getString(outputElement);
@@ -945,7 +944,7 @@ public void UpdateCustomer(){
 					userGroupElement.setAttribute("UsergroupKey", "BUYER-USER");
 					userGroupListsElement.appendChild(userGroupElement);
 				}
-				
+
 			}
 			if(userGroupListsElement.hasAttribute("BuyerAdmin"))
 			{
@@ -955,7 +954,7 @@ public void UpdateCustomer(){
 					userGroupElement.setAttribute("UsergroupKey", "BUYER-ADMIN");
 					userGroupListsElement.appendChild(userGroupElement);
 				}
-				
+
 			}
 			if(userGroupListsElement.hasAttribute("BuyerApprover"))
 			{
@@ -965,7 +964,7 @@ public void UpdateCustomer(){
 					userGroupElement.setAttribute("UsergroupKey", "BUYER-APPROVER");
 					userGroupListsElement.appendChild(userGroupElement);
 				}
-				
+
 			}
 			if(userGroupListsElement.hasAttribute("ProcurementUser"))
 			{
@@ -975,7 +974,7 @@ public void UpdateCustomer(){
 					userGroupElement.setAttribute("UsergroupKey", "PROCUREMENT-USER");
 					userGroupListsElement.appendChild(userGroupElement);
 				}
-				
+
 			}
 		}
 		return inputDoc;
@@ -987,16 +986,16 @@ public void UpdateCustomer(){
 		if(!oldMailId.equalsIgnoreCase(changedMailId)){
 			UpdateEMailAddress(oldMailId,changedMailId); //--function used to call API for MailId change
 		}
-		
+
 		Element targetModel = addNonBindedAttribute();
-		//invoking hasValidInputData()  method to validate input Fields on User profile Info Screen 
+		//invoking hasValidInputData()  method to validate input Fields on User profile Info Screen
 		if(!hasError() && hasValidInputData()){
 			if(!YRCPlatformUI.isVoid(customerContactID)){
 				targetModel.setAttribute("CustomerContactID", customerContactID);
 				targetModel.setAttribute("ApproverUserId", getFieldValue("comboPrimApprover"));
 				targetModel.setAttribute("ApproverProxyUserId", getFieldValue("comboAlterApprover"));
 				targetModel.setAttribute("SpendingLimit", getFieldValue("txtSpendingLimit"));
-				targetModel.setAttribute("SpendingLimitCurrency", getFieldValue("comboCurrencyType"));		
+				targetModel.setAttribute("SpendingLimitCurrency", getFieldValue("comboCurrencyType"));
 				Element eleUser = YRCXmlUtils.getXPathElement(targetModel, "/CustomerContact/User");
 				//Contact person info added under user element to update values at user label
 				Element eleContactPersonInfo = YRCXmlUtils.createChild(eleUser, "ContactPersonInfo");
@@ -1013,16 +1012,16 @@ public void UpdateCustomer(){
 				ctx.setUserData("isRefreshReqd", String.valueOf(false));
 				callApi(ctx, page);
 				((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
-				
+
 			}
 		} else {
 			showError();
 		}
 //		}
 	}
-	
+
 	public void deleteAction(){
-		
+
 		//GetCustomer Assignment List
 		ArrayList assignedList = null;
 		assignedList =XPXUtils.getAssignedCustomerList();
@@ -1034,11 +1033,11 @@ public void UpdateCustomer(){
 		YRCApiContext ctx = new YRCApiContext();
 		String[] apinames ={"XPXManageCustomerAndAssignmentAPIService","manageCustomer"/*,"deleteUserHierarchy"*/};
 		ctx.setApiNames(apinames);
-		
+
 		Document[] docInput = {
 				multiAPIDocElement.getOwnerDocument(),
 				YRCXmlUtils.createFromString("<Customer CustomerID='"+XPXUtils.getMsapCustomerOrgID()+"' OrganizationCode='"+orgCode+"'><CustomerContactList><CustomerContact CustomerContactID='"+userID+"' Operation ='Delete'></CustomerContact></CustomerContactList></Customer> "),
-				//YRCXmlUtils.createFromString("<User DisplayUserID='"+userID+"'  Loginid='"+userID+"' />  "),	
+				//YRCXmlUtils.createFromString("<User DisplayUserID='"+userID+"'  Loginid='"+userID+"' />  "),
 			//	YRCXmlUtils.createFromString("<CustomerAssignment UserId='" + userID + "'/>")
 		};
 
@@ -1051,8 +1050,8 @@ public void UpdateCustomer(){
 		multiAPIDocElement = null;
 		apinames=null;
 		docInput=null;
-		
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);	
+
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);
 	//	PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);
@@ -1060,14 +1059,14 @@ public void UpdateCustomer(){
 			System.out.println("Exception" + e);
 		}
 		}else{
-			
+
 		}
 	}
 
-	
-	
+
+
 	private void saveChanges(List<String> wList, String operation,Element customerAssignmentListElem) {
-		
+
 		for (int index = 0; index < wList.size(); index++) {
 			try {
 				if(wList.get(index) != null && wList.get(index).trim().length() ==0 )
@@ -1082,11 +1081,11 @@ public void UpdateCustomer(){
 			}
 		}
 	}
-	
+
 	public void createManageAssignmentInput(List<String> wList){
 		if(null ==multiAPIDocElement){
 		multiAPIDocElement = YRCXmlUtils.createDocument("ManageCustomerAndAssignment").getDocumentElement();
-		
+
 		}
 		multiAPIDocElement.setAttribute("IgnoreOrdering", "Y");
 		Element custAssignmentele=(Element)multiAPIDocElement.getElementsByTagName("CustomerAssignmentList").item(0);
@@ -1094,16 +1093,16 @@ public void UpdateCustomer(){
 		{
 			custAssignmentele= YRCXmlUtils.createChild(multiAPIDocElement, "CustomerAssignmentList");
 		}
-		
+
 		saveChanges(wList, "Delete",custAssignmentele);
 		System.out.println("Final XML : " + YRCXmlUtils.getString(multiAPIDocElement));
-	}	
-	
-	
-	
+	}
+
+
+
 	 //including this method to validate input fields like MinOrdAmt/MaxOrdAmt
 	private boolean hasValidInputData()
-	{  
+	{
 		boolean hasValidData=true;
 		Element targetModel =  getTargetModel("XPXResultOut");
 
@@ -1111,7 +1110,7 @@ public void UpdateCustomer(){
 		String minAmount="0.0";
 		String maxAmount="0.0";
 		BigDecimal minAmountDecimal,maxAmountDecimal,checkOverallTotal;
-		
+
 		// Initializations
 		minAmount = YRCXmlUtils.getAttributeValue(targetModel, "/CustomerContact/Extn/@ExtnMinOrderAmount");
 		maxAmount = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(targetModel, "/CustomerContact/Extn"), "ExtnMaxOrderAmount");
@@ -1128,7 +1127,7 @@ public void UpdateCustomer(){
 		{
 			YRCPlatformUI.showWarning("warning", "INVALID DATA !!");
 	    	getControl("txtMinOrderAmount").setFocus();
-		    return false;	
+		    return false;
 		}
 		try{
 			maxAmountDecimal = new BigDecimal(maxAmount);
@@ -1137,7 +1136,7 @@ public void UpdateCustomer(){
 		{
 			YRCPlatformUI.showWarning("warning", "INVALID DATA !!");
 	    	getControl("txtMaxOrderAmount").setFocus();
-		    return false;	
+		    return false;
 		}
 
 		if((!"0.0".equals(minAmount)) && (!"0.0".equals(maxAmount))){
@@ -1175,7 +1174,7 @@ public void UpdateCustomer(){
 			}
 		}
 		/*End- For Jira 3264 */
-		
+
 		/*Start- For Jira XB-691 */
 		String chkApproveOrders=getFieldValue("chkApproveOrders");
 		if("Y".equals(chkApproveOrders))
@@ -1186,19 +1185,19 @@ public void UpdateCustomer(){
 				YRCPlatformUI.showWarning("PrimaryApprover", "Please select a Primary Approver");
 				getControl("comboPrimApprover").setFocus();
 				return false;
-			}			
-		}		
+			}
+		}
 		/*End- For Jira XB-691*/
-		
+
 	    return hasValidData;
 	}
 
 
-	
+
 	private void callUpdatePOListAPI() {
 		Element inputElement = getModel("XPXCustomerContactIn");
 		String customerContactId=inputElement.getAttribute("CustomerContactID");
-		
+
 		String[] apinames = null;
 		Document[] docInput = null;
 		String strPOList="";
@@ -1217,7 +1216,7 @@ public void UpdateCustomer(){
 			}
 			//strPOList =strPOList+POElement.getAttribute("PONumber");
 		}
-		
+
 		Element eleEmailList = getModel("XPXEmailList");
 		NodeList nl1= eleEmailList.getElementsByTagName("Email");
 		String strEmailList="";
@@ -1227,22 +1226,22 @@ public void UpdateCustomer(){
 				strEmailList=strEmailList+",";
 			strEmailList =strEmailList+POElement.getAttribute("Address");
 		}
-		
+
 		Document docPOListInput=YRCXmlUtils.createFromString("<XPXCustomerContactExtn />");
 
 		docPOListInput.getDocumentElement().setAttribute("CustomerKey", customerKey);
     	docPOListInput.getDocumentElement().setAttribute("CustomerContactID", customerContactId);
     	docPOListInput.getDocumentElement().setAttribute("POList", strPOList);
     	docPOListInput.getDocumentElement().setAttribute("AddnlEmailAddrs", strEmailList);
-    	
+
     	if(YRCPlatformUI.isVoid(docPOList))
     		apinames = new String[]{"createXPXCustContExtn"};
     	else
     		apinames = new String[]{"changeXPXCustContExtn"};
-    	
+
     	docInput = new Document[]{docPOListInput};
     	callApis(apinames, docInput);
-		
+
 	}
 	/** --function to call API for mailId change-- **/
 	private void UpdateEMailAddress(String oldMailId, String changedMailId) {
@@ -1261,34 +1260,34 @@ public void UpdateCustomer(){
     	apinames = new String[]{"XPXSendUserUpdateEmailService"};
     	docInput = new Document[]{docLDAPSearchInputQry};
     	callApis(apinames, docInput);
-		
+
 	}
 
 	private Element createManageCustomerOutputXml(Element results){
-		
+
 		Element targetDoc = YRCXmlUtils.createFromString("<Customer CustomerKey='" + customerKey + "'/>").getDocumentElement();
 		Element targetContactList = YRCXmlUtils.createChild(targetDoc, "CustomerContactList");
 		YRCXmlUtils.importElement(targetContactList, results);
 		return targetDoc;
 	}
-	
+
 	public void setSpendingLmtTextBoxBehaviorOnLoad(String extnOrderApprovalFlag){
-		
+
 		Control controlSpendingLimit=getControl("txtSpendingLimit");
-		
-		if(!YRCPlatformUI.isVoid(controlSpendingLimit)){			
-			Text txtSpendingLimit = (Text)controlSpendingLimit;			
+
+		if(!YRCPlatformUI.isVoid(controlSpendingLimit)){
+			Text txtSpendingLimit = (Text)controlSpendingLimit;
 			if("Y".equalsIgnoreCase(extnOrderApprovalFlag)){
 				txtSpendingLimit.setText("");
 				txtSpendingLimit.setEnabled(false);
-			
+
 			} else{
 				txtSpendingLimit.setEnabled(true);
-				
-			}			
-		}		
-	}	
-	
+
+			}
+		}
+	}
+
 //	private void createModelForRecieveOrderConfirmationEmails(){
 //	Element optionListDoc = YRCXmlUtils.createFromString("<OptionList/>").getDocumentElement();
 //	Element optionEle = YRCXmlUtils.createChild(optionListDoc, "Option");
@@ -1303,7 +1302,7 @@ public void UpdateCustomer(){
 	private void invokeCustomerListAPI(String billtoCustID ) {
 		String[] apinames = { "getBilltoExtnCustomerClass" };
 		Document[] docInput = { YRCXmlUtils.createFromString("<Customer CustomerID='" + billtoCustID+ "'/>") };
-		
+
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId(getFormId());
 		ctx.setApiNames(apinames);
@@ -1312,15 +1311,15 @@ public void UpdateCustomer(){
 			callApi(ctx, page);
 
 	}
-	
+
 	public String getBillToExtnCustomerClass() {
 		return billToExtnCustomerClass;
 	}
-	
+
 	public void setBillToExtnCustomerClass(String billToExtnCustomerClass) {
 		this.billToExtnCustomerClass = billToExtnCustomerClass;
 	}
-	
+
 	public String getB2bCatalogView() {
 		return b2bCatalogView;
 	}
