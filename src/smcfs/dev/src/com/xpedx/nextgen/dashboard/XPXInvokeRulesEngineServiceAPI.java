@@ -1,6 +1,8 @@
 package com.xpedx.nextgen.dashboard;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.w3c.dom.Document;
@@ -8,6 +10,7 @@ import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -43,7 +46,30 @@ public class XPXInvokeRulesEngineServiceAPI implements YIFCustomApi
 		String orderConfirmationFlow = "";
 		Document rulesEngineOutDoc = null;
 		Element rootElem = inputXML.getDocumentElement();
-		
+		boolean isWebHoldFlag=false;
+		try
+		{
+			if (env instanceof ClientVersionSupport) {
+				ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
+				HashMap map = clientVersionSupport.getClientProperties();
+				if (map != null && map.size()>0) {
+					String isPlaceOnWebHold=(String)map.get("PlaceOrderOnWBHold");
+					if(isPlaceOnWebHold != null && "PlaceOrderOnWBHold".equalsIgnoreCase(isPlaceOnWebHold))
+					{
+						isWebHoldFlag=true;
+						System.out.println("**********   Order   Should go to Web Hold ********************");
+					}
+					else
+					{
+						System.out.println("**********   Order   Should not go to Web Hold ********************");
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			log.error("Error while getting webHoldFlag");
+		}
 		try {			
 			
 			if (rootElem.hasAttribute("OrderConfirmationFlow")) {
@@ -63,7 +89,22 @@ public class XPXInvokeRulesEngineServiceAPI implements YIFCustomApi
 				   rulesEngineOutDoc = api.executeFlow(env, XPXLiterals.RULES_ENGINE_SERVICE, getOrderListInputDoc);
 				}
 			}
-			
+			if(isWebHoldFlag =true)
+			{
+				Element rulesEngineOutElem=rulesEngineOutDoc.getDocumentElement();
+				ArrayList<Element> orderExtnList=SCXmlUtil.getElements(rulesEngineOutElem,"Extn");
+				if(orderExtnList != null)
+				{
+					Element orderExtn=orderExtnList.get(0);
+					if(orderExtn != null )
+					{
+						String webHoldFlag=orderExtn.getAttribute("ExtnWebHoldFlag");
+						if( !"Y".equals(webHoldFlag))
+							orderExtn.setAttribute("ExtnWebHoldFlag", "Y");	
+						System.out.println("**********    Web Hold flag has been set to Y  ********************");
+					}
+				}
+			}
 			log.debug("XPXInvokeRulesEngineServiceAPI-OutXML: "+SCXmlUtil.getString(rulesEngineOutDoc));
 			 YFCDate orderDate = new YFCDate();
 			String orderPlaceDate = orderDate.getString();

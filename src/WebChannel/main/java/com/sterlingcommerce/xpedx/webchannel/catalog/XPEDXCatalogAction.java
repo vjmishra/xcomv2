@@ -844,7 +844,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 						}
 
 						//EB-7558 - When searched with singler term for eg 5T3, it should searc with 5T3*
-						if (searchStartsWithFlag && searchStringTokenList.length == 1 && searchStringToken.indexOf("*") == -1 ){							
+						if (searchStringTokenList.length == 1 && searchStringToken.indexOf("*") == -1 ){							
 							searchStringToken =searchStringToken+ "*";
 						}
 						//End of //EB-7558

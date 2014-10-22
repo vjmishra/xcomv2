@@ -73,6 +73,7 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 		orgsKeyNameMap.put(organizationKey, organizationName);
 		wcContext.setWCAttribute("OrgKeyNameMAP", orgsKeyNameMap, WCAttributeScope.SESSION);	
 		}
+		XPEDXWCUtils.setObectInCache("OrgKeyNameMAP", orgsKeyNameMap);
 		return orgsKeyNameMap;
 	}
 	
