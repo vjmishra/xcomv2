@@ -164,7 +164,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 			if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
 				userId = userId + ldapAuthAttrsuffix.trim();
 			}
-
+			ldapAuthAttrDomain=null;
 			ldapAuthAttrDomain = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_DOMAIN);
 			ldapAuthIsActiveDir = YFSSystem.getProperty(UNI_LDAP_AUTH_IS_ACTIVE_DIR);
 
@@ -217,6 +217,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				}catch(Exception e1){
 					LOG.error(e1.getMessage());
 					System.out.println("Error with " + userId + "for domain "  + ldapDN);
+					throw e1;
 				}
 		}
 
@@ -281,7 +282,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 					if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
 						userId = userId + ldapAuthAttrsuffix.trim();
 					}
-
+					ldapAuthAttrDomain=null;
 					ldapAuthAttrDomain = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_DOMAIN);
 					ldapAuthIsActiveDir = YFSSystem.getProperty(UNI_LDAP_AUTH_IS_ACTIVE_DIR);
 
@@ -334,6 +335,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 						}catch(Exception e1){
 							LOG.error(e1.getMessage());
 							System.out.println("Error with " + userId + "for domain "  + ldapDN);
+							throw e1;
 						}
 				}
 
