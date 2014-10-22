@@ -212,7 +212,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 
 			Set<String> entitledItemIDs = pocGetEntitledItemIDs(allItemIDs);
 
-			System.out.println(started + ": entitledItemIDs (" + entitledItemIDs.size() + ") = " + entitledItemIDs);
+			System.out.println(started + ": entitledItemIDs = " + entitledItemIDs);
 
 			// remove the unentitled items from the dom
 			for (Element itemElem : itemElems) {
@@ -226,16 +226,19 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		}
 	}
 
+	/**
+	 * Finds the entitled item ids in <code>allItemIDs</code>. This method is guaranteed to not throw exceptions.
+	 */
 	private Set<String> pocGetEntitledItemIDs(Set<String> allItemIDs) {
 		// TODO if this works, will refactor into an API call of some sort
-		//      guaranteed to not throw any exceptions since this query will fail in non-dev environments
+		//      this query will fail in non-dev environments, so the catch block returns the all the item ids so as to preserve normal (non-filter) behavior
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet res = null;
 		try {
 			conn = getConnection();
 
-			stmt = conn.prepareStatement("select item_id from trey_entitled_item where item_id in (" + createQuestionMarks(allItemIDs.size()) + ")");
+			stmt = conn.prepareStatement("select trim(item_id) from trey_entitled_item where item_id in (" + createQuestionMarks(allItemIDs.size()) + ")");
 
 			int parameterIndex = 1;
 			for (String itemID : allItemIDs) {
