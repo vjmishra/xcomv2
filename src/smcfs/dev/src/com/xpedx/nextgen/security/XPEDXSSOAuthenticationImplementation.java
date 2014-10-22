@@ -45,6 +45,17 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 	//added for jira 3393 - inactivate Ldap authentication
 	private static final String LDAP_AUTH_IS_REQUIRED = "xpedx.ldap.authentication.IsRequired";
 	
+	//EB -8323 -  Unisource LDAP set up
+	public static final String UNI_LDAP_SERVER_URL = "uni.ldap.server.url";
+	public static final String UNI_LDAP_SCHEMA = "uni.ldap.schema";
+	public static final String UNI_LDAP_AUTH_ATTR_NAME = "uni.ldap.authentication.attribute.name";
+	public static final String UNI_LDAP_AUTH_ATTR_SUFFIX = "uni.ldap.authentication.attribute.suffix";
+	public static final String UNI_LDAP_AUTH_ATTR_DOMAIN = "uni.ldap.authentication.attribute.domain";
+	private static final String UNI_LDAP_AUTH_IS_ACTIVE_DIR = "uni.ldap.authentication.isActiveDirectory";
+	
+
+	
+	
 	private static final String USER_TYPE_INTERNAL = "INTERNAL";	
 	
 	private static String PLATFORM_AUTH_USERS = "platform_auth_enabled_usernames";
@@ -137,11 +148,77 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		env.put(Context.SECURITY_AUTHENTICATION, "simple");
 		env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());	
 		env.put(Context.SECURITY_CREDENTIALS, password.trim());
+        
+		try{
+			DirContext ctx = new InitialDirContext(env);
+		}catch(Exception e){
+			//EB-8323 - Unisource LDAP set up validation 
+			System.out.println("Error in sales rep "  + userId + "Failed to domain name " + ldapDN );
+			String ldapServerURL = YFSSystem.getProperty(UNI_LDAP_SERVER_URL);
+			String ldapSchema = YFSSystem.getProperty(UNI_LDAP_SCHEMA);
+			String ldapAuthAttrName = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_NAME);
+			
+			String ldapAuthAttrsuffix = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_SUFFIX);
+			if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
+				userId = userId + ldapAuthAttrsuffix.trim();
+			}
 
-        DirContext ctx = new InitialDirContext(env);
+			String ldapAuthAttrDomain = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_DOMAIN);
+			String ldapAuthIsActiveDir = YFSSystem.getProperty(UNI_LDAP_AUTH_IS_ACTIVE_DIR);
+
+			
+			
+			if(!YFCCommon.isVoid(ldapAuthIsRequired) && "Y".equalsIgnoreCase(ldapAuthIsRequired.trim())){
+				if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
+					if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
+						if (!userId.startsWith(ldapAuthAttrDomain)){
+							userId = ldapAuthAttrDomain.trim() + "\\" + userId;
+						}
+					}
+					else {
+						if (!userId.endsWith(ldapAuthAttrDomain)){
+							userId = userId  + "@" + ldapAuthAttrDomain.trim();
+						}
+					}
+				}
+				
+				String ldapDN=null;
+				if (!YFCCommon.isVoid(ldapSchema)){
+					ldapDN=(new StringBuilder()).append(userId).append(",").append(ldapSchema.trim()).toString();
+				}
+				else {
+					ldapDN=userId;
+				}
+				if (!YFCCommon.isVoid(ldapAuthAttrName)){
+					ldapDN=(new StringBuilder()).append(ldapAuthAttrName + "=").append(ldapDN).toString();
+				}
+				
+				
+				if(LOG.isDebugEnabled()){
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+				}
+		        Hashtable<String, String> env = new Hashtable<String, String>();
+		        env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
+				env.put(Context.PROVIDER_URL, ldapServerURL);
+				env.put(Context.SECURITY_AUTHENTICATION, "simple");
+				env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());	
+				env.put(Context.SECURITY_CREDENTIALS, password.trim());
+				try{
+					DirContext ctx = new InitialDirContext(env);
+				}catch(Exception e){
+					LOG.error(e.getMessage());
+					System.out.println("Error with " + userId + "for domain "  + ldapDN);
+				}
+		}
         ctx.close();
 		LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
-}
+		}
+		}
 		}
 //JIRA 3852 starts
 		else
@@ -188,7 +265,73 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());
 				env.put(Context.SECURITY_CREDENTIALS, password.trim());
 
-		        DirContext ctx = new InitialDirContext(env);
+				try{
+					DirContext ctx = new InitialDirContext(env);
+				}catch(Exception e){
+					//EB-8323 - Unisource LDAP set up validation 
+					System.out.println("Error in sales rep "  + userId + "Failed to domain name " + ldapDN );
+					String ldapServerURL = YFSSystem.getProperty(UNI_LDAP_SERVER_URL);
+					String ldapSchema = YFSSystem.getProperty(UNI_LDAP_SCHEMA);
+					String ldapAuthAttrName = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_NAME);
+					
+					String ldapAuthAttrsuffix = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_SUFFIX);
+					if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
+						userId = userId + ldapAuthAttrsuffix.trim();
+					}
+
+					String ldapAuthAttrDomain = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_DOMAIN);
+					String ldapAuthIsActiveDir = YFSSystem.getProperty(UNI_LDAP_AUTH_IS_ACTIVE_DIR);
+
+					
+					
+					if(!YFCCommon.isVoid(ldapAuthIsRequired) && "Y".equalsIgnoreCase(ldapAuthIsRequired.trim())){
+						if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
+							if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
+								if (!userId.startsWith(ldapAuthAttrDomain)){
+									userId = ldapAuthAttrDomain.trim() + "\\" + userId;
+								}
+							}
+							else {
+								if (!userId.endsWith(ldapAuthAttrDomain)){
+									userId = userId  + "@" + ldapAuthAttrDomain.trim();
+								}
+							}
+						}
+						
+						String ldapDN=null;
+						if (!YFCCommon.isVoid(ldapSchema)){
+							ldapDN=(new StringBuilder()).append(userId).append(",").append(ldapSchema.trim()).toString();
+						}
+						else {
+							ldapDN=userId;
+						}
+						if (!YFCCommon.isVoid(ldapAuthAttrName)){
+							ldapDN=(new StringBuilder()).append(ldapAuthAttrName + "=").append(ldapDN).toString();
+						}
+						
+						
+						if(LOG.isDebugEnabled()){
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+						}
+				        Hashtable<String, String> env = new Hashtable<String, String>();
+				        env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
+						env.put(Context.PROVIDER_URL, ldapServerURL);
+						env.put(Context.SECURITY_AUTHENTICATION, "simple");
+						env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());	
+						env.put(Context.SECURITY_CREDENTIALS, password.trim());
+						try{
+							DirContext ctx = new InitialDirContext(env);
+						}catch(Exception e){
+							LOG.error(e.getMessage());
+							System.out.println("Error with " + userId + "for domain "  + ldapDN);
+						}
+				}
+		       
 		        ctx.close();
 				LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
 				if("".equalsIgnoreCase(password) || password==null)
@@ -217,9 +360,12 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 			request.setAttribute("loggedInUserId", actualUserId);
 			request.setAttribute("SRSalesRepEmailID", SRemailID);
 		}
-    
+		}
 		return actualUserId;
+	
+	
 	}
+	
 	
 	private String getPassword(HttpServletRequest request) {
 		String password = request.getParameter(DEFAULT_PASSWORD_PRAM_NAME);
