@@ -1604,7 +1604,7 @@ a.underlink:hover {
 
 																<a
 																	href="javascript:getNewContactInfo1('<s:url value="/profile/user/MyNewUserCreate.action"/>');"
-																	class="grey-ui-btn"> <span><s:text
+																	class="btn-neutral"> <span><s:text
 																			name='Add_User' /></span>
 																</a>
 															</ul>
@@ -1805,7 +1805,7 @@ a.underlink:hover {
 																	<div class="clearview">
 																		<ul class="float-left">
 																			<li class="float-left margin-10"><a href="#"
-																				class="grey-ui-btn"
+																				class="btn-neutral"
 																				onclick="javascript: return addToPOListfn();"><span>Add
 																						to List</span></a></li>
 																		</ul>
@@ -1814,7 +1814,7 @@ a.underlink:hover {
 																	<div class="clearview">
 																		<ul class="float-left">
 																			<li class="float-left margin-10"><a href="#"
-																				class="grey-ui-btn"
+																				class="btn-neutral"
 																				onclick="javascript: return removeFrmPOList();"><span>Remove
 																						from List</span></a></li>
 																		</ul>
@@ -1897,7 +1897,7 @@ a.underlink:hover {
 																	<div class="clearview">
 																		<ul class="float-left">
 																			<li class="float-left margin-10"><a href="#"
-																				class="grey-ui-btn"
+																				class="btn-neutral"
 																				onclick="javascript: return addOrderConfEmailToList();"><span>Add
 																						to List</span></a></li>
 																		</ul>
@@ -1906,7 +1906,7 @@ a.underlink:hover {
 																	<div class="clearview">
 																		<ul class="float-left">
 																			<li class="float-left margin-10"><a href="#"
-																				class="grey-ui-btn"
+																				class="btn-neutral"
 																				onclick="javascript: return removeOrderConfEmailFrmList();"><span>Remove
 																						from List</span></a></li>
 																		</ul>
@@ -2401,7 +2401,7 @@ a.underlink:hover {
 																<ul class="float-left">
 																	<s:url id="ResetPasswordURL" action="resetPassword" />
 																	<li><a href="javascript:resetPassword();"
-																		class="grey-ui-btn"><span><s:text
+																		class="btn-neutral"><span><s:text
 																					name="reset.Password" /></span></a></li>
 																</ul>
 															</td>
@@ -2779,7 +2779,7 @@ a.underlink:hover {
 																	<div class="clearview">
 																		<ul class="float-left">
 																			<li class="float-left margin-10"><a href="#"
-																				class="grey-ui-btn"
+																				class="btn-neutral"
 																				onclick="javascript: return addToPOListfn();"><span>Add
 																						to List</span></a></li>
 																		</ul>
@@ -2788,7 +2788,7 @@ a.underlink:hover {
 																	<div class="clearview">
 																		<ul class="float-left">
 																			<li class="float-left margin-10"><a href="#"
-																				class="grey-ui-btn"
+																				class="btn-neutral"
 																				onclick="javascript: return removeFrmPOList();"><span>Remove
 																						from List</span></a></li>
 																		</ul>
@@ -2871,7 +2871,7 @@ a.underlink:hover {
 																	<div class="clearview">
 																		<ul class="float-left">
 																			<li class="float-left margin-10"><a href="#"
-																				class="grey-ui-btn"
+																				class="btn-neutral"
 																				onclick="javascript: return addOrderConfEmailToList();"><span>Add
 																						to List</span></a></li>
 																		</ul>
@@ -2880,7 +2880,7 @@ a.underlink:hover {
 																	<div class="clearview">
 																		<ul class="float-left">
 																			<li class="float-left margin-10"><a href="#"
-																				class="grey-ui-btn"
+																				class="btn-neutral"
 																				onclick="javascript: return removeOrderConfEmailFrmList();"><span>Remove
 																						from List</span></a></li>
 																		</ul>
@@ -3222,8 +3222,8 @@ a.underlink:hover {
 								<ul class="float-right">
 									<li class="float-left margin-10"><a href="#"
 										onclick="javascript:window.location.reload();"
-										class="grey-ui-btn"><span>Cancel</span></a></li>
-									<li class="float-right"><a class="green-ui-btn"
+										class="btn-neutral"><span>Cancel</span></a></li>
+									<li class="float-right"><a class="btn-gradient"
 										href="javascript:void(0);"
 										onclick="javascript:validateAndSave('myAccount', []);"
 										tabindex="38"><span>Save</span></a></li>
@@ -3449,7 +3449,7 @@ if (window.event && window.event.keyCode == 13) {
       cell1.innerHTML = "<input id=theLinkName type=text> ";
       cell1.valign="top";
       var cell2 = document.createElement("TD");
-      cell2.innerHTML = "<input id=theUrl type=text>" + "<br><br>" + "<a class=green-ui-btn onclick=javascript:saveClick(); href=#addNewQL><span>Add</span></a>";
+      cell2.innerHTML = "<input id=theUrl type=text>" + "<br><br>" + "<a class=btn-gradient onclick=javascript:saveClick(); href=#addNewQL><span>Add</span></a>";
       var cell3 = document.createElement("TD");
       cell3.innerHTML = "&nbsp;";
       var cell4 = document.createElement("TD");

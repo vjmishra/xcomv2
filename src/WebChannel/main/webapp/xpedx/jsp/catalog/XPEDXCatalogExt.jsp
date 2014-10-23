@@ -739,15 +739,7 @@ function getNormalView() {
 									'{contractitemdiv}',
 							</s:if>
 						'</div>', //end contents
-						'<div id="instructions-trigger"	class="special-text">',
-						'<p id=\'instructions-link_{itemid}\' class="gray instructions-link addmargintop10" onclick="javascript:specialInstBox(\'{itemid}\')">Add Special Instructions</p>',
-					'</div>',
-					'<div class="clearfix"></div>',
-					'<div id=\"instructions-content_{itemid}\"	style="display: none;" class="instructions-content addmarginleft10">',
-						'<input name="textarea" class="instructions-content-textfield" onkeyup="javascript:restrictTextareaMaxLength(this,250);" value="" id=\'enteredInstructionsText_{itemid}\' name="enteredInstructionsText"> </input>',
-					'<div class="clearfix"></div>',
-						'<p class="text-smaller italic addmarginbottom10">Special Instructions are Saved to Cart</p>',
-					'</div>',
+						
 							'<div class="clearfix"></div>',
 						'<div class="order-input-wrap">',
 							'<div class="order-row">',
@@ -806,19 +798,32 @@ function getNormalView() {
 									'{uomLink}',
 								'</div>',
 							</s:if>
-							<s:if test='!#guestUser'>
-								<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-									'{itemtypedesc}',
-								</s:if>
-								'<div class="clearfix"></div>',	
-								<s:if test='!#guestUser'>
-									'<div class="replacement-item replacement-text">',
-										'{repItem}',
-									'</div>',
-								</s:if>	
+							
 						'</div>', <%-- / order-input-wrap" --%>
+						<s:if test='!#guestUser'>
+						<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
+							'{itemtypedesc}',
+						</s:if>
 						'<div class="clearfix"></div>',
 						
+						'<div class="instructions-wrap">',
+						'<div id="instructions-trigger"	class="special-text">',
+						'<p id=\'instructions-link_{itemid}\' class="gray instructions-link addmargintop10" onclick="javascript:specialInstBox(\'{itemid}\')">Add Special Instructions</p>',
+					'</div>',
+					'<div class="clearfix"></div>',
+					'<div id=\"instructions-content_{itemid}\"	style="display: none;" class="instructions-content addmarginleft10">',
+						'<textarea class="instructions-content-textfield" onkeyup="javascript:restrictTextareaMaxLength(this,250);" id=\"enteredInstructionsText_{itemid}\" name="enteredInstructionsText"></textarea>',
+						'<div class="clearfix"></div>',
+						'<p class="text-smaller italic addmarginbottom10">Special Instructions are Saved to Cart</p>',
+					'</div>',
+						'</div>',
+						
+						<s:if test='!#guestUser'>
+							'<div class="replacement-item replacement-text">',
+								'{repItem}',
+							'</div>',
+						</s:if>	
+						'<div class="clearfix"></div>',
 						<s:if test='!#guestUser'>
 							'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
 						</s:if>
