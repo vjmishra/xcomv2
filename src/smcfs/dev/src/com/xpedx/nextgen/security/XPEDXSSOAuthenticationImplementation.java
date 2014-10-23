@@ -159,7 +159,10 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 			ldapServerURL = YFSSystem.getProperty(UNI_LDAP_SERVER_URL);
 			ldapSchema = YFSSystem.getProperty(UNI_LDAP_SCHEMA);
 			ldapAuthAttrName = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_NAME);
-
+            
+			userId=null;
+			userId=getUserId(request);
+			System.out.println("User id First time " + userId);
 			ldapAuthAttrsuffix = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_SUFFIX);
 			if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
 				userId = userId + ldapAuthAttrsuffix.trim();
