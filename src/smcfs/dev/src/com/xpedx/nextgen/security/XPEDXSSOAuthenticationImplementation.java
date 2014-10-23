@@ -164,25 +164,28 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 			if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
 				userId = userId + ldapAuthAttrsuffix.trim();
 			}
-			ldapAuthAttrDomain=null;
-			ldapAuthAttrDomain = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_DOMAIN);
+			System.out.println("User id is now " + userId);
+			String ldapAuthAttrDomainUni=null;
+			ldapAuthAttrDomainUni = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_DOMAIN);
+			System.out.println("LDAP Auth Attribute Domain is " + ldapAuthAttrDomainUni);
 			ldapAuthIsActiveDir = YFSSystem.getProperty(UNI_LDAP_AUTH_IS_ACTIVE_DIR);
 
 
 
 			if(!YFCCommon.isVoid(ldapAuthIsRequired) && "Y".equalsIgnoreCase(ldapAuthIsRequired.trim())){
-				if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
+				if (!YFCCommon.isVoid(ldapAuthAttrDomainUni)){
 					if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
-						if (!userId.startsWith(ldapAuthAttrDomain)){
-							userId = ldapAuthAttrDomain.trim() + "\\" + userId;
+						if (!userId.startsWith(ldapAuthAttrDomainUni)){
+							userId = ldapAuthAttrDomainUni.trim() + "\\" + userId;
 						}
 					}
 					else {
-						if (!userId.endsWith(ldapAuthAttrDomain)){
-							userId = userId  + "@" + ldapAuthAttrDomain.trim();
+						if (!userId.endsWith(ldapAuthAttrDomainUni)){
+							userId = userId  + "@" + ldapAuthAttrDomainUni.trim();
 						}
 					}
 				}
+				System.out.println("User id is now -1 " + userId);
 
 				ldapDN=null;
 				if (!YFCCommon.isVoid(ldapSchema)){
