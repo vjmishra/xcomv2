@@ -943,7 +943,7 @@
 		  <Attribute ColumnName="EXTN_USER_EMAIL_TEMPLATE" DataType="varchar2-30" Description="OCI/SAP User E-Mail Template. Punchout related field." Nullable="true" Size="" XMLName="ExtnUserEmailTemplate" XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_USER_PWD_PARAM" DataType="varchar2-255" Description="OCI/SAP User Password Parameter. Punchout related field." Nullable="true" Size="" XMLName="ExtnUserPwdParam" XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_PUNCHOUT_COMNT" DataType="varchar2-500" Description="Comments to be displayed to SAP/OCI Punchout user." Nullable="true" Size="" XMLName="ExtnPunchOutComments" XMLGroup="Extn" />
-		  <Attribute ColumnName="EXTN_PUNCHOUT_NOTES" DataType="varchar2-500" Description="Internal notes related to Punchout." Nullable="true" Size="" XMLName="ExtnPunchOutNotes" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_PUNCHOUT_NOTES" DataType="varchar2-1000" Description="Internal notes related to Punchout." Nullable="true" Size="" XMLName="ExtnPunchOutNotes" XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_SUPPORT_EMAIL_ADDRESS" DataType="varchar2-200" Description="Support Email Address. B2B Integration related field." Nullable="true" Size="" XMLName="ExtnSupportEmailAddress" XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_PURCHASE_ORDER_FLAG" DataType="char-1" Description="Purchase Order Flag, enables a customer for B2B Order Place. B2B Integration related field." Nullable="true" Size="" XMLName="ExtnPurchaseOrderFlag" XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_PURCHASE_ORDER_FLAG_COMNT" DataType="varchar2-200" Description="Comments in case Purchase Order Flag is changed." Nullable="true" Size="" XMLName="ExtnPurchaseOrderFlagComments" XMLGroup="Extn" />
