@@ -3,6 +3,8 @@
  */
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.io.File;
+import java.io.FileReader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,12 +23,15 @@ import javax.xml.xpath.XPathExpressionException;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import com.comergent.appservices.configuredItem.XMLUtils;
 import com.sterlingcommerce.baseutil.SCUtil;
@@ -75,6 +81,51 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	private int [] quickaddItemLines= new int[200];
 	private int displayItemLines =5;
 	private Map<String, String> customerDescItemMap;
+	private File file;
+	private String contentType;
+	private String filename;
+	private Map<Integer,XPEDXQuickAddCsvVO>  xpedxQuickAddCsvVOMap = new HashMap<Integer,XPEDXQuickAddCsvVO>();
+	boolean csvVar=true;
+	private boolean isImported = false;
+	
+	public boolean isCsvVar() {
+		return csvVar;
+	}
+
+	public void setCsvVar(boolean csvVar) {
+		this.csvVar = csvVar;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+	public boolean isImported() {
+		return isImported;
+	}
+	public void setImported(boolean isImported) {
+		this.isImported = isImported;
+	}
+    public void setUpload(File file) {
+       this.file = file;
+    }
+
+	public void setUploadContentType(String contentType) {
+       this.contentType = contentType;
+    }
+
+    public void setUploadFileName(String filename) {
+       this.filename = filename;
+    }
+    
+	public Map<Integer, XPEDXQuickAddCsvVO> getXpedxQuickAddCsvVOMap() {
+		return xpedxQuickAddCsvVOMap;
+	}
+	public void setXpedxQuickAddCsvVOMap(
+			Map<Integer, XPEDXQuickAddCsvVO> xpedxQuickAddCsvVOMap) {
+		this.xpedxQuickAddCsvVOMap = xpedxQuickAddCsvVOMap;
+	}
+
+
 	public String getCustomerItemFlag() {
 		return customerItemFlag;
 	}
@@ -3382,5 +3433,53 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public Map<String, String> getCustomerDescItemMap() {
 		return customerDescItemMap;
 	}
-
+	/**
+	 * Method to import the .csv file from quick add page.
+	 *
+	 * 
+	 * @return
+	 */
+	public String importFile() throws Exception{
+		setImported(true);
+		if(!(getFilename().endsWith(".csv"))){
+			setCsvVar(false);
+		}
+		CSVReader reader = null;
+		try {
+			reader = new CSVReader(new FileReader(this.file));
+			String[] line;
+			int row = 0;
+			while ((line = reader.readNext()) != null) {				
+				if(row == 0){
+					row++;
+					continue;
+				}				
+				XPEDXQuickAddCsvVO quickAddImport = new XPEDXQuickAddCsvVO();
+				quickAddImport.setItemId(line[0]);
+				quickAddImport.setQty(line[1]);
+				quickAddImport.setItemPONumber(line[2]);
+				quickAddImport.setItemLineNumber(line[3]);
+				xpedxQuickAddCsvVOMap.put(row, quickAddImport);
+				LOG.debug("Record: " + StringUtils.join(line, ", "));
+				row++;
+			}
+			if(row <= 201){
+				displayItemLines = row;	
+				setImported(true);
+			}else{
+				setImported(false);
+			}
+			}
+		catch (Exception e) {
+		}
+		finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (Exception ignore) {
+				}
+			}
+		}
+		return this.openQuickAdd();
+	}
 }

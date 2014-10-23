@@ -250,4 +250,34 @@ $(document).ready(function() {
 	});
 });
 
+ /*fancybox modal for importing Items List*/ 
 
+$('#importItemList').click(function() {
+	$("#dlgImportFormLink").click();
+});
+$("#dlgImportFormLink").fancybox({
+	'onClosed' : function(){
+	document.getElementById("errorMsgForBrowsePath").style.display = "none";
+	/*document.getElementById("errorMsgForRequiredField").innerHTML = "";
+	document.getElementById("errorMsgForRequiredField").style.display = "none";*/
+	if(document.getElementById("File"))
+		document.getElementById("File").value = "";
+	},
+
+	'autoDimensions'	:false,
+	'width'				: 620,
+	'height'			: 355
+});
+
+function importFile(){
+	document.quickAddFileImport[0].submit();
+}
+
+function submitImportFile() {
+		submitImport("quickAddFileImport");
+	}					
+
+function submitImport(xForm) {
+	var form = Ext.get(xForm);
+	form.dom.submit();
+}

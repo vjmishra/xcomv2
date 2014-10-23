@@ -92,7 +92,10 @@
 	<s:set name='isProcurementInspectMode' value="true" />
 	<s:set name='isPunchoutUser' value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>
 	<s:set name='hasPendingChanges' value='#orderDetails.getAttribute("HasPendingChanges")' />
-		
+	<s:set name='isImported' value="%{#_action.isImported()}"/>	
+	<s:hidden id="isImportedValue"	value='%{#isImported}' />
+	<s:set name='csvVar' value="%{#_action.isCsvVar()}"/>	
+	<s:hidden id="csvVarValue"	value='%{#csvVar}' />
 	<s:if test='majorLineElements.size() == 0'>
 		<s:set name='checkoutDisabled' value='"disabled"' />
 	</s:if>
@@ -180,7 +183,7 @@
 		<s:param name="addedToCart" value="true" />
 	</s:url> 
 	<s:a cssClass="display:none;" id="quickAddURL" href="%{#quickAddURLid}" />
-	
+	<a style="display: none;" id="dlgImportFormLink" href="#dlgImportForm" />
 	<div id="main-container">
 		<div id="main">
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
@@ -200,7 +203,10 @@
 					<h1>Quick Add</h1>
 					<form name="QuickAddForm" id="QuickAddForm"
 						onsubmit="validateItems(); return false;">
-						<label>
+						<label></label>
+						 <div class="floatright"> 
+							<input id="importItemList" class="btn-neutral addmarginright120 addmargintop-5" type="button" onclick="" value="Import"/>
+						</div> 
 							<div class="qa-rightcol">
 								<p>Select Item Type</p>
 							</div> <!-- START wctheme.select.ftl --> <!-- START wctheme.controlheader.ftl -->
@@ -210,13 +216,23 @@
 									<s:select id="qaItemType" name="qaItemType"
 										cssStyle="width:135px;" headerKey="1" list="skuTypeList"
 										listKey="key" listValue="value" />
-								</div>
-							</div> <!-- END select.ftl --> <s:hidden name="#qaItemType.type"
+							</div>
+						</div> <!-- END select.ftl --> <s:hidden name="#qaItemType.type"
 								value="ItemID" id="#qaItemType_type" />
-						</label>
 						<div class="clearfix"></div>
+						<div class="center">
+								<s:if test='%{!#csvVar}'>
+									<p id="csvCheck" class="error">The import file must be
+										in .csv format.</p>
+								</s:if>
+								<s:set name='dataSize' value='xpedxQuickAddCsvVOMap.size()' />
+								<s:if test='%{#dataSize>"200"}'>
+									<p id="dataSize" class="error">Quick Add has exceeded
+										the maximum of 200 items. Please remove some items and try
+										again.</p>
+								</s:if>
+							</div>
 						<div class="qa-add-wrap">
-
 							<div class="qa-add-divider"></div>
 							<s:set name="jobIdFlag"
 								value='%{customerFieldsMap.get("CustLineAccNo")}' />
@@ -274,10 +290,70 @@
 									
 								</s:if>
 							</div>
+							 <s:if test='%{#isImported}'>
+								<s:iterator value='#_action.getQuickaddItemLines()'
+									status="itemline">
+									<s:set name='index' value='%{#itemline.count}' />
+									<s:set name='XPEDXQuickAddCsvVO' value='%{xpedxQuickAddCsvVOMap.get(#index)}'/>
+									<s:div id='%{"qa-listrow_" + #itemline.count}'
+										cssStyle='%{#itemline.count > #_action.getDisplayItemLines() ? "display:none;" : ""}'>
+										<div class="qa-listrow">
+											<div class="qa-error-icon" style="visibility: hidden">
+												<input type="image"
+													id="errorIcon_<s:property value='#itemline.count'/>"
+													src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x<s:property 
+											value='#wcUtil.xpedxBuildKey' />.png" />
+											</div>
+											<div class="label-item">
+													<input type="text" maxlength="27" size="15"
+														id="enteredProductIDs_<s:property value='#itemline.count'/>"
+														name="enteredProductIDs" class="inputfloat input-item"
+														value="<s:property value='%{#XPEDXQuickAddCsvVO.getItemId()}'/>"
+														onfocus="javascript:showQuickAddRow(<s:property value='%{#itemline.count + 1}'/>)" />
+											</div>
+											<div class="label-qty">
+													<input maxlength="7" size="8" type="text"
+														id="enteredQuantities_<s:property value='#itemline.count'/>"
+														name="enteredQuantities" class="inputfloat input-qty" 
+														value="<s:property value='%{#XPEDXQuickAddCsvVO.getQty()}'/>"
+														onKeyUp="return isValidQuantityRemoveAlpha(this,event)" />
+											</div>
+											<s:if
+												test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
+												<div class="label-po">
+													<input maxlength="22" size="15" type="text"
+														name="enteredPONos" class="inputfloat input-po"
+														value="<s:property value='%{#XPEDXQuickAddCsvVO.getItemPONumber()}'/>"
+														id="enteredPONos_<s:property value='#itemline.count'/>" />
+												</div>
+											</s:if>
+											<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
+												<div class="label-account">
+													<input maxlength="24" size="20" type="text"
+														id="enteredJobIDs_<s:property value='#itemline.count'/>"
+														name="enteredJobIDs" class="inputfloat input-account" value="<s:property value='%{#XPEDXQuickAddCsvVO.getItemLineNumber()}'/>" />
+												</div>
+											</s:if>
+											<div class="error producterrorLine" style="display: none;"
+												id="producterrorLine_<s:property value='#itemline.count'/>"></div>
+
+											<%-- These inputs are required for the backend to process, not visible in UI --%>
+											<s:hidden cssClass="input-uom" name="enteredUOMs" value="" />
+											<%-- populated by javascript before submission --%>
+											<s:hidden cssClass="input-itemType" name="enteredItemTypes"
+												value="" />
+											<%-- populated by javascript before submission --%>
+											<s:hidden name="enteredProductDescs" value="" />
+											<%-- always empty --%>
+											<s:hidden name="quickAddOrderMultiple" value="1" />
+											<%-- always 1 (quick add ignores order multiple) --%>
+										</div>
+									</s:div>
+								</s:iterator>
+								</s:if>
+						<s:else>
 							<s:iterator value='#_action.getQuickaddItemLines()'
 								status="itemline">
-
-								
 								<s:div id='%{"qa-listrow_" + #itemline.count}'
 									cssStyle='%{#itemline.count > #_action.getDisplayItemLines() ? "display:none;" : ""}'>
 									<div class="qa-listrow">
@@ -289,7 +365,7 @@
 											<input type="text" maxlength="27" size="15"
 												id="enteredProductIDs_<s:property value='#itemline.count'/>"
 												name="enteredProductIDs" class="inputfloat input-item"
-												onfocus="javascript:showQuickAddRow(<s:property value='%{#itemline.count + 1}'/>)" />
+												onfocus="javascript:showQuickAddRow(<s:property value='%{#itemline.count + 1}'/>)" />											
 										</div>
 										<div class="label-qty">
 											<input maxlength="7" size="8" type="text"
@@ -329,8 +405,8 @@
 									</div>
 								</s:div>
 								<%-- / qa-listrow --%>
-
 							</s:iterator>
+						</s:else>
 							<%-- quickaddItemLines --%>
 							<s:if
 							test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
@@ -422,10 +498,10 @@
 			</div> <%-- / container --%>
 		</div> <%-- main --%>
 	</div> <%-- / main-container --%>
+	<s:include value="../modals/XPEDXQuickAddItemImportModal.jsp" />
 	<div class="loading-wrap"  style="display:none;">
          <div class="load-modal" ></div>
     </div>
-	
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx.swc.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>

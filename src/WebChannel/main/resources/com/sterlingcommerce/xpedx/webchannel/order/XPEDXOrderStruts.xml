@@ -820,6 +820,7 @@
 			<result type="json"></result>
 		</action>
 		
+		
         
         <action name="xpedxEditOrder"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXEditOrderAction">
@@ -936,6 +937,10 @@
             <result name="failure">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
 			</result>
         </action>
-       
+        
+         <action name="QuickAddImportPrepare" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDetailsAction" method="importFile">
+			<result name="success">/xpedx/jsp/order/QuickAdd.jsp</result>
+		</action>
+		
 	</package>
 </struts>

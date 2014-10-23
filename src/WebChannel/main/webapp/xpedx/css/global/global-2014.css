@@ -1777,7 +1777,13 @@ hr.shade {
 .width-117 {
 	width: 117px;
 }
-.instructions-wrap  {
+
+.addmarginright120 {
+	margin-right:120px;
+}
+.addmargintop-5{
+	margin-top:-5px;
+}.instructions-wrap  {
 	clear: none;
 	width: 350px;
 	margin: 0px;
