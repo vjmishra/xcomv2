@@ -9,12 +9,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -48,7 +48,10 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 
 	private static final YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 
-	private long started = new Date().getTime();
+	private static AtomicLong counter = new AtomicLong(1);
+
+	private long started = System.currentTimeMillis();
+	private final String execId = Thread.currentThread().hashCode() + "_" + counter.getAndIncrement();
 
 	@Override
 	public Document getAdditionalCatalogIndexInformation(YFSEnvironment env, Document inDocumentUE) throws YFSUserExitException {
@@ -84,7 +87,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			}
 
 			long stopped = System.currentTimeMillis();
-			System.out.println(started + ": total time = " + (started - stopped));
+			System.out.println(execId + ": total time = " + (stopped - started));
 
 			return outDoc.getDocument();
 
@@ -100,7 +103,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 	private void dumpInputXml(Document inDocumentUE, String label) {
 		String filename = String.format("XPEDXGetAdditionalCatalogIndexInformationUE_%s_%s.xml", started, label);
 		File xmlFile = new File(System.getProperty("java.io.tmpdir"), filename);
-		System.out.println(started + ": Logging inDocumentUE to file: " + xmlFile);
+		System.out.println(execId + ": Logging inDocumentUE to file: " + xmlFile);
 
 		Writer writer = null;
 		try {
@@ -210,7 +213,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 
 			Set<String> entitledItemIDs = pocGetEntitledItemIDs(allItemIDs);
 
-			System.out.println(started + ": " + entitledItemIDs.size() + " / " + allItemIDs.size() + " entitledItemIDs = " + entitledItemIDs);
+			System.out.println(execId + ": " + entitledItemIDs.size() + " / " + allItemIDs.size() + " entitledItemIDs = " + entitledItemIDs);
 
 			// remove the unentitled items from the dom
 			for (Element itemElem : itemElems) {
@@ -250,7 +253,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 				entitledItemIDs.add(res.getString("item_id"));
 			}
 
-			System.out.println(started + ": Entitlement query succeeded: " + entitledItemIDs.size() + " / " + allItemIDs.size() + " are entitled items");
+			System.out.println(execId + ": Entitlement query succeeded: " + entitledItemIDs.size() + " / " + allItemIDs.size() + " are entitled items");
 
 			return entitledItemIDs;
 
