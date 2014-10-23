@@ -19,10 +19,6 @@
 			document.getElementById('entered'+custFieldName+'_'+uid).value= value;
 			
 		}
-		/*if(name.indexOf('specialIns')>-1)
-		{
-			document.getElementById('specialIns'+uid).value= "Extn" + name + "@"+value;
-		}*/
 	}
 	
 	function updateHidden(component,uid,fieldCount,jsonMap)
@@ -52,14 +48,9 @@
 		{
 			var custFieldName = name.substring(name.indexOf('customField')+11, name.length - 1);
 			document.getElementById('customerField_'+fieldCount+"_"+uid).value= "Extn" + custFieldName + "@"+value;
-			document.getElementById('specialIns'+uid).value= "Extn" + name + "@"+value;
 			document.getElementById('entered'+custFieldName+'_'+uid).value= value;
 			
 		}
-		/*if(name.indexOf('specialIns')>-1)
-		{
-			document.getElementById('specialIns'+uid).value= "Extn" + name + "@"+value;
-		}*/
 	}
 	function addItemToCart(itemId,uid) {
 		//added for jira 3974

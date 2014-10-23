@@ -13,14 +13,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
-import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.validators.WCValidationUtils;
 import com.sterlingcommerce.webchannel.order.DraftOrderAddOrderLinesAction;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
@@ -1100,26 +1097,6 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 
 	public void setQuantitydraftError(String quantitydraftError) {
 		this.quantitydraftError = quantitydraftError;
-	}
-
-	private Element prepareAndInvokeMashup() throws XMLExceptionWrapper, CannotBuildInputException{
-	       Element inputElemet =  WCMashupHelper.getMashupInput(MASHUP_DO_ADD_ORDER_LINES, wcContext.getSCUIContext());
-	       System.out.println(com.sterlingcommerce.framework.utils.SCXmlUtils.getString(inputElemet));
-	       ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(inputElemet,"OrderLines/OrderLine");
-	       if(orderLineElemList !=null && orderLineElemList.size() > 0){
-	              for (Element orderLineElem : orderLineElemList) {
-	                     Node  instructionsNode = SCXmlUtil.getChildElement(orderLineElem, "Instructions");
-	                     ArrayList<Element> orderLineInstructionList = SCXmlUtil.getElements(orderLineElem, "Instructions/Instruction");
-	                     if(orderLineInstructionList !=null && orderLineInstructionList.size() >0){
-	                           Element instructionElement =  orderLineInstructionList.get(0);
-	                           if(instructionElement != null && SCUtil.isVoid(instructionElement.getAttribute("InstructionText"))){
-	                                  orderLineElem.removeChild(instructionsNode);
-	                           }
-	                     }
-	              }
-	       }
-	       System.out.println(com.sterlingcommerce.framework.utils.SCXmlUtils.getString(inputElemet));
-	       return (Element)WCMashupHelper.invokeMashup(MASHUP_DO_ADD_ORDER_LINES, inputElemet, wcContext.getSCUIContext());
 	}
 
 
