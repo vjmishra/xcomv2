@@ -5736,7 +5736,7 @@ public class XPEDXWCUtils {
 					if(rulesDoc == null)
 					{
 						rulesDoc = XPEDXOrderUtils.getValidationRulesForCustomer(orderEle, wcContext);
-						wcContext.setWCAttribute("rulesDoc", rulesDoc, WCAttributeScope.LOCAL_SESSION);
+						setObectInCache("rulesDoc", rulesDoc);
 					}
 					if(orderElement == null)
 					{

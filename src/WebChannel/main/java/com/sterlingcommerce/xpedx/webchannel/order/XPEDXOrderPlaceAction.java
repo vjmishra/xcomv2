@@ -257,6 +257,11 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 
 					}
 				}
+				else
+				{
+					setOrderPlaceYFSEnvironmentVariables(getWCContext(),shipToCustomerDoc, null);
+				}
+		
 				//setOrderPlaceYFSEnvironmentVariables(getWCContext(),shipToCustomerDoc);
 				confirmDraftOrderElem = prepareAndInvokeMashup(CONFIRM_DRAFT_ORDER_MASHUP_ID);
 				String cartInContextOrderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
@@ -605,8 +610,28 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	}
 	public void setOrderPlaceYFSEnvironmentVariables(IWCContext wcContext,Document customerListDoc, Element orderHoldTypeElement )
 	{
-			Document rulesDoc = (Document) wcContext.getWCAttribute("rulesDoc");
+			//Document rulesDoc = (Document) wcContext.getWCAttribute("rulesDoc");
+			Document rulesDoc = (Document) XPEDXWCUtils.getObjectFromCache("rulesDoc");
 			HashMap<String, Object> map = new HashMap<String, Object>();
+			Element rulesDocElem=rulesDoc.getDocumentElement();
+			NodeList ruleList=rulesDocElem.getElementsByTagName("Rule");
+			if(ruleList != null)
+			{
+				for(int i=0;i<ruleList.getLength();i++)
+				{
+					Element ruleElem=(Element)ruleList.item(i);
+					if(ruleElem != null)
+					{
+						String ruleId=ruleElem.getAttribute("RuleId");
+						if(ruleId != null && "PlaceOrderOnWBHold".equalsIgnoreCase(ruleId))
+						{
+							map.put("PlaceOrderOnWBHold", "PlaceOrderOnWBHold");
+							System.out.println("**********    Web Hold flag has been set to Y in WEB ********************   for customer id ==== " + wcContext.getCustomerId());
+						}
+							
+					}
+				}
+			}
 			if(orderHoldTypeElement!=null){
 				map.put("ApplyHoldonOrderDoc",orderHoldTypeElement);
 

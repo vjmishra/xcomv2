@@ -1,6 +1,9 @@
 package com.xpedx.nextgen.itembranch.api;
 
 import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 import org.w3c.dom.Document;
@@ -21,6 +24,7 @@ import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
+import java.io.IOException;
 
 public class XPXLoadBranchWiseItemFeedAPI implements YIFCustomApi {
 
@@ -167,6 +171,36 @@ public class XPXLoadBranchWiseItemFeedAPI implements YIFCustomApi {
 		ErrorLogger.log(errorObject, env);
 	}
 
+private void writetoFile(String errorMessage,String itemId, String division) throws YFSException{		
+	
+	
+	StringBuilder sb=new StringBuilder("");
+			
+	
+			
+	//Write to a  file
+	try {						
+			String filename="/xpedx/logfiles/itembrancherrors.csv";
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date nowdate = new Date();
+			String logtime = dateFormat.format(nowdate);
+			
+        	sb.append("${nl} " + logtime + ","+itemId + "," + division + "," +errorMessage);
+        	String content = sb.toString();		
+        	System.out.println("Content of error to be displayed for item branch is : "+content);
+			
+			String [] commands = { "bash", "-c", "echo hello > hello.txt" };			
+			commands[2]="echo "+ content + " >> " + filename;
+			
+    	    Runtime.getRuntime().exec(commands);   
+    	    
+		System.out.println("Done with write in a file");
+
+	}catch (IOException x) {
+		log.error("------------Failed to write a file with failed items ----------");
+		log.error("Exception: " + x.getStackTrace());
+	}
+}
 	private void mergeItemBranchData(YFSEnvironment env,
 			NodeList nlWMItemBranch, Document docItemExtns,
 			Element eleItemExtns, int i) throws YFSException, RemoteException {
@@ -398,6 +432,7 @@ public class XPXLoadBranchWiseItemFeedAPI implements YIFCustomApi {
 					.getAttribute("ItemKey"));
 		} else {
 			// invalid Item
+			writetoFile("Item does not exist in master table",eleWMItemBranch.getAttribute("LegacyProductNumber"),eleWMItemBranch.getAttribute("DivisionNumber"));
 			throw new YFSException("Invalid Legacy Product Number.",
 					"ERROR_LOAD_01", "Invalid Legacy Product Number:["
 							+ eleWMItemBranch

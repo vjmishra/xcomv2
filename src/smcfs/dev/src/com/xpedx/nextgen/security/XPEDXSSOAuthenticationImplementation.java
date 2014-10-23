@@ -45,8 +45,20 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 	//added for jira 3393 - inactivate Ldap authentication
 	private static final String LDAP_AUTH_IS_REQUIRED = "xpedx.ldap.authentication.IsRequired";
 	
-	private static final String USER_TYPE_INTERNAL = "INTERNAL";	
+	//EB -8323 -  Unisource LDAP set up
+	public static final String UNI_LDAP_SERVER_URL = "uni.ldap.server.url";
+	public static final String UNI_LDAP_SCHEMA = "uni.ldap.schema";
+	public static final String UNI_LDAP_AUTH_ATTR_NAME = "uni.ldap.authentication.attribute.name";
+	public static final String UNI_LDAP_AUTH_ATTR_SUFFIX = "uni.ldap.authentication.attribute.suffix";
+	public static final String UNI_LDAP_AUTH_ATTR_DOMAIN = "uni.ldap.authentication.attribute.domain";
+	private static final String UNI_LDAP_AUTH_IS_ACTIVE_DIR = "uni.ldap.authentication.isActiveDirectory";
 	
+
+
+
+
+	private static final String USER_TYPE_INTERNAL = "INTERNAL";
+
 	private static String PLATFORM_AUTH_USERS = "platform_auth_enabled_usernames";
 	
 	private static final Logger LOG = Logger.getLogger(XPEDXSSOAuthenticationImplementation.class);
@@ -67,23 +79,24 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
        		 	changedData.setSessionMap(sessionMap);
     		}
     		return changedData;
-    	}   
+    	}
     };
 	static {
         SCUISessionChangeListener.addListener(sessionChangeAware);
     }
-	
+
 	@Override
 	public String getUserData(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String userId = getUserId(request);
 		String actualUserId = userId;
 		String password = getPassword(request);
-		
+
+
 		String ldapServerURL = YFSSystem.getProperty(LDAP_SERVER_URL);
 		String ldapSchema = YFSSystem.getProperty(LDAP_SCHEMA);
 		String ldapAuthAttrName = YFSSystem.getProperty(LDAP_AUTH_ATTR_NAME);
-		
+
 		String ldapAuthAttrsuffix = YFSSystem.getProperty(LDAP_AUTH_ATTR_SUFFIX);
 		if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
 			userId = userId + ldapAuthAttrsuffix.trim();
@@ -93,7 +106,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String ldapAuthIsActiveDir = YFSSystem.getProperty(LDAP_AUTH_IS_ACTIVE_DIR);
 		String ldapAuthIsRequired = YFSSystem.getProperty(LDAP_AUTH_IS_REQUIRED);
 		String isSWCReq = request.getParameter("isSWCReq");
-		
+
 		//start of jira 3393 condition
 		if(isSWCReq != null && "true".equalsIgnoreCase(isSWCReq)){
 			request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.TRUE);
@@ -110,7 +123,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				}
 			}
 		}
-		
+
 		String ldapDN=null;
 		if (!YFCCommon.isVoid(ldapSchema)){
 			ldapDN=(new StringBuilder()).append(userId).append(",").append(ldapSchema.trim()).toString();
@@ -121,8 +134,8 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		if (!YFCCommon.isVoid(ldapAuthAttrName)){
 			ldapDN=(new StringBuilder()).append(ldapAuthAttrName + "=").append(ldapDN).toString();
 		}
-		
-		
+
+
 		if(LOG.isDebugEnabled()){
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
@@ -135,19 +148,93 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
         env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
 		env.put(Context.PROVIDER_URL, ldapServerURL);
 		env.put(Context.SECURITY_AUTHENTICATION, "simple");
-		env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());	
+		env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());
 		env.put(Context.SECURITY_CREDENTIALS, password.trim());
 
-        DirContext ctx = new InitialDirContext(env);
-        ctx.close();
-		LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
-}
+		try{
+			DirContext ctx = new InitialDirContext(env);
+		}catch(Exception e){
+			//EB-8323 - Unisource LDAP set up validation
+			System.out.println("Error in sales rep "  + userId + "Failed to domain name " + ldapDN );
+			ldapServerURL = YFSSystem.getProperty(UNI_LDAP_SERVER_URL);
+			ldapSchema = YFSSystem.getProperty(UNI_LDAP_SCHEMA);
+			ldapAuthAttrName = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_NAME);
+            
+			userId=null;
+			userId=getUserId(request);
+			System.out.println("User id First time " + userId);
+			ldapAuthAttrsuffix = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_SUFFIX);
+			if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
+				userId = userId + ldapAuthAttrsuffix.trim();
+			}
+			System.out.println("User id is now " + userId);
+			String ldapAuthAttrDomainUni=null;
+			ldapAuthAttrDomainUni = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_DOMAIN);
+			System.out.println("LDAP Auth Attribute Domain is " + ldapAuthAttrDomainUni);
+			ldapAuthIsActiveDir = YFSSystem.getProperty(UNI_LDAP_AUTH_IS_ACTIVE_DIR);
+
+
+
+			if(!YFCCommon.isVoid(ldapAuthIsRequired) && "Y".equalsIgnoreCase(ldapAuthIsRequired.trim())){
+				if (!YFCCommon.isVoid(ldapAuthAttrDomainUni)){
+					if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
+						if (!userId.startsWith(ldapAuthAttrDomainUni)){
+							userId = ldapAuthAttrDomainUni.trim() + "\\" + userId;
+						}
+					}
+					else {
+						if (!userId.endsWith(ldapAuthAttrDomainUni)){
+							userId = userId  + "@" + ldapAuthAttrDomainUni.trim();
+						}
+					}
+				}
+				System.out.println("User id is now -1 " + userId);
+
+				ldapDN=null;
+				if (!YFCCommon.isVoid(ldapSchema)){
+					ldapDN=(new StringBuilder()).append(userId).append(",").append(ldapSchema.trim()).toString();
+				}
+				else {
+					ldapDN=userId;
+				}
+				if (!YFCCommon.isVoid(ldapAuthAttrName)){
+					ldapDN=(new StringBuilder()).append(ldapAuthAttrName + "=").append(ldapDN).toString();
+				}
+
+
+				if(LOG.isDebugEnabled()){
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
+				LOG.debug("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+				}
+		         env = new Hashtable<String, String>();
+		        env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
+				env.put(Context.PROVIDER_URL, ldapServerURL);
+				env.put(Context.SECURITY_AUTHENTICATION, "simple");
+				env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());
+				env.put(Context.SECURITY_CREDENTIALS, password.trim());
+				try{
+					DirContext ctx = new InitialDirContext(env);
+					 ctx.close();
+					LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
+				}catch(Exception e1){
+					LOG.error(e1.getMessage());
+					System.out.println("Error with " + userId + "for domain "  + ldapDN);
+					throw e1;
+				}
+		}
+
+		}
+		}
 		}
 //JIRA 3852 starts
 		else
 		{
-	
-			
+
+
 				if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
 					if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
 						if (!userId.startsWith(ldapAuthAttrDomain)){
@@ -160,7 +247,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 						}
 					}
 				}
-				
+
 				String ldapDN=null;
 				if (!YFCCommon.isVoid(ldapSchema)){
 					ldapDN=(new StringBuilder()).append(userId).append(",").append(ldapSchema.trim()).toString();
@@ -188,9 +275,77 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());
 				env.put(Context.SECURITY_CREDENTIALS, password.trim());
 
-		        DirContext ctx = new InitialDirContext(env);
-		        ctx.close();
-				LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
+				try{
+					DirContext ctx = new InitialDirContext(env);
+				}catch(Exception e){
+					//EB-8323 - Unisource LDAP set up validation
+					System.out.println("Error in sales rep "  + userId + "Failed to domain name " + ldapDN );
+					ldapServerURL = YFSSystem.getProperty(UNI_LDAP_SERVER_URL);
+					ldapSchema = YFSSystem.getProperty(UNI_LDAP_SCHEMA);
+					ldapAuthAttrName = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_NAME);
+
+					ldapAuthAttrsuffix = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_SUFFIX);
+					if (!YFCCommon.isVoid(ldapAuthAttrsuffix) && !userId.endsWith(ldapAuthAttrsuffix)){
+						userId = userId + ldapAuthAttrsuffix.trim();
+					}
+					ldapAuthAttrDomain=null;
+					ldapAuthAttrDomain = YFSSystem.getProperty(UNI_LDAP_AUTH_ATTR_DOMAIN);
+					ldapAuthIsActiveDir = YFSSystem.getProperty(UNI_LDAP_AUTH_IS_ACTIVE_DIR);
+
+
+
+					if(!YFCCommon.isVoid(ldapAuthIsRequired) && "Y".equalsIgnoreCase(ldapAuthIsRequired.trim())){
+						if (!YFCCommon.isVoid(ldapAuthAttrDomain)){
+							if (!YFCCommon.isVoid(ldapAuthIsActiveDir) && "Y".equalsIgnoreCase(ldapAuthIsActiveDir.trim())){
+								if (!userId.startsWith(ldapAuthAttrDomain)){
+									userId = ldapAuthAttrDomain.trim() + "\\" + userId;
+								}
+							}
+							else {
+								if (!userId.endsWith(ldapAuthAttrDomain)){
+									userId = userId  + "@" + ldapAuthAttrDomain.trim();
+								}
+							}
+						}
+
+						ldapDN=null;
+						if (!YFCCommon.isVoid(ldapSchema)){
+							ldapDN=(new StringBuilder()).append(userId).append(",").append(ldapSchema.trim()).toString();
+						}
+						else {
+							ldapDN=userId;
+						}
+						if (!YFCCommon.isVoid(ldapAuthAttrName)){
+							ldapDN=(new StringBuilder()).append(ldapAuthAttrName + "=").append(ldapDN).toString();
+						}
+
+
+						if(LOG.isDebugEnabled()){
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP server URL is " + ldapServerURL);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Schema is " + ldapSchema);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP Attribute is " + ldapAuthAttrName);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP userId is " + userId);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: LDAP password is " + password);
+						LOG.debug("XPEDXSSOAuthenticationImplementation:: DN is " + ldapDN);
+						}
+				         env = new Hashtable<String, String>();
+				        env.put(Context.INITIAL_CONTEXT_FACTORY, LDAP_FACTORY);
+						env.put(Context.PROVIDER_URL, ldapServerURL);
+						env.put(Context.SECURITY_AUTHENTICATION, "simple");
+						env.put(Context.SECURITY_PRINCIPAL, ldapDN.trim());
+						env.put(Context.SECURITY_CREDENTIALS, password.trim());
+						try{
+							DirContext ctx = new InitialDirContext(env);
+					        ctx.close();
+					        LOG.debug("XPEDXSSOAuthenticationImplementation::"+ actualUserId + " Authenticated.");
+						}catch(Exception e1){
+							LOG.error(e1.getMessage());
+							System.out.println("Error with " + userId + "for domain "  + ldapDN);
+							throw e1;
+						}
+				}
+
+
 				if("".equalsIgnoreCase(password) || password==null)
 								{
 									request.setAttribute("IS_LDAP_AUTHENTICATED", Boolean.FALSE);
@@ -211,16 +366,19 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 			request.getSession(false).setAttribute("loggedInUserName",userName);
 			request.getSession(false).setAttribute("loggedInUserId",actualUserId);
 			request.getSession(false).setAttribute("SRSalesRepEmailID",SRemailID);
-			
+
 			request.setAttribute("IS_SALES_REP", "true");
 			request.setAttribute("loggedInUserName", userName);
 			request.setAttribute("loggedInUserId", actualUserId);
 			request.setAttribute("SRSalesRepEmailID", SRemailID);
 		}
-    
+		}
 		return actualUserId;
+
+
 	}
-	
+
+
 	private String getPassword(HttpServletRequest request) {
 		String password = request.getParameter(DEFAULT_PASSWORD_PRAM_NAME);
 		if (!YFCCommon.isVoid(password)){
@@ -247,12 +405,12 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		return userId;
 	}
 
-	
+
 	@Override
 	public boolean isPlatformLoginNeeded(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: ::::::::::::::::::::::::: Authentication isPlatformLoginNeeded check :::::::::::::::::::::::::");
-		
+
 		// Check the YFS_USER table and see if the user is internal or external
 		// If the user is internal return false so that SSO Authentication (this class's getUser(...)) 
 		// method will be called.
@@ -287,30 +445,30 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 	 */
 	private boolean isInternal(HttpServletRequest request, String loggedInUser) {
 		boolean isInternal = false;
-		
+
 		if (userNeedsPlatformAuth(loggedInUser)){
 			return false;
 		}
-		
+
 		// user type
 		String userType = null;
 		//Added to fetch User name for Jira 2367
 		String userName = null;
 		String SRemailID = null;
 		String password = getPassword(request);
-		
+
 		String isSWCReq = request.getParameter("isSWCReq");
 		String saltKey=null;
 		String contextPath = request.getContextPath();
-		
+
 		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
 		String jdbcDriver = Manager.getProperty("jdbcService", "oraclePool.driver");
 		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
 		String jdbcPassword = Manager.getProperty("jdbcService", "oraclePool.password");
 		//Added USERNAME in the query to fetch USERNAME column data for Jira 2367
 		String queryString = "SELECT EXTN_USER_TYPE , USERNAME,EXTN_SALT_KEY FROM yfs_user WHERE DISPLAY_USER_ID = ?";
-				
-		
+
+
         Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -319,13 +477,13 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
             con = DriverManager.getConnection(jdbcURL, jdbcUser, jdbcPassword);
             stmt = con.prepareStatement(queryString);
             stmt.setString(1, loggedInUser);
-            
+
             rs =  stmt.executeQuery();
             while(rs!= null && rs.next()){
             	userType = rs.getString("EXTN_USER_TYPE");
             	saltKey =  rs.getString("EXTN_SALT_KEY");
             	}
-            
+
             userName = (String)request.getSession().getAttribute("loggedInUserName");
 			//SRSalesRepEmailID added for jira 3438
             SRemailID = (String)request.getSession().getAttribute("SRSalesRepEmailID");
@@ -338,7 +496,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
     			request.setAttribute("SRSalesRepEmailID", SRemailID);
                 }
 		}catch( Exception e ) {
-		   LOG.error(" Error while fetching the USERTYPE for User: " + loggedInUser + e.getMessage(), e);    
+		   LOG.error(" Error while fetching the USERTYPE for User: " + loggedInUser + e.getMessage(), e);
 		}
 		finally{
 			try{
@@ -350,12 +508,12 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 						con.close();
 			}
 			catch( Exception e ) {
-			   LOG.error(" Error while fetching the USERTYPE for User: " + loggedInUser + e.getMessage(), e);    
+			   LOG.error(" Error while fetching the USERTYPE for User: " + loggedInUser + e.getMessage(), e);
 			}
 		}
-		
+
 		LOG.debug("XPEDXSSOAuthenticationImplementation:: User " + loggedInUser + " is " +userType);
-		
+
 		  // if the user is internal then it goes through authentication
 		if(isSWCReq != null && "true".equalsIgnoreCase(isSWCReq)){
 		if(userType != null && USER_TYPE_INTERNAL.equalsIgnoreCase(userType.trim())){
@@ -371,15 +529,15 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				request.setAttribute("loggedInUserId", loggedInUser);
 				request.setAttribute("SRSalesRepEmailID", SRemailID);
 				request.setAttribute("SRsaltKey", saltKey);
-				
+
 				LOG.debug("XPEDXSSOAuthenticationImplementation:isInternal: userName " + userName );
 				}
 			isInternal = true;
-		}else 
+		}else
 			isInternal = false;
 		}else{
 			if((userType != null && USER_TYPE_INTERNAL.equalsIgnoreCase(userType.trim())) && ((!"".equalsIgnoreCase(password)) && password!= null)){
-				
+
 				if (request.getSession(false) != null){
 					request.getSession(false).setAttribute("IS_SALES_REP","true");
 					request.getSession(false).setAttribute("loggedInUserName",userName);
@@ -396,18 +554,18 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 					}
 				isInternal = true;
 			}else {
-		
+
 				isInternal = false;
 			}
-			
+
 		}
-		
-		
+
+
 		return isInternal;
 	}
 
 	private boolean userNeedsPlatformAuth(String loggedInUser) {
-		
+
 		String usernames = YFSSystem.getProperty(PLATFORM_AUTH_USERS);
 		if (YFCCommon.isVoid(usernames)){
 			return false;
@@ -420,5 +578,5 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		}
 		return false;
 	}
-	
+
 }
