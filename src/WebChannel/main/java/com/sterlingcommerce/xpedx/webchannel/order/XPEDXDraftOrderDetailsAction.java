@@ -3433,8 +3433,9 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public Map<String, String> getCustomerDescItemMap() {
 		return customerDescItemMap;
 	}
+	
 	/**
-	 * Method to import the .csv file from quick add page.
+	 * Method to import the .csv file on quick add page.
 	 *
 	 * 
 	 * @return
@@ -3448,12 +3449,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		try {
 			reader = new CSVReader(new FileReader(this.file));
 			String[] line;
-			int row = 0;
-			while ((line = reader.readNext()) != null) {				
-				if(row == 0){
-					row++;
-					continue;
-				}				
+			int row = 1;
+			while ((line = reader.readNext()) != null) {
 				XPEDXQuickAddCsvVO quickAddImport = new XPEDXQuickAddCsvVO();
 				quickAddImport.setItemId(line[0]);
 				quickAddImport.setQty(line[1]);
@@ -3465,7 +3462,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			}
 			if(row <= 201){
 				displayItemLines = row;	
-				setImported(true);
 			}else{
 				setImported(false);
 			}
