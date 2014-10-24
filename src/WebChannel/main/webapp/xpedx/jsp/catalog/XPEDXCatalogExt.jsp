@@ -812,7 +812,7 @@ function getNormalView() {
 					'</div>',
 					'<div class="clearfix"></div>',
 					'<div id=\"instructions-content_{itemid}\"	style="display: none;" class="instructions-content addmarginleft10">',
-						'<textarea class="instructions-content-textfield" onkeyup="javascript:restrictTextareaMaxLength(this,250);" id=\"enteredInstructionsText_{itemid}\" name="enteredInstructionsText"></textarea>',
+						'<input class="instructions-content-textfield" onkeyup="javascript:restrictTextareaMaxLength(this,250);" id=\"enteredInstructionsText_{itemid}\" name="enteredInstructionsText"></input>',
 						'<div class="clearfix"></div>',
 						'<p class="text-smaller italic addmarginbottom10">Special Instructions are Saved to Cart</p>',
 					'</div>',
