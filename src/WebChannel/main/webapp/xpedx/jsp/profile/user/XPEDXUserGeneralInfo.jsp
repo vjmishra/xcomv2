@@ -110,8 +110,8 @@
 <!-- ENDS - Customer-User Profile Changes - adsouza -->
 
 <s:set name='viewInvoices' value='%{getViewInvoices()}'/>
-<s:set name='punchoutUser' value='%{getPunchoutUsers()}'/>
-<s:set name='stockCheckWebservice' value='%{getStockCheckWebservice()}'/>
+<%-- <s:set name='punchoutUser' value='%{getPunchoutUsers()}'/> --%>
+<%-- <s:set name='stockCheckWebservice' value='%{getStockCheckWebservice()}'/> --%>
 <s:set name='estimator' value='%{getEstimator()}'/>
 
 <s:set name='customer' value='customerelement' />
@@ -513,6 +513,7 @@
 						</td>
 					</tr>
 				</s:else>
+<%-- 				The punchout role (and Extn Punchout MIL Edit flag) or not currently visible in WC
 				<s:if test='%{#punchoutUser=="T"}'>
 					<tr>
 						<td><s:checkbox tabindex="88" name='punchoutUsers'
@@ -529,7 +530,7 @@
 							name="Punchout Users" /></td>
 					</tr>
 				</s:else>
-
+ --%>
 				<tr>
 					<td class="themeSubHeader" colspan="4"><s:text
 						name="RB_statuses" /></td>

@@ -91,7 +91,7 @@
 	<entry key="viewInvoices">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnViewInvoices</entry>
 	<entry key="estimator">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnEstimator</entry>
 	<entry key="stockCheckWebservice">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnStockCheckWS</entry>
-	<entry key="punchoutUsers">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnPunchOutUser</entry>
+	<entry key="punchOutMilEdit">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnPunchOutMilEdit</entry>
 	<entry key="defaultShipTo">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnDefaultShipTo</entry>
 	<entry key="#parameters.networkID">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnUserNetworkID</entry>
 	<entry key="#parameters.employeeID">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnEmployeeID</entry>

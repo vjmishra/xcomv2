@@ -1433,7 +1433,6 @@ a.underlink:hover {
 	<!-- ENDS - Customer-User Profile Changes - adsouza -->
 
 	<s:set name='viewInvoices' value='#_action.getViewInvoices()' />
-	<s:set name='punchoutUser' value='#_action.getPunchoutUsers()' />
 	<s:set name='stockCheckWebservice'
 		value='#_action.getStockCheckWebservice()' />
 	<s:set name='OrderApprovalFlag'
@@ -1642,12 +1641,6 @@ a.underlink:hover {
 						<s:hidden name="preferredLocale"
 							id="saveNewUserInfo_preferredLocale" value="%{'en_US_EST'}" />
  						<s:hidden name='saveAddUser' id="saveAddUser" value="%{#_action.isSaveAddUser()}" />
-						<s:if test='#punchoutUser == "Y"'>
-							<s:hidden name='punchoutUsers' value='%{true}' />
-						</s:if>
-						<s:else>
-							<s:hidden name='punchoutUsers' value='%{false}' />
-						</s:else>
 						<s:if test='#stockCheckWebservice == "Y"'>
 							<s:hidden name='stockCheckWebservice' value='%{true}' />
 						</s:if>

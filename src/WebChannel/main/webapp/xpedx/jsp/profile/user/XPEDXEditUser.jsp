@@ -280,7 +280,6 @@
 <!-- ENDS - Customer-User Profile Changes - adsouza -->
 
 <s:set name='viewInvoices' value='%{getViewInvoices()}'/>
-<s:set name='punchoutUser' value='%{getPunchoutUsers()}'/>
 <s:set name='stockCheckWebservice' value='%{getStockCheckWebservice()}'/>
 <s:set name='estimator' value='%{getEstimator()}'/>
 <s:set name='customer' value='customerelement' />

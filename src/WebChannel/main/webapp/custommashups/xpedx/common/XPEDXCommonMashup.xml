@@ -213,7 +213,7 @@
 										EMailID="" />
 								</CustomerAdditionalAddress>
 							</CustomerAdditionalAddressList>
-							<Extn ExtnEstimator="" ExtnPunchOutUser="" ExtnAddnlEmailAddrs=""
+							<Extn ExtnEstimator="" ExtnPunchOutMilEdit="" ExtnAddnlEmailAddrs=""
 								ExtnStockCheckWS="" ExtnViewInvoices="" ExtnB2BCatalogView="" ExtnAcceptTAndCFlag=""/>
 						</CustomerContact>
 					</CustomerContactList>

@@ -335,12 +335,12 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		this.stockCheckWebservice = stockCheckWebservice;
 	}
 
-	public String getPunchoutUsers() {
-		return punchoutUsers;
+	public String getPunchoutMilEdit() {
+		return punchoutMilEdit;
 	}
 
-	public void setPunchoutUsers(String punchoutUsers) {
-		this.punchoutUsers = punchoutUsers;
+	public void setPunchoutMilEdit(String punchoutMilEdit) {
+		this.punchoutMilEdit = punchoutMilEdit;
 	}
 
 	/* STARTS - Customer-User Profile Changes - adsouza */
@@ -366,7 +366,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	}
 
 	private String stockCheckWebservice = "F";
-	private String punchoutUsers = "Y";
+	private String punchoutMilEdit = "Y";
 	private String viewInvoices = "N";
 
 	/* STARTS - Customer-User Profile Changes - adsouza */
@@ -1296,7 +1296,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			}
 		}
 		setViewInvoices(viewInvoices.equals("true") ? "Y" : "N");
-		setPunchoutUsers(punchoutUsers.equals("true") ? "Y" : "N");
+		setPunchoutMilEdit(punchoutMilEdit.equals("true") ? "Y" : "N");
 		setStockCheckWebservice(stockCheckWebservice.equals("true") ? "T" : "F");
 		setEstimator(estimator.equals("true") ? "Y" : "N");
 		setViewPrices("true".equals(viewPrices) ? "Y" : "N");

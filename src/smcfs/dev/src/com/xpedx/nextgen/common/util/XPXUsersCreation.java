@@ -36,46 +36,46 @@ public class XPXUsersCreation implements YIFCustomApi {
 	private static YIFApi api = null;
 	private String emailAddress = null;
 	private StringBuilder emailAddressUpdateSql= null;
-	
+
 	static {
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
-		try 
+		try
 		{
 			api = YIFClientFactory.getInstance().getApi();
-			
+
 		}
 		catch (YIFClientCreationException e1) {
 			log.error("API initialization error");
 			e1.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
 
 
 	}
-	
+
 	public Document createUsers(YFSEnvironment env,Document inputXML) throws Exception
 	{
-		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");	
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		log.info("XPXUsersCreation-InXML: "+ SCXmlUtil.getString(inputXML));
 		if(inputXML != null)
 		{
 			Node node = inputXML.getElementsByTagName("EmailAddress").item(0);
-			
+
 			 if(!SCUIUtils.isVoid(node) && !SCUIUtils.isVoid(node.getTextContent())){
 				 emailAddress = node.getTextContent();
 				 File excelFile = getUsersListExcelFile();
 				 return createXMLFromExcel(excelFile);
 			 }else{
-				 throw new Exception("input xml is not valid: valid input for ex:<EmailAddress>xpedx@gmail.com</EmailAddress>");	
+				 throw new Exception("input xml is not valid: valid input for ex:<EmailAddress>xpedx@gmail.com</EmailAddress>");
 			 }
 		}
 		else{
-			throw new Exception("input xml is null: valid input for ex:<EmailAddress>xpedx@gmail.com</EmailAddress>");			
+			throw new Exception("input xml is null: valid input for ex:<EmailAddress>xpedx@gmail.com</EmailAddress>");
 		}
-		
+
 	}
 	private Document createXMLFromExcel(File excelFile) throws Exception {
 		Workbook workbook = null;
@@ -85,23 +85,23 @@ public class XPXUsersCreation implements YIFCustomApi {
 
 				InputStream in = new FileInputStream(excelFile);
 				workbook = WorkbookFactory.create(in);
-				userListSheet = (XSSFSheet) workbook.getSheet("usersetup");	
+				userListSheet = (XSSFSheet) workbook.getSheet("usersetup");
 				emailAddressUpdateSql = new StringBuilder("UPDATE YFS_CUSTOMER_CONTACT SET EMAILID=");
-				
+
 				emailAddressUpdateSql.append("'");
 				emailAddressUpdateSql.append(emailAddress);
 				emailAddressUpdateSql.append("'");// )
 				emailAddressUpdateSql.append(" WHERE CUSTOMER_CONTACT_ID in \n( \n");
-				
-				orderConfirmationEmailSheet = (XSSFSheet) workbook.getSheet("OrderConfirmationEmailList");				
-				String orderConfirmationEmailList = this.getOrderConfirmationEmails(orderConfirmationEmailSheet);				
+
+				orderConfirmationEmailSheet = (XSSFSheet) workbook.getSheet("OrderConfirmationEmailList");
+				String orderConfirmationEmailList = this.getOrderConfirmationEmails(orderConfirmationEmailSheet);
                 int noOfRows = ((org.apache.poi.ss.usermodel.Sheet) userListSheet).getPhysicalNumberOfRows();
-                System.out.println("Number of excel rows are "+noOfRows);              
+                System.out.println("Number of excel rows are "+noOfRows);
             	Document customerListInputDoc = YFCDocument.createDocument("CustomerList").getDocument();
     			Element customerListInputDocElement = customerListInputDoc.getDocumentElement();
-    			
+
                 for (int rownum = 1; rownum < noOfRows; rownum++) {
-                	
+
                     Row row = ((org.apache.poi.ss.usermodel.Sheet) userListSheet).getRow(rownum);
                     String organizationCode = row.getCell(0)!=null?row.getCell(0).getStringCellValue():"";
                     String customerName = row.getCell(1)!=null?row.getCell(1).getStringCellValue():"";
@@ -109,7 +109,7 @@ public class XPXUsersCreation implements YIFCustomApi {
                     String defaultShipTo = row.getCell(3)!=null?row.getCell(3).getStringCellValue():"";
                     String firstName = row.getCell(4)!=null?row.getCell(4).getStringCellValue():"";
                     String lastName = row.getCell(5)!=null?row.getCell(5).getStringCellValue():"";
-                    String emailAddress = "xpedx@gmail.com"; //row.getCell(6)!=null?row.getCell(6).getStringCellValue():"";              
+                    String emailAddress = "xpedx@gmail.com"; //row.getCell(6)!=null?row.getCell(6).getStringCellValue():"";
                     String currency = row.getCell(7)!=null?row.getCell(7).getStringCellValue():"USD";
                     String loginId = row.getCell(8)!=null?row.getCell(8).getStringCellValue().trim().toLowerCase():"";
                     if(rownum!=1){
@@ -137,10 +137,10 @@ public class XPXUsersCreation implements YIFCustomApi {
                     String receiveOrderCancelationEmail = row.getCell(25)!=null?row.getCell(25).getStringCellValue():"";
                     String receiveOrderShipmentEmail = row.getCell(26)!=null?row.getCell(26).getStringCellValue():"";
                     String receiveBackOrderEmail = row.getCell(27)!=null?row.getCell(27).getStringCellValue():"";
-                    String pos = row.getCell(28)!=null?row.getCell(28).getStringCellValue():"";                 
-                           
-                
-                  
+                    String pos = row.getCell(28)!=null?row.getCell(28).getStringCellValue():"";
+
+
+
                     Element customer = SCXmlUtil.createChild(customerListInputDocElement,"Customer");
                     customer.setAttribute("CustomerID", customerID);
                     customer.setAttribute("OrganizationCode", organizationCode);
@@ -156,15 +156,15 @@ public class XPXUsersCreation implements YIFCustomApi {
                     customerContact.setAttribute("Status", "10");
                     customerContact.setAttribute("SpendingLimit", spendingLimit);
                     customerContact.setAttribute("SpendingLimitCurrency", currency);
-                    
+
                     if(!SCUIUtils.isVoid(submitAllOrdersForApproval) && submitAllOrdersForApproval.equalsIgnoreCase("Y")){
                     		customerContact.setAttribute("SpendingLimit", "");
                 	}
                     customerContact.setAttribute("ApproverUserId", primaryArrover);
                     customerContact.setAttribute("ApproverProxyUserId", alternateApprover);
-                    
+
                     Element user = SCXmlUtil.createChild(customerContact,"User");
-                    
+
                     user.setAttribute("Activateflag", "Y");
                     user.setAttribute("EnterpriseCode", organizationCode);
                     user.setAttribute("DisplayUserID", loginId);
@@ -172,42 +172,43 @@ public class XPXUsersCreation implements YIFCustomApi {
                     user.setAttribute("Loginid", loginId);
                     user.setAttribute("GeneratePassword", "N");
                     user.setAttribute("Localecode", "en_US_EST");
-                    
+
                     Element contactPersonInfo = SCXmlUtil.createChild(user,"ContactPersonInfo");
-                    
+
                     contactPersonInfo.setAttribute("FirstName", firstName);
                     contactPersonInfo.setAttribute("LastName", lastName);
                     contactPersonInfo.setAttribute("EMailID", emailAddress);
-                 
-                    
+
+
                     Element userGroupLists = SCXmlUtil.createChild(user,"UserGroupLists");
                     userGroupLists.setAttribute("Reset", "N");
-                    
+
                     if(!SCUIUtils.isVoid(isAdmin) && isAdmin.equalsIgnoreCase("Y")){
 	                    Element userGroupList = SCXmlUtil.createChild(userGroupLists,"UserGroupList");
-	                    userGroupList.setAttribute("UsergroupId", "BUYER-ADMIN");	                   
+	                    userGroupList.setAttribute("UsergroupId", "BUYER-ADMIN");
                     }
-                    
+
                     if(!SCUIUtils.isVoid(isBuyer) && isBuyer.equalsIgnoreCase("Y")){
                     	Element userGroupList1 = SCXmlUtil.createChild(userGroupLists,"UserGroupList");
                         userGroupList1.setAttribute("UsergroupId", "BUYER-USER");
                     }
-                    
+
+                    // Punchout is a role (not a flag on YFS_USER)
                     if(!SCUIUtils.isVoid(isProcurementUser) && isProcurementUser.equalsIgnoreCase("Y")){
                     	Element userGroupList2 = SCXmlUtil.createChild(userGroupLists,"UserGroupList");
                         userGroupList2.setAttribute("UsergroupId", "PROCUREMENT-USER");
                     }
-                    
+
                     if(!SCUIUtils.isVoid(isApprover) && isApprover.equalsIgnoreCase("Y")){
                     	Element userGroupList3 = SCXmlUtil.createChild(userGroupLists,"UserGroupList");
                         userGroupList3.setAttribute("UsergroupId", "BUYER-APPROVER");
                     }
-                    
+
                     Element extn = SCXmlUtil.createChild(customerContact,"Extn");
                     extn.setAttribute("ExtnEstimator", isEstimator);
                     extn.setAttribute("ExtnStockCheckWS", isStockCheck);
                     extn.setAttribute("ExtnViewInvoices", isViewInvoices);
-                    extn.setAttribute("ExtnPunchOutUser", isProcurementUser);                   
+                    //extn.setAttribute("ExtnPunchOutUser", isProcurementUser);
                     extn.setAttribute("ExtnMaxOrderAmount", maxOrderAmount);
                     extn.setAttribute("ExtnMinOrderAmount", minOrderAmount);
                     extn.setAttribute("ExtnDefaultShipTo", defaultShipTo);
@@ -232,7 +233,7 @@ public class XPXUsersCreation implements YIFCustomApi {
                     if(!SCUIUtils.isVoid(orderConfirmationEmailList)){
                     	extn.setAttribute("ExtnAddnlEmailAddrs", orderConfirmationEmailList);
                     }
-                    
+
                     Element customerAssignmentList = SCXmlUtil.createChild(customerContact,"CustomerAssignmentList");
                     Element customerAssignment = SCXmlUtil.createChild(customerAssignmentList,"CustomerAssignment");
                     customerAssignment.setAttribute("CustomerID", customerID);
@@ -240,21 +241,21 @@ public class XPXUsersCreation implements YIFCustomApi {
                     customerAssignment.setAttribute("UserId", loginId);
                     customerAssignment.setAttribute("Operation", "Create");
                 }
-                	emailAddressUpdateSql.append("\n ); \n commit;");                	
+                	emailAddressUpdateSql.append("\n ); \n commit;");
 					javax.xml.transform.TransformerFactory transFact = javax.xml.transform.TransformerFactory.newInstance();
 					Transformer transformer = transFact.newTransformer();
 					DOMSource source = new DOMSource(customerListInputDoc);
-					File xmlFile=getUsersListXMLFile();			
+					File xmlFile=getUsersListXMLFile();
 					transformer.transform(source, new StreamResult(xmlFile));
-		            
+
              in.close();
              createUpdateEmailAddressSqlFile();
              return customerListInputDoc;
 			}
 		return null;
-		
-		
-		
+
+
+
   }
   private File getUsersListXMLFile(){
 			String xmlFilePath = YFSSystem.getProperty("xpedx.datamigration.user_prof.input");
@@ -264,13 +265,13 @@ public class XPXUsersCreation implements YIFCustomApi {
 			}
 			String fileName = xmlFilePath+"/UserProfileCreateExternalUsers.xml";
 			log.info("usersListXML.file "+fileName);
-		  return new File(fileName);	      
+		  return new File(fileName);
 
   }
-  
+
   private File getUsersListExcelFile(){
 
-			String name = YFSSystem.getProperty("usersListExcel.file"); 
+			String name = YFSSystem.getProperty("usersListExcel.file");
 			log.info("usersListExcel.file "+name);
 			if(name==null || name.isEmpty() || !new File(name).exists()){
 				name ="/xpedx/testuserloads/in/usersListExcel.xls";
@@ -280,24 +281,24 @@ public class XPXUsersCreation implements YIFCustomApi {
 			}
 			log.info("usersListExcel.file "+name);
 		  return new File(name);
-	    
+
   }
-  
+
  private String getOrderConfirmationEmails(XSSFSheet orderConfirmationEmailSheet){
 	 StringBuilder orderConfirmationEmails = new StringBuilder();
-		 if(orderConfirmationEmailSheet!=null){				  
-				 int noOfRows = ((org.apache.poi.ss.usermodel.Sheet) orderConfirmationEmailSheet).getPhysicalNumberOfRows(); 
+		 if(orderConfirmationEmailSheet!=null){
+				 int noOfRows = ((org.apache.poi.ss.usermodel.Sheet) orderConfirmationEmailSheet).getPhysicalNumberOfRows();
 				 for (int rownum = 0; rownum < noOfRows; rownum++) {
 		             Row row = ((org.apache.poi.ss.usermodel.Sheet) orderConfirmationEmailSheet).getRow(rownum);
 		             if(row.getCell(0)!=null){
 		            	 orderConfirmationEmails.append(row.getCell(0).getStringCellValue()+",");
 		             }
-			 }			
+			 }
 		 }
 	 return orderConfirmationEmails.toString();
- 	} 
+ 	}
  private void createUpdateEmailAddressSqlFile() throws Exception {
-	 String updateEmailAddressSqlFilePath = YFSSystem.getProperty("email_address_update_sql.file"); 
+	 String updateEmailAddressSqlFilePath = YFSSystem.getProperty("email_address_update_sql.file");
 		log.info("email_address_update_sql.file "+updateEmailAddressSqlFilePath);
 		if(updateEmailAddressSqlFilePath==null || updateEmailAddressSqlFilePath.isEmpty()){
 			updateEmailAddressSqlFilePath ="/xpedx/testuserloads/out";

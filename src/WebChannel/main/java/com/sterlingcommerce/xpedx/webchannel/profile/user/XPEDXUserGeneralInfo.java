@@ -717,7 +717,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			stockCheckWebservice = extnElem.getAttribute("ExtnStockCheckWS");
 			viewInvoices = extnElem.getAttribute("ExtnViewInvoices");
 			estimator = extnElem.getAttribute("ExtnEstimator");
-			punchoutUsers = extnElem.getAttribute("ExtnPunchOutUser");
+			punchoutMilEdit = extnElem.getAttribute("ExtnPunchOutMilEdit");
 			prefCategory = extnElem.getAttribute("ExtnPrefCatalog");
 			String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
 
@@ -2140,12 +2140,12 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		this.stockCheckWebservice = stockCheckWebservice;
 	}
 
-	public String getPunchoutUsers() {
-		return punchoutUsers;
+	public String getpunchOutMilEdit() {
+		return punchoutMilEdit;
 	}
 
-	public void setPunchoutUsers(String punchoutUsers) {
-		this.punchoutUsers = punchoutUsers;
+	public void setpunchOutMilEdit(String punchOutMilEdit) {
+		this.punchoutMilEdit = punchOutMilEdit;
 	}
 
 	/* STARTS - Customer-User Profile Changes - adsouza */
@@ -2350,7 +2350,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	/* ENDS - Customer-User Profile Changes - adsouza */
 	private String estimator = "N";
 	private String stockCheckWebservice = "F";
-	private String punchoutUsers = "Y"; // indicates if punchout user has MIL write
+	private String punchoutMilEdit = "Y"; // indicates if punchout user has MIL write
 	private String viewInvoices = "N";
 	private Map b2bCatalogViewMap;
 	protected boolean orderFlagForApproval = false;// xb-226

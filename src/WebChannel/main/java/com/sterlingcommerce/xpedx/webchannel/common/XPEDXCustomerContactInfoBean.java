@@ -31,8 +31,8 @@ public class XPEDXCustomerContactInfoBean {
     private String spendingLimit;
     private String orderApproveFlag ; //added for XB 226
     private String extnIsSalesRep;
-    private String extnPunchOutUser; //using for whether Po user allowed MIL edit
-    private Boolean hasPunchoutRole;  //a role indicates whether po user (not CustCont flag
+    private String extnPunchOutMilEdit;
+    private Boolean hasPunchoutRole;  //a *role* indicates whether po user (not CustCont table flag)
     private String extnStockCheckWS;
 	//JIRA 3488 Start
 	 private String extnmaxOrderAmount;
@@ -70,7 +70,7 @@ public class XPEDXCustomerContactInfoBean {
 			String extnViewReportsFlag, String extnViewPricesFlag,
 			ArrayList<String> usergroupKeyList, String extnDefaultShipTo,
 			String extnPrefCatalog, String isApprover, Boolean usergroupKeyListActive, String extnMyItemsLink, Integer numberOfAssignedShioTos, String extnB2BCatalogView
-			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID,String maxOrderAmt,String spendingLimit,String orderApproveFlag, String extnPunchOutUser, Boolean hasPunchoutRole, String extnStockCheckWS) {//added maxOrderAmt for JIRA 3488 orderApproveFalg for Jira226
+			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID,String maxOrderAmt,String spendingLimit,String orderApproveFlag, String extnPunchOutMilEdit, Boolean hasPunchoutRole, String extnStockCheckWS) {//added maxOrderAmt for JIRA 3488 orderApproveFalg for Jira226
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -96,7 +96,7 @@ public class XPEDXCustomerContactInfoBean {
 		this.extnmaxOrderAmount=maxOrderAmt;//JIRA 3488
 		this.spendingLimit=spendingLimit;
 		this.orderApproveFlag = orderApproveFlag;//XB 226
-		this.extnPunchOutUser=extnPunchOutUser;
+		this.extnPunchOutMilEdit=extnPunchOutMilEdit;
 		this.hasPunchoutRole=hasPunchoutRole;
 		this.extnStockCheckWS=extnStockCheckWS;
 	}
@@ -296,11 +296,11 @@ public class XPEDXCustomerContactInfoBean {
 		this.orderApproveFlag = orderApproveFlag;
 	}
 
-	public String getExtnPunchOutUser() {
-		return extnPunchOutUser;
+	public String getExtnPunchOutMilEdit() {
+		return extnPunchOutMilEdit;
 	}
-	public void setExtnPunchOutUser(String extnPunchOutUser) {
-		this.extnPunchOutUser = extnPunchOutUser;
+	public void setExtnPunchOutMilEdit(String extnPunchOutMilEdit) {
+		this.extnPunchOutMilEdit = extnPunchOutMilEdit;
 	}
 	public boolean hasPunchoutRole() {
 		return hasPunchoutRole;

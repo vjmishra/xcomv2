@@ -13,7 +13,7 @@
         ExtnMaxOrderAmount=" " ExtnMinChargeAmount=" "
         ExtnMinOrderAmount=" " ExtnOrderEmailFormat=" " ExtnPOList=" "
         ExtnPaper101Grade=" " ExtnPrefCatalog=" " ExtnProcessedFlag=" "
-        ExtnPunchOutUser=" " ExtnStockCheckWS=" " ExtnUserNetworkID=" "
+        ExtnPunchOutMilEdit=" " ExtnStockCheckWS=" " ExtnUserNetworkID=" "
         ExtnUserType=" " ExtnViewInvoices=" " ExtnOrderShipEmailFlag=" " ExtnOrderCancelEmailFlag=" " ExtnBackOrderEmailFlag=" "/>
 	<User>
 		<UserGroupLists>
