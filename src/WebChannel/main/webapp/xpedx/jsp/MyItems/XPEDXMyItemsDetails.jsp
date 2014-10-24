@@ -3575,7 +3575,6 @@ function showSharedListForm(){
 			 var arrQty = new Array();
 			 arrQty = document.getElementsByName("qtys");
 				for(var i = 0; i < arrQty.length; i++){
-					//alert("arrQty[i].value= "+ arrQty[i].value);
 					 var uid = arrQty[i].id;
 					 uid = uid.substring(5);
 					if(document.getElementById('qtys_' + uid).value != ""){
@@ -3591,13 +3590,11 @@ function showSharedListForm(){
 			var arrQty = new Array();
 			 arrQty = document.getElementsByName("qtys");
 				for(var i = 0; i < arrQty.length; i++){
-					//alert("arrQty[i].value= "+ arrQty[i].value);
 					 var uid = arrQty[i].id;
 					 uid = uid.substring(5);
 					var id = parseInt(uid);
 			if(document.getElementById('qtys_' + uid).value != "" && pid == id){
 				$("#instructions-content_" + uid).slideToggle("slow");
-				$("#instructions-content_" + uid).focus();
 			}
 		} 
 		}
