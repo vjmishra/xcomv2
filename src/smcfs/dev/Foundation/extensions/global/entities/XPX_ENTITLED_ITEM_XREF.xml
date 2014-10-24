@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="List of item ids with one or more entitlements. Any item id NOT in this table has no entitlements." HasHistory="false" Prefix="XPX" TableName="XPX_ENTITLED_ITEM_XREF" Name="XPXEntitledItemXref">
+			<Attributes>
+				<Attribute ColumnName="ITEM_ID" DataType="ItemID" DefaultValue="' '" Description="Refers to the item_id of the YFS_ITEM table." Name="Item_ID" Nullable="false" XMLName="ItemID"/>
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Created TimeStamp" Nullable="false" XMLName="CreateTs" />
+			</Attributes>
+			
+			<PrimaryKey Name="XPX_ENTITLED_ITEM_PK">
+				<Attribute ColumnName="ITEM_ID" Name="Item_ID" />
+			</PrimaryKey>
+		</Entity>
+	</Entities>
+</DBSchema>

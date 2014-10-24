@@ -618,5 +618,31 @@ ON B.ADDRESS_CUSTOMER_KEY=A.CUSTOMER_KEY )
  ;
  
 
+create or replace force view xpx_entitled_item_view (item_id) as 
+select item_id
+from yfs_item
+where exists (select *
+              from YFS_ENTITLEMENT_RULE_DTL 
+              inner join YFS_ENTITLE_RULE_DTL_ITEM on YFS_ENTITLE_RULE_DTL_ITEM.Entitlement_RULE_DTL_KEY = YFS_ENTITLEMENT_RULE_DTL.Entitlement_RULE_DTL_KEY
+              inner join (
+                          --These are the entitlements that are directly assigned to a customer (CDI and custom catalogs)
+                          select distinct YFS_ENTITLEMENT_RULE_HDR.ENTITLEMENT_RULE_HDR_KEY
+                          from YFS_ENTITLEMENT_RULE_HDR 
+                          inner join YFS_ENTITLE_RULE_ASSIGNMENT on YFS_ENTITLE_RULE_ASSIGNMENT.ENTITLEMENT_RULE_HDR_KEY = YFS_ENTITLEMENT_RULE_HDR.ENTITLEMENT_RULE_HDR_KEY
+                          where exists (select * from YFS_CUSTOMER where YFS_CUSTOMER.CUSTOMER_ID = YFS_ENTITLE_RULE_ASSIGNMENT.CUSTOMER_ID)
+                          UNION
+                          --These are the entitlements that are assigned by rule (Division entitlements)
+                          select distinct YFS_ENTITLEMENT_RULE_HDR.ENTITLEMENT_RULE_HDR_KEY
+                          from YFS_ENTITLEMENT_RULE_HDR 
+                          inner join YFS_ENTITLE_RULE_ASSIGNMENT on YFS_ENTITLE_RULE_ASSIGNMENT.ENTITLEMENT_RULE_HDR_KEY = YFS_ENTITLEMENT_RULE_HDR.ENTITLEMENT_RULE_HDR_KEY
+                          inner join YFS_CUSTOMER  on YFS_CUSTOMER.Vertical = YFS_ENTITLE_RULE_ASSIGNMENT.Vertical 
+                                                  and YFS_CUSTOMER.RELATIONSHIP_TYPE = YFS_ENTITLE_RULE_ASSIGNMENT.RELATIONSHIP_TYPE
+                                                  and YFS_CUSTOMER.CUSTOMER_LEVEL = YFS_ENTITLE_RULE_ASSIGNMENT.Customer_LEVEL
+                          where ENTITLEMENT_RULE_HDR_ID like 'DIVISION%' and YFS_ENTITLE_RULE_ASSIGNMENT.Customer_ID is null
+                          ) ActiveEntitlements on ActiveEntitlements.ENTITLEMENT_RULE_HDR_KEY = YFS_ENTITLEMENT_RULE_DTL.ENTITLEMENT_RULE_HDR_KEY
+              where YFS_ENTITLE_RULE_DTL_ITEM.ITEM_ID = yfs_item.item_id)
+;
 
+ 
+ 
 COMMIT;

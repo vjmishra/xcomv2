@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -42,7 +40,7 @@ import com.yantra.yfs.japi.YFSException;
 import com.yantra.yfs.japi.YFSUserExitException;
 
 /**
- * Adds normally stocked item and customer part number to the Sterling/Lucene item index.
+ * Adds normally stocked item, customer part number, and contract item data to the Sterling/Lucene item index.
  */
 public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditionalCatalogIndexInformationUE {
 
@@ -50,11 +48,12 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 
 	private static AtomicLong counter = new AtomicLong(1);
 
-	private long started = System.currentTimeMillis();
 	private final String execId = Thread.currentThread().hashCode() + "_" + counter.getAndIncrement();
 
 	@Override
 	public Document getAdditionalCatalogIndexInformation(YFSEnvironment env, Document inDocumentUE) throws YFSUserExitException {
+		long started = System.currentTimeMillis();
+
 		String inStockStatus = YFSSystem.getProperty("inventory_indicator_for_in_stock_status");
 		if (inStockStatus == null || inStockStatus.trim().length() == 0) {
 			inStockStatus = "W";
@@ -64,9 +63,9 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			log.debug("inStockStatus = " + inStockStatus);
 		}
 
-		dumpInputXml(inDocumentUE, "input");
+//		dumpInputXml(inDocumentUE, "input"); // only uncomment when debugging due to small disk capacity on servers
 		removeUnentitledItems(inDocumentUE);
-		dumpInputXml(inDocumentUE, "filtered");
+//		dumpInputXml(inDocumentUE, "filtered"); // only uncomment when debugging due to small disk capacity on servers
 
 		try {
 			YFCDocument inDoc = YFCDocument.getDocumentFor(inDocumentUE);
@@ -79,7 +78,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 
 			List<String> allItemIDs = getItemIds(inElem.getChildElement("ItemList").getChildren("Item"));
 
-			Map<String, ItemMetadata> metadataForItems = new ItemIndexUtil().getMetadataForItems(env, allItemIDs, inStockStatus);
+			Map<String, ItemMetadata> metadataForItems = new ItemIndexUtil(execId).getMetadataForItems(env, allItemIDs, inStockStatus);
 
 			YFCDocument outDoc = YFCDocument.createDocument("ItemList");
 			if ("en_US".equals(inElem.getAttribute("LocaleCode"))) {
@@ -87,7 +86,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			}
 
 			long stopped = System.currentTimeMillis();
-			System.out.println(execId + ": total time = " + (stopped - started));
+			System.out.println(String.format("%s: getAdditionalCatalogIndexInformation elapsed time: %s", execId, (stopped - started)));
 
 			return outDoc.getDocument();
 
@@ -99,11 +98,12 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 
 	/**
 	 * Writes the input xml to a file in the temp directory. This method is guaranteed to not throw exceptions.
+	 * This results in ~300mb of xml written, so use with caution.
 	 */
 	private void dumpInputXml(Document inDocumentUE, String label) {
-		String filename = String.format("XPEDXGetAdditionalCatalogIndexInformationUE_%s_%s.xml", started, label);
+		String filename = String.format("XPEDXGetAdditionalCatalogIndexInformationUE_%s_%s.xml", execId, label);
 		File xmlFile = new File(System.getProperty("java.io.tmpdir"), filename);
-		System.out.println(execId + ": Logging inDocumentUE to file: " + xmlFile);
+		System.out.println(String.format("%s: Logging inDocumentUE to file: %s", execId, xmlFile));
 
 		Writer writer = null;
 		try {
@@ -211,9 +211,9 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 				allItemIDs.add(itemID);
 			}
 
-			Set<String> entitledItemIDs = pocGetEntitledItemIDs(allItemIDs);
+			Set<String> entitledItemIDs = getEntitledItemIDs(allItemIDs);
 
-			System.out.println(execId + ": " + entitledItemIDs.size() + " / " + allItemIDs.size() + " entitledItemIDs = " + entitledItemIDs);
+			System.out.println(String.format("%s: %s / %s entitledItemIDs: %s", execId, entitledItemIDs.size(), allItemIDs.size(), entitledItemIDs));
 
 			// remove the unentitled items from the dom
 			for (Element itemElem : itemElems) {
@@ -230,16 +230,15 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 	/**
 	 * Finds the entitled item ids in <code>allItemIDs</code>. This method is guaranteed to not throw exceptions.
 	 */
-	private Set<String> pocGetEntitledItemIDs(Set<String> allItemIDs) {
-		// TODO if this works, will refactor into an API call of some sort
-		//      this query will fail in non-dev environments, so the catch block returns the all the item ids so as to preserve normal (non-filter) behavior
+	private Set<String> getEntitledItemIDs(Set<String> allItemIDs) {
+		// direct sql used for performance reasons. also not worth the dev effort to create an api for just this one use that's only used in this batch process.
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet res = null;
 		try {
 			conn = getConnection();
 
-			stmt = conn.prepareStatement("select trim(item_id) as item_id from trey_entitled_item where item_id in (" + createQuestionMarks(allItemIDs.size()) + ")");
+			stmt = conn.prepareStatement("select trim(item_id) as item_id from xpx_entitled_item_xref where item_id in (" + createQuestionMarks(allItemIDs.size()) + ")");
 
 			int parameterIndex = 1;
 			for (String itemID : allItemIDs) {
@@ -253,12 +252,12 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 				entitledItemIDs.add(res.getString("item_id"));
 			}
 
-			System.out.println(execId + ": Entitlement query succeeded: " + entitledItemIDs.size() + " / " + allItemIDs.size() + " are entitled items");
+			System.out.println(String.format("%s: Entitlement query succeeded: %s / %s are entitled items", execId, entitledItemIDs.size(), allItemIDs.size()));
 
 			return entitledItemIDs;
 
 		} catch (Exception ignore) {
-			System.out.print("started: ");
+			System.out.print(String.format("%s: Failed to filter entitled items: ", execId));
 			ignore.printStackTrace(System.out);
 
 			if (res != null) {
@@ -310,35 +309,8 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
 		String jdbcPassword = Manager.getProperty("jdbcService", "oraclePool.password");
 
-//		String jdbcDriver = "oracle.jdbc.OracleDriver";
-//		String jdbcURL = "jdbc:oracle:thin:@oratst08.ipaper.com:1521:NGD1";
-//		String jdbcUser = "ng";
-//		String jdbcPassword = "ng1";
-
 		Class.forName(jdbcDriver);
 		return DriverManager.getConnection(jdbcURL, jdbcUser, jdbcPassword);
-	}
-
-//	public static void main(String[] args) {
-//		Set<String> allItemIDs = new LinkedHashSet<String>();
-//		allItemIDs.add("2030733");
-//		allItemIDs.add("2137515");
-//		allItemIDs.add("2181279");
-//		allItemIDs.add("2052954");
-//		allItemIDs.add("2190881");
-//		allItemIDs.add("5126797");
-//		allItemIDs.add("5126835");
-//		allItemIDs.add("5052667");
-//
-//		new XPEDXGetAdditionalCatalogIndexInformationUE().pocGetEntitledItemIDs(allItemIDs);
-//	}
-
-	public static void main(String[] args) throws Exception {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document inDocumentUE = builder.parse(new File("C:/Users/THOWA14/Desktop/8038/XPEDXGetAdditionalCatalogIndexInformationUE-input-1.xml"));
-
-		new XPEDXGetAdditionalCatalogIndexInformationUE().removeUnentitledItems(inDocumentUE);
 	}
 
 }

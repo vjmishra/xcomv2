@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,7 +29,13 @@ import com.yantra.yfs.japi.YFSEnvironment;
 public class ItemIndexUtil {
 
 	private static final YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
-	private static final Logger log4j = Logger.getLogger("veritiv.ItemIndex");
+
+	private String execId;
+
+	public ItemIndexUtil(String execId) {
+		super();
+		this.execId = execId;
+	}
 
 	/**
 	 * Gathers additional item metadata needed to include the following in the Sterling/Lucene item index:
@@ -51,9 +56,13 @@ public class ItemIndexUtil {
 		SegmentedList<String> itemIDGroups = new SegmentedList<String>(itemIDs, 100);
 		for (List<String> itemIDGroup : itemIDGroups) {
 
+			long startedContractBillTosForItem = System.currentTimeMillis();
 			Map<String, Set<String>> contractBillTosForItem = getContractBillToIds(env, itemIDGroup);
+			System.out.println(String.format("%s: contractBillTosForItem elapsed time: %s", execId, (System.currentTimeMillis() - startedContractBillTosForItem)));
 
+			long startedDivisionsInStockForItem = System.currentTimeMillis();
 			Map<String, Set<String>> divisionsInStockForItem = getDivisionsInStockForAllItems(env, itemIDGroup, inStockStatus);
+			System.out.println(String.format("%s: divisionsInStockForItem elapsed time: %s", execId, (System.currentTimeMillis() - startedDivisionsInStockForItem)));
 
 			for (Entry<String, Set<String>> entry : divisionsInStockForItem.entrySet()) {
 				String itemID = entry.getKey();
@@ -68,7 +77,10 @@ public class ItemIndexUtil {
 				}
 
 				// this call is NOT batched, since the api limits output to 5000 records and some items have thousands of records (as of Aug 2014, one item has 4000+)
+				long startedCustomerAndItemNumbers = System.currentTimeMillis();
 				Set<String> customerAndItemNumbers = getCustomerPartNumbersForItem(env, itemID);
+				System.out.println(String.format("%s: customerAndItemNumbers elapsed time: %s", execId, (System.currentTimeMillis() - startedCustomerAndItemNumbers)));
+
 				im.setCustomerAndItemNumbers(customerAndItemNumbers);
 			}
 		}
@@ -144,7 +156,7 @@ public class ItemIndexUtil {
 		// drop chars after first 13 and strip "-" so get "900000442599"
 		String billTo = itemElem.getAttribute("CustomerId");
 		String[] billToParts = billTo.split("-");
-		contractBillTos.add(billToParts[0]+billToParts[1]);
+		contractBillTos.add(billToParts[0] + billToParts[1]);
 	}
 
 	//--- Divisions that have item in stock (api calls batched for improved performance)
