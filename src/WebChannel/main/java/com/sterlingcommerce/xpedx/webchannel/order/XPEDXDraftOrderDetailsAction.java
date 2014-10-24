@@ -3441,27 +3441,42 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	 * @return
 	 */
 	public String importFile() throws Exception{
-		setImported(true);
+		
 		if(!(getFilename().endsWith(".csv"))){
 			setCsvVar(false);
+			return this.openQuickAdd();
 		}
+		setImported(true);
 		CSVReader reader = null;
 		try {
 			reader = new CSVReader(new FileReader(this.file));
 			String[] line;
 			int row = 1;
 			while ((line = reader.readNext()) != null) {
-				XPEDXQuickAddCsvVO quickAddImport = new XPEDXQuickAddCsvVO();
-				quickAddImport.setItemId(line[0]);
-				quickAddImport.setQty(line[1]);
-				quickAddImport.setItemPONumber(line[2]);
-				quickAddImport.setItemLineNumber(line[3]);
-				xpedxQuickAddCsvVOMap.put(row, quickAddImport);
-				LOG.debug("Record: " + StringUtils.join(line, ", "));
-				row++;
+				if(!SCUtil.isVoid(line) && line.length >= 1 && !SCUtil.isVoid(line[0])){
+					XPEDXQuickAddCsvVO quickAddImport = new XPEDXQuickAddCsvVO();
+					quickAddImport.setItemId(line[0]);
+					
+					if(line.length > 1 && !SCUtil.isVoid(line[1])){
+						quickAddImport.setQty(line[1]);
+					}
+					
+					if(line.length > 2 && !SCUtil.isVoid(line[2])){
+						quickAddImport.setItemPONumber(line[2]);
+					}
+					if(line.length > 3 && !SCUtil.isVoid(line[3])) {
+						quickAddImport.setItemLineNumber(line[3]);
+					}
+					
+					xpedxQuickAddCsvVOMap.put(row, quickAddImport);
+					LOG.debug("Record: " + StringUtils.join(line, ", "));
+					row++;
+					}
+				
 			}
 			if(row <= 201){
-				displayItemLines = row;	
+				
+				displayItemLines = row < 5 ? 5:row;	
 			}else{
 				setImported(false);
 			}
