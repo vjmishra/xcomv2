@@ -495,7 +495,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		txtPunchoutNotes.setData("yrc:customType", "Text");
 		txtPunchoutNotes.setData("name", "txtPunchoutNotes");
 		txtPunchoutNotes.setText("Internal Notes");
-		txtPunchoutNotes.setTextLimit(500);
+		txtPunchoutNotes.setTextLimit(1000);
 
 	}
 
