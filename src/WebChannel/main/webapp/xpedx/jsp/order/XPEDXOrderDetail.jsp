@@ -1573,6 +1573,7 @@ function showSplitDiv(divId)
 			</s:if>
 			<%-- Commented for bug# 1913
 			 <s:if test ="#_action.isCancel() && ! #_action.isCustomerOrder(#orderDetail)" > --%>
+			 <a id="confirmcancelorder" href="#cancelOrderDiv"></a>
 			<s:if test="!#isEstimator">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview()">
@@ -1784,7 +1785,9 @@ function showSplitDiv(divId)
 
 <!-- div for order cancel light box -->
 <swc:dialogPanel title='' isModal="true" id="cancelDialog">
-         <s:form id="CancelForm" name="CancelForm" action="MyOrderCancel">
+		<div style="display: none;">  
+		<div id="cancelOrderDiv" class="xpedx-light-box">
+         <s:form  id="CancelForm" name="CancelForm" action="MyOrderCancel">
          <s:hidden name="orderHeaderKey" value="%{dorderHeaderKey}" />
          <!--Changed for  Jira 2039  -->
          <input type="hidden" name="orderListReturnUrl" value="<s:property value='%{orderListReturnUrl}' />" />
@@ -1809,19 +1812,15 @@ function showSplitDiv(divId)
 		 <s:hidden name="enteredWebLineNumbers" value='%{#xutil.getAttribute(#xpedxOrderLineExtn,"ExtnWebLineNumber")}'/>
 		 	  
 		</s:iterator>
-		
-        	<span class="padding-left4 textAlignLeft">
-         		<s:text name='Order_Cancel_Confirmation_Message' >
-			<!--Commented for  Jira 2039  -->         		
-				<s:param><s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#OrderExtn)'/></s:param>		
-				</s:text>
-         	</span>
-         	<div class="clearBoth"></div>
-         	<div id="deleteButtonPanelId" class="padding-all1 textAlignCenter">
-                 <s:submit type="button" id="Confirm_Yes" key="Confirm_Yes" cssClass="submitBtnBg1"  onclick="javascript:DialogPanel.hide('cancelDialog')" tabindex="3100"/>
-                 <s:submit type="button" id="Confirm_No" key="Confirm_No" cssClass="submitBtnBg1"  onclick="javascript:DialogPanel.hide('cancelDialog');return false" tabindex="3101"/>
+        		<h1>Cancel Order</h1>
+         		<p class="addmargintop0"> Are you sure want to cancel this order?</p>
+         	<div id="deleteButtonPanelId" class="addmargintop10 floatright">
+                 <input type="button" class="btn-neutral addmarginright10"  onclick="$.fancybox.close();" tabindex="3101" value="No"/>
+                 <s:submit type="button" id="Confirm_Yes" key="Confirm_Yes" cssClass="btn-gradient"  onclick="javascript:DialogPanel.hide('cancelDialog')" tabindex="3100"/>
          	</div>
         </s:form>
+        </div> 
+	</div>
 </swc:dialogPanel>
 <s:include value='XPEDXOrderLineTotalAdjustments.jsp' />
 <div style="display: none;">

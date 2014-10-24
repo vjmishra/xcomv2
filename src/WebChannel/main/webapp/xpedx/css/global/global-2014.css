@@ -209,6 +209,12 @@
 	cursor: hand;
 	cursor: pointer;
 }
+.addmarginright120 {
+	margin-right:120px;
+}
+.addmargintop-5 {
+	margin-top:-5px;
+}
 /*---------------*/
 .form input.btn-gradient.floatright{
 	display: inline;
@@ -1777,13 +1783,7 @@ hr.shade {
 .width-117 {
 	width: 117px;
 }
-
-.addmarginright120 {
-	margin-right:120px;
-}
-.addmargintop-5{
-	margin-top:-5px;
-}.instructions-wrap  {
+.instructions-wrap  {
 	clear: none;
 	width: 350px;
 	margin: 0px;

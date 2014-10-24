@@ -92,11 +92,11 @@ var focusDelay = 100;
         document.postOrderForm.submit();
     }
     function cancelOrder(){
-      DialogPanel.show("cancelDialog");
-      var focusElement = Ext.get('Confirm_Yes');
-      if(focusElement != null){
-        focusElement.focus(focusDelay);
-      }
+    		$("#confirmcancelorder").fancybox({
+    			'autoDimensions'	: false,
+    			'width' 			: 250,
+    			'height' 			: 110  
+    		}).trigger('click');
     }
 
     Ext.onReady(function() {
