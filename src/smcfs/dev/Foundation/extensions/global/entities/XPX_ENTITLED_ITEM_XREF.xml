@@ -8,7 +8,7 @@
 				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Created TimeStamp" Nullable="false" XMLName="CreateTs" />
 			</Attributes>
 			
-			<PrimaryKey Name="XPX_ENTITLED_ITEM_PK">
+			<PrimaryKey Name="XPX_ENTLD_ITEM_PK">
 				<Attribute ColumnName="ITEM_ID" Name="Item_ID" />
 			</PrimaryKey>
 		</Entity>
