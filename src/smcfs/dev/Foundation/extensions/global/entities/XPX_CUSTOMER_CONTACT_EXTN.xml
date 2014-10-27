@@ -16,13 +16,13 @@
 					DefaultValue="F" Description=" " Nullable="false" XMLName="ExtnStockCheckWS"
 					XMLGroup="Extn">
 				</Attribute>
-				<!-- This field is not being used and should probably be removed -->
-				<Attribute ColumnName="EXTN_PUNCH_OUT_USER" DataType="Flag"
-					DefaultValue="Y" Description=" " Nullable="false" XMLName="ExtnPunchOutUser"
-					XMLGroup="Extn">
-				</Attribute>
 				<Attribute ColumnName="EXTN_PUNCH_OUT_MIL_EDIT" DataType="Flag"
 					DefaultValue="Y" Description=" " Nullable="false" XMLName="ExtnPunchOutMilEdit"
+					XMLGroup="Extn">
+				</Attribute>
+				<!-- Added for XB-258 Commenting to revert the changes -->
+				<Attribute ColumnName="EXTN_ORDER_APPROVAL_FLAG" DataType="Flag"
+					DefaultValue="N" Description=" " Nullable="false" XMLName="ExtnOrderApprovalFlag"
 					XMLGroup="Extn">
 				</Attribute>
 				
