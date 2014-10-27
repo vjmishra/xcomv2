@@ -25,11 +25,6 @@
 					DefaultValue="Y" Description=" " Nullable="false" XMLName="ExtnPunchOutMilEdit"
 					XMLGroup="Extn">
 				</Attribute>
-				<!-- Added for XB-258 Commenting to revert the changes -->
-				<Attribute ColumnName="EXTN_ORDER_APPROVAL_FLAG" DataType="Flag"
-					DefaultValue="N" Description=" " Nullable="false" XMLName="ExtnOrderApprovalFlag"
-					XMLGroup="Extn">
-				</Attribute>
 				
 				<!-- START Customer/User Profile Data : adsouza-->
 				<Attribute ColumnName="EXTN_USER_NETWORK_ID" DataType="Text-25"
