@@ -278,8 +278,8 @@
     
         <br/>
 		<ul id="tool-bar" class="tool-bar-bottom"  style="float:right; margin-right:13px;"  >
-	        <li><a class="btn-neutral" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
-            <li ><a class="btn-gradient" href="#" onclick="javascript: selectedUser('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />'); return false;"><span>Select</span></a></li>
+	        <li><a class="line-height-normal btn-neutral" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
+            <li ><a class="line-height-normal btn-gradient" href="#" onclick="javascript: selectedUser('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />'); return false;"><span>Select</span></a></li>
 	    </ul>
 	    <s:form name="userList" id="userList">
 		    <s:hidden name="customerID" value="%{#_action.getCustomerID()}"/>

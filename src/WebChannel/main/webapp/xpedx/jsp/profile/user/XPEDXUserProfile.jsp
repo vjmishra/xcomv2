@@ -2394,7 +2394,7 @@ a.underlink:hover {
 																<ul class="float-left">
 																	<s:url id="ResetPasswordURL" action="resetPassword" />
 																	<li><a href="javascript:resetPassword();"
-																		class="btn-neutral"><span><s:text
+																		class="line-height-normal btn-neutral"><span><s:text
 																					name="reset.Password" /></span></a></li>
 																</ul>
 															</td>
