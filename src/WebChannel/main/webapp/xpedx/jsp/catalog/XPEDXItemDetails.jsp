@@ -298,16 +298,10 @@
 						</s:if>
 						<s:if test='%{#_action.getWCContext().isGuestUser()}'>
 							<div class="addpadtop20 addpadright20">
-								<h4>Price and availability are offered to registered customers. 
-								<s:if test="%{wCContext.storefrontId == 'Saalfeld'}">
-								Please contact us at 1-877-372-2533  to learn more.</h4>
-								</s:if>
-								<s:else>
-									<p class="addmarginbottom10">Create an account to shop online.</p>
-									<input id="registerId" class="btn-gradient" type="button" value="Register"/>
-								</s:else>
-								
-							</div>
+								<h4>Price and availability are offered to registered customers.
+								<p class="addmarginbottom10">Please click the link to register.</p> 
+								<input id="registerId" class="btn-gradient" type="button" value="Register"/>
+								</div>
 						</s:if>
 						<s:else>
 							<div class="order-input-wrap">													
