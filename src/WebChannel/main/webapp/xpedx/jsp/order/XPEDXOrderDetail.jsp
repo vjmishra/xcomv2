@@ -1813,7 +1813,7 @@ function showSplitDiv(divId)
 		 	  
 		</s:iterator>
         		<h1>Cancel Order</h1>
-         		<p class="addmargintop0"> Are you sure want to cancel this order?</p>
+         		<p class="addmargintop0"> Are you sure you want to cancel this order?</p>
          	<div id="deleteButtonPanelId" class="addmargintop10 floatright">
                  <input type="button" class="btn-neutral addmarginright10"  onclick="$.fancybox.close();" tabindex="3101" value="No"/>
                  <s:submit type="button" id="Confirm_Yes" key="Confirm_Yes" cssClass="btn-gradient"  onclick="javascript:DialogPanel.hide('cancelDialog')" tabindex="3100"/>
