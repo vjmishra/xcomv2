@@ -61,7 +61,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 					else {
 						remElems.add(orderLineEle);
 					}
-					if(enteredInstructionsText!=null && enteredInstructionsText != ""){
+					if(enteredInstructionsText!=null && !YFCCommon.isVoid(enteredInstructionsText)){
 						YFCElement instructionsElememt = orderLineEle.createChild("Instructions");
 						YFCElement instructionElment = instructionsElememt.createChild("Instruction");
 						instructionElment.setAttribute("InstructionType", "LINE");

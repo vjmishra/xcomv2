@@ -808,14 +808,14 @@ function getNormalView() {
 						
 						'<div class="instructions-wrap">',
 						'<div id="instructions-trigger"	class="special-text">',
-						'<p id=\'instructions-link_{itemid}\' class="gray instructions-link addmargintop10" onclick="javascript:specialInstBox(\'{itemid}\')">Add Special Instructions</p>',
-					'</div>',
-					'<div class="clearfix"></div>',
-					'<div id=\"instructions-content_{itemid}\"	style="display: none;" class="instructions-content addmarginleft10">',
-						'<input class="instructions-content-textfield" onkeyup="javascript:restrictTextareaMaxLength(this,250);" id=\"enteredInstructionsText_{itemid}\" name="enteredInstructionsText"></input>',
+							'<p id=\'instructions-link_{itemid}\' class="gray instructions-link addmargintop10" onclick="javascript:specialInstBox(\'{itemid}\')">Add Special Instructions</p>',
+						'</div>',
 						'<div class="clearfix"></div>',
-						'<p class="text-smaller italic addmarginbottom10">Special Instructions are Saved to Cart</p>',
-					'</div>',
+						'<div id=\"instructions-content_{itemid}\"	style="display: none;" class="instructions-content addmarginleft10">',
+							'<input class="instructions-content-textfield" onkeyup="javascript:restrictTextareaMaxLength(this,250);" id=\"enteredInstructionsText_{itemid}\" name="enteredInstructionsText"></input>',
+							'<div class="clearfix"></div>',
+							'<p class="text-smaller italic addmarginbottom10">Special Instructions are Saved to Cart</p>',
+						'</div>',
 						'</div>',
 						
 						<s:if test='!#guestUser'>
@@ -891,7 +891,7 @@ function getCondensedView() {
 										'{contractitemdiv}',
 									</s:if>
 									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-									 
+									'<input type="hidden" id=\"enteredInstructionsText_{itemid}\" name="enteredInstructionsText"></input>',
 
 								'</div>', // end item-numbers
 								
@@ -979,7 +979,7 @@ function getMiniView() {
 										'{contractitemdiv}',
 									</s:if>	
 									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-									
+									'<input type="hidden" id=\"enteredInstructionsText_{itemid}\" name="enteredInstructionsText"></input>',
 								'</div>', // end item_number
 								
 								'<div class="quantity_box">',
