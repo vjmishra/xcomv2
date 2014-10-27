@@ -60,7 +60,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		//EB-225 - For retrieving the customer UOM of ItemID, from ItemIdcustomerUOM Map
 		String custUOM = validate(tag.getItemCustomerUomMap().get(itemID));
 		String isContractItem = tag.getContractItemMap().get(itemID);
-		String customerSpecificItemDecription = ((HashMap<String, String>) tag.getWcContext().getWCAttribute("customerDescItemMap", WCAttributeScope.REQUEST)).get(itemID);
+		Map<String,String> customerDescItemMap = (HashMap<String, String>) tag.getWcContext().getWCAttribute("customerDescItemMap", WCAttributeScope.REQUEST);
+		String customerSpecificItemDecription = customerDescItemMap != null ? customerDescItemMap.get(itemID) : null;
 		String shortDesc = !YFCCommon.isVoid(customerSpecificItemDecription) ? customerSpecificItemDecription:validate(info.getAttribute("ShortDescription"));
 		String desc = validate(info.getAttribute("Description"));
 		String itemKey = validate(item.getAttribute("ItemKey"));
