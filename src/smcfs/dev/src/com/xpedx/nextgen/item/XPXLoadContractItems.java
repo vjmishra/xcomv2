@@ -315,7 +315,7 @@ public class XPXLoadContractItems implements YIFCustomApi {
 				if (ids.length==1 & ids[0].equals("")) {
 					continue;
 				}
-				if (ids.length != 2) {
+				if (ids.length < 2) {
 					log.warn("XPXLoadContractItems: Invalid entry on line " + num);
 				}
 				else {
