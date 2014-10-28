@@ -94,8 +94,8 @@ var focusDelay = 100;
     function cancelOrder(){
     		$("#confirmcancelorder").fancybox({
     			'autoDimensions'	: false,
-    			'width' 			: 250,
-    			'height' 			: 110  
+    			'width' 			: 255,
+    			'height' 			: 120  
     		}).trigger('click');
     }
 
