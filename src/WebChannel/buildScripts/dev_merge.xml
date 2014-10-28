@@ -6,6 +6,7 @@
 
 	<property file="devMerge.properties" />
 	<property name="source_project_dir" value="${source_project_dir}" />
+
 	<property name="swc_build_dir" value="${swc_exploded_dir}" />
 	<property name="source_webapps_dir" value="${source_project_dir}/main/webapp" />
 	<property name="classes_dir" value="${swc_build_dir}/WEB-INF/classes" />
