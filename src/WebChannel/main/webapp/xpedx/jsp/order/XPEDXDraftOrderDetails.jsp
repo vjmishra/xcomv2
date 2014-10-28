@@ -615,7 +615,7 @@ $(document).ready(function(){
 	
 <!-- List Item Description -->
 
-
+<div id="errorMsgTop" class="textAlignCenter" style="display: none"><p class="error"></p></div>
 <div class="cart-info-wrap">
 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 	<s:if test="#canChangeOrderName">
@@ -728,7 +728,7 @@ $(document).ready(function(){
 	
 
 
-<div id="errorMsgTop" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+
 
 <div class="clear">&nbsp;</div>
 <!-- end item description -->

@@ -368,6 +368,7 @@ function update()
 		{
 			document.OrderDetailsForm.orderName.value = document.getElementById('cartName_new').value;			
 		}
+		document.OrderDetailsForm.orderName.value = document.getElementById('cartName_new').value;
 		document.OrderDetailsForm.orderDesc.value = document.getElementById('cartDesc_new').value;
 		document.OrderDetailsForm.zeroOrderLines.value = "true";
 		document.OrderDetailsForm.action = document.getElementById('updateNoLinesURL');

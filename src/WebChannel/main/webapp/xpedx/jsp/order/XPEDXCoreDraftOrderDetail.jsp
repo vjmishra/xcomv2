@@ -247,7 +247,7 @@
 								  <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<s:textfield name='tempOrderLineQuantities'
 									theme="simple" id="tempOrderLineQuantities_%{#orderLineKey}" size='1'
-									cssClass="cart-qty-label" value='%{#qty}'
+									cssClass="cart-qty-label x-input" value='%{#qty}'
 									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
 								 </s:if>
 									<s:hidden name="orderLineQuantities" id="orderLineQuantities_%{#orderLineKey}" value='%{#qty}' />
@@ -256,7 +256,7 @@
 								  <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 									<s:textfield name='orderLineQuantities'
 									theme="simple" id="orderLineQuantities_%{#orderLineKey}" size='1'
-									cssClass="cart-qty-label" value='%{#qty}'
+									cssClass="cart-qty-label x-input" value='%{#qty}'
 									disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" maxlength="7"/>
 								  </s:if>
 								  <s:else>
@@ -267,7 +267,7 @@
 									<s:hidden name="#qaQuantity.type" value="OrderedQty" />
 									<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 										  <s:select name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}"
-											cssClass="xpedx_select_sm width-140" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
+											cssClass="xpedx_select_sm width-140 x-input"  onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
 											list="#displayUomMap" listKey="key" listValue='value'
 											disabled="#isUOMAndInstructions" value='%{#uom}' tabindex="%{#tabIndex}" theme="simple"/>
 											<s:hidden id="custUOM_%{#orderLineKey}" name="custUOM" value="%{#customerUOM}" />
@@ -573,13 +573,13 @@
 													<div class="col-2"><s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#orderLine.getAttribute(#FieldLabel)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" cssStyle="border-color:#FF0000"/></div>
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" cssStyle="border-color:#FF0000" cssClass="x-input"/></div>
 													</s:if>
 													<s:else>
 													<div class="col-2"><s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#orderLine.getAttribute(#FieldLabel)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22"  /></div>
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" cssClass="x-input" /></div>
 													</s:else>
 												</s:if>
 												<s:else>
