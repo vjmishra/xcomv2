@@ -661,3 +661,12 @@ function addItemToListnew(form){
 	form.dom.fromItemDetail.value = true;
 }
 
+$(document).ready(function() {
+	
+	$("#registerId").click(function(){
+		var url = $('#myregisterId').val();
+		window.location.href = url;
+		return false;
+	});
+});
+

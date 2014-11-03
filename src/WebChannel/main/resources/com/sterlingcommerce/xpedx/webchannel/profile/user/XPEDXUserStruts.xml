@@ -302,5 +302,13 @@
 			<param name="resourceId">/swc/profile/ManageUserProfile</param>
 			<result name="success">/xpedx/jsp/profile/user/XPEDXPwdValidationError.jsp</result>
 		</action>
+		<action name="resetPassword"
+            class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXResetPasswordAction">
+            <param name="mashups">ResetPassword</param>
+            <param name="xmlBindingFile"> com/sterlingcommerce/webchannel/profile/user/ResetPassword_binding.xml</param>
+                     <param name="resourceId">/swc/profile/ManageUserList</param>
+            <result name="success">/swc/jsp/profile/user/resetPwdResult.jsp</result>
+        </action>
+		
 	</package>
 </struts>

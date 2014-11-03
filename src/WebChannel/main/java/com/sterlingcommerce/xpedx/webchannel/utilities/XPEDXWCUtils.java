@@ -7066,10 +7066,9 @@ public class XPEDXWCUtils {
 				punchOutComments = extnElem.getAttribute("ExtnPunchOutComments");
 				context.setWCAttribute("punchOutComments", punchOutComments, WCAttributeScope.LOCAL_SESSION);
 			}
-
-
-		}
 			scuiTransactionContext.commit();
+		} 
+			
 			return punchOutComments;
 		} catch (Exception e) {
 			// rollback the tran

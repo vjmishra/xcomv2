@@ -65,7 +65,8 @@
 	<div>
 	     <div class="loading-icon" style="display:none;"></div>
 	</div>
-	
+	<s:url id="MyRegisterUserURL" namespace='/profile/user' action='MyRegisterUser' />
+	<s:hidden id="myregisterId" value="%{#MyRegisterUserURL}"/>
 	<s:url id='addToCartURLid' namespace='/order' action='addToCart' includeParams="none" />
 	<s:hidden id="addToCartURL" value="%{#addToCartURLid}" />
 	
@@ -302,15 +303,10 @@
 						</s:if>
 						<s:if test='%{#_action.getWCContext().isGuestUser()}'>
 							<div class="addpadtop20 addpadright20">
-								<h4>Price and availability are offered to registered customers. Please contact us at
-								<s:if test="%{wCContext.storefrontId == 'Saalfeld'}">
-									1-877-372-2533
-								</s:if>
-								<s:else>
-									1-888-973-3976
-								</s:else>
-								to learn more.</h4>
-							</div>
+								<h4>Price and availability are offered to registered customers.
+								<p class="addmarginbottom10">Please click the link to register.</p> 
+								<input id="registerId" class="btn-gradient" type="button" value="Register"/>
+								</div>
 						</s:if>
 						<s:else>
 							<div class="order-input-wrap">													

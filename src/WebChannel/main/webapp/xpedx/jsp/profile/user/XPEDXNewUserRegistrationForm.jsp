@@ -381,12 +381,12 @@
 										</s:textfield>
 										<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 										<div class="account-text">Need Account Number?<br />
-											<a href="https://xpedx.com/locate-us.aspx" class="bright-link" target="_blank">Click to locate a Customer Serice Representative.</a>
+											<a href="https://xpedx.com/locate-us.aspx" class="bright-link" target="_blank">Click to locate a Customer Service Representative.</a>
 											</div>
 										</s:if>
 										<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 										<div class="account-text">Need Account Number?<br />
-										<a href="https://saalfeldredistribution.com/ContactUs.aspx" target="_blank">Click to locate a Customer Serice Representative.</a>
+										<a href="https://saalfeldredistribution.com/ContactUs.aspx" target="_blank">Click to locate a Customer Service Representative.</a>
 										</div>
 										</s:elseif>
 											
