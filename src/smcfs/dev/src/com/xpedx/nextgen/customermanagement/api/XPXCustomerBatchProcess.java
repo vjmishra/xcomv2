@@ -902,16 +902,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					End: CR 2277*/
 
 						//assign a pricelist
-						try
-						{
-							createPriceListAssignmentForCustomer(env, shipFrom,envtId,companyCode,pricingWareHouse,customerID,organizationCode);
+						createPriceListAssignmentForCustomer(env, shipFrom,envtId,companyCode,pricingWareHouse,customerID,organizationCode);
 
-						}
-						catch (Exception e)
-						{
-							e.printStackTrace();
-						}
-						
 						if(processCode.equalsIgnoreCase("C"))
 						{
 							//get the existing assignments

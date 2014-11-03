@@ -61,6 +61,7 @@ public class XPXInvokeRulesEngineServiceAPI implements YIFCustomApi
 					}
 					else
 					{
+						isWebHoldFlag=false;
 						System.out.println("**********   Order   Should not go to Web Hold ********************");
 					}
 				}
@@ -89,7 +90,7 @@ public class XPXInvokeRulesEngineServiceAPI implements YIFCustomApi
 				   rulesEngineOutDoc = api.executeFlow(env, XPXLiterals.RULES_ENGINE_SERVICE, getOrderListInputDoc);
 				}
 			}
-			if(isWebHoldFlag =true)
+			if(isWebHoldFlag)
 			{
 				Element rulesEngineOutElem=rulesEngineOutDoc.getDocumentElement();
 				ArrayList<Element> orderExtnList=SCXmlUtil.getElements(rulesEngineOutElem,"Extn");

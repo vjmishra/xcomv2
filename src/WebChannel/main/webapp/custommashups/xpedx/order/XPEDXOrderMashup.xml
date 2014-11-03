@@ -2245,7 +2245,7 @@
     <mashup id='xpedxCreateLegacyOrderOnApproval' transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="order update flow">
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <!--  <API FlowName="XPXInvokeRulesEngineAndLegacyOrderCreationService">  -->
-        <API FlowName="XPXAsyncOrderApprovalService">
+        <API FlowName="XPXOrderApprovalService">
             <Input>
                 <Order OrderHeaderKey="" />
             </Input>
