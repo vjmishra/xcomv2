@@ -41,8 +41,11 @@ function onChangeItemOrder(currentElem, currentSeqNo, newSeqNo) {
 }
 <!-- eb 1131-->
 function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
+	
+	
 	var rsize=document.getElementById("rListSize_"+repItemID).value;
   	if(rsize == "1"){
+  		
   	  selReplacementId = document.getElementById("hUId_"+repItemID).value;
   	}
   	else{
@@ -58,16 +61,20 @@ function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
   	var form = Ext.get("formRIReplaceInList");
   	form.dom.key.value = orderLineKey;
     
-  	//Display the facy box
+  	//Display the fancy box
 	$.fancybox(
 		Ext.get("replacementItems").dom.innerHTML,
 		{
-        	'autoDimensions'	: false,
-			'width'         	: 600,
-			'height'        	: 360
+			
+        	'autoDimensions'	: true,
+        	'width'         	: '600',
+			'height'        	: 'auto'
 		}
+		
 	);	  	
 }
+
+
 
 function replacementAddToList(uId) {
 	if (uId == ""){

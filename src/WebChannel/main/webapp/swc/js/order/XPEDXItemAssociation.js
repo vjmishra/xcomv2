@@ -119,23 +119,6 @@ function replaceXPEDXAlternateItemToCart(){
     document.addAlternativeItemForm.action = "addAlternativeItemToCart.action";
     document.addAlternativeItemForm.submit();
 }
-
-/*function showXPEDXReplacementItems(itemIDUOM, orderLineKey, quantity)
-{
-	var source = document.getElementById("replacement_" + itemIDUOM);
-    var destination = document.getElementById("replacementItemBody");
-    destination.innerHTML = source.innerHTML;
-    
-    document.addReplacementItemToCartForm.OrderLineKey.value = orderLineKey;
-    document.addReplacementItemToCartForm.Quantity.value = quantity;
-	DialogPanel.show("replacementItems");
-    svg_classhandlers_decoratePage();
-
-  	var initialFocus = Ext.get("replacement_" + itemIDUOM + "_first");
-    initialFocus.focus.defer(1000, initialFocus);
-}
-*/
-
 function addXPEDXReplacementItem()
 {
 	//get the select item, quantity and UOM from the form and set it in the parameters.
@@ -195,6 +178,7 @@ function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
 	
   	var rsize=document.getElementById("rListSize_"+repItemID).value;
   	if(rsize == "1"){
+  		
   	  selReplacementId = document.getElementById("hUId_"+repItemID).value;
   	}
   	else{
@@ -210,13 +194,13 @@ function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
   	var form = Ext.get("formRIReplaceInList");
   	form.dom.key.value = orderLineKey;
   	
-  	//Display the facy box
+  	//Display the fancy box
 	$.fancybox(
 		Ext.get("replacementItems").dom.innerHTML,
 		{
-        	'autoDimensions'	: false,
-			'width'         	: 600,
-			'height'        	: 325
+        	'autoDimensions'	: true,
+			'width'         	: '600',
+			'height'        	: 'auto'
 		}
 	);	  	
 }

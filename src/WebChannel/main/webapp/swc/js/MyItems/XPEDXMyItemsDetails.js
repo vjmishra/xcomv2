@@ -323,28 +323,6 @@ function saveShareListForChild(divId, isCustomerSelected){
 	}
 }
 
-function showXPEDXReplacementItems(itemIDUOM, orderLineKey, order) {
-	var source 		= document.getElementById("replacement_" + itemIDUOM);
-	var destination = document.getElementById("replacementItemBody");
-
-	//Fill in data
-	destination.innerHTML = source.innerHTML;
-
-	//Add the key into the change form
-	var form = Ext.get("formRIReplaceInList");
-	form.dom.key.value = orderLineKey;
-
-	//Display the fancy box
-	$.fancybox(
-			Ext.get("replacementItems").dom.innerHTML,
-			{
-				'autoDimensions'	: true,
-				'width'         	: '1035px',
-				'height'        	: 'auto'
-			}
-	);	  	
-}
-
 function showSpecialItem(divId) {
 
 	//Display the facy box

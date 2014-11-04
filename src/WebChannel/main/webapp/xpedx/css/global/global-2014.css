@@ -1792,3 +1792,40 @@ hr.shade {
 .line-height-normal {
 	line-height: normal;
 }
+
+.addpadbottom10 {
+	padding-bottom: 10px;	
+}
+
+/*----- NEW FOR REPLACEMENT MODAL-----*/
+.replace-item-wrap {
+	border-bottom: 1px dotted #cccccc;
+	padding: 8px 0;
+}
+.replace-radio, .replace-item-wrap .prodImg, .replace-item-wrap .contents {
+	display: inline-block;
+	vertical-align: top;
+}
+.replace-item-wrap .contents .ddesc {
+	font-weight: bold;
+	margin-top: 5px;
+}
+.replace-item-wrap .contents .item_number-wrap {
+	display: inline-block;
+	margin-top: 3px;
+}
+.replace-item-wrap .contents .item_number-wrap span {
+	display: inline-block;
+}
+.xpedx-light-box {
+    height: auto;
+    max-height: 555px;
+	overflow-x: hidden;
+	overflow: auto;
+}
+
+.prodImg {
+    box-shadow: 1px 1px 4px #999999;
+    width: 150px;
+    height: 150px;
+}

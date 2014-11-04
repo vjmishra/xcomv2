@@ -1740,11 +1740,7 @@ BEGIN 2014 styles
 	margin-right: 8px;
    	margin-top: -56px;
 }
-.prodImg {
-    box-shadow: 1px 1px 4px #999999;
-    width: 150px;
-    height: 150px;
-}
+
 .detail-view .order-wrap {
 	width: 440px;
 	float: left;
