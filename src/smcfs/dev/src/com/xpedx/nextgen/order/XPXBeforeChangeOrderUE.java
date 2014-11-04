@@ -457,6 +457,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					linePriceElement.removeAttribute("LineTotal");
 				}
 			}
+			XPXOrderUpdateUtils.setBackorderQtyFlagIfExists(outputDoc);
 			if(log.isDebugEnabled()){
 			log.debug("Output XML of Before Change Order UE "+SCXmlUtil.getString(outputDoc));
 			}

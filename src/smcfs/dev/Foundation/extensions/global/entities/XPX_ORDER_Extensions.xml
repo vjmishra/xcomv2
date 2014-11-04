@@ -129,7 +129,8 @@
 					Description="Last action/operation executed on the customer order" Nullable="true" XMLName="ExtnLastOrderOperation"  XMLGroup="Extn"/>
 		  <Attribute ColumnName="EXTN_ORDCONFIRM_EMAILSENT_FLAG" DataType="Text-1"
 					Description="Last action/operation executed on the customer order" Nullable="true" XMLName="ExtnOrderConfirmationEmailSentFlag"  XMLGroup="Extn"/>
-       	
+       	  <Attribute ColumnName="EXTN_REQ_BACK_ORD_QTY_EXIST" DataType="Flag" DefaultValue="'N'" Description="It indicates any one of the Order line has Back Ordered Qty greater than zero or not" Nullable="true" 
+       	 			Size="" XMLName="ExtnReqBackOrdQtyExist" XMLGroup="Extn" />
         </Attributes>
 		<!-- Begin : New index created for XBT-361 -->
 		<Indices>

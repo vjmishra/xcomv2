@@ -81,6 +81,7 @@ public class XPXBeforeCreateOrderUE implements YFSBeforeCreateOrderUE {
 					}
 				}
 			}
+			XPXOrderUpdateUtils.setBackorderQtyFlagIfExists(document);
 		}
 		return document;
 	}
