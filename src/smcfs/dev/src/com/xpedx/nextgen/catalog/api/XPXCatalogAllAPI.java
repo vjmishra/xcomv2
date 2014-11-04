@@ -684,7 +684,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			YIFClientCreationException {
 
 		Node customerUnitNode = null;
-		customerUOMList.clear();
+		ExtnIsCustUOMExcl = "";
+		customerUOMList.clear();System.out.println(com.sterlingcommerce.baseutil.SCXmlUtil.getString(itemsXrefDoc));
 		List<Element> XpxItemcustXrefList = XPXUtils.getElements(itemsXrefDoc.getDocumentElement(), "XPXItemcustXref[@LegacyItemNumber=" + itemID + "]");
 		int length3 = XpxItemcustXrefList.size();
 		for (int m = 0; m < length3; m++) {
