@@ -256,13 +256,15 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 
 			itemOrderMultipleMap = XPEDXOrderUtils
 					.getOrderMultipleFoXPXItems(items);
-			customerDescItemMap	=	XPEDXWCUtils.getCustomerDescItemMapForItems(this.getWCContext(),items);
-			if(customerDescItemMap!=null && customerDescItemMap.size() > 0){
-				for (int i = 0; i < iTotItmList; i++) {
-					eleItemDetails = (Element) nlItemDetails.item(i);
-					if(customerDescItemMap.containsKey(SCXmlUtil.getAttribute(eleItemDetails, "ItemID"))){
-						Element primaryInfoElement = (Element)eleItemDetails.getElementsByTagName("PrimaryInformation").item(0);
-						primaryInfoElement.setAttribute("ShortDescription", customerDescItemMap.get(SCXmlUtil.getAttribute(eleItemDetails, "ItemID")));
+			if (!getWCContext().isGuestUser()){
+				customerDescItemMap	=	XPEDXWCUtils.getCustomerDescItemMapForItems(this.getWCContext(),items);
+				if(customerDescItemMap!=null && customerDescItemMap.size() > 0){
+					for (int i = 0; i < iTotItmList; i++) {
+						eleItemDetails = (Element) nlItemDetails.item(i);
+						if(customerDescItemMap.containsKey(SCXmlUtil.getAttribute(eleItemDetails, "ItemID"))){
+							Element primaryInfoElement = (Element)eleItemDetails.getElementsByTagName("PrimaryInformation").item(0);
+							primaryInfoElement.setAttribute("ShortDescription", customerDescItemMap.get(SCXmlUtil.getAttribute(eleItemDetails, "ItemID")));
+						}
 					}
 				}
 			}
