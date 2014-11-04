@@ -159,6 +159,8 @@
 				<Attribute ColumnName="ORDER_STATUS" DataType="Text-15"
 					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
 					Nullable="true" XMLName="OrderStatus" />
+				<Attribute ColumnName="EXTN_REQ_BACK_ORD_QTY_EXIST" DataType="Flag" DefaultValue="'N'" Description="It indicates any one of the Order line has Back Ordered Qty greater than zero or not" 
+					Nullable="true"	Size="" XMLName="ExtnReqBackOrdQtyExist"/>
 			</Attributes>
 			<PrimaryKey Name="XPX_ODER_SARCH_PK">
 				<Attribute ColumnName="ORDER_HEADER_KEY" />
