@@ -12,7 +12,6 @@ import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7219,15 +7218,49 @@ public class XPEDXWCUtils {
 	 * Get BillTos for Master, then check for contract items for those.
 	 */
 	public static boolean hasContractItems(IWCContext wcContext) throws Exception {
-		YFSEnvironment env = (YFSEnvironment) wcContext.getSCUIContext().getTransactionContext(true).
-				getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 
 		String masterCustKey = getMSACustomerKeyFromSession(wcContext);
 		List<String> custIds = getBillTosFromMaster(masterCustKey, wcContext);
 
-		int count = countContractItemEntries(env, custIds);
+		int count = countContractItemEntries(wcContext, custIds);
 
 		return count>0;
+	}
+
+	//--- Contract information - gather BillTos per item
+	public static int countContractItemEntries(IWCContext wcContext, List<String> custIds) throws Exception {
+		YFSEnvironment env = (YFSEnvironment) wcContext.getSCUIContext().getTransactionContext(true).
+				getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+
+		Element itemListOutputElem = getContractElementsFromDB(env, custIds);
+
+		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "XPXItemContractExtn");
+		return itemElems.size();
+	}
+	private static Element getContractElementsFromDB(YFSEnvironment env, List<String> custIds) throws Exception {
+
+		YFCDocument contractsInputDoc = getContractsApiInput(custIds);
+
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+		Document contractsOutputDoc = api.executeFlow(env, "XPXGetItemContractExtn", contractsInputDoc.getDocument());
+
+		return contractsOutputDoc.getDocumentElement();
+	}
+	private static YFCDocument getContractsApiInput(List<String> custIds) {
+		YFCDocument contractsInputDoc = YFCDocument.createDocument("XPXItemContractExtn");
+		YFCElement contractsInputElem = contractsInputDoc.getDocumentElement();
+
+		YFCElement complexQueryElem = contractsInputElem.createChild("ComplexQuery");
+		complexQueryElem.setAttribute("Operation", "OR");
+
+		YFCElement orElem = complexQueryElem.createChild("Or");
+
+		for (String custId : custIds) {
+			YFCElement expElem = orElem.createChild("Exp");
+			expElem.setAttribute("Name", "CustomerId");
+			expElem.setAttribute("Value", custId);
+		}
+		return contractsInputDoc;
 	}
 
 	public static List<String> getBillTosFromMaster(String masterCustKey, IWCContext wcContext) throws Exception {
@@ -7257,39 +7290,5 @@ public class XPEDXWCUtils {
 			billToCustIds.add(customerElement.getAttribute("CustomerID"));
 		}
 		return billToCustIds;
-	}
-
-	//--- Contract information - gather BillTos per item
-	public static int countContractItemEntries(YFSEnvironment env, Collection<? extends String> custIds) throws Exception {
-
-		Element itemListOutputElem = getContractElementsFromDB(env, custIds);
-
-		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "XPXItemContractExtn");
-		return itemElems.size();
-	}
-	private static Element getContractElementsFromDB(YFSEnvironment env, Collection<? extends String> custIds) throws Exception {
-
-		YFCDocument contractsInputDoc = getContractsApiInput(custIds);
-
-		YIFApi api = YIFClientFactory.getInstance().getApi();
-		Document contractsOutputDoc = api.executeFlow(env, "XPXGetItemContractExtn", contractsInputDoc.getDocument());
-
-		return contractsOutputDoc.getDocumentElement();
-	}
-	private static YFCDocument getContractsApiInput(Collection<? extends String> custIds) {
-		YFCDocument contractsInputDoc = YFCDocument.createDocument("XPXItemContractExtn");
-		YFCElement contractsInputElem = contractsInputDoc.getDocumentElement();
-
-		YFCElement complexQueryElem = contractsInputElem.createChild("ComplexQuery");
-		complexQueryElem.setAttribute("Operation", "OR");
-
-		YFCElement orElem = complexQueryElem.createChild("Or");
-
-		for (String custId : custIds) {
-			YFCElement expElem = orElem.createChild("Exp");
-			expElem.setAttribute("Name", "CustomerId");
-			expElem.setAttribute("Value", custId);
-		}
-		return contractsInputDoc;
 	}
 }
