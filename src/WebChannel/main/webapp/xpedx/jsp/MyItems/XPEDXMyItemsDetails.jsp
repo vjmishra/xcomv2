@@ -1661,6 +1661,14 @@ function showSharedListForm(){
 					setTimeout(updateMilCountSelected, 0);
 				}
 			});
+
+			<s:if test="!editMode">
+				// Init page with all boxes checked (EB-8355)
+				var checkboxes = $('.milCheckbox, .toggleAllSelected');
+				for (var i = 0, len = checkboxes.length; i < len; i++) {
+					checkboxes[i].checked = checkAll;
+				}
+			</s:if>
 		});
 
 
