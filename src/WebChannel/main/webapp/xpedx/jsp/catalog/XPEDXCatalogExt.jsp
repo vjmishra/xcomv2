@@ -386,9 +386,13 @@
 			<div><input id="bestSellerItemChk" type="checkbox" <s:if test="%{isBestSellerChecked}">checked</s:if>
 				onclick="setCatalogFilters();"/>Best Seller</div>
 
-			<s:set name="isContractChecked" value="%{getWCContext().getWCAttribute('ContractCheckbox')}"/>
-			<div><input id="contractItemChk"   type="checkbox" <s:if test="%{isContractChecked}">checked</s:if>
-				onclick="setCatalogFilters();"/>Contract Pricing</div>
+			<%-- Only show contract items checkbox for users whose master customer has contract items --%>
+			<s:set name="hasContractItems" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('hasContractItems')}"/>
+			<s:if test='%{#hasContractItems}'>
+				<s:set name="isContractChecked" value="%{getWCContext().getWCAttribute('ContractCheckbox')}"/>
+				<div><input id="contractItemChk"   type="checkbox" <s:if test="%{isContractChecked}">checked</s:if>
+					onclick="setCatalogFilters();"/>Contract Pricing</div>
+			</s:if>
 
 			<s:if test="#currentShipTo.billTo.extnDefaultStockedItemView == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED">
 				<s:hidden name="stockedItemChk" value="true" />

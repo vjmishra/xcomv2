@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
@@ -153,41 +154,49 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		return sapCustomer;
 	}
 	 */
+
 	@Override
 	public String execute() {
+
+		final boolean isGuestUser = wcContext.isGuestUser();
+		final HttpSession httpSession = wcContext.getSCUIContext().getSession();
+
 		try {
 			//Removing  from AUTHORIZED_LOCATIONS and AVAILABLE_LOCATIONS session -Jira 4146
-			Boolean sessionForUserProfile=  (Boolean) XPEDXWCUtils.getObjectFromCache("SessionForUserProfile");
+			Boolean sessionForUserProfile = (Boolean) XPEDXWCUtils.getObjectFromCache("SessionForUserProfile");
+
 			/*Start of webtrend tags*/
-			if(wcContext.getSCUIContext().getSession().getAttribute("firstTimeFlag")!=null){
-				wcContext.getSCUIContext().getSession().setAttribute("firstTimeFlag",null);
+			if(httpSession.getAttribute("firstTimeFlag")!=null){
+				httpSession.setAttribute("firstTimeFlag",null);
 			}
-			if(getWCContext().getWCAttribute("firstTimeFlag")!=null){
-				getWCContext().removeWCAttribute("firstTimeFlag",WCAttributeScope.LOCAL_SESSION);
+			if(wcContext.getWCAttribute("firstTimeFlag")!=null){
+				wcContext.removeWCAttribute("firstTimeFlag",WCAttributeScope.LOCAL_SESSION);
 			}
 			/*End of webtrend tags*/
-			if(sessionForUserProfile == null || sessionForUserProfile != true)
+
+			if(sessionForUserProfile == null || !sessionForUserProfile)
 			{
 				XPEDXWCUtils.removeObectFromCache("AUTHORIZED_LOCATIONS");
 				XPEDXWCUtils.removeObectFromCache("AVAILABLE_LOCATIONS");
 				XPEDXWCUtils.removeObectFromCache("CUSTOMER2");
-
 			}
-			if(getWCContext().isGuestUser() && getWCContext().getCustomerId() != null && !("").equals(getWCContext().getCustomerId())) {
-				//get the builder object
+
+			final String custId = wcContext.getCustomerId();
+			if (isGuestUser && custId != null && !("").equals(custId)) {
 				IWCContextBuilder builder = WCContextHelper.getBuilder(wcContext.getSCUIContext().getRequest(), wcContext.getSCUIContext().getResponse());
 				builder.setCustomerId(null);
 			}
 
-			if (!getWCContext().isGuestUser()){
+			if (!isGuestUser){
 				handleChangeInContextForDefaultShipTo();
 				prepareLoggerInUsersCustomerName();
+				checkForContractItems(); //sets flag
 			}
 
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "false");
 			setupLogoURL();
 			prepareHeaderNavigationHighlight(request.getServletPath());
-			if (!getWCContext().isGuestUser()){
+			if (!isGuestUser){
 				//checkMultiStepCheckout();
 				if(XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext))
 					setSampleRequestFlagInSession();
@@ -203,7 +212,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
 			return "error";
 		}
-		if (!getWCContext().isGuestUser()){
+
+		if (!isGuestUser){
 			//call to set the flags for users. Set this value only for authenticated user.
 			// This is set in the handleChangeInContextForDefaultShipTo() method.
 			//XPEDXWCUtils.setShowAddToCartAvaiablityAndReportsFlag(getWCContext());
@@ -215,7 +225,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			setInvoiceDetails();
 
 			setAdJuglerServerURL(XPEDXConstants.AJ_SERVER_URL );
-			getWCContext().getSCUIContext().getSession().setAttribute(XPEDXConstants.AJ_SERVER_URL_KEY, getAdJuglerServerURL() );
+			httpSession.setAttribute(XPEDXConstants.AJ_SERVER_URL_KEY, getAdJuglerServerURL() );
 		}
 
 		/*String contextOrderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
@@ -224,6 +234,26 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 		}*/
 		return "success";
+	}
+
+	// Set flag indicating whether user's customer has any contract items
+	private void checkForContractItems() {
+		final HttpSession httpSession = wcContext.getSCUIContext().getSession();
+
+		// if not yet called: get billTos for MC, check whether hasContractItems, store Boolean in session
+		if (httpSession.getAttribute("hasContractItems") == null) {
+
+			boolean hasContractItems = true; // default to showing contract checkbox
+			try {
+				hasContractItems = XPEDXWCUtils.hasContractItems(wcContext);
+			}
+			catch (Exception e) {
+				LOG.error("Error while checking for contract items: ", e);
+			}
+
+			String hasContractItemsStr = hasContractItems ? "true" : "false";
+			httpSession.setAttribute("hasContractItems", hasContractItemsStr );
+		}
 	}
 
 	private void setInvoiceDetails() {

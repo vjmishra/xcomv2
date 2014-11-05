@@ -12,6 +12,7 @@ import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -78,6 +79,7 @@ import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXOverriddenShipToAddress;
 import com.sterlingcommerce.xpedx.webchannel.utilities.megamenu.MegaMenuUtil;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.common.util.XPXTranslationUtilsAPI;
 import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.client.InteropEnvStub;
@@ -98,11 +100,6 @@ import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
-/**
- * @author rugrani
- * @author mvummadi
- *
- */
 public class XPEDXWCUtils {
 	public static String LOGGED_IN_CUSTOMER_ID = "loggedInCustomerID";
 	public static String LOGGED_IN_CUSTOMER_KEY = "loggedInCustomerKey";
@@ -7215,5 +7212,84 @@ public class XPEDXWCUtils {
 			}
 		}
 		return customerDescItemMap;
+	}
+
+	/**
+	 * Determine if user's Master Customer has any contract items.
+	 * Get BillTos for Master, then check for contract items for those.
+	 */
+	public static boolean hasContractItems(IWCContext wcContext) throws Exception {
+		YFSEnvironment env = (YFSEnvironment) wcContext.getSCUIContext().getTransactionContext(true).
+				getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+
+		String masterCustKey = getMSACustomerKeyFromSession(wcContext);
+		List<String> custIds = getBillTosFromMaster(masterCustKey, wcContext);
+
+		int count = countContractItemEntries(env, custIds);
+
+		return count>0;
+	}
+
+	public static List<String> getBillTosFromMaster(String masterCustKey, IWCContext wcContext) throws Exception {
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+		ISCUITransactionContext scuiTransactionContext = wcContext.getSCUIContext().getTransactionContext(true);
+		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+
+		YFCDocument inputCustomerDoc = YFCDocument.createDocument("Customer");
+		YFCElement documentElement = inputCustomerDoc.getDocumentElement();
+		documentElement.setAttribute("RootCustomerKey", masterCustKey);
+
+		YFCElement customerExtnElement = inputCustomerDoc.createElement(XPXLiterals.E_EXTN);
+		customerExtnElement.setAttribute("ExtnSuffixType", "B");
+		inputCustomerDoc.getDocumentElement().appendChild(customerExtnElement);
+
+		String customerListTemplate = "<Customer CustomerID='' CustomerKey='' RootCustomerKey=''> </Customer>";
+
+		// Call API to get all the BillTos
+		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, SCXmlUtil.createFromString(customerListTemplate) );
+		Document customerListDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, inputCustomerDoc.getDocument());
+		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
+
+		NodeList customerNodeList = customerListDoc.getElementsByTagName("Customer");
+		ArrayList<String> billToCustIds = new ArrayList<String>();
+		for (int i=0; i<customerNodeList.getLength(); i++) {
+			Element customerElement = (Element)customerNodeList.item(i);
+			billToCustIds.add(customerElement.getAttribute("CustomerID"));
+		}
+		return billToCustIds;
+	}
+
+	//--- Contract information - gather BillTos per item
+	public static int countContractItemEntries(YFSEnvironment env, Collection<? extends String> custIds) throws Exception {
+
+		Element itemListOutputElem = getContractElementsFromDB(env, custIds);
+
+		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "XPXItemContractExtn");
+		return itemElems.size();
+	}
+	private static Element getContractElementsFromDB(YFSEnvironment env, Collection<? extends String> custIds) throws Exception {
+
+		YFCDocument contractsInputDoc = getContractsApiInput(custIds);
+
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+		Document contractsOutputDoc = api.executeFlow(env, "XPXGetItemContractExtn", contractsInputDoc.getDocument());
+
+		return contractsOutputDoc.getDocumentElement();
+	}
+	private static YFCDocument getContractsApiInput(Collection<? extends String> custIds) {
+		YFCDocument contractsInputDoc = YFCDocument.createDocument("XPXItemContractExtn");
+		YFCElement contractsInputElem = contractsInputDoc.getDocumentElement();
+
+		YFCElement complexQueryElem = contractsInputElem.createChild("ComplexQuery");
+		complexQueryElem.setAttribute("Operation", "OR");
+
+		YFCElement orElem = complexQueryElem.createChild("Or");
+
+		for (String custId : custIds) {
+			YFCElement expElem = orElem.createChild("Exp");
+			expElem.setAttribute("Name", "CustomerId");
+			expElem.setAttribute("Value", custId);
+		}
+		return contractsInputDoc;
 	}
 }
