@@ -1822,6 +1822,7 @@ hr.shade {
     max-height: 555px;
 	overflow-x: hidden;
 	overflow: auto;
+	overflow-y: auto;
 }
 
 .prodImg {

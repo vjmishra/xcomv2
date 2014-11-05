@@ -210,7 +210,7 @@ function replacementAddToList(uId) {
 		 alert("Please select an item first.");
 		return;
 	}
-	
+	showProcessingIcon();
 	//Get the form
 	var form = Ext.get("formRIAddToList");
 	
@@ -231,8 +231,7 @@ function replacementAddToList(uId) {
 	
 	//Submit the form
 	form.dom.submit();
-	
-	Ext.Msg.wait('Saving your selection... Please wait.');
+	setTimeout(function() { hideProcessingIcon() },15000);
 }
 
 function replacementReplaceInList(uId) {
@@ -242,7 +241,7 @@ function replacementReplaceInList(uId) {
 		//Ext.Msg.alert('Error', 'Please select an item first.');
 		return;
 	}
-	
+	showProcessingIcon();
 	//Get the form
 	var form = Ext.get("formRIReplaceInList");
 	
@@ -266,8 +265,7 @@ function replacementReplaceInList(uId) {
 	
 	//Submit the form
 	form.dom.submit();
-	
-	Ext.Msg.wait('Saving your selection... Please wait.');
+	setTimeout(function() { hideProcessingIcon() },15000);
 }
 
 function updateUOM(uId, uom ) {

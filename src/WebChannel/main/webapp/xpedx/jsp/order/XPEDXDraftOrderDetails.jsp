@@ -721,22 +721,7 @@ $(document).ready(function(){
 		</s:else>
 	</s:if>
 	</div>
-	
-
-
-	
-	
-
-
-
-
 <div class="clear">&nbsp;</div>
-<!-- end item description -->
-
-	
-	
-	 <div class="mil-wrap-condensed-container"> 
-
 	<s:include value="XPEDXCoreDraftOrderDetail.jsp" />
 
 <div id="order-btm-left">
@@ -872,7 +857,6 @@ $(document).ready(function(){
 	</s:form> 
 	<!-- CODE_END MIL - PN -->
 	</div>
-</div>
 <!-- END of new MIL - PN -->
 
 <!-- START - Adding the MIL dropdown - PN -->	
@@ -1253,11 +1237,15 @@ var currentAadd2ItemList = new Object();
 	
 		<div id="replacementItemBody"  class="xpedx-light-box"/> 
 	</div>
-	<ul class="tool-bar-bottom float-right" id="tool-bar">
-		<li style="float: right;"><a href="javascript:replacementReplaceInList(selReplacementId);" class="btn-gradient"><span>Replace</span></a></li>
-		<li style="float: right; margin-right:5px;"><a href="javascript:replacementAddToList(selReplacementId);" class="btn-neutral"><span>Add</span></a></li>
-		<li style="float: right;"><a href="javascript:$.fancybox.close();" class="btn-neutral"><span>Cancel</span></a></li>
-	</ul>
+	<div class="loading-icon" style="display:none;"></div>
+		<div class="button-container addpadtop15" id="tool-bar">
+				<input class="btn-gradient floatright addmarginright10" type="submit" value="Replace" onclick="replacementReplaceInList(selReplacementId);" />
+				<input class="btn-gradient floatright addmarginright10" type="submit" value="Add" onclick="replacementAddToList(selReplacementId);" />
+				<input class="btn-neutral floatright addmarginright10" type="submit" value="Close" onclick="$.fancybox.close();" />
+		</div>
+		<div class="loading-wrap"  style="display:none;">
+        	<div class="load-modal" ></div>
+    	</div>
 </s:form> 
 <s:form id="formRIAddToList" action="draftOrderAddReplacementOrderLines"
 	method="post">
