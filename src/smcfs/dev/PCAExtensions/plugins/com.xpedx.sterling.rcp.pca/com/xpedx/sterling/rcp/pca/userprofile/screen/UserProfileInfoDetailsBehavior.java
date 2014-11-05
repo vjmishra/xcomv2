@@ -1151,6 +1151,14 @@ public void UpdateCustomer(){
 		int spendLimit;
 		String spendingLimit=getFieldValue("txtSpendingLimit");
 		if(spendingLimit != null && !spendingLimit.equalsIgnoreCase("")){
+
+			String primaryApprover=getFieldValue("comboPrimApprover");
+			if(YRCPlatformUI.isVoid(primaryApprover))
+			{
+				YRCPlatformUI.showWarning("PrimaryApprover", "Please select a Primary Approver");
+				getControl("comboPrimApprover").setFocus();
+				return false;
+			}
 			try
 			{
 			  double d = new Double(spendingLimit);
