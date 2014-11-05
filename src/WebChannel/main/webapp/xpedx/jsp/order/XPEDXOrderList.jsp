@@ -517,7 +517,7 @@ function printPOs(customerPos) {
 					<s:set name="chainedOrderList" value='xpedxChainedOrderListMap.get(#parentOrder.getAttribute("OrderHeaderKey"))'/>
 					<s:set name="temChainedOrder" value='#chainedOrderList.get(0)'/>
 					<s:set name="orderListExists" value="#_action.getOrderListExist()"></s:set>
-					
+					<s:set name="isBackOrdQtyExistOnParent" value="#OrderExtn.getAttribute('ExtnReqBackOrdQtyExist')" />
 					<%-- Fix for Jira 3123, Added openOrder == true to if condition --%>
 					<%--<s:if test='#openOrder == "true" && #sourceTabVal != null && #temChainedOrder.getAttribute("Status") == #sourceTabVal '>
 						<s:property value='#temChainedOrder.getAttribute("Status")'/>.
@@ -579,7 +579,9 @@ function printPOs(customerPos) {
 							<s:set name="isOrderException" value="%{#_action.isOrderOnHold(#parentOrder,'ORDER_EXCEPTION_HOLD')}" />
 							<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 							<s:set name="status" value="#parentOrder.getAttribute('Status')" />
-							
+							<s:if test='%{#isBackOrdQtyExistOnParent == "Y"}'>
+							<div class="partial">PARTIAL</div>
+							</s:if>
 							<%-- auto-expand splits that aren't completely invoiced - EB-1972 --%>
 							<s:if test='%{#status != "Invoiced"}'>
 								<div style="display:none;" class="splitExpandInit" orderHeaderKey="<s:property value='#parentOrder.getAttribute("OrderHeaderKey")'/>"></div>
@@ -618,7 +620,7 @@ function printPOs(customerPos) {
 								value='#chainedOrder' />
 							<s:set name='ChainedLegacyOrderNumber'
 								value='#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo")' />
-								
+							<s:set name="isBackOrdQtyExistOnChainedOrder" value="#ChainedOrderExtn.getAttribute('ExtnReqBackOrdQtyExist')" />
 							<s:url id="chainedOrderDetailsURL" action="orderDetail"
 								escapeAmp="false">
 								<s:param name="orderHeaderKey" value='#chainedOrder.getAttribute("OrderHeaderKey")' />
@@ -721,6 +723,9 @@ function printPOs(customerPos) {
 								<s:set name="isFOOnCSRReviewHold" value="%{#_action.isFOCSRReviewHold(#chainedOrder)}" />
 								<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 								<s:set name="Orderstatus" value="#parentOrder.getAttribute('Status')" />
+								<s:if test='%{#isBackOrdQtyExistOnChainedOrder == "Y"}'>
+								<div class="partial">PARTIAL</div>
+								</s:if>
 								<s:if test='%{#chainedOrder.getAttribute("MaxOrderStatus") == "1310" || #parentOrder.getAttribute("MaxOrderStatus") == "1310"  || 
 												#chainedOrder.getAttribute("isCSRReview") == "Y" }'>
 												Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
@@ -783,7 +788,7 @@ function printPOs(customerPos) {
 			            	<s:set name='ChainedOrderExtn' value='#chainedOrder'/>
 							<s:set name='ChainedLegacyOrderNumber' value='#ChainedOrderExtn.getAttribute("ExtnLegacyOrderNo")'/>
 							<s:set name='priceWithCurrency' value='#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #ChainedOrderExtn.getAttribute("ExtnTotalOrderValue"))'/>
-							
+							<s:set name="isBackOrdQtyExistOnChainedOrder" value="#ChainedOrderExtn.getAttribute('ExtnReqBackOrdQtyExist')" />	
 							<s:if test='#ChainedLegacyOrderNumber==""'>
 								<s:set name='ChainedLegacyOrderNumber' value="''"/>
 							</s:if>
@@ -838,6 +843,9 @@ function printPOs(customerPos) {
 				            	</td>
 				            	
 				            	<td class="right-cell">
+				            	<s:if test='%{#isBackOrdQtyExistOnChainedOrder == "Y"}'>
+								<div class="partial">PARTIAL</div>
+								</s:if>
 					            	<s:if test='%{#chainedOrder.getAttribute("MaxOrderStatus") == "1310"'>
 													Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 									</s:if>

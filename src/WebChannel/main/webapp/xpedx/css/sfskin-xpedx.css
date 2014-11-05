@@ -1132,3 +1132,11 @@ li.icon-grid-view-select {
 .mini-view .contract-pricing{
 	width : 170px;
 }
+.partial {
+	background:url(../images/partial.png) top left no-repeat;
+	font-size:10px;
+	color: #e16700;
+	padding-left: 28px;
+	height: 20px;
+	line-height: 20px;
+}

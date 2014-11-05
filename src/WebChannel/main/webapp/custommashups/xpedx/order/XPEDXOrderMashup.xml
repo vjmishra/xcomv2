@@ -693,7 +693,7 @@
                                           Currency="" Modifyts="" Modifyuserid="" ExtnWebConfNum="" ExtnOrderDivision="" ExtnLegacyOrderNo="" ExtnLegacyOrderType=""  
                                           ExtnShipToName="" ExtnOrderedByName="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnOrderSubTotal="" ExtnOrderStatus="" ExtnHeaderStatusCode=""
                                            HoldStatus="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" State=""  
-                                           ZipCode="" Country="" StatusQuantity="" OrderStatus="" />  
+                                           ZipCode="" Country="" StatusQuantity="" OrderStatus="" ExtnReqBackOrdQtyExist = "" />  
                               </XPEDXOrderSearchListViewList>
                         </Template>
                     </API>
@@ -732,7 +732,7 @@
                                           Currency="" Modifyts="" Modifyuserid="" ExtnWebConfNum="" ExtnOrderDivision="" ExtnLegacyOrderNo="" ExtnLegacyOrderType=""  
                                           ExtnShipToName="" ExtnOrderedByName="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnOrderSubTotal="" ExtnOrderStatus=""
                                            HoldStatus="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" State=""  
-                                           ZipCode="" Country="" StatusQuantity="" OrderStatus="" />  
+                                           ZipCode="" Country="" StatusQuantity="" OrderStatus="" ExtnReqBackOrdQtyExist = "" />  
                               </XPEDXOrderSearchLineListViewList>
                         </Template>
                     </API>

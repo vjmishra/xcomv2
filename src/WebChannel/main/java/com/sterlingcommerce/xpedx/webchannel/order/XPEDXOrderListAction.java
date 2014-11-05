@@ -793,6 +793,11 @@ public class XPEDXOrderListAction extends OrderListAction {
 									orderList.add(order);
 									xpedxChainedOrderListMap.put(chainedFromOHK, orderList);
 								}
+								if("FUTURESHIPMENTS".equalsIgnoreCase(getFilteredStatusSearchFieldName())
+										 && (filteredOrderStausMap.get("OPEN").indexOf(order.getAttribute("ExtnOrderStatus"))!= -1)){
+									 orderList.add(order);
+									xpedxChainedOrderListMap.put(chainedFromOHK, orderList);
+								}
 							}
 
 						}
@@ -1119,7 +1124,8 @@ public class XPEDXOrderListAction extends OrderListAction {
 			{
 				complexQueryElement = orderElem.createChild("ComplexQuery");
 				complexQueryElement.setAttribute("Operator", "AND");
-			 	YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+				complexQueryAndElement = complexQueryElement.createChild("And");
+	    		YFCElement complexQueryOrElement = complexQueryAndElement.createChild("Or");
 			 	YFCElement expElementCustomerLinePONo = complexQueryOrElement.createChild("Exp");
 			    expElementCustomerLinePONo.setAttribute("Name", "CustomerLinePONo");
 			    expElementCustomerLinePONo.setAttribute("Value",convertedSrchFieldValue.toUpperCase());
@@ -1187,7 +1193,8 @@ public class XPEDXOrderListAction extends OrderListAction {
         			if(complexQueryElement == null)	{
         				complexQueryElement = orderElem.createChild("ComplexQuery");
         				complexQueryElement.setAttribute("Operator", "AND");
-        				complexQueryOrElement = complexQueryElement.createChild("Or");
+        				complexQueryAndElement = complexQueryElement.createChild("And");
+        				complexQueryOrElement = complexQueryAndElement.createChild("Or");
         			}else{
         				complexQueryOrElement = complexQueryAndElement.createChild("Or");
         			}
@@ -1218,12 +1225,80 @@ public class XPEDXOrderListAction extends OrderListAction {
         			expElementCOType.setAttribute("Value","Customer");
         			complexQueryCOAndElement.appendChild(expElementCOType);
         		}
+        		else if("FUTURESHIPMENTS".equalsIgnoreCase(filteredStatusSearchFieldName)){
+        			setOrderType("");
+        			setOrderTypeQryType("EQ");
+        			orderElem.removeAttribute("OrderType");
+        			orderElem.setAttribute("OrderTypeQryType", "EQ");
+        			YFCElement complexQueryOrElement = null;
+        			if(complexQueryElement == null)	{
+        				complexQueryElement = orderElem.createChild("ComplexQuery");
+        				complexQueryElement.setAttribute("Operator", "AND");
+        				complexQueryAndElement = complexQueryElement.createChild("And");
+        				complexQueryOrElement = complexQueryAndElement.createChild("Or");
+        			}else{
+        				complexQueryOrElement = complexQueryAndElement.createChild("Or");
+        			}
+
+        			YFCElement complexQueryFFOAndElement = complexQueryOrElement.createChild("And");
+        			YFCElement complexQueryFFOAndOrElement = complexQueryFFOAndElement.createChild("Or");
+        			for (String searchStatus : searchStatusList) {
+        				YFCElement ffoExpElementExtnOrderStatus = complexQueryFFOAndOrElement.createChild("Exp");
+        				ffoExpElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
+        				ffoExpElementExtnOrderStatus.setAttribute("Value",searchStatus);
+        				complexQueryFFOAndOrElement.appendChild(ffoExpElementExtnOrderStatus);
+        			}
+        			YFCElement expElementFFOType = complexQueryFFOAndElement.createChild("Exp");
+        			expElementFFOType.setAttribute("Name", "OrderType");
+        			expElementFFOType.setAttribute("Value","STOCK_ORDER");
+        			complexQueryFFOAndElement.appendChild(expElementFFOType);
+
+        			YFCElement complexQueryFOAndElement = complexQueryOrElement.createChild("And");
+        			YFCElement complexQueryFOAndOrElement = complexQueryFOAndElement.createChild("Or");
+        			for (String searchStatus : openFOStatusList) {
+        				YFCElement foExpElementExtnOrderStatus = complexQueryFOAndOrElement.createChild("Exp");
+        				foExpElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
+        				foExpElementExtnOrderStatus.setAttribute("Value",searchStatus);
+        				complexQueryFOAndOrElement.appendChild(foExpElementExtnOrderStatus);
+        			}
+        			YFCElement expElementFOType = complexQueryFOAndElement.createChild("Exp");
+        			expElementFOType.setAttribute("Name", "OrderType");
+        			expElementFOType.setAttribute("Value","STOCK_ORDER");
+        			complexQueryFOAndElement.appendChild(expElementFOType);
+
+        			YFCElement expElementFOBackOrdQtyExist = complexQueryFOAndElement.createChild("Exp");
+        			expElementFOBackOrdQtyExist.setAttribute("Name", "ExtnReqBackOrdQtyExist");
+        			expElementFOBackOrdQtyExist.setAttribute("Value","Y");
+        			complexQueryFOAndElement.appendChild(expElementFOBackOrdQtyExist);
+
+
+        			YFCElement complexQueryCOAndElement = complexQueryOrElement.createChild("And");
+
+        			YFCElement complexQueryCOAndOrElement = complexQueryCOAndElement.createChild("Or");
+        			for (String searchStatus : openCustomerStatusList) {
+        				YFCElement coExpElementExtnOrderStatus = complexQueryCOAndOrElement.createChild("Exp");
+        				coExpElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
+        				coExpElementExtnOrderStatus.setAttribute("Value",searchStatus);
+        				complexQueryCOAndOrElement.appendChild(coExpElementExtnOrderStatus);
+        			}
+        			YFCElement expElementCOType = complexQueryCOAndElement.createChild("Exp");
+        			expElementCOType.setAttribute("Name", "OrderType");
+        			expElementCOType.setAttribute("Value","Customer");
+        			complexQueryCOAndElement.appendChild(expElementCOType);
+
+        			YFCElement expElementCOBackOrdQtyExist = complexQueryCOAndElement.createChild("Exp");
+        			expElementCOBackOrdQtyExist.setAttribute("Name", "ExtnReqBackOrdQtyExist");
+        			expElementCOBackOrdQtyExist.setAttribute("Value","Y");
+        			complexQueryCOAndElement.appendChild(expElementCOBackOrdQtyExist);
+
+        		}
         		else{
         			if(complexQueryElement == null)
         			{
         				complexQueryElement = orderElem.createChild("ComplexQuery");
         				complexQueryElement.setAttribute("Operator", "AND");
-        				YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+        				complexQueryAndElement = complexQueryElement.createChild("And");
+        	    		YFCElement complexQueryOrElement = complexQueryAndElement.createChild("Or");
         				for (String searchStatus : searchStatusList) {
         					YFCElement expElementExtnOrderStatus = complexQueryOrElement.createChild("Exp");
         					expElementExtnOrderStatus.setAttribute("Name", "ExtnOrderStatus");
