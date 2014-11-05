@@ -80,6 +80,7 @@ public class XPEDXConstants {
 	public static final String XPEDX_ITEM_LABEL = " Item #";
 	public static final String CUSTOMER_ITEM_LABEL = "My Item #"; /* <!-- -FXD-4 --> */
 	public static final String MANUFACTURER_ITEM_LABEL = "Mfg. Item #";
+	public static final String MANUFACTURER_NAME_LABEL = "Mfg. Name";
 	public static final String MPC_ITEM_LABEL = "MPC Code";
 	public static final String DEFAULT_SELECT_SHIP_TO_LABEL = "- Select Ship-To -";
 	public static final String DEFAULT_SELECT_ORDER_CRITERIA_LABEL = "- Select Order Criteria -";

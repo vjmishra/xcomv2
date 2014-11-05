@@ -250,6 +250,7 @@
 						<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL"/>
 						<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
 						<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
+						<s:set name="manufacturerNameLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_NAME_LABEL"/>
 						<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
 						<div class="item-numbers"><b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='%{#itemID}' /></b>											
 							<s:if test='certFlag=="Y"'>
@@ -258,6 +259,9 @@
 						</div>
 						<s:if test= '%{#_action.getExtnMfgItemFlag()== "Y"}'>
 							<div class="mfg-numbers"><s:property value="#manufacturerItemLabel" />: <s:property value='ManufacturerPartNumber' /></div>
+						</s:if>
+						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(wCContext.storefrontId)}'>
+							<div class="mfg-name"><s:property value="#manufacturerNameLabel" />: <s:property value='Manufacturer' /></div>
 						</s:if>
 						<s:if test= '%{#_action.getExtnCustomerItemFlag()== "Y"}'>
 							<div class="cust-numbers"><s:property value="#customerItemLabel" />: <s:property value='custPartNumber' /></div>
