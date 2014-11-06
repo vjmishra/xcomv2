@@ -1065,8 +1065,10 @@ var selectedShipCustomer = null;
 	// All filters
 	function setCatalogFilters() {
 		var isStocked    = document.getElementById('stockedItemChk').checked;	
-		var isContract   = document.getElementById('contractItemChk').checked;
 		var isBestSeller = document.getElementById('bestSellerItemChk').checked;
+		// Contract only appears for some users
+		if (document.getElementById('contractItemChk') != null)
+			var isContract   = document.getElementById('contractItemChk').checked;
 		var searchTermString = document.getElementById("searchTermString").value;
 		Ext.Ajax.request({
       		url: '<s:property value="#setCatalogFiltersURL"/>',
