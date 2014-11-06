@@ -90,7 +90,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			if(log.isDebugEnabled()){
 			log.debug("Inside Before Change Order UE");
 			}
-
+			System.out.println("1. beforeChangeOrder called");
 			Document inputDoc=null;
 			String ischangeOrderInprogress=null;
 			String isDiscountCalculate = null;
@@ -135,6 +135,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					}
 				}
 			}
+			System.out.println("2. orderWithoutLineToProcess:" + orderWithoutLineToProcess);
 			NodeList promotions=outputOrderElement.getElementsByTagName("Promotion");
 			boolean isPromotion=(promotions !=null && promotions.getLength()>0);
 			ArrayList<Element> orderLineList=SCXmlUtil.getElements(outputOrderElement,"OrderLines/OrderLine");
@@ -457,6 +458,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 					linePriceElement.removeAttribute("LineTotal");
 				}
 			}
+
 			XPXOrderUpdateUtils.setBackorderQtyFlagIfExists(outputDoc);
 			if(log.isDebugEnabled()){
 			log.debug("Output XML of Before Change Order UE "+SCXmlUtil.getString(outputDoc));

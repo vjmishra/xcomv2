@@ -18,12 +18,13 @@ public class XPXOrderUpdateUtils {
 	 * @param outputDoc
 	 */
 	public static void setBackorderQtyFlagIfExists(Document outputDoc){
+		System.out.println("3. setBackorderQtyFlagIfExists called");
 		String reqBackOrdQtyExist = "N";
 		if(outputDoc != null && outputDoc.getDocumentElement() != null){
-			System.out.println("outputDoc.getDocumentElement():" + outputDoc.getDocumentElement());
-			System.out.println("Draft order flag:" + outputDoc.getDocumentElement().getAttribute("DraftOrderFlag"));
+			System.out.println("4. outputDoc.getDocumentElement():" + SCXmlUtil.getString(outputDoc.getDocumentElement()));
+			System.out.println("5. Draft order flag:" + outputDoc.getDocumentElement().getAttribute("DraftOrderFlag"));
 			String draftOrderFlag = YFCCommon.isVoid(outputDoc.getDocumentElement().getAttribute("DraftOrderFlag")) ? "N":outputDoc.getDocumentElement().getAttribute("DraftOrderFlag").trim();
-			System.out.println("draftOrderFlag :" + draftOrderFlag);
+			System.out.println("6. draftOrderFlag after:" + draftOrderFlag);
 			if(!"Y".equalsIgnoreCase(draftOrderFlag)){
 				Element outputDocElement = outputDoc.getDocumentElement();
 				ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(outputDocElement,"OrderLines/OrderLine");
@@ -52,7 +53,7 @@ public class XPXOrderUpdateUtils {
 					orderExtnElem = XmlUtils.createChild(outputDocElement, "Extn");
 				}
 				orderExtnElem.setAttribute("ExtnReqBackOrdQtyExist", reqBackOrdQtyExist);
-				System.out.println("after setting flag outputDoc.getDocumentElement():" + outputDoc.getDocumentElement());
+				System.out.println("7. after setting flag outputDoc.getDocumentElement():" +  SCXmlUtil.getString(outputDoc.getDocumentElement()));
 			}
 		}
 	}
